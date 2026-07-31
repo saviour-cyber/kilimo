@@ -1,11 +1,12 @@
 import { and, eq, lt } from "drizzle-orm";
 import { z } from "zod";
-import { farmInvites, farmMembers } from "../../drizzle/schema";
+import { farmInvites, farmMembers, farms } from "../../drizzle/schema";
 import { getDb } from "../db";
 import { protectedProcedure, router } from "../_core/trpc";
 import { assertFarmMember, assertMinRole } from "./farms";
 import { TRPCError } from "@trpc/server";
 import { nanoid } from "nanoid";
+import { emailService } from "../services/email";
 
 export const invitesRouter = router({
   // ── Send Invite ────────────────────────────────────────────────────────────────
@@ -36,6 +37,26 @@ export const invitesRouter = router({
         inviteToken,
         expiresAt,
         status: "pending",
+      });
+
+      // Send the email asynchronously
+      setImmediate(async () => {
+        try {
+          const [farm] = await db.select().from(farms).where(eq(farms.id, input.farmId)).limit(1);
+          if (farm) {
+            await emailService.sendFarmInviteEmail(
+              { email: input.email },
+              {
+                inviterName: ctx.user.name ?? "Someone",
+                farmName: farm.name,
+                role: input.farmRole,
+                inviteToken,
+              }
+            );
+          }
+        } catch (err) {
+          console.error("[invitesRouter] Failed to send invite email:", err);
+        }
       });
 
       return {

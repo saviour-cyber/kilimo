@@ -885,3 +885,35 @@ export const iotSensorCalibrationLog = mysqlTable("iotSensorCalibrationLog", {
 export type IotSensorCalibrationLog = typeof iotSensorCalibrationLog.$inferSelect;
 export type InsertIotSensorCalibrationLog = typeof iotSensorCalibrationLog.$inferInsert;
 
+
+// ─── Email Verification Tokens ─────────────────────────────────────────────────
+// Stores single-use tokens sent to users for email verification after registration.
+// Each token is hashed (SHA-256) before storage; only the hash is persisted.
+
+export const emailVerificationTokens = mysqlTable("emailVerificationTokens", {
+  id:        int("id").autoincrement().primaryKey(),
+  userId:    int("userId").notNull(),
+  tokenHash: varchar("tokenHash", { length: 64 }).unique().notNull(), // SHA-256 hex
+  expiresAt: timestamp("expiresAt").notNull(),
+  usedAt:    timestamp("usedAt"),                                      // null = not yet used
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type EmailVerificationToken = typeof emailVerificationTokens.$inferSelect;
+export type InsertEmailVerificationToken = typeof emailVerificationTokens.$inferInsert;
+
+// ─── Password Reset Tokens ──────────────────────────────────────────────────────
+// Stores single-use tokens for password reset flows.
+// Tokens expire in 30 minutes and are invalidated immediately after use.
+
+export const passwordResetTokens = mysqlTable("passwordResetTokens", {
+  id:        int("id").autoincrement().primaryKey(),
+  userId:    int("userId").notNull(),
+  tokenHash: varchar("tokenHash", { length: 64 }).unique().notNull(), // SHA-256 hex
+  expiresAt: timestamp("expiresAt").notNull(),
+  usedAt:    timestamp("usedAt"),                                      // null = not yet used
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type PasswordResetToken = typeof passwordResetTokens.$inferSelect;
+export type InsertPasswordResetToken = typeof passwordResetTokens.$inferInsert;
