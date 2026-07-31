@@ -163,9 +163,9 @@ export default function Dashboard() {
         {/* ── ZONE 2: KPI ROW ──────────────────────────────────────────────── */}
         {kpis.length > 0 && (
           <section aria-label="Key Performance Indicators">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {kpis.map(({ id, component: Widget }) => (
-                <Widget key={id} farmId={farmId} className="col-span-1" />
+                <Widget key={id} farmId={farmId} className="col-span-1 min-h-[140px] max-h-[180px]" />
               ))}
             </div>
           </section>

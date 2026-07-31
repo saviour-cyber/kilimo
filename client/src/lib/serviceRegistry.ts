@@ -53,7 +53,7 @@ export const SERVICE_REGISTRY: PlatformServiceDefinition[] = [
     showInSidebar: true,
     icon: Sparkles,
     basePath: "/kili-ai",
-    color: "text-green-600",
+    color: "text-purple-500",
     widgets: [
       { id: "kili-dashboard", type: "intelligence", size: "large", priority: { level: "critical", order: 2 }, component: KiliAIDashboardWidget },
     ],
@@ -68,7 +68,7 @@ export const SERVICE_REGISTRY: PlatformServiceDefinition[] = [
     showInSidebar: true,
     icon: CloudRain,
     basePath: "/weather",
-    color: "text-blue-600",
+    color: "text-cyan-500",
     widgets: [
       { id: "weather-banner", type: "system", size: "small", priority: { level: "critical", order: 1 }, component: WeatherWidget as React.FC<{ farmId: number }> },
       { id: "weather-alerts", type: "system", size: "medium", priority: { level: "high", order: 1 }, component: WeatherAlertsWidget as React.FC<{ farmId: number }> },
@@ -97,7 +97,7 @@ export const SERVICE_REGISTRY: PlatformServiceDefinition[] = [
     showInSidebar: true,
     icon: FileText,
     basePath: "/reports",
-    color: "text-indigo-600",
+    color: "text-indigo-500",
     pageComponent: ReportsPage,
   },
 
@@ -108,7 +108,7 @@ export const SERVICE_REGISTRY: PlatformServiceDefinition[] = [
     showInSidebar: true,
     icon: Cpu,
     basePath: "/iot",
-    color: "text-cyan-600",
+    color: "text-sky-500",
     widgets: [
       { id: "iot-summary", type: "summary", size: "medium", priority: { level: "high", order: 0 }, component: IoTSummaryWidget as React.FC<{ farmId: number }> },
     ],

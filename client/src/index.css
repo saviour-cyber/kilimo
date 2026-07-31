@@ -42,53 +42,57 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 1rem;
 
-  /* KilimoHub — Earth Green Light Theme */
-  --background: oklch(0.98 0.005 120);
-  --foreground: oklch(0.18 0.02 150);
+  /* KilimoHub — Premium SaaS Light Theme */
+  --background: #F8FAFC;
+  --foreground: #0F172A;
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.02 150);
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
 
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.02 150);
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
 
-  /* Primary: rich forest green */
-  --primary: oklch(0.42 0.14 155);
-  --primary-foreground: oklch(0.98 0.005 120);
+  /* Primary Brand: Emerald */
+  --primary: #10B981;
+  --primary-foreground: #FFFFFF;
 
-  --secondary: oklch(0.94 0.02 140);
-  --secondary-foreground: oklch(0.28 0.06 150);
+  --secondary: #F1F5F9;
+  --secondary-foreground: #64748B;
 
-  --muted: oklch(0.95 0.01 130);
-  --muted-foreground: oklch(0.52 0.04 150);
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
 
-  --accent: oklch(0.92 0.05 140);
-  --accent-foreground: oklch(0.28 0.06 150);
+  --accent: #F1F5F9;
+  --accent-foreground: #0F172A;
 
-  --destructive: oklch(0.55 0.22 25);
+  /* Status Colors */
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --destructive: #EF4444;
+  --info: #3B82F6;
 
-  --border: oklch(0.88 0.015 140);
-  --input: oklch(0.88 0.015 140);
-  --ring: oklch(0.42 0.14 155);
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #10B981;
 
   /* Charts */
-  --chart-1: oklch(0.42 0.14 155);
-  --chart-2: oklch(0.62 0.18 50);
-  --chart-3: oklch(0.52 0.16 250);
-  --chart-4: oklch(0.72 0.14 80);
-  --chart-5: oklch(0.55 0.22 25);
+  --chart-1: #10B981;
+  --chart-2: #8B5CF6;
+  --chart-3: #0EA5E9;
+  --chart-4: #F97316;
+  --chart-5: #6366F1;
 
-  /* Sidebar */
-  --sidebar: oklch(0.18 0.04 155);
-  --sidebar-foreground: oklch(0.90 0.02 140);
-  --sidebar-primary: oklch(0.55 0.16 155);
-  --sidebar-primary-foreground: oklch(0.98 0.005 120);
-  --sidebar-accent: oklch(0.25 0.05 155);
-  --sidebar-accent-foreground: oklch(0.90 0.02 140);
-  --sidebar-border: oklch(0.28 0.04 155);
-  --sidebar-ring: oklch(0.55 0.16 155);
+  /* Sidebar (Dark Slate) */
+  --sidebar: #0F172A;
+  --sidebar-foreground: #F8FAFC;
+  --sidebar-primary: #10B981;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #1E293B;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #1E293B;
+  --sidebar-ring: #10B981;
 }
 
 .dark {

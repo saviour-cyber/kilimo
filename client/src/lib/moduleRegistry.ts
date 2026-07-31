@@ -297,7 +297,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     label: "Disease Detection",
     icon: Stethoscope,
     basePath: "/disease",
-    color: "text-violet-600",
+    color: "text-orange-500",
     description: "AI-powered crop and livestock disease detection",
     subItems: [
       { label: "New Scan",     path: "/disease/scan" },
