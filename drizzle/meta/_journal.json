@@ -8,6 +8,13 @@
       "when": 1785481959080,
       "tag": "0000_mute_ego",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1785509185829,
+      "tag": "0001_boring_rhino",
+      "breakpoints": true
     }
   ]
 }
