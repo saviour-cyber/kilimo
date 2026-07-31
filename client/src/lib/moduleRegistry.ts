@@ -214,16 +214,6 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     ],
   },
 
-  {
-    key: "equipment",
-    label: "Equipment",
-    icon: Tractor,
-    basePath: "/inventory/equipment",
-    color: "text-cyan-600",
-    description: "Farm machinery and tools",
-    dashboardWidgets: [],
-  },
-
 
   {
     key: "finance",

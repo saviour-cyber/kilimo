@@ -315,12 +315,51 @@ export function KilimoLayout({ children }: KilimoLayoutProps) {
       {/* 2. Middle Content (Scrollable) */}
       <ScrollArea className="flex-1 overflow-hidden">
         <nav className={cn("space-y-0.5 py-4", collapsed ? "px-1.5" : "px-3")}>
+          {/* Dashboard */}
+          {visibleModules.find(m => m.key === "dashboard") && (
+            <NavItem mod={visibleModules.find(m => m.key === "dashboard") as any} collapsed={collapsed} />
+          )}
+
+          {/* Farm Operations */}
           {!collapsed && (
-            <div className="mb-2 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
-              Business Modules
+            <div className="mt-4 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
+              Farm Operations
             </div>
           )}
-          {visibleModules.filter(mod => mod.key !== "settings").map((mod) => (
+          {visibleModules.filter(m => ["crop", "livestock", "inventory", "finance", "tasks"].includes(m.key)).map((mod) => (
+            <NavItem key={mod.key} mod={mod as any} collapsed={collapsed} />
+          ))}
+
+          {/* Intelligence */}
+          {!collapsed && (
+            <div className="mt-4 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
+              Intelligence
+            </div>
+          )}
+          {platformServices.filter(s => s.key === "kili-ai").map((service) => (
+            <ServiceNavItem key={service.key} service={service} collapsed={collapsed} />
+          ))}
+          {visibleModules.filter(m => m.key === "disease").map((mod) => (
+            <NavItem key={mod.key} mod={mod as any} collapsed={collapsed} />
+          ))}
+
+          {/* Platform */}
+          {!collapsed && (
+            <div className="mt-4 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
+              Platform
+            </div>
+          )}
+          {platformServices.filter(s => ["weather", "reports", "iot"].includes(s.key)).map((service) => (
+            <ServiceNavItem key={service.key} service={service} collapsed={collapsed} />
+          ))}
+
+          {/* Administration */}
+          {!collapsed && (
+            <div className="mt-4 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
+              Administration
+            </div>
+          )}
+          {visibleModules.filter(m => m.key === "settings").map((mod) => (
             <NavItem key={mod.key} mod={mod as any} collapsed={collapsed} />
           ))}
         </nav>
@@ -328,35 +367,6 @@ export function KilimoLayout({ children }: KilimoLayoutProps) {
 
       {/* 3. Footer (Fixed) */}
       <div className="shrink-0 flex flex-col border-t border-sidebar-border">
-        <div className={cn("py-2 space-y-0.5", collapsed ? "px-1.5" : "px-3")}>
-          {platformServices.length > 0 && (
-            <>
-              {!collapsed && (
-                <div className="mt-1 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
-                  Platform Services
-                </div>
-              )}
-              {platformServices.map((service) => (
-                <ServiceNavItem
-                  key={service.key}
-                  service={service}
-                  collapsed={collapsed}
-                />
-              ))}
-            </>
-          )}
-
-          {visibleModules.find(mod => mod.key === "settings") && (
-            <div className="pt-1.5 mt-1.5 border-t border-sidebar-border/50">
-              <NavItem 
-                mod={visibleModules.find(mod => mod.key === "settings") as any} 
-                collapsed={collapsed} 
-              />
-            </div>
-          )}
-        </div>
-
-        <Separator className="bg-sidebar-border" />
 
         {/* User Profile */}
         <div className={cn("p-3 shrink-0", collapsed && "flex justify-center")}>

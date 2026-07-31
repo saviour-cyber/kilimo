@@ -80,7 +80,7 @@ export const SERVICE_REGISTRY: PlatformServiceDefinition[] = [
     key: "notifications",
     name: "Notifications",
     description: "Farm-wide notification feed.",
-    showInSidebar: true,
+    showInSidebar: false,
     icon: Bell,
     basePath: "/notifications",
     color: "text-amber-600",
