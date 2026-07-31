@@ -16,6 +16,9 @@ import AdminServices from "./pages/admin/Services";
 import AdminAuditLogs from "./pages/admin/AuditLogs";
 import AdminMonitoring from "./pages/admin/Monitoring";
 import AdminAiManagement from "./pages/admin/AiManagement";
+import AdminIotManagement from "./pages/admin/IotManagement";
+import AdminReports from "./pages/admin/Reports";
+import AdminAnnouncements from "./pages/admin/Announcements";
 // Auth
 import Home from "./pages/Home";
 import CreateFarm from "./pages/CreateFarm";
@@ -229,6 +232,15 @@ function AppRoutes() {
       </Route>
       <Route path="/admin/audit">
         <AdminLayout><AdminAuditLogs /></AdminLayout>
+      </Route>
+      <Route path="/admin/iot">
+        <AdminLayout><AdminIotManagement /></AdminLayout>
+      </Route>
+      <Route path="/admin/reports">
+        <AdminLayout><AdminReports /></AdminLayout>
+      </Route>
+      <Route path="/admin/announcements">
+        <AdminLayout><AdminAnnouncements /></AdminLayout>
       </Route>
 
       <Route path="/404" component={NotFound} />

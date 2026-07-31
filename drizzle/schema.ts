@@ -951,3 +951,13 @@ export const auditLogs = mysqlTable("auditLogs", {
   ipAddress: varchar("ipAddress", { length: 45 }),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
+
+export const platformAnnouncements = mysqlTable("platformAnnouncements", {
+  id: int("id").autoincrement().primaryKey(),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  type: varchar("type", { length: 32 }).notNull().default("info"), // 'info', 'warning', 'critical', 'feature'
+  isActive: boolean("isActive").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});

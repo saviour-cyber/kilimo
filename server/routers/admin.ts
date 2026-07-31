@@ -1,6 +1,6 @@
 import { adminProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
-import { users, organizations, farms, iotDevices, platformModules, platformServices, auditLogs } from "../../drizzle/schema";
+import { users, organizations, farms, iotDevices, platformModules, platformServices, auditLogs, iotGateways, generatedReports, platformAnnouncements } from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
 import { sql, count, eq, desc } from "drizzle-orm";
 import { z } from "zod";
@@ -176,4 +176,93 @@ export const adminRouter = router({
       }
     };
   }),
+
+  // ── IoT Management ──────────────────────────────────────────────────────────
+  getIotStats: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+    const totalDevices = await db.select({ count: count() }).from(iotDevices);
+    const activeDevices = await db.select({ count: count() }).from(iotDevices).where(eq(iotDevices.status, 'online'));
+    const totalGateways = await db.select({ count: count() }).from(iotGateways);
+    const activeGateways = await db.select({ count: count() }).from(iotGateways).where(eq(iotGateways.status, 'online'));
+
+    return {
+      devices: { total: totalDevices[0].count, active: activeDevices[0].count },
+      gateways: { total: totalGateways[0].count, active: activeGateways[0].count },
+    };
+  }),
+
+  // ── Reports Analytics ───────────────────────────────────────────────────────
+  getPlatformAnalytics: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+    const totalReports = await db.select({ count: count() }).from(generatedReports);
+    const reportData = await db.select({
+      id: generatedReports.id,
+      type: generatedReports.reportType,
+      createdAt: generatedReports.createdAt,
+    }).from(generatedReports).orderBy(desc(generatedReports.createdAt)).limit(10);
+
+    return {
+      totalReportsGenerated: totalReports[0].count,
+      recentReports: reportData,
+    };
+  }),
+
+  // ── Announcements ───────────────────────────────────────────────────────────
+  listAnnouncements: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+    return db.select().from(platformAnnouncements).orderBy(desc(platformAnnouncements.createdAt));
+  }),
+
+  createAnnouncement: adminProcedure
+    .input(z.object({
+      title: z.string(),
+      content: z.string(),
+      type: z.enum(["info", "warning", "critical", "feature"]),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      const [result] = await db.insert(platformAnnouncements).values({
+        title: input.title,
+        content: input.content,
+        type: input.type,
+      });
+
+      await db.insert(auditLogs).values({
+        userId: ctx.user.id,
+        action: "ANNOUNCEMENT_CREATED",
+        entityType: "announcement",
+        entityId: result.insertId.toString(),
+        details: { title: input.title, type: input.type },
+      });
+
+      return { success: true, id: result.insertId };
+    }),
+
+  toggleAnnouncement: adminProcedure
+    .input(z.object({ id: z.number(), isActive: z.boolean() }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      await db.update(platformAnnouncements)
+        .set({ isActive: input.isActive })
+        .where(eq(platformAnnouncements.id, input.id));
+
+      await db.insert(auditLogs).values({
+        userId: ctx.user.id,
+        action: "ANNOUNCEMENT_TOGGLE",
+        entityType: "announcement",
+        entityId: input.id.toString(),
+        details: { isActive: input.isActive },
+      });
+
+      return { success: true };
+    }),
 });

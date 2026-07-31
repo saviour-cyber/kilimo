@@ -223,6 +223,54 @@ function ServiceNavItem({ service, collapsed }: { service: PlatformServiceDefini
   );
 }
 
+function GlobalAnnouncementBanner() {
+  const { data: announcements } = trpc.system.getActiveAnnouncements.useQuery(undefined, { refetchInterval: 60000 });
+  const [dismissed, setDismissed] = useState<number[]>([]);
+
+  if (!announcements || announcements.length === 0) return null;
+
+  const activeAnnouncements = announcements.filter(a => !dismissed.includes(a.id));
+  
+  if (activeAnnouncements.length === 0) return null;
+
+  return (
+    <div className="flex flex-col w-full z-50">
+      {activeAnnouncements.map(ann => {
+        const isCritical = ann.type === 'critical';
+        const isWarning = ann.type === 'warning';
+        const isFeature = ann.type === 'feature';
+        
+        return (
+          <div 
+            key={ann.id} 
+            className={cn(
+              "px-4 py-2 flex items-center justify-between text-sm shadow-sm",
+              isCritical ? "bg-rose-600 text-white" :
+              isWarning ? "bg-amber-500 text-white" :
+              isFeature ? "bg-emerald-600 text-white" :
+              "bg-sky-600 text-white"
+            )}
+          >
+            <div className="flex items-center gap-2">
+              <span className="font-bold tracking-wide uppercase text-[10px] bg-black/20 px-1.5 py-0.5 rounded">
+                {ann.type}
+              </span>
+              <span className="font-semibold">{ann.title}:</span>
+              <span>{ann.content}</span>
+            </div>
+            <button 
+              onClick={() => setDismissed([...dismissed, ann.id])}
+              className="p-1 hover:bg-black/10 rounded-full transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function KilimoLayout({ children }: KilimoLayoutProps) {
   const { user, isAuthenticated, loading, logout } = useAuth();
   const { currentFarm, enabledModules, role, isLoading: farmLoading } = useFarm();
@@ -488,6 +536,8 @@ export function KilimoLayout({ children }: KilimoLayoutProps) {
             </div>
           )}
         </header>
+
+        <GlobalAnnouncementBanner />
 
         {/* Page Content */}
         <main className="flex-1 overflow-auto">

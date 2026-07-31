@@ -1,6 +1,6 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
-import { systemRouter } from "./_core/systemRouter";
+import { systemRouter as coreSystemRouter } from "./_core/systemRouter";
 import { invitesRouter } from "./routers/invites";
 import { remindersRouter } from "./routers/reminders";
 import { publicProcedure, router } from "./_core/trpc";
@@ -22,29 +22,31 @@ import { iotRouter } from "./routers/iot";
 import { usersRouter } from "./routers/users";
 import { organizationsRouter } from "./routers/organizations";
 import { adminRouter } from "./routers/admin";
+import { systemRouter } from "./routers/system";
 
 export const appRouter = router({
-  system: systemRouter,
-  invites: invitesRouter,
-  reminders: remindersRouter,
   auth: authRouter,
-  onboarding: onboardingRouter,
-  farms: farmsRouter,
-  crops: cropsRouter,
-  livestock: livestockRouter,
-  inventory: inventoryRouter,
-  finance: financeRouter,
-  tasks: tasksRouter,
-  notifications: notificationsRouter,
-  dashboard: dashboardRouter,
-  weather: weatherRouter,
-  intelligence: intelligenceRouter,
-  disease: diseaseRouter,
-  reports: reportsRouter,
-  iot: iotRouter,
   users: usersRouter,
   organizations: organizationsRouter,
+  farms: farmsRouter,
+  invites: invitesRouter,
+  dashboard: dashboardRouter,
+  crops: cropsRouter,
+  livestock: livestockRouter,
+  finance: financeRouter,
+  inventory: inventoryRouter,
+  disease: diseaseRouter,
+  intelligence: intelligenceRouter,
+  tasks: tasksRouter,
+  weather: weatherRouter,
+  iot: iotRouter,
+  reminders: remindersRouter,
+  notifications: notificationsRouter,
+  reports: reportsRouter,
   admin: adminRouter,
+  system: systemRouter,
+  coreSystem: coreSystemRouter,
+  onboarding: onboardingRouter,
 });
 
 export type AppRouter = typeof appRouter;
