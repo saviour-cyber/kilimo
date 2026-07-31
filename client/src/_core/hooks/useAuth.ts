@@ -55,8 +55,11 @@ export function useAuth(options?: UseAuthOptions) {
       "manus-runtime-user-info",
       JSON.stringify(meQuery.data)
     );
+    const user = meQuery.data ?? null;
     return {
-      user: meQuery.data ?? null,
+      user,
+      role: user?.role ?? null,
+      isPlatformAdmin: user?.role === "admin",
       loading: meQuery.isLoading || logoutMutation.isPending,
       error: meQuery.error ?? logoutMutation.error ?? null,
       isAuthenticated: Boolean(meQuery.data),

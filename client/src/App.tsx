@@ -2,7 +2,7 @@ import React from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { FarmProvider } from "./contexts/FarmContext";
@@ -72,146 +72,105 @@ import IoTPage from "./pages/IoTPage";
 // Reports Hub
 import ReportsPage from "./pages/ReportsPage";
 
-function AppRoutes() {
+function TenantAppRoutes() {
+  return (
+    <FarmProvider>
+      <Switch>
+        <Route path="/" component={Home} />
+        <Route path="/create-farm" component={CreateFarm} />
+        <Route path="/farms/new" component={CreateFarm} />
+        <Route path="/accept-invite" component={AcceptInvite} />
+        <Route path="/register" component={Register} />
+        <Route path="/login" component={Login} />
+
+        {/* Protected routes inside KilimoLayout */}
+        <Route path="/dashboard">
+          <KilimoLayout><Dashboard /></KilimoLayout>
+        </Route>
+        <Route path="/tasks">
+          <KilimoLayout><Tasks /></KilimoLayout>
+        </Route>
+        <Route path="/settings">
+          <KilimoLayout><SettingsLayout /></KilimoLayout>
+        </Route>
+        <Route path="/settings/*">
+          <KilimoLayout><SettingsLayout /></KilimoLayout>
+        </Route>
+
+        {/* Dynamic Platform Services */}
+        {SERVICE_REGISTRY.filter((s) => s.basePath && s.pageComponent).map((service) => {
+          const Page = service.pageComponent!;
+          return (
+            <React.Fragment key={service.key}>
+              <Route path={service.basePath}>
+                <KilimoLayout><Page /></KilimoLayout>
+              </Route>
+              <Route path={`${service.basePath}/*`}>
+                <KilimoLayout><Page /></KilimoLayout>
+              </Route>
+            </React.Fragment>
+          );
+        })}
+
+        {/* Crops */}
+        <Route path="/crops/fields"><KilimoLayout><Fields /></KilimoLayout></Route>
+        <Route path="/crops/plantings"><KilimoLayout><Plantings /></KilimoLayout></Route>
+        <Route path="/crops/harvests"><KilimoLayout><Harvests /></KilimoLayout></Route>
+        <Route path="/crops/incidents"><KilimoLayout><Incidents /></KilimoLayout></Route>
+        <Route path="/crops/calendar"><KilimoLayout><CropCalendar /></KilimoLayout></Route>
+        <Route path="/crops/analytics"><KilimoLayout><CropAnalytics /></KilimoLayout></Route>
+
+        {/* Livestock */}
+        <Route path="/livestock/animals"><KilimoLayout><Animals /></KilimoLayout></Route>
+        <Route path="/livestock/breeding"><KilimoLayout><Breeding /></KilimoLayout></Route>
+        <Route path="/livestock/health"><KilimoLayout><HealthLogs /></KilimoLayout></Route>
+        <Route path="/livestock/feed"><KilimoLayout><FeedRecords /></KilimoLayout></Route>
+        <Route path="/livestock/production"><KilimoLayout><Production /></KilimoLayout></Route>
+        <Route path="/livestock/mortality"><KilimoLayout><Mortality /></KilimoLayout></Route>
+
+        {/* Inventory */}
+        <Route path="/inventory/items"><KilimoLayout><InventoryItems /></KilimoLayout></Route>
+        <Route path="/inventory/transactions"><KilimoLayout><StockTransactions /></KilimoLayout></Route>
+        <Route path="/inventory/equipment"><KilimoLayout><Equipment /></KilimoLayout></Route>
+        <Route path="/inventory/suppliers"><KilimoLayout><Suppliers /></KilimoLayout></Route>
+
+        {/* Finance */}
+        <Route path="/finance/transactions"><KilimoLayout><Transactions /></KilimoLayout></Route>
+        <Route path="/finance/budgets"><KilimoLayout><Budgets /></KilimoLayout></Route>
+        <Route path="/finance/report"><KilimoLayout><PLReport /></KilimoLayout></Route>
+        <Route path="/finance/budget-vs-actual"><KilimoLayout><BudgetVsActual /></KilimoLayout></Route>
+
+        {/* Disease Detection */}
+        <Route path="/disease/scan"><KilimoLayout><NewScanPage /></KilimoLayout></Route>
+        <Route path="/disease/history"><KilimoLayout><ScanHistoryPage /></KilimoLayout></Route>
+        <Route path="/disease/reports"><KilimoLayout><DiseaseReportsPage /></KilimoLayout></Route>
+        <Route path="/disease"><KilimoLayout><NewScanPage /></KilimoLayout></Route>
+
+        {/* IoT Engine */}
+        <Route path="/iot"><KilimoLayout><IoTPage /></KilimoLayout></Route>
+        <Route path="/iot/*"><KilimoLayout><IoTPage /></KilimoLayout></Route>
+
+        {/* Reports Hub */}
+        <Route path="/reports"><KilimoLayout><ReportsPage /></KilimoLayout></Route>
+        <Route path="/reports/*"><KilimoLayout><ReportsPage /></KilimoLayout></Route>
+
+        <Route path="/404" component={NotFound} />
+        <Route component={NotFound} />
+      </Switch>
+    </FarmProvider>
+  );
+}
+
+function AdminAppRoutes() {
+  // Admin routes are COMPLETELY outside FarmProvider.
+  // No farm queries will ever fire for Platform Admins.
   return (
     <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/create-farm" component={CreateFarm} />
-      <Route path="/farms/new" component={CreateFarm} />
-      <Route path="/accept-invite" component={AcceptInvite} />
-      <Route path="/register" component={Register} />
-      <Route path="/login" component={Login} />
-
-      {/* Protected routes inside KilimoLayout */}
-      <Route path="/dashboard">
-        <KilimoLayout><Dashboard /></KilimoLayout>
-      </Route>
-      <Route path="/tasks">
-        <KilimoLayout><Tasks /></KilimoLayout>
-      </Route>
-      <Route path="/settings">
-        <KilimoLayout><SettingsLayout /></KilimoLayout>
-      </Route>
-      <Route path="/settings/*">
-        <KilimoLayout><SettingsLayout /></KilimoLayout>
-      </Route>
-
-      {/* Dynamic Platform Services */}
-      {SERVICE_REGISTRY.filter((s) => s.basePath && s.pageComponent).map((service) => {
-        const Page = service.pageComponent!;
-        return (
-          <React.Fragment key={service.key}>
-            <Route path={service.basePath}>
-              <KilimoLayout><Page /></KilimoLayout>
-            </Route>
-            <Route path={`${service.basePath}/*`}>
-              <KilimoLayout><Page /></KilimoLayout>
-            </Route>
-          </React.Fragment>
-        );
-      })}
-
-      {/* Crops */}
-      <Route path="/crops/fields">
-        <KilimoLayout><Fields /></KilimoLayout>
-      </Route>
-      <Route path="/crops/plantings">
-        <KilimoLayout><Plantings /></KilimoLayout>
-      </Route>
-      <Route path="/crops/harvests">
-        <KilimoLayout><Harvests /></KilimoLayout>
-      </Route>
-      <Route path="/crops/incidents">
-        <KilimoLayout><Incidents /></KilimoLayout>
-      </Route>
-      <Route path="/crops/calendar">
-        <KilimoLayout><CropCalendar /></KilimoLayout>
-      </Route>
-      <Route path="/crops/analytics">
-        <KilimoLayout><CropAnalytics /></KilimoLayout>
-      </Route>
-
-      {/* Livestock */}
-      <Route path="/livestock/animals">
-        <KilimoLayout><Animals /></KilimoLayout>
-      </Route>
-      <Route path="/livestock/breeding">
-        <KilimoLayout><Breeding /></KilimoLayout>
-      </Route>
-      <Route path="/livestock/health">
-        <KilimoLayout><HealthLogs /></KilimoLayout>
-      </Route>
-      <Route path="/livestock/feed">
-        <KilimoLayout><FeedRecords /></KilimoLayout>
-      </Route>
-      <Route path="/livestock/production">
-        <KilimoLayout><Production /></KilimoLayout>
-      </Route>
-      <Route path="/livestock/mortality">
-        <KilimoLayout><Mortality /></KilimoLayout>
-      </Route>
-
-      {/* Inventory */}
-      <Route path="/inventory/items">
-        <KilimoLayout><InventoryItems /></KilimoLayout>
-      </Route>
-      <Route path="/inventory/transactions">
-        <KilimoLayout><StockTransactions /></KilimoLayout>
-      </Route>
-      <Route path="/inventory/equipment">
-        <KilimoLayout><Equipment /></KilimoLayout>
-      </Route>
-      <Route path="/inventory/suppliers">
-        <KilimoLayout><Suppliers /></KilimoLayout>
-      </Route>
-
-      {/* Finance */}
-      <Route path="/finance/transactions">
-        <KilimoLayout><Transactions /></KilimoLayout>
-      </Route>
-      <Route path="/finance/budgets">
-        <KilimoLayout><Budgets /></KilimoLayout>
-      </Route>
-      <Route path="/finance/report">
-        <KilimoLayout><PLReport /></KilimoLayout>
-      </Route>
-      <Route path="/finance/budget-vs-actual">
-        <KilimoLayout><BudgetVsActual /></KilimoLayout>
-      </Route>
-
-      {/* Disease Detection */}
-      <Route path="/disease/scan">
-        <KilimoLayout><NewScanPage /></KilimoLayout>
-      </Route>
-      <Route path="/disease/history">
-        <KilimoLayout><ScanHistoryPage /></KilimoLayout>
-      </Route>
-      <Route path="/disease/reports">
-        <KilimoLayout><DiseaseReportsPage /></KilimoLayout>
-      </Route>
-      <Route path="/disease">
-        <KilimoLayout><NewScanPage /></KilimoLayout>
-      </Route>
-
-      {/* IoT Engine */}
-      <Route path="/iot">
-        <KilimoLayout><IoTPage /></KilimoLayout>
-      </Route>
-      <Route path="/iot/*">
-        <KilimoLayout><IoTPage /></KilimoLayout>
-      </Route>
-
-      {/* Reports Hub */}
-      <Route path="/reports">
-        <KilimoLayout><ReportsPage /></KilimoLayout>
-      </Route>
-      <Route path="/reports/*">
-        <KilimoLayout><ReportsPage /></KilimoLayout>
-      </Route>
-
-      {/* ── Admin Panel ── */}
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin" exact>
+        <AdminLayout><AdminDashboard /></AdminLayout>
+      </Route>
+      <Route path="/admin/dashboard">
         <AdminLayout><AdminDashboard /></AdminLayout>
       </Route>
       <Route path="/admin/organizations">
@@ -244,11 +203,18 @@ function AppRoutes() {
       <Route path="/admin/announcements">
         <AdminLayout><AdminAnnouncements /></AdminLayout>
       </Route>
-
-      <Route path="/404" component={NotFound} />
-      <Route component={NotFound} />
     </Switch>
   );
+}
+
+function AppRoutes() {
+  const [location] = useLocation();
+  // Route to the correct context based on the URL prefix.
+  // Admin routes must never share a provider tree with tenant routes.
+  if (location.startsWith("/admin")) {
+    return <AdminAppRoutes />;
+  }
+  return <TenantAppRoutes />;
 }
 
 function App() {
@@ -256,10 +222,8 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
         <TooltipProvider>
-          <FarmProvider>
-            <Toaster richColors position="top-right" />
-            <AppRoutes />
-          </FarmProvider>
+          <Toaster richColors position="top-right" />
+          <AppRoutes />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

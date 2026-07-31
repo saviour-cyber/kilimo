@@ -35,14 +35,15 @@ const FEATURES = [
 ];
 
 export default function Home() {
-  const { loading, isAuthenticated } = useAuth();
+  const { loading, isAuthenticated, isPlatformAdmin } = useAuth();
   const [, navigate] = useLocation();
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
-      navigate("/dashboard");
+      // Platform Admins must NEVER be routed to the farm dashboard
+      navigate(isPlatformAdmin ? "/admin" : "/dashboard");
     }
-  }, [loading, isAuthenticated, navigate]);
+  }, [loading, isAuthenticated, isPlatformAdmin, navigate]);
 
   return (
     // System background token: #F8FAFC

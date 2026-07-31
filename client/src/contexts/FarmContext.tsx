@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 
 export type FarmRole = "owner" | "administrator" | "farm_manager" | "worker" | "veterinary_officer" | "crop_officer" | "viewer";
 
@@ -51,12 +52,17 @@ const ROLE_PERMISSIONS: Record<FarmRole, ("read" | "write" | "manage" | "admin")
 };
 
 export function FarmProvider({ children }: { children: React.ReactNode }) {
+  const { isPlatformAdmin } = useAuth();
   const [currentFarmId, setCurrentFarmId] = useState<number | null>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     return stored ? parseInt(stored, 10) : null;
   });
 
+  // CRITICAL: Platform Admins (role === 'admin') must NEVER trigger farm queries.
+  // They are not tenants and have no farms. Enabling this for admins would cause
+  // unnecessary API calls and could expose cross-tenant data.
   const { data: farms = [], isLoading: farmsLoading, refetch: refetchFarms } = trpc.farms.list.useQuery(undefined, {
+    enabled: !isPlatformAdmin,
     retry: false,
   });
 

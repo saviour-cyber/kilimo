@@ -1,6 +1,5 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useEffect } from "react";
-import { useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import {
   Activity,
@@ -152,9 +151,9 @@ export function AdminLayout({ children }: AdminLayoutProps) {
               variant="ghost"
               size="icon"
               className="text-slate-400 hover:text-red-400 hover:bg-red-400/10 h-8 w-8 rounded-full"
-              onClick={() => {
-                logout();
-                window.location.href = startLogin;
+              onClick={async () => {
+                await logout();
+                window.location.href = "/admin/login";
               }}
             >
               <LogOut className="w-4 h-4" />
@@ -173,9 +172,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             )?.label || "Admin Panel"}
           </h1>
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm" asChild className="text-slate-600">
-              <Link href="/dashboard">Return to App</Link>
-            </Button>
+            <span className="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded-md font-mono">Platform Administration</span>
           </div>
         </header>
 

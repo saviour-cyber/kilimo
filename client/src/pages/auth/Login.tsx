@@ -6,11 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { Sprout, Loader2 } from "lucide-react";
+import { resolvePostLoginPath } from "@/components/AuthRouter";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+  const utils = trpc.useUtils();
+
   const loginMutation = trpc.auth.login.useMutation();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -22,12 +24,12 @@ export default function Login() {
 
     try {
       await loginMutation.mutateAsync({ email, password });
+      // Fetch the user's role immediately after login to route correctly
+      const me = await utils.auth.me.fetch();
       toast.success("Successfully logged in");
-      
-      // Redirect to dashboard
       setTimeout(() => {
-        window.location.href = "/dashboard";
-      }, 500);
+        window.location.href = resolvePostLoginPath(me?.role);
+      }, 300);
     } catch (error: any) {
       toast.error(error.message || "Invalid credentials");
     }
