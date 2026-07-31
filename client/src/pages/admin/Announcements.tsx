@@ -11,10 +11,9 @@ import { Bell, Plus, RefreshCw } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { format } from "date-fns";
 import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 export default function AdminAnnouncements() {
-  const { toast } = useToast();
   const utils = trpc.useContext();
   const { data: announcements, isLoading } = trpc.admin.listAnnouncements.useQuery();
   const createMutation = trpc.admin.createAnnouncement.useMutation();
@@ -26,22 +25,22 @@ export default function AdminAnnouncements() {
   const handleCreate = async () => {
     try {
       await createMutation.mutateAsync(newAnn);
-      toast({ title: "Success", description: "Announcement published globally." });
+      toast.success("Announcement published globally.");
       setIsOpen(false);
       setNewAnn({ title: "", content: "", type: "info" });
       utils.admin.listAnnouncements.invalidate();
     } catch (e: any) {
-      toast({ title: "Error", description: e.message, variant: "destructive" });
+      toast.error(e.message);
     }
   };
 
   const handleToggle = async (id: number, isActive: boolean) => {
     try {
       await toggleMutation.mutateAsync({ id, isActive });
-      toast({ title: "Success", description: isActive ? "Announcement activated" : "Announcement hidden" });
+      toast.success(isActive ? "Announcement activated" : "Announcement hidden");
       utils.admin.listAnnouncements.invalidate();
     } catch (e: any) {
-      toast({ title: "Error", description: e.message, variant: "destructive" });
+      toast.error(e.message);
     }
   };
 

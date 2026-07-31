@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { ShieldAlert, Eye, EyeOff, Loader2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function AdminLogin() {
   const [, navigate] = useLocation();
-  const { toast } = useToast();
   const utils = trpc.useContext();
 
   const [email, setEmail] = useState("");
@@ -17,26 +16,16 @@ export default function AdminLogin() {
 
   const loginMutation = trpc.auth.login.useMutation({
     onSuccess: async () => {
-      // Verify the logged-in user is actually an admin
       const me = await utils.auth.me.fetch();
       if (me?.role !== "admin") {
-        // Log them out immediately — not an admin
-        toast({
-          title: "Access Denied",
-          description: "This portal is restricted to platform administrators.",
-          variant: "destructive",
-        });
+        toast.error("This portal is restricted to platform administrators.");
         await utils.auth.logout.fetch();
         return;
       }
       navigate("/admin");
     },
     onError: (err) => {
-      toast({
-        title: "Login Failed",
-        description: err.message,
-        variant: "destructive",
-      });
+      toast.error(err.message);
     },
   });
 
