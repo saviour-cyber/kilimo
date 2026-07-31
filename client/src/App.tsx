@@ -14,12 +14,16 @@ import AdminOrganizations from "./pages/admin/Organizations";
 import AdminUsers from "./pages/admin/Users";
 import AdminModules from "./pages/admin/Modules";
 import AdminServices from "./pages/admin/Services";
-import AdminAuditLogs from "./pages/admin/AuditLogs";
-import AdminMonitoring from "./pages/admin/Monitoring";
 import AdminAiManagement from "./pages/admin/AiManagement";
 import AdminIotManagement from "./pages/admin/IotManagement";
 import AdminReports from "./pages/admin/Reports";
+import AdminMonitoring from "./pages/admin/Monitoring";
+import AdminAuditLogs from "./pages/admin/AuditLogs";
 import AdminAnnouncements from "./pages/admin/Announcements";
+import AdminSubscriptions from "./pages/admin/Subscriptions";
+import AdminSupport from "./pages/admin/Support";
+import AdminBilling from "./pages/admin/Billing";
+import AdminSettings from "./pages/admin/Settings";
 // Auth
 import Home from "./pages/Home";
 import CreateFarm from "./pages/CreateFarm";
@@ -202,6 +206,26 @@ function AdminAppRoutes() {
       </Route>
       <Route path="/admin/announcements">
         <AdminLayout><AdminAnnouncements /></AdminLayout>
+      </Route>
+      <Route path="/admin/subscriptions">
+        <AdminLayout><AdminSubscriptions /></AdminLayout>
+      </Route>
+      <Route path="/admin/support">
+        <AdminLayout><AdminSupport /></AdminLayout>
+      </Route>
+      <Route path="/admin/billing">
+        <AdminLayout><AdminBilling /></AdminLayout>
+      </Route>
+      <Route path="/admin/settings">
+        <AdminLayout><AdminSettings /></AdminLayout>
+      </Route>
+      <Route>
+        <AdminLayout>
+          <div className="p-8">
+            <h2 className="text-2xl font-bold text-slate-800">Page not found</h2>
+            <p className="text-slate-500 mt-2">The requested administrative page does not exist or is under construction.</p>
+          </div>
+        </AdminLayout>
       </Route>
     </Switch>
   );

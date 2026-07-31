@@ -1,0 +1,39 @@
+import React from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Wallet } from "lucide-react";
+
+export default function Billing() {
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Billing & Invoices</h1>
+        <p className="text-slate-500 mt-2">
+          Manage platform revenue, tenant invoices, and payment gateways.
+        </p>
+      </div>
+      
+      <Card>
+        <CardHeader>
+          <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center mb-4">
+            <Wallet className="w-5 h-5 text-green-600" />
+          </div>
+          <CardTitle>Billing Dashboard</CardTitle>
+          <CardDescription>
+            This module is under construction. It will provide an overview of recurring revenue, failed payments, and integration with Stripe/PayPal.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="p-8 text-center bg-slate-50 border border-dashed rounded-lg text-slate-500">
+            Billing interface coming soon.
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
