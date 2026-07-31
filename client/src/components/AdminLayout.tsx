@@ -95,7 +95,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           </div>
         </div>
 
-        <ScrollArea className="flex-1 py-6 px-4">
+        <ScrollArea className="flex-1 min-h-0 py-6 px-4">
           <div className="space-y-8">
             {ADMIN_MENU.map((group) => (
               <div key={group.group}>
@@ -177,7 +177,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         </header>
 
         {/* Page Content */}
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex-1 min-h-0">
           <div className="p-8">
             {children}
           </div>

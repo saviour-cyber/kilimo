@@ -361,7 +361,7 @@ export function KilimoLayout({ children }: KilimoLayoutProps) {
       </div>
 
       {/* 2. Middle Content (Scrollable) */}
-      <ScrollArea className="flex-1 overflow-hidden">
+      <ScrollArea className="flex-1 min-h-0 overflow-hidden">
         <nav className={cn("space-y-0.5 py-4", collapsed ? "px-1.5" : "px-3")}>
           {/* Dashboard */}
           {visibleModules.find(m => m.key === "dashboard") && (
@@ -540,7 +540,7 @@ export function KilimoLayout({ children }: KilimoLayoutProps) {
         <GlobalAnnouncementBanner />
 
         {/* Page Content */}
-        <main className="flex-1 overflow-auto">
+        <main className="flex-1 min-h-0 overflow-auto">
           {currentFarm ? (
             children
           ) : (
