@@ -3,13 +3,23 @@ import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
+import mysql from "mysql2/promise";
+
 let _db: ReturnType<typeof drizzle> | null = null;
+let _pool: mysql.Pool | null = null;
 
 // Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      _db = drizzle(process.env.DATABASE_URL);
+      // TiDB and other cloud providers often require SSL.
+      // Providing the URL to createPool handles complex connection strings robustly.
+      _pool = mysql.createPool({
+        uri: process.env.DATABASE_URL,
+        connectionLimit: 10,
+        ssl: process.env.DATABASE_URL.includes('tidb') || process.env.DATABASE_URL.includes('ssl=') ? { rejectUnauthorized: true } : undefined,
+      });
+      _db = drizzle(_pool);
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
