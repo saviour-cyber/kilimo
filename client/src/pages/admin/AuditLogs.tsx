@@ -62,9 +62,9 @@ export default function AdminAuditLogs() {
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-medium text-slate-600">
-                          {log.user?.fullName?.charAt(0) || "U"}
+                          {log.user?.name?.charAt(0) || "U"}
                         </div>
-                        <span className="text-sm font-medium text-slate-700">{log.user?.fullName || "System"}</span>
+                        <span className="text-sm font-medium text-slate-700">{log.user?.name || "System"}</span>
                       </div>
                     </TableCell>
                     <TableCell>

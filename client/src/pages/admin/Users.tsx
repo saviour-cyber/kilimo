@@ -3,14 +3,32 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, ShieldOff, KeyRound, Ban, Building2 } from "lucide-react";
+import { MoreHorizontal, ShieldCheck, ShieldOff, Trash2, Users } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { toast } from "sonner";
 
 export default function AdminUsers() {
+  const utils = trpc.useContext();
   const { data: users, isLoading } = trpc.admin.listUsers.useQuery();
+
+  const updateRoleMutation = trpc.admin.updateUserRole.useMutation({
+    onSuccess: (_, vars) => {
+      toast.success(`User role updated to ${vars.role}.`);
+      utils.admin.listUsers.invalidate();
+    },
+    onError: (e) => toast.error(e.message),
+  });
+
+  const deleteUserMutation = trpc.admin.deleteUser.useMutation({
+    onSuccess: () => {
+      toast.success("User deleted successfully.");
+      utils.admin.listUsers.invalidate();
+    },
+    onError: (e) => toast.error(e.message),
+  });
 
   return (
     <Card className="border-slate-200 shadow-sm">
@@ -20,6 +38,9 @@ export default function AdminUsers() {
             <CardTitle className="text-xl text-slate-800">Platform Users</CardTitle>
             <CardDescription>Manage all registered users across the entire platform.</CardDescription>
           </div>
+          <Badge variant="outline" className="text-slate-500">
+            {users?.length ?? 0} total
+          </Badge>
         </div>
       </CardHeader>
       <CardContent>
@@ -37,7 +58,6 @@ export default function AdminUsers() {
                 <TableHead>Role</TableHead>
                 <TableHead>Joined</TableHead>
                 <TableHead>Last Active</TableHead>
-                <TableHead>Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -58,15 +78,19 @@ export default function AdminUsers() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline" className={user.role === "admin" ? "border-emerald-200 text-emerald-700 bg-emerald-50" : "border-slate-200 text-slate-600"}>
+                    <Badge
+                      variant="outline"
+                      className={
+                        user.role === "admin"
+                          ? "border-emerald-200 text-emerald-700 bg-emerald-50"
+                          : "border-slate-200 text-slate-600"
+                      }
+                    >
                       {user.role}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-slate-600">{format(new Date(user.createdAt), "MMM d, yyyy")}</TableCell>
                   <TableCell className="text-slate-600">{format(new Date(user.lastSignedIn), "MMM d, yyyy")}</TableCell>
-                  <TableCell>
-                    <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none">Verified</Badge>
-                  </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -74,14 +98,35 @@ export default function AdminUsers() {
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-56">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuContent align="end" className="w-52">
+                        <DropdownMenuLabel>User Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="gap-2 text-slate-600"><Building2 className="w-4 h-4" /> Assign Organization</DropdownMenuItem>
-                        <DropdownMenuItem className="gap-2 text-slate-600"><KeyRound className="w-4 h-4" /> Reset Password</DropdownMenuItem>
+                        {user.role !== "admin" ? (
+                          <DropdownMenuItem
+                            className="gap-2 text-emerald-700"
+                            onClick={() => updateRoleMutation.mutate({ userId: user.id, role: "admin" })}
+                          >
+                            <ShieldCheck className="w-4 h-4" /> Make Platform Admin
+                          </DropdownMenuItem>
+                        ) : (
+                          <DropdownMenuItem
+                            className="gap-2 text-amber-600"
+                            onClick={() => updateRoleMutation.mutate({ userId: user.id, role: "user" })}
+                          >
+                            <ShieldOff className="w-4 h-4" /> Remove Admin Role
+                          </DropdownMenuItem>
+                        )}
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="gap-2 text-amber-600"><Ban className="w-4 h-4" /> Disable Login</DropdownMenuItem>
-                        <DropdownMenuItem className="gap-2 text-rose-600 font-semibold"><ShieldOff className="w-4 h-4" /> Suspend User</DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="gap-2 text-rose-600 font-semibold"
+                          onClick={() => {
+                            if (confirm(`Permanently delete "${user.name}"? This cannot be undone.`)) {
+                              deleteUserMutation.mutate({ userId: user.id });
+                            }
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4" /> Delete User
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -89,7 +134,8 @@ export default function AdminUsers() {
               ))}
               {users?.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-slate-500">
+                  <TableCell colSpan={5} className="text-center py-12 text-slate-400">
+                    <Users className="w-8 h-8 mx-auto mb-2 opacity-30" />
                     No users found on the platform.
                   </TableCell>
                 </TableRow>

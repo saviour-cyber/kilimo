@@ -48,6 +48,55 @@ export const adminRouter = router({
       .orderBy(users.createdAt);
   }),
 
+  updateUserRole: adminProcedure
+    .input(z.object({
+      userId: z.number(),
+      role: z.enum(["user", "admin"]),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      if (input.userId === ctx.user.id && input.role !== "admin") {
+        throw new TRPCError({ code: "FORBIDDEN", message: "You cannot remove your own admin role." });
+      }
+
+      await db.update(users).set({ role: input.role }).where(eq(users.id, input.userId));
+
+      await db.insert(auditLogs).values({
+        userId: ctx.user.id,
+        action: "USER_ROLE_UPDATED",
+        entityType: "user",
+        entityId: input.userId.toString(),
+        details: { newRole: input.role },
+      });
+
+      return { success: true };
+    }),
+
+  deleteUser: adminProcedure
+    .input(z.object({ userId: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      if (input.userId === ctx.user.id) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "You cannot delete your own account." });
+      }
+
+      await db.insert(auditLogs).values({
+        userId: ctx.user.id,
+        action: "USER_DELETED",
+        entityType: "user",
+        entityId: input.userId.toString(),
+        details: {},
+      });
+
+      await db.delete(users).where(eq(users.id, input.userId));
+
+      return { success: true };
+    }),
+
   // ── Organizations ──────────────────────────────────────────────────────────
   listOrganizations: adminProcedure.query(async () => {
     const db = await getDb();
@@ -59,11 +108,70 @@ export const adminRouter = router({
         name: organizations.name,
         businessType: organizations.businessType,
         country: organizations.country,
+        contactEmail: organizations.contactEmail,
+        contactPhone: organizations.contactPhone,
+        ownerId: organizations.ownerId,
         createdAt: organizations.createdAt,
       })
       .from(organizations)
       .orderBy(organizations.createdAt);
   }),
+
+  createOrganization: adminProcedure
+    .input(z.object({
+      name: z.string().min(2),
+      businessType: z.string().min(1),
+      country: z.string().default("Kenya"),
+      county: z.string().optional(),
+      contactEmail: z.string().email().optional().or(z.literal("")),
+      contactPhone: z.string().optional(),
+      description: z.string().optional(),
+      ownerId: z.number(),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      const [result] = await db.insert(organizations).values({
+        name: input.name,
+        businessType: input.businessType,
+        country: input.country,
+        county: input.county,
+        contactEmail: input.contactEmail || undefined,
+        contactPhone: input.contactPhone,
+        description: input.description,
+        ownerId: input.ownerId,
+      });
+
+      await db.insert(auditLogs).values({
+        userId: ctx.user.id,
+        action: "ORGANIZATION_CREATED",
+        entityType: "organization",
+        entityId: result.insertId.toString(),
+        details: { name: input.name, businessType: input.businessType },
+      });
+
+      return { success: true, id: result.insertId };
+    }),
+
+  deleteOrganization: adminProcedure
+    .input(z.object({ organizationId: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      await db.insert(auditLogs).values({
+        userId: ctx.user.id,
+        action: "ORGANIZATION_DELETED",
+        entityType: "organization",
+        entityId: input.organizationId.toString(),
+        details: {},
+      });
+
+      await db.delete(organizations).where(eq(organizations.id, input.organizationId));
+
+      return { success: true };
+    }),
 
   // ── Modules ────────────────────────────────────────────────────────────────
   listModules: adminProcedure.query(async () => {
@@ -142,7 +250,7 @@ export const adminRouter = router({
         createdAt: auditLogs.createdAt,
         user: {
           id: users.id,
-          fullName: users.fullName,
+          name: users.name,
           email: users.email,
         }
       })
