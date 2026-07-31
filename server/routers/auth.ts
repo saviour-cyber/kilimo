@@ -45,7 +45,8 @@ export const authRouter = router({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const { email, password } = input;
+      const email = input.email.trim().toLowerCase();
+      const password = input.password;
 
       const userResult = await ctx.db
         .select()
