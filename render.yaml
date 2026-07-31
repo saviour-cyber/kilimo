@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: kilimohub
+    env: node
+    region: frankfurt
+    plan: starter
+    buildCommand: corepack enable pnpm && pnpm install && pnpm run build
+    startCommand: pnpm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: VITE_APP_ID
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: OAUTH_SERVER_URL
+        sync: false
+      - key: OWNER_OPEN_ID
+        sync: false

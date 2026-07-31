@@ -1,0 +1,420 @@
+import {
+  BarChart3,
+  Beef,
+  CheckSquare,
+  DollarSign,
+  LayoutDashboard,
+  Package,
+  PlusCircle,
+  Settings,
+  Sprout,
+  Stethoscope,
+  Tractor,
+  TrendingUp,
+  type LucideIcon,
+} from "lucide-react";
+import type React from "react";
+
+// ─── Quick Action ────────────────────────────────────────────────────────────
+export interface QuickAction {
+  label: string;
+  description: string;
+  icon: LucideIcon;
+  path: string;
+  color: string;
+}
+
+// ─── Dashboard Widget ─────────────────────────────────────────────────────────
+export type WidgetType = "kpi" | "summary" | "intelligence" | "system" | "sidebar" | "activity" | "analytics" | "quickAction" | "utility";
+
+export type WidgetPriorityLevel = "critical" | "high" | "normal" | "low";
+
+export interface DashboardWidgetDefinition {
+  /** Unique ID, used as React key */
+  id: string;
+  /** Where on the dashboard this widget typically belongs conceptually */
+  type: WidgetType;
+  /** Sizing metadata for the layout engine */
+  size: "small" | "medium" | "large";
+  /** Sorting priority for the layout engine */
+  priority: { level: WidgetPriorityLevel; order: number };
+  /** The component to render. Receives { farmId: number } as prop. */
+  component: React.FC<{ farmId: number; className?: string }>;
+}
+
+// ─── Reporting API ────────────────────────────────────────────────────────────
+export interface ReportFilterDef {
+  id: string;
+  label: string;
+  type: "date_range" | "select" | "boolean" | "multiselect";
+  options?: { label: string; value: string }[];
+}
+
+export interface ReportDefinition {
+  id: string;
+  name: string;
+  description: string;
+  supportedFormats: ("pdf" | "excel" | "csv" | "print")[];
+  filters: ReportFilterDef[];
+  /** Standard visual layout type for the Reports Hub */
+  visualType: "tabular" | "kpi" | "chart" | "mixed";
+  /** The backend data source (tRPC route key, e.g. "crop.getReportData") */
+  dataSourceQuery: string;
+  /** Optional custom visualization component for specialized reports */
+  customComponent?: React.FC<{ data: any; filters: any; dateRange?: { from: Date; to: Date } }>;
+}
+
+// ─── Module Definition ───────────────────────────────────────────────────────
+export interface ModuleDefinition {
+  key: string;
+  label: string;
+  icon: LucideIcon;
+  basePath: string;
+  color: string;
+  description: string;
+  alwaysVisible?: boolean;
+  minRole?: "viewer" | "worker" | "manager" | "owner";
+  subItems?: { label: string; path: string }[];
+  quickActions?: QuickAction[];
+  /** Widgets this module contributes to the Dashboard */
+  dashboardWidgets?: DashboardWidgetDefinition[];
+  /** Standardized report definitions provided by this module */
+  reports?: ReportDefinition[];
+}
+
+// ─── Registry ────────────────────────────────────────────────────────────────
+// NOTE: Widget components are lazy-imported here to avoid circular deps.
+// We use React.lazy-compatible factories registered at module load time.
+
+import { CropKpiWidget, CropSummaryWidget } from "@/components/widgets/modules/CropWidgets";
+import { LivestockKpiWidget, LivestockSummaryWidget } from "@/components/widgets/modules/LivestockWidgets";
+import { InventoryKpiWidget, InventorySummaryWidget } from "@/components/widgets/modules/InventoryWidgets";
+import { EquipmentKpiWidget, EquipmentSummaryWidget } from "@/components/widgets/modules/EquipmentWidgets";
+import { FinanceRevenueKpiWidget, FinanceExpenseKpiWidget, FinanceSummaryWidget } from "@/components/widgets/modules/FinanceWidgets";
+import { TasksKpiWidget, TasksSummaryWidget, TasksUpcomingSidebarWidget } from "@/components/widgets/modules/TasksWidgets";
+import { DiseaseKpiWidget, DiseaseSummaryWidget } from "@/components/widgets/modules/DiseaseWidgets";
+
+export const MODULE_REGISTRY: ModuleDefinition[] = [
+  {
+    key: "dashboard",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    basePath: "/dashboard",
+    color: "text-emerald-600",
+    description: "Overview and KPIs",
+    alwaysVisible: true,
+  },
+
+  {
+    key: "crop",
+    label: "Crops",
+    icon: Sprout,
+    basePath: "/crops",
+    color: "text-green-600",
+    description: "Crop and field management",
+    subItems: [
+      { label: "Fields", path: "/crops/fields" },
+      { label: "Plantings", path: "/crops/plantings" },
+      { label: "Harvests", path: "/crops/harvests" },
+      { label: "Calendar", path: "/crops/calendar" },
+      { label: "Incidents", path: "/crops/incidents" },
+      { label: "Analytics", path: "/crops/analytics" },
+    ],
+    quickActions: [
+      {
+        label: "Add a Crop",
+        description: "Record your first planting or field.",
+        icon: Sprout,
+        path: "/crops/plantings",
+        color: "bg-green-100 text-green-700",
+      },
+      {
+        label: "Manage Fields",
+        description: "View and edit your farm fields.",
+        icon: BarChart3,
+        path: "/crops/fields",
+        color: "bg-emerald-100 text-emerald-700",
+      },
+    ],
+    dashboardWidgets: [
+      { id: "crop-kpi",      type: "kpi",      size: "small", priority: { level: "high", order: 1 }, component: CropKpiWidget },
+      { id: "crop-summary",  type: "summary",  size: "large", priority: { level: "normal", order: 1 }, component: CropSummaryWidget },
+    ],
+  },
+
+  {
+    key: "livestock",
+    label: "Livestock",
+    icon: Beef,
+    basePath: "/livestock",
+    color: "text-amber-600",
+    description: "Animal registry and health",
+    subItems: [
+      { label: "Animals", path: "/livestock/animals" },
+      { label: "Breeding", path: "/livestock/breeding" },
+      { label: "Health Logs", path: "/livestock/health" },
+      { label: "Feed Records", path: "/livestock/feed" },
+      { label: "Production", path: "/livestock/production" },
+      { label: "Mortality", path: "/livestock/mortality" },
+    ],
+    quickActions: [
+      {
+        label: "Register Animal",
+        description: "Add an animal to your registry.",
+        icon: Beef,
+        path: "/livestock/animals",
+        color: "bg-amber-100 text-amber-700",
+      },
+      {
+        label: "Log Health Record",
+        description: "Record a health check or treatment.",
+        icon: PlusCircle,
+        path: "/livestock/health",
+        color: "bg-orange-100 text-orange-700",
+      },
+    ],
+    dashboardWidgets: [
+      { id: "livestock-kpi",     type: "kpi",     size: "small", priority: { level: "high", order: 2 }, component: LivestockKpiWidget },
+      { id: "livestock-summary", type: "summary", size: "large", priority: { level: "normal", order: 2 }, component: LivestockSummaryWidget },
+    ],
+  },
+
+  {
+    key: "inventory",
+    label: "Inventory",
+    icon: Package,
+    basePath: "/inventory",
+    color: "text-blue-600",
+    description: "Inputs, stock, and equipment",
+    subItems: [
+      { label: "Items", path: "/inventory/items" },
+      { label: "Transactions", path: "/inventory/transactions" },
+      { label: "Equipment", path: "/inventory/equipment" },
+      { label: "Suppliers", path: "/inventory/suppliers" },
+    ],
+    quickActions: [
+      {
+        label: "Add Inventory Item",
+        description: "Add seeds, fertilisers or supplies.",
+        icon: Package,
+        path: "/inventory/items",
+        color: "bg-blue-100 text-blue-700",
+      },
+      {
+        label: "Log Equipment",
+        description: "Register farm machinery or tools.",
+        icon: Tractor,
+        path: "/inventory/equipment",
+        color: "bg-sky-100 text-sky-700",
+      },
+    ],
+    dashboardWidgets: [
+      { id: "inventory-kpi",     type: "kpi",     size: "small", priority: { level: "high", order: 3 }, component: InventoryKpiWidget },
+      { id: "inventory-summary", type: "summary", size: "medium", priority: { level: "normal", order: 3 }, component: InventorySummaryWidget },
+    ],
+  },
+
+  {
+    key: "equipment",
+    label: "Equipment",
+    icon: Tractor,
+    basePath: "/inventory/equipment",
+    color: "text-cyan-600",
+    description: "Farm machinery and tools",
+    dashboardWidgets: [],
+  },
+
+
+  {
+    key: "finance",
+    label: "Finance",
+    icon: DollarSign,
+    basePath: "/finance",
+    color: "text-violet-600",
+    description: "Income, expenses, and reports",
+    subItems: [
+      { label: "Transactions", path: "/finance/transactions" },
+      { label: "Budgets", path: "/finance/budgets" },
+      { label: "P&L Report", path: "/finance/report" },
+    ],
+    quickActions: [
+      {
+        label: "Record Transaction",
+        description: "Add income or an expense entry.",
+        icon: DollarSign,
+        path: "/finance/transactions",
+        color: "bg-violet-100 text-violet-700",
+      },
+      {
+        label: "View P&L Report",
+        description: "Check your profit and loss summary.",
+        icon: TrendingUp,
+        path: "/finance/report",
+        color: "bg-purple-100 text-purple-700",
+      },
+    ],
+    dashboardWidgets: [
+      { id: "finance-revenue-kpi", type: "kpi", size: "small", priority: { level: "high", order: 4 }, component: FinanceRevenueKpiWidget },
+      { id: "finance-expense-kpi", type: "kpi", size: "small", priority: { level: "high", order: 5 }, component: FinanceExpenseKpiWidget },
+      { id: "finance-summary",     type: "summary", size: "large", priority: { level: "normal", order: 4 }, component: FinanceSummaryWidget },
+    ],
+    reports: [
+      {
+        id: "finance-profit-loss",
+        name: "Profit & Loss Statement",
+        description: "Comprehensive breakdown of income and expenses over time.",
+        supportedFormats: ["pdf", "excel", "csv", "print"],
+        visualType: "tabular",
+        dataSourceQuery: "finance.getProfitLossReport",
+        filters: [
+          { id: "dateRange", label: "Date Range", type: "date_range" },
+          { id: "category", label: "Category", type: "select", options: [
+            { label: "All", value: "all" },
+            { label: "Sales", value: "sales" },
+            { label: "Operating", value: "operating" }
+          ]}
+        ]
+      }
+    ]
+  },
+
+  {
+    key: "tasks",
+    label: "Tasks",
+    icon: CheckSquare,
+    basePath: "/tasks",
+    color: "text-orange-600",
+    description: "Task and reminder management",
+    alwaysVisible: true,
+    quickActions: [
+      {
+        label: "Create Task",
+        description: "Add a farm activity or to-do.",
+        icon: CheckSquare,
+        path: "/tasks",
+        color: "bg-orange-100 text-orange-700",
+      },
+    ],
+    dashboardWidgets: [
+      { id: "tasks-kpi",              type: "kpi",     size: "small", priority: { level: "high", order: 6 }, component: TasksKpiWidget },
+      { id: "tasks-summary",          type: "summary", size: "medium", priority: { level: "normal", order: 5 }, component: TasksSummaryWidget },
+      { id: "tasks-upcoming-sidebar", type: "utility", size: "medium", priority: { level: "low", order: 1 }, component: TasksUpcomingSidebarWidget },
+    ],
+  },
+
+  {
+    key: "disease",
+    label: "Disease Detection",
+    icon: Stethoscope,
+    basePath: "/disease",
+    color: "text-violet-600",
+    description: "AI-powered crop and livestock disease detection",
+    subItems: [
+      { label: "New Scan",     path: "/disease/scan" },
+      { label: "Scan History", path: "/disease/history" },
+      { label: "Reports",      path: "/disease/reports" },
+    ],
+    quickActions: [
+      {
+        label: "Run Disease Scan",
+        description: "Upload a photo for AI disease analysis.",
+        icon: Stethoscope,
+        path: "/disease/scan",
+        color: "bg-violet-100 text-violet-700",
+      },
+    ],
+    dashboardWidgets: [
+      { id: "disease-kpi",     type: "kpi",     size: "small", priority: { level: "critical", order: 0 }, component: DiseaseKpiWidget },
+      { id: "disease-summary", type: "summary", size: "medium", priority: { level: "high",     order: 0 }, component: DiseaseSummaryWidget },
+    ],
+  },
+
+  {
+    key: "settings",
+    label: "Settings",
+    icon: Settings,
+    basePath: "/settings",
+    color: "text-slate-600",
+    description: "Farm and user settings",
+    alwaysVisible: true,
+    minRole: "manager",
+  },
+];
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+/**
+ * Returns sidebar-visible modules based on enabled keys and user role.
+ */
+export function getVisibleModules(
+  enabledModules: string[],
+  role: string | null
+): ModuleDefinition[] {
+  const roleHierarchy: Record<string, number> = {
+    viewer: 1,
+    worker: 2,
+    manager: 3,
+    owner: 4,
+  };
+  const userLevel = roleHierarchy[role ?? ""] ?? 0;
+
+  return MODULE_REGISTRY.filter((mod) => {
+    if (mod.alwaysVisible) {
+      const required = roleHierarchy[mod.minRole ?? "viewer"] ?? 1;
+      return userLevel >= required;
+    }
+    if (!enabledModules.includes(mod.key)) return false;
+    const required = roleHierarchy[mod.minRole ?? "viewer"] ?? 1;
+    return userLevel >= required;
+  });
+}
+
+/**
+ * Returns all quick actions contributed by the currently enabled modules.
+ */
+export function getQuickActions(enabledModules: string[]): QuickAction[] {
+  return MODULE_REGISTRY.filter((mod) => enabledModules.includes(mod.key) || mod.alwaysVisible)
+    .flatMap((mod) => mod.quickActions ?? []);
+}
+
+/**
+ * Returns dashboard widgets of a specific type from all enabled modules.
+ * The Dashboard calls this to render widgets without knowing which module contributes them.
+ */
+export function getWidgetsByType(
+  enabledModules: string[],
+  type: WidgetType
+): DashboardWidgetDefinition[] {
+  return MODULE_REGISTRY.filter(
+    (mod) => mod.alwaysVisible || enabledModules.includes(mod.key)
+  ).flatMap((mod) =>
+    (mod.dashboardWidgets ?? []).filter((w) => w.type === type)
+  );
+}
+
+/**
+ * Returns ALL dashboard widgets from all enabled modules, grouped by type.
+ */
+export function getAllWidgets(enabledModules: string[]): Record<WidgetType, DashboardWidgetDefinition[]> {
+  const result: Record<WidgetType, DashboardWidgetDefinition[]> = {
+    kpi: [],
+    summary: [],
+    intelligence: [],
+    system: [],
+    sidebar: [],
+    activity: [],
+    analytics: [],
+    quickAction: [],
+    utility: [],
+  };
+
+  MODULE_REGISTRY
+    .filter((mod) => mod.alwaysVisible || enabledModules.includes(mod.key))
+    .forEach((mod) => {
+      for (const w of mod.dashboardWidgets ?? []) {
+        if (w.type in result) result[w.type as WidgetType].push(w);
+      }
+    });
+
+  return result;
+}

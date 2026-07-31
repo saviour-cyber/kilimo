@@ -1,0 +1,116 @@
+import { useFarm } from "@/contexts/FarmContext";
+import { trpc } from "@/lib/trpc";
+import { AIChatBox, type Message } from "@/components/AIChatBox";
+import { Sparkles, Brain, CloudRain, ShieldAlert } from "lucide-react";
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+
+export default function KiliAIPage() {
+  const { currentFarm } = useFarm();
+  const farmId = currentFarm?.farm.id ?? 0;
+
+  const [messages, setMessages] = useState<Message[]>([
+    { role: "assistant", content: "Hi! I'm Kili, your AI farm assistant. How can I help you optimize your farm today?" }
+  ]);
+
+  const { data: insights } = trpc.intelligence.getRecommendations.useQuery(
+    { farmId },
+    { enabled: !!farmId }
+  );
+
+  const chatMutation = trpc.intelligence.chat.useMutation({
+    onSuccess: (data) => {
+      setMessages((prev) => [...prev, { role: "assistant", content: data.message }]);
+    },
+    onError: (error) => {
+      setMessages((prev) => [...prev, { role: "assistant", content: "Sorry, I encountered an error: " + error.message }]);
+    }
+  });
+
+  if (!currentFarm) return null;
+
+  const handleSendMessage = (content: string) => {
+    const userMessage: Message = { role: "user", content };
+    setMessages((prev) => [...prev, userMessage]);
+    chatMutation.mutate({
+      farmId,
+      message: content,
+      history: messages.map(m => ({ role: m.role, content: m.content })),
+    });
+  };
+
+  return (
+    <div className="flex flex-col h-full bg-slate-50/50">
+      <div className="p-4 sm:p-6 pb-0 max-w-[1600px] mx-auto w-full">
+        <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4 mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
+              <Sparkles className="w-5 h-5 text-green-700" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Kili AI Workspace</h1>
+              <p className="text-sm text-slate-500">Platform Intelligence Engine</p>
+            </div>
+          </div>
+        </header>
+      </div>
+
+      <div className="flex-1 overflow-hidden p-4 sm:p-6 pt-0 max-w-[1600px] mx-auto w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+          
+          {/* Main Chat Interface */}
+          <div className="lg:col-span-2 h-full">
+            <AIChatBox
+              messages={messages}
+              onSendMessage={handleSendMessage}
+              isLoading={chatMutation.isPending}
+              className="h-full border-slate-200"
+              height="100%"
+              suggestedPrompts={[
+                "Analyze my recent crop harvests",
+                "Are there any weather risks this week?",
+                "Suggest a feeding schedule for my cattle",
+              ]}
+            />
+          </div>
+
+          {/* Active Insights Panel */}
+          <div className="lg:col-span-1 h-full overflow-y-auto">
+            <Card className="border shadow-sm bg-white h-full">
+              <div className="p-4 border-b bg-slate-50/50 flex items-center gap-2">
+                <Brain className="w-4 h-4 text-slate-500" />
+                <h3 className="font-bold text-sm text-slate-800">Active Insights</h3>
+              </div>
+              <CardContent className="p-4 space-y-4">
+                <p className="text-sm text-slate-600 mb-6">
+                  {insights?.summary ?? "Kili AI is analyzing your farm data to generate insights."}
+                </p>
+
+                <div className="space-y-3">
+                  {(insights?.recommendations ?? []).length === 0 ? (
+                    <div className="text-center p-6 bg-slate-50 rounded-lg border border-dashed text-sm text-slate-500">
+                      No specific recommendations available right now. Ask Kili AI for general advice!
+                    </div>
+                  ) : (
+                    insights?.recommendations.map((rec, i) => (
+                      <div key={i} className="p-3 bg-slate-50/50 border rounded-lg hover:border-green-200 transition-colors cursor-pointer group">
+                        <div className="flex items-start gap-3">
+                          <div className="mt-0.5 bg-white p-1.5 rounded-md border shrink-0">
+                            {i % 2 === 0 ? <CloudRain className="w-3.5 h-3.5 text-blue-500" /> : <ShieldAlert className="w-3.5 h-3.5 text-amber-500" />}
+                          </div>
+                          <p className="text-[13px] font-medium text-slate-700 leading-snug group-hover:text-slate-900">
+                            {rec}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

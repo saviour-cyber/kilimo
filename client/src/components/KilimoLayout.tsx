@@ -1,0 +1,511 @@
+import { useAuth } from "@/_core/hooks/useAuth";
+import { startLogin } from "@/const";
+import { useFarm } from "@/contexts/FarmContext";
+import { getVisibleModules, MODULE_REGISTRY } from "@/lib/moduleRegistry";
+import { getSidebarServices, getFloatingWidgets, type PlatformServiceDefinition } from "@/lib/serviceRegistry";
+import { trpc } from "@/lib/trpc";
+import { cn } from "@/lib/utils";
+import {
+  ChevronDown,
+  ChevronRight,
+  Leaf,
+  LogOut,
+  Menu,
+  Plus,
+  User,
+  X,
+} from "lucide-react";
+import React, { useState } from "react";
+import { Link, useLocation } from "wouter";
+import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { ScrollArea } from "./ui/scroll-area";
+import { Separator } from "./ui/separator";
+import { Skeleton } from "./ui/skeleton";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+
+interface KilimoLayoutProps {
+  children: React.ReactNode;
+}
+
+function FarmSwitcher() {
+  const { currentFarm, farms, switchFarm, role } = useFarm();
+
+  if (!currentFarm) return null;
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="flex items-center gap-2 w-full px-3 py-2.5 rounded-lg hover:bg-sidebar-accent transition-colors group">
+          <div className="w-8 h-8 rounded-md bg-primary/20 flex items-center justify-center shrink-0">
+            <Leaf className="w-4 h-4 text-primary" />
+          </div>
+          <div className="flex-1 text-left min-w-0">
+            <p className="text-sm font-semibold text-sidebar-foreground truncate leading-tight">
+              {currentFarm.farm.name}
+            </p>
+            <p className="text-xs text-sidebar-foreground/50 capitalize">{role}</p>
+          </div>
+          <ChevronDown className="w-3.5 h-3.5 text-sidebar-foreground/40 shrink-0 group-hover:text-sidebar-foreground/70 transition-colors" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-64">
+        <DropdownMenuLabel className="text-xs text-muted-foreground uppercase tracking-wider">Your Farms</DropdownMenuLabel>
+        {farms.map(({ farm, role: farmRole }) => (
+          <DropdownMenuItem
+            key={farm.id}
+            onClick={() => switchFarm(farm.id)}
+            className={cn("gap-2", currentFarm.farm.id === farm.id && "bg-accent")}
+          >
+            <div className="w-7 h-7 rounded bg-primary/10 flex items-center justify-center">
+              <Leaf className="w-3.5 h-3.5 text-primary" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate">{farm.name}</p>
+              <p className="text-xs text-muted-foreground capitalize">{farmRole}</p>
+            </div>
+            {currentFarm.farm.id === farm.id && (
+              <div className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+            )}
+          </DropdownMenuItem>
+        ))}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href="/farms/new" className="gap-2 cursor-pointer">
+            <Plus className="w-4 h-4" />
+            <span>Create New Farm</span>
+          </Link>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function NavItem({
+  mod,
+  collapsed,
+}: {
+  mod: ReturnType<typeof MODULE_REGISTRY[0]["icon"]> extends React.FC ? never : (typeof MODULE_REGISTRY)[number];
+  collapsed: boolean;
+}) {
+  const [location] = useLocation();
+  const isActive = location.startsWith(mod.basePath);
+  const [expanded, setExpanded] = useState(isActive);
+  const Icon = mod.icon;
+  const hasSubItems = mod.subItems && mod.subItems.length > 0;
+
+  if (collapsed) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Link href={mod.basePath}>
+            <div
+              className={cn(
+                "flex items-center justify-center w-9 h-9 rounded-lg mx-auto transition-all duration-150",
+                isActive
+                  ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
+                  : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+              )}
+            >
+              <Icon className="w-4.5 h-4.5" />
+            </div>
+          </Link>
+        </TooltipTrigger>
+        <TooltipContent side="right" className="font-medium">{mod.label}</TooltipContent>
+      </Tooltip>
+    );
+  }
+
+  return (
+    <div>
+      {hasSubItems ? (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className={cn(
+            "flex items-center gap-2.5 w-full px-3 py-2 rounded-lg text-sm transition-all duration-150",
+            isActive
+              ? "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
+              : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+          )}
+        >
+          <Icon className="w-4 h-4 shrink-0" />
+          <span className="flex-1 text-left">{mod.label}</span>
+          <ChevronRight className={cn("w-3.5 h-3.5 transition-transform duration-200", expanded && "rotate-90")} />
+        </button>
+      ) : (
+        <Link href={mod.basePath}>
+          <div
+            className={cn(
+              "flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-150",
+              isActive
+                ? "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
+                : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+            )}
+          >
+            <Icon className="w-4 h-4 shrink-0" />
+            <span>{mod.label}</span>
+          </div>
+        </Link>
+      )}
+      {hasSubItems && expanded && (
+        <div className="ml-6 mt-0.5 space-y-0.5 border-l border-sidebar-border pl-3">
+          {mod.subItems!.map((sub) => (
+            <Link key={sub.path} href={sub.path}>
+              <div
+                className={cn(
+                  "px-2 py-1.5 rounded-md text-xs transition-all duration-150",
+                  location === sub.path
+                    ? "text-sidebar-primary font-semibold"
+                    : "text-sidebar-foreground/50 hover:text-sidebar-foreground"
+                )}
+              >
+                {sub.label}
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** A sidebar nav item specifically for Platform Services (uses `name` instead of `label`) */
+function ServiceNavItem({ service, collapsed }: { service: PlatformServiceDefinition; collapsed: boolean }) {
+  const [location] = useLocation();
+  const Icon = service.icon!;
+  const isActive = !!service.basePath && location.startsWith(service.basePath);
+
+  if (collapsed) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Link href={service.basePath ?? "#"}>
+            <div
+              className={cn(
+                "flex items-center justify-center w-9 h-9 rounded-lg mx-auto transition-all duration-150",
+                isActive
+                  ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
+                  : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+              )}
+            >
+              <Icon className="w-4.5 h-4.5" />
+            </div>
+          </Link>
+        </TooltipTrigger>
+        <TooltipContent side="right" className="font-medium">{service.name}</TooltipContent>
+      </Tooltip>
+    );
+  }
+
+  return (
+    <Link href={service.basePath ?? "#"}>
+      <div
+        className={cn(
+          "flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-150",
+          isActive
+            ? "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
+            : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+        )}
+      >
+        <Icon className="w-4 h-4 shrink-0" />
+        <span>{service.name}</span>
+      </div>
+    </Link>
+  );
+}
+
+export function KilimoLayout({ children }: KilimoLayoutProps) {
+  const { user, isAuthenticated, loading, logout } = useAuth();
+  const { currentFarm, enabledModules, role, isLoading: farmLoading } = useFarm();
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const { data: notifCount } = trpc.notifications.unreadCount.useQuery(
+    { farmId: currentFarm?.farm.id ?? 0 },
+    { enabled: !!currentFarm?.farm.id, refetchInterval: 30000 }
+  );
+
+  if (loading || farmLoading) {
+    return (
+      <div className="flex h-screen bg-background">
+        <div className="w-64 bg-sidebar border-r border-sidebar-border p-4 space-y-3">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton key={i} className="h-8 w-full bg-sidebar-accent" />
+          ))}
+        </div>
+        <div className="flex-1 p-8 space-y-4">
+          <Skeleton className="h-10 w-64" />
+          <div className="grid grid-cols-4 gap-4">
+            {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-28" />)}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center space-y-6 max-w-sm mx-auto p-8">
+          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
+            <Leaf className="w-8 h-8 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">KilimoHub Next</h1>
+            <p className="text-muted-foreground mt-2 text-sm">Enterprise farm management platform</p>
+          </div>
+          <Button onClick={() => window.location.href = "/login"} size="lg" className="w-full">
+            Sign in to continue
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const visibleModules = getVisibleModules(enabledModules, role);
+  const platformServices = getSidebarServices();
+  const floatingWidgets = getFloatingWidgets();
+
+  const SidebarContent = ({ collapsed }: { collapsed: boolean }) => (
+    <div className="flex flex-col h-full bg-sidebar">
+      {/* 1. Header (Fixed) */}
+      <div className={cn("flex flex-col shrink-0", collapsed ? "items-center" : "")}>
+        {/* Logo */}
+      <div className={cn("flex items-center gap-2.5 px-4 py-4 shrink-0", collapsed && "justify-center px-2")}>
+        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
+          <Leaf className="w-4.5 h-4.5 text-primary-foreground" />
+        </div>
+        {!collapsed && (
+          <div>
+            <span className="font-bold text-sidebar-foreground text-sm leading-tight">KilimoHub</span>
+            <span className="block text-[10px] text-sidebar-foreground/40 leading-tight uppercase tracking-widest">Next</span>
+          </div>
+        )}
+      </div>
+
+      <Separator className="bg-sidebar-border" />
+
+      {/* Farm Switcher */}
+      {!collapsed && (
+        <div className="px-3 py-3 shrink-0">
+          <FarmSwitcher />
+        </div>
+      )}
+      
+      {collapsed && (
+        <div className="py-3 flex justify-center shrink-0">
+          <div className="w-8 h-8 rounded-md bg-primary/20 flex items-center justify-center">
+            <Leaf className="w-4 h-4 text-primary" />
+          </div>
+        </div>
+      )}
+
+      <Separator className="bg-sidebar-border" />
+      </div>
+
+      {/* 2. Middle Content (Scrollable) */}
+      <ScrollArea className="flex-1 overflow-hidden">
+        <nav className={cn("space-y-0.5 py-4", collapsed ? "px-1.5" : "px-3")}>
+          {!collapsed && (
+            <div className="mb-2 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
+              Business Modules
+            </div>
+          )}
+          {visibleModules.filter(mod => mod.key !== "settings").map((mod) => (
+            <NavItem key={mod.key} mod={mod as any} collapsed={collapsed} />
+          ))}
+        </nav>
+      </ScrollArea>
+
+      {/* 3. Footer (Fixed) */}
+      <div className="shrink-0 flex flex-col border-t border-sidebar-border">
+        <div className={cn("py-2 space-y-0.5", collapsed ? "px-1.5" : "px-3")}>
+          {platformServices.length > 0 && (
+            <>
+              {!collapsed && (
+                <div className="mt-1 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
+                  Platform Services
+                </div>
+              )}
+              {platformServices.map((service) => (
+                <ServiceNavItem
+                  key={service.key}
+                  service={service}
+                  collapsed={collapsed}
+                />
+              ))}
+            </>
+          )}
+
+          {visibleModules.find(mod => mod.key === "settings") && (
+            <div className="pt-1.5 mt-1.5 border-t border-sidebar-border/50">
+              <NavItem 
+                mod={visibleModules.find(mod => mod.key === "settings") as any} 
+                collapsed={collapsed} 
+              />
+            </div>
+          )}
+        </div>
+
+        <Separator className="bg-sidebar-border" />
+
+        {/* User Profile */}
+        <div className={cn("p-3 shrink-0", collapsed && "flex justify-center")}>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className={cn(
+                "flex items-center gap-2.5 w-full rounded-lg p-2 hover:bg-sidebar-accent transition-colors",
+                collapsed && "w-10 h-10 justify-center p-0"
+              )}>
+                <Avatar className="w-8 h-8 shrink-0">
+                  <AvatarFallback className="bg-primary/20 text-primary text-xs font-semibold">
+                    {user?.name?.charAt(0)?.toUpperCase() ?? "U"}
+                  </AvatarFallback>
+                </Avatar>
+                {!collapsed && (
+                  <div className="flex-1 text-left min-w-0">
+                    <p className="text-sm font-medium text-sidebar-foreground truncate">{user?.name ?? "User"}</p>
+                    <p className="text-[11px] text-sidebar-foreground/50 truncate">{user?.email ?? ""}</p>
+                  </div>
+                )}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align={collapsed ? "center" : "end"} side="top" className="w-56 mb-2">
+              <DropdownMenuLabel className="font-normal p-3">
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-semibold">{user?.name}</p>
+                  <p className="text-xs text-muted-foreground">{user?.email}</p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href="/settings/user/profile" className="gap-3 cursor-pointer py-2.5">
+                  <User className="w-4 h-4" />
+                  Profile Settings
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={logout} className="text-destructive gap-3 py-2.5">
+                <LogOut className="w-4 h-4" />
+                Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="flex h-screen bg-background overflow-hidden">
+      {/* Desktop Sidebar */}
+      <aside
+        className={cn(
+          "hidden lg:flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300 ease-out shrink-0 z-10",
+          sidebarCollapsed ? "w-[72px]" : "w-[280px]"
+        )}
+      >
+        <SidebarContent collapsed={sidebarCollapsed} />
+      </aside>
+
+      {/* Mobile Sidebar Overlay */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
+          <aside className="absolute left-0 top-0 bottom-0 w-[280px] bg-sidebar border-r border-sidebar-border shadow-xl">
+            <SidebarContent collapsed={false} />
+          </aside>
+        </div>
+      )}
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Top Bar */}
+        <header className="h-14 border-b border-border bg-background/95 backdrop-blur-sm flex items-center gap-3 px-4 shrink-0">
+          {/* Mobile menu toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden"
+            onClick={() => setMobileOpen(true)}
+          >
+            <Menu className="w-5 h-5" />
+          </Button>
+
+          {/* Desktop sidebar toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hidden lg:flex"
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+          >
+            <Menu className="w-5 h-5" />
+          </Button>
+
+          <div className="flex-1" />
+
+          {/* Notification Bell */}
+          {currentFarm && (
+            <Link href="/notifications">
+              <Button variant="ghost" size="icon" className="relative">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+                {(notifCount?.count ?? 0) > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-destructive text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    {notifCount!.count > 9 ? "9+" : notifCount!.count}
+                  </span>
+                )}
+              </Button>
+            </Link>
+          )}
+
+          {/* Farm name in header */}
+          {currentFarm && (
+            <div className="hidden sm:flex items-center gap-1.5 text-sm text-muted-foreground">
+              <Leaf className="w-3.5 h-3.5 text-primary" />
+              <span className="font-medium text-foreground">{currentFarm.farm.name}</span>
+              <Badge variant="outline" className="text-[10px] capitalize px-1.5 py-0">{role}</Badge>
+            </div>
+          )}
+        </header>
+
+        {/* Page Content */}
+        <main className="flex-1 overflow-auto">
+          {currentFarm ? (
+            children
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center space-y-4 max-w-sm mx-auto p-8">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
+                  <Leaf className="w-8 h-8 text-primary" />
+                </div>
+                <h2 className="text-xl font-bold">Welcome to KilimoHub</h2>
+                <p className="text-muted-foreground text-sm">Create your first farm to get started managing your agricultural operations.</p>
+                <Button asChild>
+                  <Link href="/farms/new">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Your First Farm
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
+
+      {floatingWidgets.map((Widget, idx) => (
+        <Widget key={idx} />
+      ))}
+    </div>
+  );
+}
