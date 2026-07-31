@@ -4,7 +4,7 @@ services:
     env: node
     region: frankfurt
     plan: starter
-    buildCommand: corepack enable pnpm && pnpm install --frozen-lockfile && NODE_ENV=production pnpm run build && pnpm exec drizzle-kit migrate && pnpm exec tsx script/seed-modules.ts
+    buildCommand: corepack enable pnpm && pnpm install --frozen-lockfile && NODE_ENV=production pnpm run build && pnpm exec drizzle-kit migrate && pnpm exec tsx script/seed-modules.ts && pnpm exec tsx script/seed-admin.ts
     startCommand: pnpm run start
     envVars:
       - key: NODE_ENV
