@@ -13,6 +13,9 @@ import AdminOrganizations from "./pages/admin/Organizations";
 import AdminUsers from "./pages/admin/Users";
 import AdminModules from "./pages/admin/Modules";
 import AdminServices from "./pages/admin/Services";
+import AdminAuditLogs from "./pages/admin/AuditLogs";
+import AdminMonitoring from "./pages/admin/Monitoring";
+import AdminAiManagement from "./pages/admin/AiManagement";
 // Auth
 import Home from "./pages/Home";
 import CreateFarm from "./pages/CreateFarm";
@@ -217,6 +220,15 @@ function AppRoutes() {
       </Route>
       <Route path="/admin/services">
         <AdminLayout><AdminServices /></AdminLayout>
+      </Route>
+      <Route path="/admin/ai">
+        <AdminLayout><AdminAiManagement /></AdminLayout>
+      </Route>
+      <Route path="/admin/monitoring">
+        <AdminLayout><AdminMonitoring /></AdminLayout>
+      </Route>
+      <Route path="/admin/audit">
+        <AdminLayout><AdminAuditLogs /></AdminLayout>
       </Route>
 
       <Route path="/404" component={NotFound} />

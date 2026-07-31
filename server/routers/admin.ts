@@ -1,8 +1,8 @@
 import { adminProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
-import { users, organizations, farms, iotDevices, platformModules, platformServices } from "../../drizzle/schema";
+import { users, organizations, farms, iotDevices, platformModules, platformServices, auditLogs } from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
-import { sql, count, eq } from "drizzle-orm";
+import { sql, count, eq, desc } from "drizzle-orm";
 import { z } from "zod";
 
 export const adminRouter = router({
@@ -75,7 +75,7 @@ export const adminRouter = router({
 
   toggleModule: adminProcedure
     .input(z.object({ id: z.string(), isEnabled: z.boolean() }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
@@ -83,6 +83,15 @@ export const adminRouter = router({
         .update(platformModules)
         .set({ isEnabled: input.isEnabled })
         .where(eq(platformModules.id, input.id));
+
+      // Audit Log
+      await db.insert(auditLogs).values({
+        userId: ctx.user.id,
+        action: "MODULE_TOGGLE",
+        entityType: "module",
+        entityId: input.id,
+        details: { isEnabled: input.isEnabled },
+      });
 
       return { success: true };
     }),
@@ -97,7 +106,7 @@ export const adminRouter = router({
 
   toggleService: adminProcedure
     .input(z.object({ id: z.string(), isEnabled: z.boolean() }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
@@ -106,6 +115,65 @@ export const adminRouter = router({
         .set({ isEnabled: input.isEnabled })
         .where(eq(platformServices.id, input.id));
 
+      // Audit Log
+      await db.insert(auditLogs).values({
+        userId: ctx.user.id,
+        action: "SERVICE_TOGGLE",
+        entityType: "service",
+        entityId: input.id,
+        details: { isEnabled: input.isEnabled },
+      });
+
       return { success: true };
     }),
+
+  // ── Audit Logs ────────────────────────────────────────────────────────────
+  getAuditLogs: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+    return db
+      .select({
+        id: auditLogs.id,
+        action: auditLogs.action,
+        entityType: auditLogs.entityType,
+        entityId: auditLogs.entityId,
+        details: auditLogs.details,
+        createdAt: auditLogs.createdAt,
+        user: {
+          id: users.id,
+          fullName: users.fullName,
+          email: users.email,
+        }
+      })
+      .from(auditLogs)
+      .leftJoin(users, eq(auditLogs.userId, users.id))
+      .orderBy(desc(auditLogs.createdAt))
+      .limit(100);
+  }),
+
+  // ── System Monitoring ─────────────────────────────────────────────────────
+  getSystemMetrics: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+    // Mock CPU/RAM data to simulate APM response for the CEO dashboard
+    const history = Array.from({ length: 24 }).map((_, i) => ({
+      time: `${i}:00`,
+      cpu: Math.floor(Math.random() * 40) + 20, // 20% - 60%
+      memory: Math.floor(Math.random() * 30) + 40, // 40% - 70%
+      apiRequests: Math.floor(Math.random() * 5000) + 1000,
+    }));
+
+    return {
+      history,
+      current: {
+        cpu: history[history.length - 1].cpu,
+        memory: history[history.length - 1].memory,
+        uptime: "14d 5h 23m",
+        status: "Healthy",
+        activeConnections: Math.floor(Math.random() * 100) + 50,
+      }
+    };
+  }),
 });
