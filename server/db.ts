@@ -17,7 +17,7 @@ export async function getDb() {
       _pool = mysql.createPool({
         uri: process.env.DATABASE_URL,
         connectionLimit: 10,
-        ssl: process.env.DATABASE_URL.includes('tidb') || process.env.DATABASE_URL.includes('ssl=') ? { rejectUnauthorized: true } : undefined,
+        ssl: process.env.DATABASE_URL.includes('tidb') || process.env.DATABASE_URL.includes('ssl=') ? { rejectUnauthorized: false } : undefined,
       });
       _db = drizzle(_pool);
     } catch (error) {
