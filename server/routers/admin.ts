@@ -1,8 +1,9 @@
 import { adminProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
-import { users, organizations, farms, iotDevices } from "../../drizzle/schema";
+import { users, organizations, farms, iotDevices, platformModules, platformServices } from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
-import { sql, count } from "drizzle-orm";
+import { sql, count, eq } from "drizzle-orm";
+import { z } from "zod";
 
 export const adminRouter = router({
   // ── Dashboard Stats ────────────────────────────────────────────────────────
@@ -63,4 +64,48 @@ export const adminRouter = router({
       .from(organizations)
       .orderBy(organizations.createdAt);
   }),
+
+  // ── Modules ────────────────────────────────────────────────────────────────
+  listModules: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+    return db.select().from(platformModules).orderBy(platformModules.sortOrder);
+  }),
+
+  toggleModule: adminProcedure
+    .input(z.object({ id: z.string(), isEnabled: z.boolean() }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      await db
+        .update(platformModules)
+        .set({ isEnabled: input.isEnabled })
+        .where(eq(platformModules.id, input.id));
+
+      return { success: true };
+    }),
+
+  // ── Services ───────────────────────────────────────────────────────────────
+  listServices: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+    return db.select().from(platformServices).orderBy(platformServices.name);
+  }),
+
+  toggleService: adminProcedure
+    .input(z.object({ id: z.string(), isEnabled: z.boolean() }))
+    .mutation(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      await db
+        .update(platformServices)
+        .set({ isEnabled: input.isEnabled })
+        .where(eq(platformServices.id, input.id));
+
+      return { success: true };
+    }),
 });

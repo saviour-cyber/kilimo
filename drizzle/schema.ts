@@ -917,3 +917,26 @@ export const passwordResetTokens = mysqlTable("passwordResetTokens", {
 
 export type PasswordResetToken = typeof passwordResetTokens.$inferSelect;
 export type InsertPasswordResetToken = typeof passwordResetTokens.$inferInsert;
+// ─── Platform Administration ───────────────────────────────────────────────────
+
+export const platformModules = mysqlTable("platformModules", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
+  version: varchar("version", { length: 32 }).default("1.0.0"),
+  isEnabled: boolean("isEnabled").default(true).notNull(),
+  icon: varchar("icon", { length: 64 }),
+  sortOrder: int("sortOrder").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export const platformServices = mysqlTable("platformServices", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
+  isEnabled: boolean("isEnabled").default(true).notNull(),
+  providerConfig: json("providerConfig"), // To store API keys, selected models, etc
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});

@@ -11,6 +11,8 @@ import { AdminLayout } from "./components/AdminLayout";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminOrganizations from "./pages/admin/Organizations";
 import AdminUsers from "./pages/admin/Users";
+import AdminModules from "./pages/admin/Modules";
+import AdminServices from "./pages/admin/Services";
 // Auth
 import Home from "./pages/Home";
 import CreateFarm from "./pages/CreateFarm";
@@ -209,6 +211,12 @@ function AppRoutes() {
       </Route>
       <Route path="/admin/users">
         <AdminLayout><AdminUsers /></AdminLayout>
+      </Route>
+      <Route path="/admin/modules">
+        <AdminLayout><AdminModules /></AdminLayout>
+      </Route>
+      <Route path="/admin/services">
+        <AdminLayout><AdminServices /></AdminLayout>
       </Route>
 
       <Route path="/404" component={NotFound} />
