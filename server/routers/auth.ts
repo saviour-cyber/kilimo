@@ -8,7 +8,7 @@ import { getSessionCookieOptions } from "../_core/cookies";
 import { COOKIE_NAME } from "@shared/const";
 import { SignJWT, jwtVerify } from "jose";
 
-const JWT_SECRET = new TextEncoder().encode(process.env.SESSION_SECRET || "kilimo-hub-secret-key-development");
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "kilimo-hub-secret-key-development");
 
 export const authRouter = router({
   me: publicProcedure.query(async ({ ctx }) => {
