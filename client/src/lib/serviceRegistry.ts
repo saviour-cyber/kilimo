@@ -63,7 +63,7 @@ export const SERVICE_REGISTRY: PlatformServiceDefinition[] = [
 
   {
     key: "weather",
-    name: "Weather Engine",
+    name: "Weather",
     description: "Platform-wide weather context and alerts for any farm location.",
     showInSidebar: true,
     icon: CloudRain,
@@ -92,7 +92,7 @@ export const SERVICE_REGISTRY: PlatformServiceDefinition[] = [
 
   {
     key: "reports",
-    name: "Reports Hub",
+    name: "Reports",
     description: "Aggregate platform-wide reporting and data exports.",
     showInSidebar: true,
     icon: FileText,
@@ -103,7 +103,7 @@ export const SERVICE_REGISTRY: PlatformServiceDefinition[] = [
 
   {
     key: "iot",
-    name: "IoT Engine",
+    name: "IoT",
     description: "Smart device management, live telemetry, and sensor data for the entire farm.",
     showInSidebar: true,
     icon: Cpu,
