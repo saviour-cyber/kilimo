@@ -1,5 +1,6 @@
 import { useAuth } from "@/_core/hooks/useAuth";
-import { startLogin } from "@/const";
+import { useEffect } from "react";
+import { useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import {
   Activity,
@@ -65,17 +66,16 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const { user, logout } = useAuth();
   const [location] = useLocation();
 
+  const [, navigate] = useLocation();
+
+  useEffect(() => {
+    if (!user || user.role !== "admin") {
+      navigate("/admin/login");
+    }
+  }, [user, navigate]);
+
   if (!user || user.role !== "admin") {
-    return (
-      <div className="flex h-screen items-center justify-center bg-background">
-        <div className="text-center">
-          <ShieldAlert className="w-12 h-12 text-destructive mx-auto mb-4" />
-          <h2 className="text-2xl font-bold mb-2">Access Denied</h2>
-          <p className="text-muted-foreground mb-4">You do not have permission to view the admin panel.</p>
-          <Button onClick={() => window.location.href = "/dashboard"}>Return to Dashboard</Button>
-        </div>
-      </div>
-    );
+    return null; // Redirect in progress
   }
 
   return (

@@ -8,6 +8,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { FarmProvider } from "./contexts/FarmContext";
 import { KilimoLayout } from "./components/KilimoLayout";
 import { AdminLayout } from "./components/AdminLayout";
+import AdminLogin from "./pages/admin/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminOrganizations from "./pages/admin/Organizations";
 import AdminUsers from "./pages/admin/Users";
@@ -208,8 +209,9 @@ function AppRoutes() {
         <KilimoLayout><ReportsPage /></KilimoLayout>
       </Route>
 
-      {/* Admin Panel (Completely Independent from Farm App) */}
-      <Route path="/admin">
+      {/* ── Admin Panel ── */}
+      <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin" exact>
         <AdminLayout><AdminDashboard /></AdminLayout>
       </Route>
       <Route path="/admin/organizations">
