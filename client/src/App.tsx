@@ -7,7 +7,10 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { FarmProvider } from "./contexts/FarmContext";
 import { KilimoLayout } from "./components/KilimoLayout";
-
+import { AdminLayout } from "./components/AdminLayout";
+import AdminDashboard from "./pages/admin/Dashboard";
+import AdminOrganizations from "./pages/admin/Organizations";
+import AdminUsers from "./pages/admin/Users";
 // Auth
 import Home from "./pages/Home";
 import CreateFarm from "./pages/CreateFarm";
@@ -195,6 +198,17 @@ function AppRoutes() {
       </Route>
       <Route path="/reports/*">
         <KilimoLayout><ReportsPage /></KilimoLayout>
+      </Route>
+
+      {/* Admin Panel (Completely Independent from Farm App) */}
+      <Route path="/admin">
+        <AdminLayout><AdminDashboard /></AdminLayout>
+      </Route>
+      <Route path="/admin/organizations">
+        <AdminLayout><AdminOrganizations /></AdminLayout>
+      </Route>
+      <Route path="/admin/users">
+        <AdminLayout><AdminUsers /></AdminLayout>
       </Route>
 
       <Route path="/404" component={NotFound} />

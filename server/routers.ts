@@ -21,6 +21,7 @@ import { reportsRouter } from "./routers/reports";
 import { iotRouter } from "./routers/iot";
 import { usersRouter } from "./routers/users";
 import { organizationsRouter } from "./routers/organizations";
+import { adminRouter } from "./routers/admin";
 
 export const appRouter = router({
   system: systemRouter,
@@ -43,6 +44,7 @@ export const appRouter = router({
   iot: iotRouter,
   users: usersRouter,
   organizations: organizationsRouter,
+  admin: adminRouter,
 });
 
 export type AppRouter = typeof appRouter;
