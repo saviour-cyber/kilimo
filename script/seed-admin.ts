@@ -21,7 +21,10 @@ const ADMIN_NAME     = "Platform Superadmin";
 async function main() {
   console.log("🔑 Seeding platform admin account…");
 
-  const connection = await mysql.createConnection({ uri: process.env.DATABASE_URL });
+  const connection = await mysql.createConnection({ 
+    uri: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: true }
+  });
 
   try {
     const passwordHash = await bcrypt.hash(ADMIN_PASSWORD, 12);
