@@ -352,8 +352,6 @@ export const adminRouter = router({
         content: input.content,
         type: input.type,
         isActive: true,
-        createdAt: sql`NOW()`,
-        updatedAt: sql`NOW()`,
       });
 
       await db.insert(auditLogs).values({
@@ -363,7 +361,6 @@ export const adminRouter = router({
         entityType: "announcement",
         description: `Created announcement: ${input.title}`,
         metadata: { title: input.title, type: input.type },
-        createdAt: sql`NOW()`,
       });
 
       return { success: true };
@@ -376,7 +373,7 @@ export const adminRouter = router({
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
       await db.update(platformAnnouncements)
-        .set({ isActive: input.isActive, updatedAt: sql`NOW()` })
+        .set({ isActive: input.isActive })
         .where(eq(platformAnnouncements.id, input.id));
 
       await db.insert(auditLogs).values({
@@ -386,7 +383,6 @@ export const adminRouter = router({
         entityType: "announcement",
         description: `Toggled announcement ${input.id} to ${input.isActive}`,
         metadata: { isActive: input.isActive },
-        createdAt: sql`NOW()`,
       });
 
       return { success: true };
