@@ -64,9 +64,18 @@ export const authRouter = router({
         throw new TRPCError({ code: "UNAUTHORIZED", message: "Invalid email or password" });
       }
 
+      // Auto-promote the designated admin email to role='admin' on every login.
+      // This ensures re-deployments or DB resets never lock out the superadmin.
+      const adminEmail = (process.env.ADMIN_EMAIL ?? "admin@kilimohub.com").trim().toLowerCase();
+      const updateFields: Record<string, unknown> = { lastSignedIn: new Date() };
+      if (email === adminEmail && user.role !== "admin") {
+        updateFields.role = "admin";
+        user.role = "admin";
+      }
+
       await ctx.db
         .update(users)
-        .set({ lastSignedIn: new Date() })
+        .set(updateFields)
         .where(eq(users.id, user.id));
 
       const token = await new SignJWT({ userId: user.id })
