@@ -953,7 +953,7 @@ export const auditLogs = mysqlTable("activitylogs", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
-export const platformAnnouncements = mysqlTable("platformAnnouncements", {
+export const platformAnnouncements = mysqlTable("platformannouncements", {
   id: varchar("id", { length: 36 }).primaryKey().$defaultFn(() => crypto.randomUUID()),
   title: text("title").notNull(),
   content: text("content").notNull(),

@@ -346,12 +346,15 @@ export const adminRouter = router({
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
       const id = crypto.randomUUID();
+      const now = new Date();
       await db.insert(platformAnnouncements).values({
         id,
         title: input.title,
         content: input.content,
         type: input.type,
         isActive: true,
+        createdAt: now,
+        updatedAt: now,
       });
 
       await db.insert(auditLogs).values({
@@ -361,6 +364,7 @@ export const adminRouter = router({
         entityType: "announcement",
         description: `Created announcement: ${input.title}`,
         metadata: { title: input.title, type: input.type },
+        createdAt: now,
       });
 
       return { success: true };
@@ -372,8 +376,9 @@ export const adminRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
+      const now = new Date();
       await db.update(platformAnnouncements)
-        .set({ isActive: input.isActive })
+        .set({ isActive: input.isActive, updatedAt: now })
         .where(eq(platformAnnouncements.id, input.id));
 
       await db.insert(auditLogs).values({
@@ -383,6 +388,7 @@ export const adminRouter = router({
         entityType: "announcement",
         description: `Toggled announcement ${input.id} to ${input.isActive}`,
         metadata: { isActive: input.isActive },
+        createdAt: now,
       });
 
       return { success: true };
