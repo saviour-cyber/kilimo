@@ -20,7 +20,7 @@ export default function AdminAnnouncements() {
   const toggleMutation = trpc.admin.toggleAnnouncement.useMutation();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [newAnn, setNewAnn] = useState({ title: "", content: "", type: "info" as "info" | "warning" | "critical" | "feature" });
+  const [newAnn, setNewAnn] = useState({ title: "", content: "", type: "info" as "info" | "warning" | "critical" });
 
   const handleCreate = async () => {
     try {
@@ -49,7 +49,6 @@ export default function AdminAnnouncements() {
       case 'info': return 'bg-sky-100 text-sky-700 hover:bg-sky-100';
       case 'warning': return 'bg-amber-100 text-amber-700 hover:bg-amber-100';
       case 'critical': return 'bg-rose-100 text-rose-700 hover:bg-rose-100';
-      case 'feature': return 'bg-emerald-100 text-emerald-700 hover:bg-emerald-100';
       default: return 'bg-slate-100 text-slate-700';
     }
   };
@@ -83,7 +82,6 @@ export default function AdminAnnouncements() {
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="info">Info (Blue)</SelectItem>
-                    <SelectItem value="feature">Feature (Green)</SelectItem>
                     <SelectItem value="warning">Warning (Yellow)</SelectItem>
                     <SelectItem value="critical">Critical (Red)</SelectItem>
                   </SelectContent>

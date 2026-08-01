@@ -338,7 +338,7 @@ export const adminRouter = router({
       z.object({
         title: z.string().min(3),
         content: z.string().min(5),
-        type: z.enum(["info", "warning", "critical", "feature"]),
+        type: z.enum(["info", "warning", "critical"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
