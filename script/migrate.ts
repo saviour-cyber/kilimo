@@ -40,6 +40,47 @@ async function runMigrations() {
   try {
     console.log("🔄  Applying Drizzle migrations from ./drizzle folder...");
     
+    // --- Auto-Baseline Logic ---
+    // If the animals table exists but __drizzle_migrations is empty, baseline it
+    const [tables] = await conn.query("SHOW TABLES LIKE 'animals'");
+    if (Array.isArray(tables) && tables.length > 0) {
+      // The database is already populated.
+      // We must ensure the initial migration is marked as applied using the EXACT hash from this environment
+      const fs = require('fs');
+      const crypto = require('crypto');
+      const path = require('path');
+      
+      const migrationFile = path.resolve(process.cwd(), "./drizzle/0000_high_johnny_storm.sql");
+      if (fs.existsSync(migrationFile)) {
+        const sqlContent = fs.readFileSync(migrationFile, 'utf8');
+        const fileHash = crypto.createHash('sha256').update(sqlContent).digest('hex');
+        
+        // Ensure __drizzle_migrations exists
+        await conn.query(`
+          CREATE TABLE IF NOT EXISTS \`__drizzle_migrations\` (
+            id SERIAL PRIMARY KEY,
+            hash text NOT NULL,
+            created_at bigint
+          )
+        `);
+        
+        // Check if baseline exists
+        const [rows] = await conn.query("SELECT * FROM \`__drizzle_migrations\`");
+        if (!Array.isArray(rows) || rows.length === 0) {
+          console.log(`📌 Baselining existing database with hash: ${fileHash}`);
+          await conn.execute("INSERT INTO \`__drizzle_migrations\` (hash, created_at) VALUES (?, ?)", [fileHash, Date.now()]);
+        } else {
+          // It exists, let's make sure our exact environment hash is in there
+          const hashes = rows.map((r: any) => r.hash);
+          if (!hashes.includes(fileHash)) {
+             console.log(`📌 Injecting environment-specific hash into baseline: ${fileHash}`);
+             await conn.execute("INSERT INTO \`__drizzle_migrations\` (hash, created_at) VALUES (?, ?)", [fileHash, Date.now()]);
+          }
+        }
+      }
+    }
+    // ---------------------------
+
     // 3. Run the migrations
     // Drizzle will automatically check the __drizzle_migrations table
     // and only apply SQL files that haven't been run yet.
