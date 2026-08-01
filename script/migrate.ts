@@ -61,10 +61,7 @@ async function run() {
         )
       `,
     },
-    {
-      name: "platformannouncements-alter-id",
-      sql: `ALTER TABLE \`platformannouncements\` MODIFY COLUMN \`id\` VARCHAR(64) NOT NULL;`,
-    },
+
   ];
 
   for (const { name, sql } of statements) {
