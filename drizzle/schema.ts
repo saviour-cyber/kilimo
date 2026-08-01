@@ -941,19 +941,20 @@ export const platformServices = mysqlTable("platformServices", {
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
-export const auditLogs = mysqlTable("auditLogs", {
+export const auditLogs = mysqlTable("activitylogs", {
   id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull().references(() => users.id),
+  farmId: int("farmId").notNull().default(0),
+  userId: int("userId").notNull(),
   action: varchar("action", { length: 128 }).notNull(),
-  entityType: varchar("entityType", { length: 64 }), // e.g. user, module, service
-  entityId: varchar("entityId", { length: 128 }),
-  details: json("details"),
-  ipAddress: varchar("ipAddress", { length: 45 }),
+  entityType: varchar("entityType", { length: 64 }),
+  entityId: int("entityId"),
+  description: text("description"),
+  metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
 export const platformAnnouncements = mysqlTable("platformAnnouncements", {
-  id: int("id").autoincrement().primaryKey(),
+  id: varchar("id", { length: 36 }).primaryKey().$defaultFn(() => crypto.randomUUID()),
   title: text("title").notNull(),
   content: text("content").notNull(),
   type: varchar("type", { length: 32 }).notNull().default("info"), // 'info', 'warning', 'critical', 'feature'

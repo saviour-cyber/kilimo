@@ -76,10 +76,10 @@ export default function AdminAuditLogs() {
                       </div>
                     </TableCell>
                     <TableCell className="text-sm text-slate-600">
-                      {log.entityType}: <span className="font-mono">{log.entityId}</span>
+                      {log.entityType ?? "—"}
                     </TableCell>
-                    <TableCell className="text-xs font-mono text-slate-500 bg-slate-50 p-2 rounded">
-                      {JSON.stringify(log.details)}
+                    <TableCell className="text-xs text-slate-500 max-w-xs truncate">
+                      {log.description ?? JSON.stringify(log.metadata)}
                     </TableCell>
                   </TableRow>
                 ))}

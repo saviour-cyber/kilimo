@@ -34,7 +34,7 @@ export default function AdminAnnouncements() {
     }
   };
 
-  const handleToggle = async (id: number, isActive: boolean) => {
+  const handleToggle = async (id: string, isActive: boolean) => {
     try {
       await toggleMutation.mutateAsync({ id, isActive });
       toast.success(isActive ? "Announcement activated" : "Announcement hidden");

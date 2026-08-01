@@ -64,11 +64,12 @@ export const adminRouter = router({
       await db.update(users).set({ role: input.role }).where(eq(users.id, input.userId));
 
       await db.insert(auditLogs).values({
+        farmId: 0,
         userId: ctx.user.id,
         action: "USER_ROLE_UPDATED",
         entityType: "user",
-        entityId: input.userId.toString(),
-        details: { newRole: input.role },
+        description: `Updated role for user ${input.userId} to ${input.role}`,
+        metadata: { newRole: input.role },
       });
 
       return { success: true };
@@ -85,11 +86,12 @@ export const adminRouter = router({
       }
 
       await db.insert(auditLogs).values({
+        farmId: 0,
         userId: ctx.user.id,
         action: "USER_DELETED",
         entityType: "user",
-        entityId: input.userId.toString(),
-        details: {},
+        description: `Deleted user ${input.userId}`,
+        metadata: {},
       });
 
       await db.delete(users).where(eq(users.id, input.userId));
@@ -144,11 +146,12 @@ export const adminRouter = router({
       });
 
       await db.insert(auditLogs).values({
+        farmId: 0,
         userId: ctx.user.id,
         action: "ORGANIZATION_CREATED",
         entityType: "organization",
-        entityId: result.insertId.toString(),
-        details: { name: input.name, businessType: input.businessType },
+        description: `Created organization: ${input.name}`,
+        metadata: { name: input.name, businessType: input.businessType },
       });
 
       return { success: true, id: result.insertId };
@@ -161,11 +164,12 @@ export const adminRouter = router({
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
       await db.insert(auditLogs).values({
+        farmId: 0,
         userId: ctx.user.id,
         action: "ORGANIZATION_DELETED",
         entityType: "organization",
-        entityId: input.organizationId.toString(),
-        details: {},
+        description: `Deleted organization ${input.organizationId}`,
+        metadata: {},
       });
 
       await db.delete(organizations).where(eq(organizations.id, input.organizationId));
@@ -194,11 +198,12 @@ export const adminRouter = router({
 
       // Audit Log
       await db.insert(auditLogs).values({
+        farmId: 0,
         userId: ctx.user.id,
         action: "MODULE_TOGGLE",
         entityType: "module",
-        entityId: input.id,
-        details: { isEnabled: input.isEnabled },
+        description: `Toggled module ${input.id} to ${input.isEnabled}`,
+        metadata: { isEnabled: input.isEnabled },
       });
 
       return { success: true };
@@ -225,11 +230,12 @@ export const adminRouter = router({
 
       // Audit Log
       await db.insert(auditLogs).values({
+        farmId: 0,
         userId: ctx.user.id,
         action: "SERVICE_TOGGLE",
         entityType: "service",
-        entityId: input.id,
-        details: { isEnabled: input.isEnabled },
+        description: `Toggled service ${input.id} to ${input.isEnabled}`,
+        metadata: { isEnabled: input.isEnabled },
       });
 
       return { success: true };
@@ -245,8 +251,8 @@ export const adminRouter = router({
         id: auditLogs.id,
         action: auditLogs.action,
         entityType: auditLogs.entityType,
-        entityId: auditLogs.entityId,
-        details: auditLogs.details,
+        description: auditLogs.description,
+        metadata: auditLogs.metadata,
         createdAt: auditLogs.createdAt,
         user: {
           id: users.id,
@@ -319,6 +325,7 @@ export const adminRouter = router({
     };
   }),
 
+
   // ── Announcements ───────────────────────────────────────────────────────────
   listAnnouncements: adminProcedure.query(async () => {
     const db = await getDb();
@@ -327,34 +334,40 @@ export const adminRouter = router({
   }),
 
   createAnnouncement: adminProcedure
-    .input(z.object({
-      title: z.string(),
-      content: z.string(),
-      type: z.enum(["info", "warning", "critical", "feature"]),
-    }))
-    .mutation(async ({ input, ctx }) => {
+    .input(
+      z.object({
+        title: z.string().min(3),
+        content: z.string().min(5),
+        type: z.enum(["info", "warning", "critical", "feature"]),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
-      const [result] = await db.insert(platformAnnouncements).values({
+      const id = crypto.randomUUID();
+      await db.insert(platformAnnouncements).values({
+        id,
         title: input.title,
         content: input.content,
         type: input.type,
+        isActive: true,
       });
 
       await db.insert(auditLogs).values({
+        farmId: 0,
         userId: ctx.user.id,
         action: "ANNOUNCEMENT_CREATED",
         entityType: "announcement",
-        entityId: result.insertId.toString(),
-        details: { title: input.title, type: input.type },
+        description: `Created announcement: ${input.title}`,
+        metadata: { title: input.title, type: input.type },
       });
 
-      return { success: true, id: result.insertId };
+      return { success: true };
     }),
 
   toggleAnnouncement: adminProcedure
-    .input(z.object({ id: z.number(), isActive: z.boolean() }))
+    .input(z.object({ id: z.string(), isActive: z.boolean() }))
     .mutation(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
@@ -364,11 +377,12 @@ export const adminRouter = router({
         .where(eq(platformAnnouncements.id, input.id));
 
       await db.insert(auditLogs).values({
+        farmId: 0,
         userId: ctx.user.id,
         action: "ANNOUNCEMENT_TOGGLE",
         entityType: "announcement",
-        entityId: input.id.toString(),
-        details: { isActive: input.isActive },
+        description: `Toggled announcement ${input.id} to ${input.isActive}`,
+        metadata: { isActive: input.isActive },
       });
 
       return { success: true };

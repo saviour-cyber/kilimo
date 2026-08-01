@@ -225,7 +225,7 @@ function ServiceNavItem({ service, collapsed }: { service: PlatformServiceDefini
 
 function GlobalAnnouncementBanner() {
   const { data: announcements } = trpc.system.getActiveAnnouncements.useQuery(undefined, { refetchInterval: 60000 });
-  const [dismissed, setDismissed] = useState<number[]>([]);
+  const [dismissed, setDismissed] = useState<string[]>([]);
 
   if (!announcements || announcements.length === 0) return null;
 
