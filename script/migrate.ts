@@ -51,7 +51,7 @@ async function run() {
       name: "platformannouncements",
       sql: `
         CREATE TABLE IF NOT EXISTS \`platformannouncements\` (
-          \`id\`        VARCHAR(36)  NOT NULL PRIMARY KEY,
+          \`id\`        VARCHAR(64)  NOT NULL PRIMARY KEY,
           \`title\`     TEXT         NOT NULL,
           \`content\`   TEXT         NOT NULL,
           \`type\`      VARCHAR(32)  NOT NULL DEFAULT 'info',
@@ -60,6 +60,10 @@ async function run() {
           \`updatedAt\` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )
       `,
+    },
+    {
+      name: "platformannouncements-alter-id",
+      sql: `ALTER TABLE \`platformannouncements\` MODIFY COLUMN \`id\` VARCHAR(64) NOT NULL;`,
     },
   ];
 

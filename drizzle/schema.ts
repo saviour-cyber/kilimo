@@ -954,7 +954,7 @@ export const auditLogs = mysqlTable("activitylogs", {
 });
 
 export const platformAnnouncements = mysqlTable("platformannouncements", {
-  id: varchar("id", { length: 36 }).primaryKey().$defaultFn(() => crypto.randomUUID()),
+  id: varchar("id", { length: 64 }).primaryKey().$defaultFn(() => crypto.randomUUID()),
   title: text("title").notNull(),
   content: text("content").notNull(),
   type: varchar("type", { length: 32 }).notNull().default("info"), // 'info', 'warning', 'critical', 'feature'
