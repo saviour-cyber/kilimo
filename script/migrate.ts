@@ -11,6 +11,8 @@ import mysql from "mysql2/promise";
 import { drizzle } from "drizzle-orm/mysql2";
 import { migrate } from "drizzle-orm/mysql2/migrator";
 import path from "path";
+import fs from "fs";
+import crypto from "crypto";
 
 const DATABASE_URL = process.env.DATABASE_URL;
 if (!DATABASE_URL) {
@@ -46,9 +48,6 @@ async function runMigrations() {
     if (Array.isArray(tables) && tables.length > 0) {
       // The database is already populated.
       // We must ensure the initial migration is marked as applied using the EXACT hash from this environment
-      const fs = require('fs');
-      const crypto = require('crypto');
-      const path = require('path');
       
       const migrationFile = path.resolve(process.cwd(), "./drizzle/0000_high_johnny_storm.sql");
       if (fs.existsSync(migrationFile)) {
