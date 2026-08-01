@@ -526,22 +526,7 @@ export const notifications = mysqlTable("notifications", {
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = typeof notifications.$inferInsert;
 
-// ─── Activity Log ──────────────────────────────────────────────────────────────
 
-export const activityLogs = mysqlTable("activityLogs", {
-  id: int("id").autoincrement().primaryKey(),
-  farmId: int("farmId").notNull(),
-  userId: int("userId").notNull(),
-  action: varchar("action", { length: 128 }).notNull(),
-  entityType: varchar("entityType", { length: 64 }),
-  entityId: int("entityId"),
-  description: text("description"),
-  metadata: json("metadata"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
-
-export type ActivityLog = typeof activityLogs.$inferSelect;
-export type InsertActivityLog = typeof activityLogs.$inferInsert;
 
 // ─── Disease Scans (AI Detections) ─────────────────────────────────────────────
 
@@ -952,6 +937,14 @@ export const auditLogs = mysqlTable("activitylogs", {
   metadata: json("metadata"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
+
+// Type aliases – auditLogs is the canonical activity log table (SQL: activitylogs)
+export type AuditLog = typeof auditLogs.$inferSelect;
+export type InsertAuditLog = typeof auditLogs.$inferInsert;
+// Keep backward-compat aliases for any code that imported ActivityLog
+export type ActivityLog = AuditLog;
+export type InsertActivityLog = InsertAuditLog;
+
 
 export const platformAnnouncements = mysqlTable("platformannouncements", {
   id: varchar("id", { length: 64 }).primaryKey().$defaultFn(() => crypto.randomUUID()),

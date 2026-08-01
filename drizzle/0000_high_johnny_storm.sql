@@ -1,16 +1,3 @@
-CREATE TABLE `activityLogs` (
-	`id` int AUTO_INCREMENT NOT NULL,
-	`farmId` int NOT NULL,
-	`userId` int NOT NULL,
-	`action` varchar(128) NOT NULL,
-	`entityType` varchar(64),
-	`entityId` int,
-	`description` text,
-	`metadata` json,
-	`createdAt` timestamp NOT NULL DEFAULT (now()),
-	CONSTRAINT `activityLogs_id` PRIMARY KEY(`id`)
-);
---> statement-breakpoint
 CREATE TABLE `animals` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`farmId` int NOT NULL,
@@ -31,6 +18,19 @@ CREATE TABLE `animals` (
 	`createdAt` timestamp NOT NULL DEFAULT (now()),
 	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `animals_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `activitylogs` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`farmId` int NOT NULL DEFAULT 0,
+	`userId` int NOT NULL,
+	`action` varchar(128) NOT NULL,
+	`entityType` varchar(64),
+	`entityId` int,
+	`description` text,
+	`metadata` json,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	CONSTRAINT `activitylogs_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
 CREATE TABLE `breedingRecords` (
@@ -122,6 +122,17 @@ CREATE TABLE `diseaseScans` (
 	`createdAt` timestamp NOT NULL DEFAULT (now()),
 	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `diseaseScans_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `emailVerificationTokens` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`tokenHash` varchar(64) NOT NULL,
+	`expiresAt` timestamp NOT NULL,
+	`usedAt` timestamp,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	CONSTRAINT `emailVerificationTokens_id` PRIMARY KEY(`id`),
+	CONSTRAINT `emailVerificationTokens_tokenHash_unique` UNIQUE(`tokenHash`)
 );
 --> statement-breakpoint
 CREATE TABLE `equipment` (
@@ -576,6 +587,52 @@ CREATE TABLE `organizations` (
 	`createdAt` timestamp NOT NULL DEFAULT (now()),
 	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `organizations_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `passwordResetTokens` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`tokenHash` varchar(64) NOT NULL,
+	`expiresAt` timestamp NOT NULL,
+	`usedAt` timestamp,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	CONSTRAINT `passwordResetTokens_id` PRIMARY KEY(`id`),
+	CONSTRAINT `passwordResetTokens_tokenHash_unique` UNIQUE(`tokenHash`)
+);
+--> statement-breakpoint
+CREATE TABLE `platformannouncements` (
+	`id` varchar(64) NOT NULL,
+	`title` text NOT NULL,
+	`content` text NOT NULL,
+	`type` varchar(32) NOT NULL DEFAULT 'info',
+	`isActive` boolean NOT NULL DEFAULT true,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `platformannouncements_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `platformModules` (
+	`id` varchar(64) NOT NULL,
+	`name` text NOT NULL,
+	`description` text,
+	`version` varchar(32) DEFAULT '1.0.0',
+	`isEnabled` boolean NOT NULL DEFAULT true,
+	`icon` varchar(64),
+	`sortOrder` int NOT NULL DEFAULT 0,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `platformModules_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `platformServices` (
+	`id` varchar(64) NOT NULL,
+	`name` text NOT NULL,
+	`description` text,
+	`isEnabled` boolean NOT NULL DEFAULT true,
+	`providerConfig` json,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `platformServices_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
 CREATE TABLE `productionRecords` (
