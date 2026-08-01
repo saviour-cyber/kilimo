@@ -17,6 +17,12 @@ export const startLogin = () => {
   const appId = import.meta.env.VITE_APP_ID;
   const redirectUri = `${window.location.origin}/api/oauth/callback`;
 
+  // If no OAuth portal is configured, fall back to the local admin login page
+  if (!oauthPortalUrl) {
+    window.location.href = "/admin/login";
+    return;
+  }
+
   const nonce = crypto.randomUUID();
   document.cookie = `${OAUTH_STATE_COOKIE}=${nonce}; Path=/; Max-Age=600; SameSite=None; Secure`;
   const state = encodeOAuthState({ redirectUri, nonce });
