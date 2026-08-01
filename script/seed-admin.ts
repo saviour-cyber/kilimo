@@ -23,7 +23,7 @@ async function main() {
 
   const connection = await mysql.createConnection({ 
     uri: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: true }
+    ssl: { rejectUnauthorized: false }
   });
 
   try {
@@ -36,12 +36,12 @@ async function main() {
     );
 
     if (rows.length > 0) {
-      // Update the existing user to ensure role = admin and reset password
+      // Update the existing user to ensure role = admin, but DO NOT overwrite password
       await connection.execute(
-        "UPDATE users SET role = 'admin', password = ?, name = ? WHERE email = ?",
-        [passwordHash, ADMIN_NAME, ADMIN_EMAIL]
+        "UPDATE users SET role = 'admin', name = ? WHERE email = ?",
+        [ADMIN_NAME, ADMIN_EMAIL]
       );
-      console.log(`✅  Admin account already exists — updated password & confirmed role=admin`);
+      console.log(`✅  Admin account already exists — confirmed role=admin`);
       console.log(`    ID: ${rows[0].id}  |  Email: ${ADMIN_EMAIL}`);
     } else {
       // Create a brand-new admin user
