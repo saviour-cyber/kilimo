@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
-import { ShieldAlert, Eye, EyeOff, Loader2, Lock } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function AdminLogin() {
   const [, navigate] = useLocation();
@@ -13,13 +13,13 @@ export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const loginMutation = trpc.auth.login.useMutation({
     onSuccess: async () => {
       const me = await utils.auth.me.ensureData();
       if (me?.role !== "admin") {
         toast.error("This portal is restricted to platform administrators.");
-        // logout is a mutation — invalidate the me cache to force re-auth
         await utils.auth.me.invalidate();
         return;
       }
@@ -37,89 +37,112 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center relative overflow-hidden">
-      {/* Background Grid */}
-      <div
-        className="absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "linear-gradient(var(--primary) 1px, transparent 1px), linear-gradient(to right, var(--primary) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
+    <div className="min-h-screen bg-[#f7f8f9] flex flex-col items-center justify-center relative px-4 font-sans text-slate-800">
+      
+      {/* Header section (Logo + Title) */}
+      <div className="flex flex-col items-center justify-center mb-8">
+        <img 
+          src="/logo.png" 
+          alt="KilimoHub Logo" 
+          className="object-contain mb-4" 
+          style={{ height: '64px' }}
+        />
+        <h1 className="text-2xl font-bold text-[#1a202c]">Admin</h1>
+      </div>
 
       {/* Card */}
-      <div className="relative z-10 w-full max-w-sm mx-4">
-        
-        <div className="flex justify-center mb-8">
-          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-sm shadow-primary/20">
-            <ShieldAlert className="w-5 h-5 text-primary-foreground" />
-          </div>
-        </div>
-
-        {/* Login Card */}
-        <div className="bg-card border border-border rounded-xl p-8 shadow-sm">
-          <div className="mb-8 text-center">
-            <h1 className="text-2xl font-semibold text-foreground">Admin</h1>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2">
-              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
-                Email
-              </label>
-              <Input
+      <div className="w-[90%] min-w-[320px] max-w-[400px] md:max-w-[480px] md:w-[440px] lg:max-w-[460px] bg-white rounded-[20px] border border-slate-200 shadow-[0_4px_24px_rgb(0,0,0,0.02)] p-[32px] md:p-[40px] lg:p-[48px]">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          
+          <div className="space-y-2">
+            <label className="text-[14px] text-slate-600 font-medium block">
+              Username or Email Address
+            </label>
+            <div className="relative flex items-center">
+              <div className="absolute left-4 text-slate-400">
+                <UserIcon className="w-5 h-5" />
+              </div>
+              <div className="absolute left-[44px] top-1/2 -translate-y-1/2 w-px h-6 bg-slate-200" />
+              <input
                 id="admin-email"
                 type="email"
-                placeholder="admin@domain.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="bg-background border-border text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 h-11"
+                className="w-full h-[52px] md:h-[56px] pl-[60px] pr-4 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-colors text-slate-900 bg-white"
               />
             </div>
+          </div>
 
-            <div className="space-y-2">
-              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
-                Password
-              </label>
-              <div className="relative">
-                <Input
-                  id="admin-password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="bg-background border-border text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 h-11 pr-10"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
+          <div className="space-y-2">
+            <label className="text-[14px] text-slate-600 font-medium block">
+              Password
+            </label>
+            <div className="relative flex items-center">
+              <div className="absolute left-4 text-slate-400">
+                <Lock className="w-5 h-5" />
               </div>
+              <div className="absolute left-[44px] top-1/2 -translate-y-1/2 w-px h-6 bg-slate-200" />
+              <input
+                id="admin-password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full h-[52px] md:h-[56px] pl-[60px] pr-12 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-colors text-slate-900 bg-white"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
+          </div>
 
-            <Button
-              type="submit"
-              disabled={loginMutation.isPending || !email || !password}
-              className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium mt-2 transition-all duration-200"
-            >
-              {loginMutation.isPending ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Authenticating…
-                </>
-              ) : (
-                "Sign In"
-              )}
-            </Button>
-          </form>
-        </div>
+          <div className="flex items-center justify-between pt-1">
+            <div className="flex items-center space-x-2">
+              <Checkbox 
+                id="remember" 
+                checked={rememberMe}
+                onCheckedChange={(c) => setRememberMe(!!c)}
+                className="border-slate-300 data-[state=checked]:bg-[#10B981] data-[state=checked]:border-[#10B981]"
+              />
+              <label
+                htmlFor="remember"
+                className="text-sm font-medium leading-none text-slate-600 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+              >
+                Remember Me
+              </label>
+            </div>
+            <a href="#" className="text-sm text-[#10B981] hover:text-emerald-700 hover:underline">
+              Lost your password?
+            </a>
+          </div>
+
+          <Button
+            type="submit"
+            disabled={loginMutation.isPending || !email || !password}
+            className="w-full h-[52px] md:h-[56px] bg-[#0F9D58] hover:bg-[#0b8043] text-white font-semibold text-[16px] rounded-md transition-colors shadow-none mt-2"
+          >
+            {loginMutation.isPending ? (
+              <>
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                Logging In...
+              </>
+            ) : (
+              "Log In"
+            )}
+          </Button>
+        </form>
       </div>
+      
+      {/* Footer */}
+      <div className="mt-8 text-center text-[13px] text-slate-500">
+        © 2024 KilimoHub. All rights reserved.
+      </div>
+
     </div>
   );
 }
