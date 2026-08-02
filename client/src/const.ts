@@ -17,9 +17,9 @@ export const startLogin = () => {
   const appId = import.meta.env.VITE_APP_ID;
   const redirectUri = `${window.location.origin}/api/oauth/callback`;
 
-  // If no OAuth portal is configured, fall back to the local admin login page
+  // If no OAuth portal is configured, fall back to the regular farm login page
   if (!oauthPortalUrl) {
-    window.location.href = "/admin/login";
+    window.location.href = "/login";
     return;
   }
 
