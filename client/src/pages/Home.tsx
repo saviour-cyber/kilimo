@@ -39,11 +39,24 @@ export default function Home() {
   const [, navigate] = useLocation();
 
   useEffect(() => {
-    if (!loading && isAuthenticated) {
-      // Platform Admins must NEVER be routed to the farm dashboard
-      navigate(isPlatformAdmin ? "/admin" : "/dashboard");
+    if (!loading) {
+      if (isAuthenticated) {
+        // Platform Admins must NEVER be routed to the farm dashboard
+        navigate(isPlatformAdmin ? "/admin" : "/dashboard");
+      } else {
+        // If accessed as an installed PWA, bypass the landing page and go straight to login
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
+                          || window.location.search.includes('mode=standalone');
+        
+        if (isStandalone) {
+          navigate("/login");
+        }
+      }
     }
   }, [loading, isAuthenticated, isPlatformAdmin, navigate]);
+
+  // Optionally, we could return a simple splash screen here if `loading` is true
+  // but keeping it simple for now to avoid disrupting the normal browser experience.
 
   return (
     // System background token: #F8FAFC
