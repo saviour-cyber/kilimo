@@ -1,7 +1,7 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Brain,
   CloudSun,
@@ -38,25 +38,42 @@ export default function Home() {
   const { loading, isAuthenticated, isPlatformAdmin } = useAuth();
   const [, navigate] = useLocation();
 
+  const isStandalone = typeof window !== 'undefined' && 
+    (window.matchMedia('(display-mode: standalone)').matches || window.location.search.includes('mode=standalone'));
+
+  const [splashFinished, setSplashFinished] = useState(!isStandalone);
+
+  // Splash screen timer
   useEffect(() => {
-    if (!loading) {
+    if (isStandalone) {
+      const timer = setTimeout(() => {
+        setSplashFinished(true);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [isStandalone]);
+
+  // Routing logic
+  useEffect(() => {
+    if (!loading && splashFinished) {
       if (isAuthenticated) {
         // Platform Admins must NEVER be routed to the farm dashboard
         navigate(isPlatformAdmin ? "/admin" : "/dashboard");
-      } else {
-        // If accessed as an installed PWA, bypass the landing page and go straight to login
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
-                          || window.location.search.includes('mode=standalone');
-        
-        if (isStandalone) {
-          navigate("/login");
-        }
+      } else if (isStandalone) {
+        // PWA users bypass landing page and go straight to login
+        navigate("/login");
       }
     }
-  }, [loading, isAuthenticated, isPlatformAdmin, navigate]);
+  }, [loading, isAuthenticated, isPlatformAdmin, navigate, splashFinished, isStandalone]);
 
-  // Optionally, we could return a simple splash screen here if `loading` is true
-  // but keeping it simple for now to avoid disrupting the normal browser experience.
+  // Show splash screen for PWA
+  if (isStandalone && !splashFinished) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center">
+        <img src="/logo.png" alt="KilimoHub Logo" className="h-24 object-contain animate-pulse" />
+      </div>
+    );
+  }
 
   return (
     // System background token: #F8FAFC
