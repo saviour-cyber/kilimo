@@ -3,7 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "node:path";
-import { defineConfig, type Plugin, type ViteDevServer } from "vite";
+import { defineConfig, type Plugin, type PluginOption, type ViteDevServer } from "vite";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -79,7 +79,7 @@ function vitePluginManusDebugCollector(): Plugin {
   return {
     name: "manus-debug-collector",
 
-    transformIndexHtml(html) {
+    transformIndexHtml(html: string) {
       if (process.env.NODE_ENV === "production") {
         return html;
       }
@@ -151,41 +151,43 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-const plugins: Plugin[] = [react(), tailwindcss()];
-if (!isProduction) {
-  // Dev-only plugins (not needed on Render/production)
-  plugins.push(jsxLocPlugin() as Plugin);
-  try {
-    const { vitePluginManusRuntime } = await import("vite-plugin-manus-runtime");
-    plugins.push(vitePluginManusRuntime() as Plugin);
-  } catch { /* not available in production */ }
-  plugins.push(vitePluginManusDebugCollector());
-}
+export default defineConfig(async () => {
+  const plugins: PluginOption[] = [react(), tailwindcss()];
+  if (!isProduction) {
+    // Dev-only plugins (not needed on Render/production)
+    plugins.push(jsxLocPlugin());
+    try {
+      const { vitePluginManusRuntime } = await import("vite-plugin-manus-runtime");
+      plugins.push(vitePluginManusRuntime());
+    } catch { /* not available in production */ }
+    plugins.push(vitePluginManusDebugCollector());
+  }
 
-export default defineConfig({
-  plugins,
-  resolve: {
-    alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+  return {
+    plugins,
+    resolve: {
+      alias: {
+        "@": path.resolve(import.meta.dirname, "client", "src"),
+        "@shared": path.resolve(import.meta.dirname, "shared"),
+        "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+      },
     },
-  },
-  envDir: path.resolve(import.meta.dirname),
-  root: path.resolve(import.meta.dirname, "client"),
-  publicDir: path.resolve(import.meta.dirname, "client", "public"),
-  build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
-    emptyOutDir: true,
-  },
-  server: {
-    host: true,
-    allowedHosts: [
-      "all",
-    ],
-    fs: {
-      strict: true,
-      deny: ["**/.*"],
+    envDir: path.resolve(import.meta.dirname),
+    root: path.resolve(import.meta.dirname, "client"),
+    publicDir: path.resolve(import.meta.dirname, "client", "public"),
+    build: {
+      outDir: path.resolve(import.meta.dirname, "dist/public"),
+      emptyOutDir: true,
     },
-  },
+    server: {
+      host: true,
+      allowedHosts: [
+        "all",
+      ],
+      fs: {
+        strict: true,
+        deny: ["**/.*"],
+      },
+    },
+  };
 });

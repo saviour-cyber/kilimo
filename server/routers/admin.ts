@@ -315,9 +315,9 @@ export const adminRouter = router({
     const totalReports = await db.select({ count: count() }).from(generatedReports);
     const reportData = await db.select({
       id: generatedReports.id,
-      type: generatedReports.reportType,
-      createdAt: generatedReports.createdAt,
-    }).from(generatedReports).orderBy(desc(generatedReports.createdAt)).limit(10);
+      type: generatedReports.name,
+      createdAt: generatedReports.generatedAt,
+    }).from(generatedReports).orderBy(desc(generatedReports.generatedAt)).limit(10);
 
     return {
       totalReportsGenerated: totalReports[0].count,
@@ -383,6 +383,27 @@ export const adminRouter = router({
         entityType: "announcement",
         description: `Toggled announcement ${input.id} to ${input.isActive}`,
         metadata: { isActive: input.isActive },
+      });
+
+      return { success: true };
+    }),
+
+  deleteAnnouncement: adminProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      await db.delete(platformAnnouncements)
+        .where(eq(platformAnnouncements.id, input.id));
+
+      await db.insert(auditLogs).values({
+        farmId: 0,
+        userId: ctx.user.id,
+        action: "ANNOUNCEMENT_DELETED",
+        entityType: "announcement",
+        description: `Deleted announcement ${input.id}`,
+        metadata: {},
       });
 
       return { success: true };

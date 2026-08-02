@@ -4,7 +4,7 @@ services:
     env: node
     region: frankfurt
     plan: starter
-    buildCommand: pnpm install --frozen-lockfile && NODE_ENV=production pnpm run build && pnpm exec tsx script/migrate.ts && pnpm exec tsx script/seed-modules.ts && pnpm exec tsx script/seed-admin.ts
+    buildCommand: pnpm install --frozen-lockfile && NODE_ENV=production pnpm run build && pnpm exec tsx script/sync-schema.ts && pnpm exec tsx script/migrate.ts && pnpm exec tsx script/seed-modules.ts && pnpm exec tsx script/seed-admin.ts
     startCommand: pnpm run start
     envVars:
       - key: NODE_ENV

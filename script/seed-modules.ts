@@ -6,7 +6,7 @@ async function run() {
 
   const connection = await mysql.createConnection({
     uri: process.env.DATABASE_URL!,
-    ssl: { rejectUnauthorized: true },
+    ssl: { rejectUnauthorized: false },
   });
 
   try {

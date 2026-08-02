@@ -78,7 +78,7 @@ export const tasksRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
-      assertMinRole(member, "manager");
+      assertMinRole(member, "farm_manager");
       await db.delete(tasks).where(and(eq(tasks.id, input.taskId), eq(tasks.farmId, input.farmId)));
       return { success: true };
     }),

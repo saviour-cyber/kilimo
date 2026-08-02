@@ -21,6 +21,7 @@ export interface SendEmailResult {
   success: boolean;
   messageId?: string;
   error?: string;
+  provider?: string;  // optionally identify which provider sent the email
 }
 
 // ─── Provider Interface ───────────────────────────────────────────────────────

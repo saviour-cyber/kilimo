@@ -171,7 +171,7 @@ function AdminAppRoutes() {
   return (
     <Switch>
       <Route path="/admin/login" component={AdminLogin} />
-      <Route path="/admin" exact>
+      <Route path="/admin">
         <AdminLayout><AdminDashboard /></AdminLayout>
       </Route>
       <Route path="/admin/dashboard">

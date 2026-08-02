@@ -6,7 +6,8 @@ import { ENV } from './_core/env';
 import mysql from "mysql2/promise";
 
 let _db: ReturnType<typeof drizzle> | null = null;
-let _pool: mysql.Pool | null = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _pool: any = null;
 
 // Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {

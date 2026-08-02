@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Bell, Plus, RefreshCw } from "lucide-react";
+import { Bell, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { format } from "date-fns";
 import { useState } from "react";
@@ -18,6 +18,7 @@ export default function AdminAnnouncements() {
   const { data: announcements, isLoading } = trpc.admin.listAnnouncements.useQuery();
   const createMutation = trpc.admin.createAnnouncement.useMutation();
   const toggleMutation = trpc.admin.toggleAnnouncement.useMutation();
+  const deleteMutation = trpc.admin.deleteAnnouncement.useMutation();
 
   const [isOpen, setIsOpen] = useState(false);
   const [newAnn, setNewAnn] = useState({ title: "", content: "", type: "info" as "info" | "warning" | "critical" });
@@ -38,6 +39,17 @@ export default function AdminAnnouncements() {
     try {
       await toggleMutation.mutateAsync({ id, isActive });
       toast.success(isActive ? "Announcement activated" : "Announcement hidden");
+      utils.admin.listAnnouncements.invalidate();
+    } catch (e: any) {
+      toast.error(e.message);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Permanently delete this announcement?")) return;
+    try {
+      await deleteMutation.mutateAsync({ id });
+      toast.success("Announcement deleted.");
       utils.admin.listAnnouncements.invalidate();
     } catch (e: any) {
       toast.error(e.message);
@@ -94,8 +106,8 @@ export default function AdminAnnouncements() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsOpen(false)}>Cancel</Button>
-              <Button onClick={handleCreate} disabled={!newAnn.title || !newAnn.content || createMutation.isLoading}>
-                {createMutation.isLoading && <RefreshCw className="w-4 h-4 mr-2 animate-spin" />}
+              <Button onClick={handleCreate} disabled={!newAnn.title || !newAnn.content || createMutation.isPending}>
+                {createMutation.isPending && <RefreshCw className="w-4 h-4 mr-2 animate-spin" />}
                 Publish
               </Button>
             </DialogFooter>
@@ -115,7 +127,8 @@ export default function AdminAnnouncements() {
                 <TableHead className="w-[300px]">Announcement</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Date Published</TableHead>
-                <TableHead className="text-right">Visibility Status</TableHead>
+                <TableHead className="text-right">Visibility</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -145,9 +158,20 @@ export default function AdminAnnouncements() {
                         <Switch 
                           checked={ann.isActive} 
                           onCheckedChange={(checked) => handleToggle(ann.id, checked)}
-                          disabled={toggleMutation.isLoading}
+                          disabled={toggleMutation.isPending}
                         />
                       </div>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-rose-500 hover:text-rose-700 hover:bg-rose-50"
+                        onClick={() => handleDelete(ann.id)}
+                        disabled={deleteMutation.isPending}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))

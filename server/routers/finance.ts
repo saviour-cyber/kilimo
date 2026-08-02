@@ -82,7 +82,7 @@ export const financeRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
-      assertMinRole(member, "manager");
+      assertMinRole(member, "farm_manager");
       await db.delete(financeTransactions).where(and(eq(financeTransactions.id, input.transactionId), eq(financeTransactions.farmId, input.farmId)));
       return { success: true };
     }),
@@ -114,7 +114,7 @@ export const financeRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
-      assertMinRole(member, "manager");
+      assertMinRole(member, "farm_manager");
       const [result] = await db.insert(budgets).values({ ...input, createdByUserId: ctx.user.id } as any);
       return { budgetId: (result as any).insertId };
     }),
@@ -125,7 +125,7 @@ export const financeRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
-      assertMinRole(member, "manager");
+      assertMinRole(member, "farm_manager");
       await db.delete(budgets).where(and(eq(budgets.id, input.budgetId), eq(budgets.farmId, input.farmId)));
       return { success: true };
     }),

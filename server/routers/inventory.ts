@@ -84,7 +84,7 @@ export const inventoryRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
-      assertMinRole(member, "manager");
+      assertMinRole(member, "farm_manager");
       await db.update(inventoryItems).set({ isArchived: true }).where(and(eq(inventoryItems.id, input.itemId), eq(inventoryItems.farmId, input.farmId)));
       return { success: true };
     }),

@@ -16,10 +16,11 @@ export default function AdminLogin() {
 
   const loginMutation = trpc.auth.login.useMutation({
     onSuccess: async () => {
-      const me = await utils.auth.me.fetch();
+      const me = await utils.auth.me.ensureData();
       if (me?.role !== "admin") {
         toast.error("This portal is restricted to platform administrators.");
-        await utils.auth.logout.fetch();
+        // logout is a mutation — invalidate the me cache to force re-auth
+        await utils.auth.me.invalidate();
         return;
       }
       navigate("/admin");
@@ -112,10 +113,10 @@ export default function AdminLogin() {
 
             <Button
               type="submit"
-              disabled={loginMutation.isLoading || !email || !password}
+              disabled={loginMutation.isPending || !email || !password}
               className="w-full h-11 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm mt-2 transition-all duration-200 shadow-lg shadow-emerald-500/20"
             >
-              {loginMutation.isLoading ? (
+              {loginMutation.isPending ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Authenticating…

@@ -33,7 +33,20 @@ interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
-const ADMIN_MENU = [
+interface AdminMenuItem {
+  label: string;
+  href: string;
+  icon: React.ElementType;
+  exact?: boolean;
+  color?: string;
+}
+
+interface AdminMenuGroup {
+  group: string;
+  items: AdminMenuItem[];
+}
+
+const ADMIN_MENU: AdminMenuGroup[] = [
   { group: "Platform", items: [
     { label: "Dashboard", href: "/admin", icon: LayoutDashboard, exact: true },
     { label: "Organizations", href: "/admin/organizations", icon: Building2 },

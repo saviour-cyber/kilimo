@@ -61,7 +61,7 @@ export const cropsRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
-      assertMinRole(member, "manager");
+      assertMinRole(member, "farm_manager");
       await db.update(fields).set({ isArchived: true }).where(and(eq(fields.id, input.fieldId), eq(fields.farmId, input.farmId)));
       return { success: true };
     }),
@@ -139,7 +139,7 @@ export const cropsRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
-      assertMinRole(member, "manager");
+      assertMinRole(member, "farm_manager");
       await db.update(cropPlantings).set({ status: "archived" }).where(and(eq(cropPlantings.id, input.plantingId), eq(cropPlantings.farmId, input.farmId)));
       return { success: true };
     }),
@@ -185,7 +185,7 @@ export const cropsRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
-      assertMinRole(member, "manager");
+      assertMinRole(member, "farm_manager");
       await db.delete(harvestLogs).where(and(eq(harvestLogs.id, input.harvestId), eq(harvestLogs.farmId, input.farmId)));
       return { success: true };
     }),

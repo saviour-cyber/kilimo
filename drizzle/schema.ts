@@ -120,7 +120,7 @@ export const farmInvites = mysqlTable("farmInvites", {
   id: int("id").autoincrement().primaryKey(),
   farmId: int("farmId").notNull(),
   email: varchar("email", { length: 320 }).notNull(),
-  farmRole: mysqlEnum("farmRole", ["owner", "manager", "worker", "viewer"]).default("worker").notNull(),
+  farmRole: mysqlEnum("farmRole", ["owner", "administrator", "farm_manager", "worker", "veterinary_officer", "crop_officer", "viewer"]).default("worker").notNull(),
   invitedByUserId: int("invitedByUserId").notNull(),
   inviteToken: varchar("inviteToken", { length: 128 }).notNull().unique(),
   acceptedByUserId: int("acceptedByUserId"),

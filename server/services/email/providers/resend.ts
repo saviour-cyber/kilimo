@@ -34,7 +34,7 @@ export class ResendProvider implements IEmailProvider {
         subject: options.subject,
         html: options.html,
         text: options.text,
-        reply_to: options.replyTo
+        replyTo: options.replyTo
           ? (options.replyTo.name
               ? `${options.replyTo.name} <${options.replyTo.email}>`
               : options.replyTo.email)
