@@ -62,7 +62,7 @@ function AdminCard({
   return (
     <div
       className={cn(
-        "rounded-xl border border-white/[0.07] bg-[#0A1628]/80 backdrop-blur-sm",
+        "rounded-xl border border-border bg-card shadow-sm",
         className,
       )}
     >

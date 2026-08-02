@@ -1,9 +1,9 @@
 import { trpc } from "@/lib/trpc";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, ShieldCheck, ShieldOff, Trash2, Users } from "lucide-react";
+import { MoreHorizontal, ShieldCheck, ShieldOff, Trash2, Users, Mail, Clock } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
@@ -31,119 +31,194 @@ export default function AdminUsers() {
   });
 
   return (
-    <Card className="border-slate-200 shadow-sm">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="text-xl text-slate-800">Platform Users</CardTitle>
-            <CardDescription>Manage all registered users across the entire platform.</CardDescription>
-          </div>
-          <Badge variant="outline" className="text-slate-500">
-            {users?.length ?? 0} total
-          </Badge>
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold text-foreground">Platform Users</h1>
+          <p className="text-sm text-muted-foreground mt-1">Manage all registered users across the entire platform.</p>
         </div>
-      </CardHeader>
-      <CardContent>
-        {isLoading ? (
-          <div className="space-y-4">
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-10 w-full" />
-          </div>
-        ) : (
+        <Badge variant="outline" className="text-muted-foreground w-fit bg-secondary/30">
+          {users?.length ?? 0} total users
+        </Badge>
+      </div>
+
+      <Card className="border-border shadow-sm bg-card rounded-xl overflow-hidden">
+        {/* Desktop Table View */}
+        <div className="hidden lg:block overflow-x-auto">
           <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>User</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Joined</TableHead>
-                <TableHead>Last Active</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+            <TableHeader className="bg-secondary/50">
+              <TableRow className="border-border hover:bg-transparent">
+                <TableHead className="font-semibold text-muted-foreground">User</TableHead>
+                <TableHead className="font-semibold text-muted-foreground">Role</TableHead>
+                <TableHead className="font-semibold text-muted-foreground">Joined</TableHead>
+                <TableHead className="font-semibold text-muted-foreground">Last Active</TableHead>
+                <TableHead className="text-right font-semibold text-muted-foreground">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {users?.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-8 w-8 border border-slate-200">
-                        <AvatarFallback className="bg-slate-100 text-slate-600 text-xs">
-                          {user.name?.charAt(0).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <div className="font-medium text-slate-800 leading-tight">{user.name}</div>
-                        <div className="text-xs text-slate-500">{user.email}</div>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant="outline"
-                      className={
-                        user.role === "admin"
-                          ? "border-emerald-200 text-emerald-700 bg-emerald-50"
-                          : "border-slate-200 text-slate-600"
-                      }
-                    >
-                      {user.role}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-slate-600">{format(new Date(user.createdAt), "MMM d, yyyy")}</TableCell>
-                  <TableCell className="text-slate-600">{format(new Date(user.lastSignedIn), "MMM d, yyyy")}</TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-52">
-                        <DropdownMenuLabel>User Actions</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        {user.role !== "admin" ? (
-                          <DropdownMenuItem
-                            className="gap-2 text-emerald-700"
-                            onClick={() => updateRoleMutation.mutate({ userId: user.id, role: "admin" })}
-                          >
-                            <ShieldCheck className="w-4 h-4" /> Make Platform Admin
-                          </DropdownMenuItem>
-                        ) : (
-                          <DropdownMenuItem
-                            className="gap-2 text-amber-600"
-                            onClick={() => updateRoleMutation.mutate({ userId: user.id, role: "user" })}
-                          >
-                            <ShieldOff className="w-4 h-4" /> Remove Admin Role
-                          </DropdownMenuItem>
-                        )}
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          className="gap-2 text-rose-600 font-semibold"
-                          onClick={() => {
-                            if (confirm(`Permanently delete "${user.name}"? This cannot be undone.`)) {
-                              deleteUserMutation.mutate({ userId: user.id });
-                            }
-                          }}
-                        >
-                          <Trash2 className="w-4 h-4" /> Delete User
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {users?.length === 0 && (
+              {isLoading ? (
+                Array.from({ length: 5 }).map((_, i) => (
+                  <TableRow key={i} className="border-border">
+                    <TableCell><div className="flex gap-3 items-center"><Skeleton className="h-8 w-8 rounded-full" /><Skeleton className="h-4 w-32" /></div></TableCell>
+                    <TableCell><Skeleton className="h-5 w-16 rounded-full" /></TableCell>
+                    <TableCell><Skeleton className="h-4 w-24" /></TableCell>
+                    <TableCell><Skeleton className="h-4 w-24" /></TableCell>
+                    <TableCell><Skeleton className="h-8 w-8 ml-auto" /></TableCell>
+                  </TableRow>
+                ))
+              ) : users?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-12 text-slate-400">
-                    <Users className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                    No users found on the platform.
+                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                    No users found.
                   </TableCell>
                 </TableRow>
+              ) : (
+                users?.map((user) => (
+                  <TableRow key={user.id} className="border-border hover:bg-secondary/30">
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8 border border-border bg-secondary">
+                          <AvatarFallback className="bg-transparent text-foreground text-xs font-semibold">
+                            {user.name?.charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <div className="font-medium text-foreground leading-tight">{user.name}</div>
+                          <div className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                            <Mail className="w-3 h-3" /> {user.email}
+                          </div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant="outline"
+                        className={
+                          user.role === "admin"
+                            ? "border-primary/30 text-primary bg-primary/10"
+                            : "border-border text-foreground"
+                        }
+                      >
+                        {user.role}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-sm text-muted-foreground">{format(new Date(user.createdAt), "MMM d, yyyy")}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">{format(new Date(user.lastSignedIn), "MMM d, yyyy")}</TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="border-border bg-card text-foreground">
+                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuSeparator className="bg-border" />
+                          {user.role === "user" ? (
+                            <DropdownMenuItem 
+                              className="cursor-pointer"
+                              onClick={() => {
+                                if (confirm("Promote to Admin?")) updateRoleMutation.mutate({ id: user.id, role: "admin" });
+                              }}
+                            >
+                              <ShieldCheck className="mr-2 h-4 w-4" /> Promote to Admin
+                            </DropdownMenuItem>
+                          ) : (
+                            <DropdownMenuItem 
+                              className="cursor-pointer"
+                              onClick={() => {
+                                if (confirm("Demote to User?")) updateRoleMutation.mutate({ id: user.id, role: "user" });
+                              }}
+                            >
+                              <ShieldOff className="mr-2 h-4 w-4" /> Demote to User
+                            </DropdownMenuItem>
+                          )}
+                          <DropdownMenuSeparator className="bg-border" />
+                          <DropdownMenuItem 
+                            className="text-destructive cursor-pointer focus:text-destructive"
+                            onClick={() => {
+                              if (confirm("Permanently delete this user?")) deleteUserMutation.mutate(user.id);
+                            }}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" /> Delete User
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))
               )}
             </TableBody>
           </Table>
-        )}
-      </CardContent>
-    </Card>
+        </div>
+
+        {/* Mobile / Tablet Stacked Cards View */}
+        <div className="lg:hidden flex flex-col divide-y divide-border">
+          {isLoading ? (
+            Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="p-4 space-y-3">
+                <div className="flex items-center gap-3"><Skeleton className="h-10 w-10 rounded-full" /><Skeleton className="h-4 w-32" /></div>
+                <Skeleton className="h-3 w-48" />
+              </div>
+            ))
+          ) : users?.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">No users found.</div>
+          ) : (
+            users?.map((user) => (
+              <div key={user.id} className="p-4 flex flex-col gap-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-start gap-3">
+                    <Avatar className="h-10 w-10 border border-border bg-secondary shrink-0">
+                      <AvatarFallback className="bg-transparent text-foreground text-sm font-semibold">
+                        {user.name?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col gap-1">
+                      <div className="font-medium text-foreground leading-none">{user.name}</div>
+                      <div className="text-xs text-muted-foreground break-all">{user.email}</div>
+                    </div>
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0 text-muted-foreground shrink-0">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="border-border bg-card">
+                      {user.role === "user" ? (
+                        <DropdownMenuItem className="cursor-pointer" onClick={() => updateRoleMutation.mutate({ id: user.id, role: "admin" })}>
+                          <ShieldCheck className="mr-2 h-4 w-4" /> Make Admin
+                        </DropdownMenuItem>
+                      ) : (
+                        <DropdownMenuItem className="cursor-pointer" onClick={() => updateRoleMutation.mutate({ id: user.id, role: "user" })}>
+                          <ShieldOff className="mr-2 h-4 w-4" /> Make User
+                        </DropdownMenuItem>
+                      )}
+                      <DropdownMenuSeparator className="bg-border" />
+                      <DropdownMenuItem className="text-destructive cursor-pointer focus:text-destructive" onClick={() => deleteUserMutation.mutate(user.id)}>
+                        <Trash2 className="mr-2 h-4 w-4" /> Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  <div className="bg-secondary/50 rounded-lg p-2.5">
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold mb-1">Role</p>
+                    <Badge variant="outline" className={user.role === "admin" ? "bg-primary/10 text-primary border-primary/20 text-[10px] px-1.5 py-0" : "border-border text-foreground text-[10px] px-1.5 py-0"}>
+                      {user.role}
+                    </Badge>
+                  </div>
+                  <div className="bg-secondary/50 rounded-lg p-2.5">
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold mb-1">Joined</p>
+                    <p className="text-xs font-medium text-foreground flex items-center gap-1"><Clock className="w-3 h-3 text-muted-foreground" /> {format(new Date(user.createdAt), "MMM d, yy")}</p>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </Card>
+    </div>
   );
 }

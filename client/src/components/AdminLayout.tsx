@@ -242,12 +242,12 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-[#060D1F]">
+      <div className="flex h-screen items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center animate-pulse">
-            <ShieldAlert className="w-4 h-4 text-white" />
+          <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center animate-pulse">
+            <ShieldAlert className="w-4 h-4 text-primary-foreground" />
           </div>
-          <p className="text-sm text-slate-500">Loading admin console…</p>
+          <p className="text-sm text-muted-foreground">Loading admin console…</p>
         </div>
       </div>
     );
@@ -263,7 +263,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
     .toUpperCase();
 
   return (
-    <div className="flex h-dvh overflow-hidden bg-[#060D1F] text-white">
+    <div className="flex h-dvh overflow-hidden bg-background text-foreground">
 
       {/* ── Mobile backdrop overlay ── */}
       <div
@@ -284,7 +284,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
       ──────────────────────────────────────────── */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex shrink-0 flex-col border-r border-white/[0.06] bg-[#0A1628]",
+          "fixed inset-y-0 left-0 z-50 flex shrink-0 flex-col border-r border-border bg-card",
           "transition-transform duration-300 ease-in-out",
           // Mobile base
           "w-[78vw] max-w-[280px]",
@@ -296,16 +296,16 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         )}
       >
         {/* ── Sidebar header ── */}
-        <div className="flex h-14 shrink-0 items-center border-b border-white/[0.06] px-3 gap-2.5">
+        <div className="flex h-[60px] shrink-0 items-center border-b border-border px-3 gap-2.5">
           {/* Logo mark */}
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-emerald-500 shadow-lg shadow-emerald-500/20">
-            <ShieldAlert className="h-3.5 w-3.5 text-white" />
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-primary shadow-sm shadow-primary/20">
+            <ShieldAlert className="h-3.5 w-3.5 text-primary-foreground" />
           </div>
 
           {/* Brand name — visible on mobile drawer + desktop expanded */}
           <span
             className={cn(
-              "truncate text-sm font-bold tracking-tight text-white",
+              "truncate text-sm font-semibold tracking-tight text-foreground",
               "md:hidden",
               !collapsed ? "lg:block" : "lg:hidden",
             )}
@@ -316,7 +316,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           {/* Mobile close */}
           <button
             onClick={() => setDrawerOpen(false)}
-            className="ml-auto flex h-7 w-7 items-center justify-center rounded-md text-slate-400 hover:bg-white/5 hover:text-white transition-colors md:hidden"
+            className="ml-auto flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors md:hidden"
             aria-label="Close menu"
           >
             <X className="h-4 w-4" />
@@ -326,7 +326,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           <button
             onClick={() => setCollapsed((c) => !c)}
             className={cn(
-              "hidden ml-auto h-6 w-6 items-center justify-center rounded-md text-slate-500 hover:bg-white/5 hover:text-slate-200 transition-colors",
+              "hidden ml-auto h-6 w-6 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors",
               "lg:flex",
             )}
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -346,13 +346,13 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         {/* ── User footer ── */}
         <div
           className={cn(
-            "flex shrink-0 items-center gap-2.5 border-t border-white/[0.06] p-3",
+            "flex shrink-0 items-center gap-2.5 border-t border-border p-3",
             (collapsed) && "lg:justify-center",
             "md:justify-center",
           )}
         >
           {/* Avatar */}
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-xs font-bold text-white">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-semibold text-foreground border border-border">
             {initials}
           </div>
 
@@ -364,15 +364,15 @@ export function AdminLayout({ children }: AdminLayoutProps) {
               !collapsed ? "lg:block" : "lg:hidden",
             )}
           >
-            <p className="truncate text-xs font-semibold text-slate-100">{user.name ?? "Admin"}</p>
-            <p className="truncate text-[10px] text-slate-500">{user.email}</p>
+            <p className="truncate text-xs font-medium text-foreground">{user.name ?? "Admin"}</p>
+            <p className="truncate text-[10px] text-muted-foreground">{user.email}</p>
           </div>
 
           {/* Logout button */}
           <button
             onClick={async () => { await logout(); window.location.href = "/admin/login"; }}
             title="Sign out"
-            className="flex h-7 w-7 items-center justify-center rounded-md text-slate-500 hover:bg-rose-500/10 hover:text-rose-400 transition-colors"
+            className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
           >
             <LogOut className="h-3.5 w-3.5" />
           </button>
@@ -385,44 +385,40 @@ export function AdminLayout({ children }: AdminLayoutProps) {
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
 
         {/* ── Top header bar ── */}
-        <header className="flex h-14 shrink-0 items-center gap-3 border-b border-white/[0.06] bg-[#0A1628] px-4">
+        <header className="flex h-[60px] shrink-0 items-center gap-3 border-b border-border bg-card px-4">
           {/* Hamburger — mobile only */}
           <button
             onClick={() => setDrawerOpen(true)}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-white/5 hover:text-white transition-colors md:hidden"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors md:hidden"
             aria-label="Open navigation"
           >
             <Menu className="h-5 w-5" />
           </button>
 
           {/* Mobile brand */}
-          <span className="text-sm font-bold text-white md:hidden">Platform Admin</span>
+          <span className="text-sm font-semibold text-foreground md:hidden">Platform Admin</span>
 
           <div className="flex-1" />
 
           {/* Search bar — tablet+ */}
-          <div className="hidden md:flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-slate-400 w-52 lg:w-64">
+          <div className="hidden md:flex items-center gap-2 rounded-md border border-border bg-background px-3 py-1.5 text-muted-foreground w-52 lg:w-64">
             <svg className="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <span className="text-xs flex-1">Quick search…</span>
-            <kbd className="rounded bg-white/[0.08] px-1 py-0.5 font-mono text-[10px]">⌘K</kbd>
+            <kbd className="rounded bg-secondary px-1 py-0.5 font-mono text-[10px] text-muted-foreground">⌘K</kbd>
           </div>
 
           {/* Notifications */}
-          <button className="relative flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-white/5 hover:text-white transition-colors">
+          <button className="relative flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors">
             <Bell className="h-4 w-4" />
-            <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-primary" />
           </button>
 
           {/* User — tablet+ */}
-          <div className="hidden md:flex items-center gap-2 border-l border-white/[0.06] pl-3">
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-700 text-xs font-bold text-white">
+          <div className="hidden md:flex items-center gap-2 border-l border-border pl-3">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-secondary text-xs font-semibold text-foreground border border-border">
               {initials}
-            </div>
-            <div className="leading-tight">
-              <p className="text-xs font-semibold text-slate-100">{user.name ?? "Admin"}</p>
-              <p className="text-[10px] text-slate-500">Superuser</p>
             </div>
           </div>
         </header>
