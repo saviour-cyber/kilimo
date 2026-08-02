@@ -75,17 +75,19 @@ const ADMIN_MENU: AdminMenuGroup[] = [
 ];
 
 export function AdminLayout({ children }: AdminLayoutProps) {
-  const { user, logout } = useAuth();
+  const { user, logout, loading } = useAuth();
   const [location] = useLocation();
 
   const [, navigate] = useLocation();
 
   useEffect(() => {
+    if (loading) return; // wait for auth to resolve before redirecting
     if (!user || user.role !== "admin") {
       navigate("/admin/login");
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
+  if (loading) return null; // still fetching session
   if (!user || user.role !== "admin") {
     return null; // Redirect in progress
   }

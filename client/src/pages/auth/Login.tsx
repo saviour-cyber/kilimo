@@ -24,7 +24,9 @@ export default function Login() {
 
     try {
       await loginMutation.mutateAsync({ email, password });
-      // Fetch the user's role immediately after login to route correctly
+      // Invalidate any stale cached session (e.g. a previous admin session)
+      // before fetching so we always get the freshly-minted role.
+      await utils.auth.me.invalidate();
       const me = await utils.auth.me.fetch();
       toast.success("Successfully logged in");
       setTimeout(() => {
