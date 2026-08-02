@@ -15,8 +15,12 @@ const redirectToLoginIfUnauthorized = (error: unknown) => {
   if (typeof window === "undefined") return;
 
   const isUnauthorized = error.message === UNAUTHED_ERR_MSG;
-
   if (!isUnauthorized) return;
+
+  // Never redirect if already on a public / auth page — avoids infinite loops
+  // where queries on the login page itself keep triggering this handler.
+  const publicPrefixes = ["/login", "/register", "/accept-invite", "/admin/login"];
+  if (publicPrefixes.some((p) => window.location.pathname.startsWith(p))) return;
 
   startLogin();
 };

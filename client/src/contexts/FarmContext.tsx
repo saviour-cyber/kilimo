@@ -52,17 +52,17 @@ const ROLE_PERMISSIONS: Record<FarmRole, ("read" | "write" | "manage" | "admin")
 };
 
 export function FarmProvider({ children }: { children: React.ReactNode }) {
-  const { isPlatformAdmin } = useAuth();
+  const { user, loading, isPlatformAdmin } = useAuth();
   const [currentFarmId, setCurrentFarmId] = useState<number | null>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     return stored ? parseInt(stored, 10) : null;
   });
 
   // CRITICAL: Platform Admins (role === 'admin') must NEVER trigger farm queries.
-  // They are not tenants and have no farms. Enabling this for admins would cause
-  // unnecessary API calls and could expose cross-tenant data.
+  // Also gate on the user being actually authenticated to prevent UNAUTHORIZED
+  // errors on public pages (/login, /register) from triggering redirect loops.
   const { data: farms = [], isLoading: farmsLoading, refetch: refetchFarms } = trpc.farms.list.useQuery(undefined, {
-    enabled: !isPlatformAdmin,
+    enabled: !loading && !!user && !isPlatformAdmin,
     retry: false,
   });
 
