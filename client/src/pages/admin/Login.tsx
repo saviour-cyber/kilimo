@@ -15,6 +15,11 @@ export default function AdminLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
+  // Environment and Version
+  const currentYear = new Date().getFullYear();
+  const env = import.meta.env.MODE === "production" ? "Production" : "Development";
+  const appVersion = "v1.0.0"; // In a real app this might come from package.json or env
+
   const loginMutation = trpc.auth.login.useMutation({
     onSuccess: async () => {
       const me = await utils.auth.me.ensureData();
@@ -37,112 +42,130 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f8f9] flex flex-col items-center justify-center relative px-4 font-sans text-slate-800">
+    <div className="min-h-screen bg-[#F9FAFB] flex flex-col items-center justify-center relative px-4 font-sans text-slate-800">
       
-      {/* Header section (Logo + Title) */}
-      <div className="flex flex-col items-center justify-center mb-8">
-        <img 
-          src="/logo.png" 
-          alt="KilimoHub Logo" 
-          className="object-contain mb-4" 
-          style={{ height: '64px' }}
-        />
-        <h1 className="text-2xl font-bold text-[#1a202c]">Admin</h1>
-      </div>
+      {/* Subtle Background Pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(#000 1px, transparent 1px), linear-gradient(to right, #000 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+        }}
+      />
 
-      {/* Card */}
-      <div className="w-[90%] min-w-[320px] max-w-[400px] md:max-w-[480px] md:w-[440px] lg:max-w-[460px] bg-white rounded-[20px] border border-slate-200 shadow-[0_4px_24px_rgb(0,0,0,0.02)] p-[32px] md:p-[40px] lg:p-[48px]">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          
-          <div className="space-y-2">
-            <label className="text-[14px] text-slate-600 font-medium block">
-              Username or Email Address
-            </label>
-            <div className="relative flex items-center">
-              <div className="absolute left-4 text-slate-400">
-                <UserIcon className="w-5 h-5" />
-              </div>
-              <div className="absolute left-[44px] top-1/2 -translate-y-1/2 w-px h-6 bg-slate-200" />
-              <input
-                id="admin-email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full h-[52px] md:h-[56px] pl-[60px] pr-4 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-colors text-slate-900 bg-white"
-              />
-            </div>
+      {/* Main Content Wrapper */}
+      <div className="relative z-10 w-full max-w-[400px] md:max-w-[440px] flex flex-col items-center">
+        
+        {/* Header section (Logo + Title) */}
+        <div className="flex flex-col items-center justify-center mb-8 text-center space-y-4">
+          <img 
+            src="/logo.png" 
+            alt="KilimoHub Logo" 
+            className="object-contain" 
+            style={{ height: '76px' }}
+          />
+          <div className="space-y-1.5">
+            <h1 className="text-[22px] font-semibold text-slate-900 tracking-tight">Platform Admin</h1>
+            <p className="text-[14px] text-slate-500 font-medium">Secure access to the KilimoHub Platform.</p>
           </div>
+        </div>
 
-          <div className="space-y-2">
-            <label className="text-[14px] text-slate-600 font-medium block">
-              Password
-            </label>
-            <div className="relative flex items-center">
-              <div className="absolute left-4 text-slate-400">
-                <Lock className="w-5 h-5" />
-              </div>
-              <div className="absolute left-[44px] top-1/2 -translate-y-1/2 w-px h-6 bg-slate-200" />
-              <input
-                id="admin-password"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full h-[52px] md:h-[56px] pl-[60px] pr-12 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-colors text-slate-900 bg-white"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between pt-1">
-            <div className="flex items-center space-x-2">
-              <Checkbox 
-                id="remember" 
-                checked={rememberMe}
-                onCheckedChange={(c) => setRememberMe(!!c)}
-                className="border-slate-300 data-[state=checked]:bg-[#10B981] data-[state=checked]:border-[#10B981]"
-              />
-              <label
-                htmlFor="remember"
-                className="text-sm font-medium leading-none text-slate-600 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-              >
-                Remember Me
+        {/* Login Card */}
+        <div className="w-full bg-white rounded-2xl border border-slate-200/60 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] p-[28px] md:p-[44px]">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            
+            <div className="space-y-2">
+              <label className="text-[13px] text-slate-700 font-medium block">
+                Username or Email
               </label>
+              <div className="relative flex items-center group">
+                <div className="absolute left-4 text-slate-400 group-focus-within:text-emerald-600 transition-colors">
+                  <UserIcon className="w-4 h-4" />
+                </div>
+                <input
+                  id="admin-email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="admin@kilimohub.com"
+                  required
+                  className="w-full h-[52px] pl-11 pr-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-slate-900 text-[14px] placeholder:text-slate-400"
+                />
+              </div>
             </div>
-            <a href="#" className="text-sm text-[#10B981] hover:text-emerald-700 hover:underline">
-              Lost your password?
-            </a>
-          </div>
 
-          <Button
-            type="submit"
-            disabled={loginMutation.isPending || !email || !password}
-            className="w-full h-[52px] md:h-[56px] bg-[#0F9D58] hover:bg-[#0b8043] text-white font-semibold text-[16px] rounded-md transition-colors shadow-none mt-2"
-          >
-            {loginMutation.isPending ? (
-              <>
-                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                Logging In...
-              </>
-            ) : (
-              "Log In"
-            )}
-          </Button>
-        </form>
-      </div>
-      
-      {/* Footer */}
-      <div className="mt-8 text-center text-[13px] text-slate-500">
-        © 2024 KilimoHub. All rights reserved.
-      </div>
+            <div className="space-y-2">
+              <label className="text-[13px] text-slate-700 font-medium block">
+                Password
+              </label>
+              <div className="relative flex items-center group">
+                <div className="absolute left-4 text-slate-400 group-focus-within:text-emerald-600 transition-colors">
+                  <Lock className="w-4 h-4" />
+                </div>
+                <input
+                  id="admin-password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  className="w-full h-[52px] pl-11 pr-12 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-slate-900 text-[14px] placeholder:text-slate-400"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-600 transition-colors rounded-lg"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
 
+            <div className="flex items-center justify-between pt-1">
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="remember" 
+                  checked={rememberMe}
+                  onCheckedChange={(c) => setRememberMe(!!c)}
+                  className="border-slate-300 rounded-[4px] data-[state=checked]:bg-[#10B981] data-[state=checked]:border-[#10B981] w-4 h-4"
+                />
+                <label
+                  htmlFor="remember"
+                  className="text-[13px] font-medium leading-none text-slate-600 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer select-none"
+                >
+                  Remember Me
+                </label>
+              </div>
+              <a href="#" className="text-[13px] font-medium text-slate-500 hover:text-emerald-600 transition-colors">
+                Forgot Password?
+              </a>
+            </div>
+
+            <Button
+              type="submit"
+              disabled={loginMutation.isPending || !email || !password}
+              className="w-full h-[52px] bg-[#10B981] hover:bg-[#059669] text-white font-medium text-[15px] rounded-xl transition-all shadow-none mt-2"
+            >
+              {loginMutation.isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Authenticating...
+                </>
+              ) : (
+                "Sign In"
+              )}
+            </Button>
+          </form>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-8 flex flex-col items-center gap-1 text-[12px] text-slate-400 font-medium tracking-wide">
+          <p>© {currentYear} KilimoHub.</p>
+          <p>{appVersion} • {env}</p>
+        </div>
+
+      </div>
     </div>
   );
 }
