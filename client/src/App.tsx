@@ -5,6 +5,7 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { PWAInstallPrompt } from "./components/PWAInstallPrompt";
 import { FarmProvider } from "./contexts/FarmContext";
 import { KilimoLayout } from "./components/KilimoLayout";
 import { AdminLayout } from "./components/AdminLayout";
@@ -248,6 +249,7 @@ function App() {
         <TooltipProvider>
           <Toaster richColors position="top-right" />
           <AppRoutes />
+          <PWAInstallPrompt />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
