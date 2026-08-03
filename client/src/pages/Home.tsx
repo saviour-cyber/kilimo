@@ -22,6 +22,9 @@ import {
   Leaf,
   Users,
   Star,
+  Download,
+  Share,
+  Plus,
 } from "lucide-react";
 
 // System accent colors — exactly matching the design system tokens
@@ -34,6 +37,11 @@ const FEATURES = [
   { icon: Wallet,              label: "Finance Tracking",   desc: "Track expenses, income and profits to grow your agricultural business.",           color: "text-amber-500",  bg: "bg-amber-50",    border: "border-amber-100"   },
 ];
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+}
+
 export default function Home() {
   const { loading, isAuthenticated, isPlatformAdmin } = useAuth();
   const [, navigate] = useLocation();
@@ -42,6 +50,30 @@ export default function Home() {
     (window.matchMedia('(display-mode: standalone)').matches || window.location.search.includes('mode=standalone'));
 
   const [splashFinished, setSplashFinished] = useState(!isStandalone);
+
+  // PWA install prompt
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [showIOSInstall, setShowIOSInstall] = useState(false);
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e as BeforeInstallPromptEvent);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (isIOS) {
+      setShowIOSInstall(true);
+      return;
+    }
+    if (!installPrompt) return;
+    await installPrompt.prompt();
+    setInstallPrompt(null);
+  };
 
   // Splash screen timer
   useEffect(() => {
@@ -401,12 +433,52 @@ export default function Home() {
           {/* Bottom bar — system border: #1E293B (sidebar-accent) */}
           <div className="border-t border-[#1E293B] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-[#64748B]">© {new Date().getFullYear()} KilimoHub Technologies Ltd.</p>
-            <div className="flex items-center gap-6 text-sm text-[#64748B]">
+            <div className="flex items-center gap-4 text-sm text-[#64748B] flex-wrap justify-center">
               {["Privacy Policy","Terms of Service","Cookie Policy"].map(l => (
                 <a key={l} href="#" className="hover:text-[#10B981] transition-colors">{l}</a>
               ))}
+              {/* Install App button — only shown when not already installed */}
+              {!isStandalone && (installPrompt || isIOS) && (
+                <button
+                  onClick={handleInstallClick}
+                  className="flex items-center gap-2 bg-[#10B981] hover:bg-[#059669] text-white text-sm font-medium px-4 py-2 rounded-full transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  Install App
+                </button>
+              )}
             </div>
           </div>
+
+          {/* iOS install instructions overlay */}
+          {showIOSInstall && (
+            <div className="fixed inset-0 bg-black/60 z-50 flex items-end justify-center p-4" onClick={() => setShowIOSInstall(false)}>
+              <div className="bg-white rounded-2xl p-6 max-w-sm w-full mb-4" onClick={e => e.stopPropagation()}>
+                <div className="flex items-center gap-3 mb-4">
+                  <img src="/logo.png" alt="KilimoHub" className="h-10 w-10 object-contain rounded-xl" />
+                  <div>
+                    <p className="font-semibold text-slate-900 text-sm">Install KilimoHub</p>
+                    <p className="text-xs text-slate-500">Add to your home screen</p>
+                  </div>
+                  <button onClick={() => setShowIOSInstall(false)} className="ml-auto text-slate-400 hover:text-slate-600 text-xl leading-none">&times;</button>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3 text-sm text-slate-600">
+                    <span className="bg-emerald-50 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">1</span>
+                    <span>Tap the <strong className="text-slate-800">Share <Share className="w-3.5 h-3.5 inline text-blue-500" /></strong> button at the bottom of Safari</span>
+                  </div>
+                  <div className="flex items-start gap-3 text-sm text-slate-600">
+                    <span className="bg-emerald-50 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">2</span>
+                    <span>Tap <strong className="text-slate-800">Add to Home Screen <Plus className="w-3.5 h-3.5 inline" /></strong></span>
+                  </div>
+                  <div className="flex items-start gap-3 text-sm text-slate-600">
+                    <span className="bg-emerald-50 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">3</span>
+                    <span>Tap <strong className="text-slate-800">Add</strong> to install on your home screen</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </footer>
     </div>
