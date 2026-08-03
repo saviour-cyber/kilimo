@@ -13,8 +13,7 @@ const isAndroid = () => /android/i.test(navigator.userAgent);
 
 const isInStandaloneMode = () =>
   window.matchMedia("(display-mode: standalone)").matches ||
-  (window.navigator as any).standalone === true ||
-  window.location.search.includes("mode=standalone");
+  (window.navigator as any).standalone === true;
 
 // Global store for the deferred prompt
 let _deferredPrompt: BeforeInstallPromptEvent | null = typeof window !== "undefined" ? (window as any)._deferredPrompt : null;
