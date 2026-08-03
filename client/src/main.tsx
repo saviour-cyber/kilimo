@@ -8,6 +8,16 @@ import App from "./App";
 import { startLogin } from "./const";
 import "./index.css";
 
+// Register service worker (required for PWA installability on Android/Chrome)
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/sw.js", { scope: "/" })
+      .then((reg) => console.log("[SW] Registered, scope:", reg.scope))
+      .catch((err) => console.warn("[SW] Registration failed:", err));
+  });
+}
+
 const queryClient = new QueryClient();
 
 const redirectToLoginIfUnauthorized = (error: unknown) => {
