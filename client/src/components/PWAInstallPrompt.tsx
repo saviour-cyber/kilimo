@@ -16,8 +16,8 @@ const isInStandaloneMode = () =>
   (window.navigator as any).standalone === true ||
   window.location.search.includes("mode=standalone");
 
-// Global store for the deferred prompt so any component can trigger it
-let _deferredPrompt: BeforeInstallPromptEvent | null = null;
+// Global store for the deferred prompt
+let _deferredPrompt: BeforeInstallPromptEvent | null = typeof window !== "undefined" ? (window as any)._deferredPrompt : null;
 const _listeners = new Set<() => void>();
 
 function notifyListeners() {
@@ -25,14 +25,18 @@ function notifyListeners() {
 }
 
 if (typeof window !== "undefined") {
+  // Overwrite the inline script's listener with our React-aware one,
+  // or catch it if it hasn't fired yet.
   window.addEventListener("beforeinstallprompt", (e: Event) => {
     e.preventDefault();
     _deferredPrompt = e as BeforeInstallPromptEvent;
+    (window as any)._deferredPrompt = e;
     notifyListeners();
   });
 
   window.addEventListener("appinstalled", () => {
     _deferredPrompt = null;
+    (window as any)._deferredPrompt = null;
     notifyListeners();
   });
 }
