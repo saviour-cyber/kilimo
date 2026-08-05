@@ -53,11 +53,9 @@ export default function Login() {
         
         {/* Header section */}
         <div className="flex flex-col items-center justify-center mb-8 text-center space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-[#10B981] flex items-center justify-center shadow-sm shadow-[#10B981]/20">
-            <Sprout className="w-7 h-7 text-white" />
-          </div>
+          <img src="/logo.png" alt="KilimoHub Logo" className="w-14 h-14 rounded-2xl shadow-sm object-contain" />
           <div className="space-y-1.5">
-            <h1 className="text-[22px] font-semibold text-slate-900 tracking-tight">Welcome back</h1>
+            <h1 className="text-[22px] font-semibold text-slate-900 tracking-tight">Sign in to KilimoHub</h1>
             <p className="text-[14px] text-slate-500 font-medium">Sign in to manage your farms.</p>
           </div>
         </div>
