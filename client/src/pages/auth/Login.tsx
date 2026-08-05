@@ -52,12 +52,9 @@ export default function Login() {
       <div className="relative z-10 w-full max-w-[400px] md:max-w-[440px] flex flex-col items-center">
         
         {/* Header section */}
-        <div className="flex flex-col items-center justify-center mb-8 text-center space-y-4">
-          <img src="/logo.png" alt="KilimoHub Logo" className="w-14 h-14 rounded-2xl shadow-sm object-contain" />
-          <div className="space-y-1.5">
-            <h1 className="text-[22px] font-semibold text-slate-900 tracking-tight">Sign in to KilimoHub</h1>
-            <p className="text-[14px] text-slate-500 font-medium">Sign in to manage your farms.</p>
-          </div>
+        <div className="flex flex-col items-center justify-center mb-8 text-center space-y-1.5">
+          <h1 className="text-[22px] font-semibold text-slate-900 tracking-tight">Welcome back</h1>
+          <p className="text-[14px] text-slate-500 font-medium">Sign in to continue to KilimoHub.</p>
         </div>
 
         {/* Login Card */}
