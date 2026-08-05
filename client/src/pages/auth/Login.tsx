@@ -36,7 +36,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] flex flex-col items-center justify-center relative px-4 font-sans text-slate-800">
+    <div className="min-h-screen w-full bg-[#F9FAFB] flex flex-col justify-center items-center px-4 py-6 font-sans text-slate-800 relative">
       
       {/* Subtle Background Pattern */}
       <div
@@ -49,17 +49,20 @@ export default function Login() {
       />
 
       {/* Main Content Wrapper */}
-      <div className="relative z-10 w-full max-w-[400px] md:max-w-[440px] flex flex-col items-center">
-        
+      <div className="relative z-10 w-full max-w-sm flex flex-col items-center space-y-6 text-center">
+
+        {/* Logo */}
+        <img src="/logo.png" alt="KilimoHub" className="w-12 h-12 rounded-2xl object-contain shadow-sm" />
+
         {/* Header section */}
-        <div className="flex flex-col items-center justify-center mb-8 text-center space-y-1.5">
+        <div className="space-y-1">
           <h1 className="text-[22px] font-semibold text-slate-900 tracking-tight">Welcome back</h1>
           <p className="text-[14px] text-slate-500 font-medium">Sign in to continue to KilimoHub.</p>
         </div>
 
         {/* Login Card */}
-        <div className="w-full bg-white rounded-2xl border border-slate-200/60 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] p-[28px] md:p-[44px]">
-          <form onSubmit={handleLogin} className="space-y-6">
+        <div className="w-full bg-white rounded-2xl border border-slate-200/60 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] p-7 text-left">
+          <form onSubmit={handleLogin} className="space-y-5">
             
             <div className="space-y-2">
               <label className="text-[13px] text-slate-700 font-medium block">
@@ -116,7 +119,7 @@ export default function Login() {
             <Button
               type="submit"
               disabled={loginMutation.isPending || !email || !password}
-              className="w-full h-[52px] bg-[#10B981] hover:bg-[#059669] text-white font-medium text-[15px] rounded-xl transition-all shadow-none mt-2"
+              className="w-full h-[52px] bg-[#10B981] hover:bg-[#059669] text-white font-medium text-[15px] rounded-xl transition-all shadow-none"
             >
               {loginMutation.isPending ? (
                 <>
@@ -128,7 +131,7 @@ export default function Login() {
               )}
             </Button>
             
-            <div className="text-center text-[13.5px] text-slate-500 pt-2">
+            <div className="text-center text-[13.5px] text-slate-500">
               Don't have an account?{" "}
               <a href="/register" className="text-[#10B981] hover:underline font-medium">
                 Create one
@@ -138,9 +141,9 @@ export default function Login() {
         </div>
 
         {/* Footer */}
-        <div className="mt-8 flex flex-col items-center gap-1 text-[12px] text-slate-400 font-medium tracking-wide">
-          <p>© {currentYear} KilimoHub.</p>
-        </div>
+        <p className="text-[12px] text-slate-400 font-medium tracking-wide">
+          © {currentYear} KilimoHub.
+        </p>
 
       </div>
     </div>
