@@ -11,6 +11,7 @@ import OrgFarms from "./OrgFarms";
 import OrgTeam from "./OrgTeam";
 import FarmProfile from "./FarmProfile";
 import FarmModules from "./FarmModules";
+import PlatformAbout from "./PlatformAbout";
 
 // Specialized Placeholders for sections under construction
 const FeaturePlaceholder = ({ title, description, icon: Icon }: { title: string, description: string, icon: any }) => (
@@ -58,6 +59,7 @@ export default function SettingsLayout() {
   const [isFarmProfile] = useRoute("/settings/farm/profile");
   const [isFarmModules] = useRoute("/settings/farm/modules");
   const [isFarmIot] = useRoute("/settings/farm/iot");
+  const [isPlatformAbout] = useRoute("/settings/platform/about");
 
   // Fallback to relative paths in case the tilde operator isn't resolving as expected
   const [isUserProfileRel] = useRoute("/user/profile");
@@ -69,6 +71,7 @@ export default function SettingsLayout() {
   const [isFarmProfileRel] = useRoute("/farm/profile");
   const [isFarmModulesRel] = useRoute("/farm/modules");
   const [isFarmIotRel] = useRoute("/farm/iot");
+  const [isPlatformAboutRel] = useRoute("/platform/about");
 
   let content = <FeaturePlaceholder title="Page Not Found" description="The page you're looking for doesn't exist." icon={Settings} />;
   if (isUserProfile || isUserProfileRel) content = <UserProfile />;
@@ -80,6 +83,7 @@ export default function SettingsLayout() {
   if (isFarmProfile || isFarmProfileRel) content = <FarmProfile />;
   if (isFarmModules || isFarmModulesRel) content = <FarmModules />;
   if (isFarmIot || isFarmIotRel) content = <FeaturePlaceholder title="IoT Configuration" description="Connect and manage your sensors, gateways, and automated irrigation pumps." icon={Settings} />;
+  if (isPlatformAbout || isPlatformAboutRel) content = <PlatformAbout />;
 
   return (
     <div className="min-h-full flex flex-col bg-white">

@@ -43,6 +43,12 @@ const NAV_GROUPS: NavGroup[] = [
       { label: "Modules", href: "/settings/farm/modules", icon: Layers },
       { label: "IoT Configuration", href: "/settings/farm/iot", icon: Cpu },
     ]
+  },
+  {
+    title: "Platform",
+    items: [
+      { label: "About KilimoHub", href: "/settings/platform/about", icon: FileText },
+    ]
   }
 ];
 

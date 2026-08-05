@@ -33,6 +33,8 @@ import { Separator } from "./ui/separator";
 import { Skeleton } from "./ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
+import { InstallSidebarButton } from "./PWAInstallPrompt";
+
 interface KilimoLayoutProps {
   children: React.ReactNode;
 }
@@ -414,10 +416,12 @@ export function KilimoLayout({ children }: KilimoLayoutProps) {
       </ScrollArea>
 
       {/* 3. Footer (Fixed) */}
-      <div className="shrink-0 flex flex-col border-t border-sidebar-border">
+      <div className="shrink-0 flex flex-col border-t border-sidebar-border p-3 gap-2">
+        
+        <InstallSidebarButton collapsed={collapsed} />
 
         {/* User Profile */}
-        <div className={cn("p-3 shrink-0", collapsed && "flex justify-center")}>
+        <div className={cn("shrink-0", collapsed && "flex justify-center")}>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className={cn(
