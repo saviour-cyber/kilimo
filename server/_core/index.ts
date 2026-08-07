@@ -26,13 +26,6 @@ async function startServer() {
   registerOAuthRoutes(app);
   // Scheduled job handlers
   app.post("/api/scheduled/generateReminders", generateRemindersHandler);
-
-  // DEBUG: confirm Express receives /verify-email requests (remove after confirming)
-  app.get("/verify-email", (req, res, next) => {
-    console.log("VERIFY EMAIL ROUTE HIT — Express is alive and handling this request");
-    next();
-  });
-
   // tRPC API
   app.use(
     "/api/trpc",
