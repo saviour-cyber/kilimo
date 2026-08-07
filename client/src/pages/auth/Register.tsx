@@ -121,12 +121,8 @@ export default function Register() {
         modules,
       });
 
-      toast.success("Setup complete! Welcome to KilimoHub.");
-      // 3. Redirect to dashboard
-      // Add a small delay so the cookie is registered properly before fetching /dashboard
-      setTimeout(() => {
-        window.location.href = "/dashboard";
-      }, 500);
+      toast.success("Setup complete!");
+      setStep(6);
       
     } catch (error: any) {
       toast.error(error.message || "Failed to complete setup.");
@@ -171,6 +167,7 @@ export default function Register() {
               {step === 3 && "Give your farm a name and basic information. You can create additional farms later."}
               {step === 4 && "Select the farming activities you want to manage. You can enable additional modules later."}
               {step === 5 && "Review your information before completing the setup."}
+              {step === 6 && "One last step to secure your account."}
             </CardDescription>
           </CardHeader>
 
@@ -386,8 +383,28 @@ export default function Register() {
                 </div>
               </div>
             )}
+
+            {/* STEP 6 */}
+            {step === 6 && (
+              <div className="text-center space-y-4 py-8">
+                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+                </div>
+                <h3 className="text-xl font-bold">Check your email</h3>
+                <p className="text-muted-foreground max-w-md mx-auto">
+                  We've sent a verification link to <span className="font-semibold text-foreground">{formData.email}</span>. 
+                  Please click the link in that email to verify your account and access KilimoHub.
+                </p>
+                <div className="pt-6">
+                  <Button variant="outline" onClick={() => window.location.href = "/login"}>
+                    Return to Login
+                  </Button>
+                </div>
+              </div>
+            )}
           </CardContent>
 
+          {step < 6 && (
           <CardFooter className="flex justify-between pt-6 border-t">
             <Button
               variant="outline"
@@ -417,6 +434,7 @@ export default function Register() {
               </Button>
             )}
           </CardFooter>
+          )}
         </Card>
         
         <div className="text-center mt-6">

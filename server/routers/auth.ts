@@ -64,6 +64,10 @@ export const authRouter = router({
         throw new TRPCError({ code: "UNAUTHORIZED", message: "Invalid email or password" });
       }
 
+      if (!user.isEmailVerified) {
+        throw new TRPCError({ code: "UNAUTHORIZED", message: "Please verify your email address to log in." });
+      }
+
       // Auto-promote the designated admin email to role='admin' on every login.
       // This ensures re-deployments or DB resets never lock out the superadmin.
       const adminEmail = (process.env.ADMIN_EMAIL ?? "admin@kilimohub.com").trim().toLowerCase();
@@ -127,15 +131,7 @@ export const authRouter = router({
 
       const userId = (result as any).insertId as number;
 
-      // ── Issue session JWT ──────────────────────────────────────────────────
-      const sessionToken = await new SignJWT({ userId })
-        .setProtectedHeader({ alg: "HS256" })
-        .setIssuedAt()
-        .setExpirationTime("30d")
-        .sign(JWT_SECRET);
-
-      const cookieOptions = getSessionCookieOptions(ctx.req);
-      ctx.res.cookie(COOKIE_NAME, sessionToken, cookieOptions);
+      // ── Do not issue JWT here (wait for email verification) ───────────────
 
       // ── Send verification email (non-blocking) ─────────────────────────────
       setImmediate(async () => {
@@ -158,7 +154,7 @@ export const authRouter = router({
         }
       });
 
-      return { success: true, userId, name, email: input.email };
+      return { success: true, userId, name, email: input.email, requiresVerification: true };
     }),
 
   // ── Verify Email ─────────────────────────────────────────────────────────────
@@ -198,6 +194,22 @@ export const authRouter = router({
         .update(emailVerificationTokens)
         .set({ usedAt: now })
         .where(eq(emailVerificationTokens.id, record.id));
+
+      // Mark user as verified
+      await ctx.db
+        .update(users)
+        .set({ isEmailVerified: true })
+        .where(eq(users.id, record.userId));
+
+      // ── Issue session JWT ──────────────────────────────────────────────────
+      const sessionToken = await new SignJWT({ userId: record.userId })
+        .setProtectedHeader({ alg: "HS256" })
+        .setIssuedAt()
+        .setExpirationTime("30d")
+        .sign(JWT_SECRET);
+
+      const cookieOptions = getSessionCookieOptions(ctx.req);
+      ctx.res.cookie(COOKIE_NAME, sessionToken, cookieOptions);
 
       return { success: true, userId: record.userId };
     }),

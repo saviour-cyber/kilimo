@@ -20,6 +20,7 @@ export const users = mysqlTable("users", {
   password: text("password"),
   name: text("name"),
   email: varchar("email", { length: 320 }).unique(),
+  isEmailVerified: boolean("isEmailVerified").default(false).notNull(),
   phone: varchar("phone", { length: 32 }),
   country: varchar("country", { length: 64 }).default("Kenya"),
   loginMethod: varchar("loginMethod", { length: 64 }),

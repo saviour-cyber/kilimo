@@ -1,0 +1,2 @@
+ALTER TABLE `farmInvites` MODIFY COLUMN `farmRole` enum('owner','administrator','farm_manager','worker','veterinary_officer','crop_officer','viewer') NOT NULL DEFAULT 'worker';--> statement-breakpoint
+ALTER TABLE `users` ADD `isEmailVerified` boolean DEFAULT false NOT NULL;

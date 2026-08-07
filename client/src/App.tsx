@@ -30,6 +30,7 @@ import CreateFarm from "./pages/CreateFarm";
 import AcceptInvite from "./pages/AcceptInvite";
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
+import VerifyEmail from "./pages/auth/VerifyEmail";
 
 // Core
 import Dashboard from "./pages/Dashboard";
@@ -86,6 +87,7 @@ function TenantAppRoutes() {
         <Route path="/accept-invite" component={AcceptInvite} />
         <Route path="/register" component={Register} />
         <Route path="/login" component={Login} />
+        <Route path="/verify-email" component={VerifyEmail} />
 
         {/* Protected routes inside KilimoLayout */}
         <Route path="/dashboard">
