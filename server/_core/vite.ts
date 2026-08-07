@@ -51,16 +51,37 @@ export function serveStatic(app: Express) {
   // Use process.cwd() so the path is always relative to the project root,
   // whether the server is running from source (tsx) or from dist/index.js (esbuild).
   const distPath = path.resolve(process.cwd(), "dist", "public");
+  const indexPath = path.resolve(distPath, "index.html");
+
   if (!fs.existsSync(distPath)) {
     console.error(
-      `Could not find the build directory: ${distPath}, make sure to build the client first`
+      `[serveStatic] ERROR: Build directory not found: ${distPath}. Run "npm run build" first.`
     );
+  } else if (!fs.existsSync(indexPath)) {
+    console.error(
+      `[serveStatic] ERROR: index.html not found at: ${indexPath}`
+    );
+  } else {
+    console.log(`[serveStatic] Serving static files from: ${distPath}`);
   }
 
+  // 1. Serve static assets (JS, CSS, images, etc.)
   app.use(express.static(distPath));
 
-  // fall through to index.html for SPA client-side routing
-  app.use("*", (_req, res) => {
-    res.sendFile(path.resolve(distPath, "index.html"));
+  // 2. SPA catch-all: any GET request that didn't match a static file or /api/* route
+  //    must return index.html so React Router can handle client-side routing.
+  //    This covers /verify-email, /login, /register, /forgot-password, /reset-password, etc.
+  //    Using app.get() is more explicit and reliable in Express 4 than app.use("*").
+  app.get("*", (_req, res) => {
+    if (!fs.existsSync(indexPath)) {
+      res.status(500).send("Server error: client build not found. Contact support.");
+      return;
+    }
+    res.sendFile(indexPath, (err) => {
+      if (err) {
+        console.error("[serveStatic] Failed to send index.html:", err);
+        res.status(500).send("Server error: failed to serve application.");
+      }
+    });
   });
 }
