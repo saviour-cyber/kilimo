@@ -20,6 +20,7 @@ import {
   platformAnnouncementTemplate,
   paymentReminderTemplate,
   securityAlertTemplate,
+  trialStartedEmailTemplate,
 } from "./templates";
 import { getDb } from "../../db";
 import { platformEmailLogs } from "../../../drizzle/schema";
@@ -137,6 +138,21 @@ export class EmailService {
       expiresInDays: 7,
     });
     return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "organization_invite" });
+  }
+
+  /** Send email when a trial subscription starts */
+  async sendTrialStartedEmail(
+    to: { name: string; email: string },
+    ctx: { organizationName: string; planName: string; trialDays: number; expiresAt: string }
+  ) {
+    const base = process.env.APP_BASE_URL ?? "https://kilimohub.onrender.com";
+    const billingUrl = `${base}/settings/organization/billing`;
+    const tpl = trialStartedEmailTemplate({
+      ...ctx,
+      userName: to.name,
+      billingUrl,
+    });
+    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "trial_started" });
   }
 
   // ── Admin templates ──────────────────────────────────────────────────────────

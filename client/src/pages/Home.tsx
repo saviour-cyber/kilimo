@@ -49,7 +49,7 @@ export default function Home() {
   const [splashFinished, setSplashFinished] = useState(!isStandalone);
 
   // Use the global PWA install state
-  const { canInstall, isInstalled, triggerInstall } = usePWAInstall();
+  const { canInstall, isInstalled, triggerPrompt: triggerInstall } = usePWAInstall();
 
 
   // Splash screen timer

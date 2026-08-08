@@ -91,13 +91,28 @@ export const farmsRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
+      const { checkFarmLimit } = await import("../services/usageLimits");
+
+      // We assume user is part of organization 1 for now, or fetch from users table
+      // To be robust, let's fetch the user's primary organization
+      const { users, organizationMembers } = await import("../../drizzle/schema");
+      
+      const [member] = await db.select().from(organizationMembers).where(eq(organizationMembers.userId, ctx.user.id)).limit(1);
+      const orgId = member ? member.organizationId : 1;
+
+      try {
+        await checkFarmLimit(orgId);
+      } catch (err: any) {
+        throw new TRPCError({ code: "FORBIDDEN", message: err.message });
+      }
+
       const { sizeHectares, ...rest } = input;
 
       const [result] = await db.insert(farms).values({
         ...rest,
         sizeHectares: sizeHectares ? sizeHectares : undefined,
         ownerId: ctx.user.id,
-        organizationId: 1,
+        organizationId: orgId,
       });
 
       const farmId = (result as any).insertId as number;

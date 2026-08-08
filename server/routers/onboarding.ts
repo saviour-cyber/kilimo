@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { eq } from "drizzle-orm";
+import { provisionTrialSubscription } from "../services/subscriptions";
 import { publicProcedure, router } from "../_core/trpc";
 import { users, organizations, farms, farmModules, farmMembers } from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
@@ -38,6 +40,9 @@ export const onboardingRouter = router({
         });
         
         const orgId = orgResult.insertId;
+
+        // 1b. Provision Trial Subscription
+        await provisionTrialSubscription(ctx.db, orgId);
 
         // 2. Create Farm
         const [farmResult] = await ctx.db.insert(farms).values({

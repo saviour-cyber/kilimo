@@ -4,6 +4,7 @@ import { useFarm } from "@/contexts/FarmContext";
 import { getVisibleModules, MODULE_REGISTRY } from "@/lib/moduleRegistry";
 import { getSidebarServices, getFloatingWidgets, type PlatformServiceDefinition } from "@/lib/serviceRegistry";
 import { trpc } from "@/lib/trpc";
+import { useGrantedModules } from "@/hooks/useEntitlement";
 import { cn } from "@/lib/utils";
 import {
   ChevronDown,
@@ -321,8 +322,15 @@ export function KilimoLayout({ children }: KilimoLayoutProps) {
     );
   }
 
-  const visibleModules = getVisibleModules(enabledModules, role);
-  const platformServices = getSidebarServices();
+  const { modules: grantedModules, isLoading: modulesLoading } = useGrantedModules();
+  
+  // A module is enabled if the farm enabled it AND the org's subscription grants it
+  const effectiveModules = enabledModules.filter(m => grantedModules.includes(m));
+  
+  const visibleModules = getVisibleModules(effectiveModules, role);
+  
+  // Filter platform services to only those granted by the subscription
+  const platformServices = getSidebarServices().filter(s => grantedModules.includes(s.key));
   const floatingWidgets = getFloatingWidgets();
 
   const SidebarContent = ({ collapsed }: { collapsed: boolean }) => (

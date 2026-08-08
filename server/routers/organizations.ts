@@ -138,6 +138,8 @@ export const organizationsRouter = router({
       const db = await getDb();
       if (!db) throw new Error("Database unavailable");
 
+      const { checkUserLimit } = await import("../services/usageLimits");
+      
       // Check caller is org admin/owner
       const [org] = await db.select().from(organizations).where(eq(organizations.id, input.organizationId)).limit(1);
       if (!org) throw new TRPCError({ code: "NOT_FOUND", message: "Organization not found" });
@@ -158,11 +160,18 @@ export const organizationsRouter = router({
       }
 
       // Check if already a member
-      const [existingMember] = await db.select().from(organizationMembers)
+      const [existingMembership] = await db.select().from(organizationMembers)
         .where(and(eq(organizationMembers.organizationId, input.organizationId), eq(organizationMembers.userId, existingUser.id)))
         .limit(1);
-      if (existingMember) {
+      if (existingMembership) {
         throw new TRPCError({ code: "CONFLICT", message: "User is already a member of this organization" });
+      }
+
+      // Check usage limits
+      try {
+        await checkUserLimit(input.organizationId);
+      } catch (err: any) {
+        throw new TRPCError({ code: "FORBIDDEN", message: err.message });
       }
 
       await db.insert(organizationMembers).values({

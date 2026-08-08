@@ -9,6 +9,7 @@ import UserNotifications from "./UserNotifications";
 import OrgProfile from "./OrgProfile";
 import OrgFarms from "./OrgFarms";
 import OrgTeam from "./OrgTeam";
+import OrgBilling from "./OrgBilling";
 import FarmProfile from "./FarmProfile";
 import FarmModules from "./FarmModules";
 import PlatformAbout from "./PlatformAbout";
@@ -56,6 +57,7 @@ export default function SettingsLayout() {
   const [isOrgProfile] = useRoute("/settings/organization/profile");
   const [isOrgFarms] = useRoute("/settings/organization/farms");
   const [isOrgTeam] = useRoute("/settings/organization/team");
+  const [isOrgBilling] = useRoute("/settings/organization/billing");
   const [isFarmProfile] = useRoute("/settings/farm/profile");
   const [isFarmModules] = useRoute("/settings/farm/modules");
   const [isFarmIot] = useRoute("/settings/farm/iot");
@@ -68,6 +70,7 @@ export default function SettingsLayout() {
   const [isOrgProfileRel] = useRoute("/organization/profile");
   const [isOrgFarmsRel] = useRoute("/organization/farms");
   const [isOrgTeamRel] = useRoute("/organization/team");
+  const [isOrgBillingRel] = useRoute("/organization/billing");
   const [isFarmProfileRel] = useRoute("/farm/profile");
   const [isFarmModulesRel] = useRoute("/farm/modules");
   const [isFarmIotRel] = useRoute("/farm/iot");
@@ -80,6 +83,7 @@ export default function SettingsLayout() {
   if (isOrgProfile || isOrgProfileRel) content = <OrgProfile />;
   if (isOrgFarms || isOrgFarmsRel) content = <OrgFarms />;
   if (isOrgTeam || isOrgTeamRel) content = <OrgTeam />;
+  if (isOrgBilling || isOrgBillingRel) content = <OrgBilling />;
   if (isFarmProfile || isFarmProfileRel) content = <FarmProfile />;
   if (isFarmModules || isFarmModulesRel) content = <FarmModules />;
   if (isFarmIot || isFarmIotRel) content = <FeaturePlaceholder title="IoT Configuration" description="Connect and manage your sensors, gateways, and automated irrigation pumps." icon={Settings} />;

@@ -973,3 +973,100 @@ export const platformAnnouncements = mysqlTable("platformannouncements", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
+
+// ─── Subscription Domain ───────────────────────────────────────────────────────
+//
+// Organization (1) ──▶ Subscription (1) ──▶ Plan (N)
+//                                        ──▶ PlanFeatures (N)
+//                   ──▶ Payments (N)
+//
+// The subscription belongs to the Organization, not to an individual user.
+// Plans define what modules/services are included and what usage limits apply.
+// Payments are recorded provider-agnostically; provider key is stored per row.
+
+// ─── Subscription Plans ────────────────────────────────────────────────────────
+
+export const subscriptionPlans = mysqlTable("subscriptionPlans", {
+  id:           int("id").autoincrement().primaryKey(),
+  name:         varchar("name", { length: 64 }).notNull(),          // "Free", "Starter", "Professional", "Enterprise"
+  description:  text("description"),
+  monthlyPrice: decimal("monthlyPrice", { precision: 10, scale: 2 }).notNull().default("0"),
+  yearlyPrice:  decimal("yearlyPrice",  { precision: 10, scale: 2 }).notNull().default("0"),
+  currency:     varchar("currency", { length: 8 }).notNull().default("KES"),
+  trialDays:    int("trialDays").default(14).notNull(),
+  // Usage limits — NULL means unlimited
+  maxFarms:     int("maxFarms"),
+  maxUsers:     int("maxUsers"),
+  maxDevices:   int("maxDevices"),
+  maxStorageMb: int("maxStorageMb"),
+  isActive:     boolean("isActive").default(true).notNull(),
+  sortOrder:    int("sortOrder").default(0).notNull(),
+  createdAt:    timestamp("createdAt").defaultNow().notNull(),
+  updatedAt:    timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SubscriptionPlan = typeof subscriptionPlans.$inferSelect;
+export type InsertSubscriptionPlan = typeof subscriptionPlans.$inferInsert;
+
+// ─── Subscription Plan Features (Entitlements) ────────────────────────────────
+
+export const subscriptionPlanFeatures = mysqlTable("subscriptionPlanFeatures", {
+  id:          int("id").autoincrement().primaryKey(),
+  planId:      int("planId").notNull(),                              // FK → subscriptionPlans.id
+  featureKey:  varchar("featureKey", { length: 64 }).notNull(),     // maps to MODULE_REGISTRY or SERVICE_REGISTRY key
+  featureType: mysqlEnum("featureType", ["module", "service"]).notNull().default("module"),
+  createdAt:   timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type SubscriptionPlanFeature = typeof subscriptionPlanFeatures.$inferSelect;
+export type InsertSubscriptionPlanFeature = typeof subscriptionPlanFeatures.$inferInsert;
+
+// ─── Subscriptions ─────────────────────────────────────────────────────────────
+
+export const subscriptions = mysqlTable("subscriptions", {
+  id:                 int("id").autoincrement().primaryKey(),
+  organizationId:     int("organizationId").notNull().unique(),       // FK → organizations.id (1 active sub per org)
+  planId:             int("planId").notNull(),                        // FK → subscriptionPlans.id
+  status:             mysqlEnum("status", [
+    "trialing",
+    "active",
+    "past_due",
+    "cancelled",
+    "expired",
+    "suspended",
+  ]).notNull().default("trialing"),
+  billingInterval:    mysqlEnum("billingInterval", ["monthly", "yearly", "lifetime"]).notNull().default("monthly"),
+  trialEndsAt:        timestamp("trialEndsAt"),
+  currentPeriodStart: timestamp("currentPeriodStart"),
+  currentPeriodEnd:   timestamp("currentPeriodEnd"),
+  cancelledAt:        timestamp("cancelledAt"),
+  cancelReason:       text("cancelReason"),
+  createdAt:          timestamp("createdAt").defaultNow().notNull(),
+  updatedAt:          timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Subscription = typeof subscriptions.$inferSelect;
+export type InsertSubscription = typeof subscriptions.$inferInsert;
+
+// ─── Subscription Payments ─────────────────────────────────────────────────────
+
+export const subscriptionPayments = mysqlTable("subscriptionPayments", {
+  id:                    int("id").autoincrement().primaryKey(),
+  subscriptionId:        int("subscriptionId").notNull(),             // FK → subscriptions.id
+  organizationId:        int("organizationId").notNull(),             // FK → organizations.id (denormalized for fast queries)
+  amount:                decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  currency:              varchar("currency", { length: 8 }).notNull().default("KES"),
+  status:                mysqlEnum("status", ["pending", "successful", "failed", "refunded"]).notNull().default("pending"),
+  billingInterval:       mysqlEnum("billingInterval", ["monthly", "yearly"]).notNull().default("monthly"),
+  paymentProvider:       varchar("paymentProvider", { length: 64 }),  // "pesapal", "stripe", "manual"
+  providerTransactionId: varchar("providerTransactionId", { length: 128 }),
+  periodStart:           timestamp("periodStart"),
+  periodEnd:             timestamp("periodEnd"),
+  paidAt:                timestamp("paidAt"),
+  failureReason:         text("failureReason"),
+  createdAt:             timestamp("createdAt").defaultNow().notNull(),
+  updatedAt:             timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SubscriptionPayment = typeof subscriptionPayments.$inferSelect;
+export type InsertSubscriptionPayment = typeof subscriptionPayments.$inferInsert;

@@ -7,6 +7,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { FarmProvider } from "./contexts/FarmContext";
 import { KilimoLayout } from "./components/KilimoLayout";
+import { SubscriptionGate } from "./components/SubscriptionGate";
 import { AdminLayout } from "./components/AdminLayout";
 import AdminLogin from "./pages/admin/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
@@ -114,56 +115,64 @@ function TenantAppRoutes() {
           return (
             <React.Fragment key={service.key}>
               <Route path={service.basePath}>
-                <KilimoLayout><Page /></KilimoLayout>
+                <KilimoLayout>
+                  <SubscriptionGate featureKey={service.key} featureName={(service as any).label || (service as any).name || service.key}>
+                    <Page />
+                  </SubscriptionGate>
+                </KilimoLayout>
               </Route>
               <Route path={`${service.basePath}/*`}>
-                <KilimoLayout><Page /></KilimoLayout>
+                <KilimoLayout>
+                  <SubscriptionGate featureKey={service.key} featureName={(service as any).label || (service as any).name || service.key}>
+                    <Page />
+                  </SubscriptionGate>
+                </KilimoLayout>
               </Route>
             </React.Fragment>
           );
         })}
 
         {/* Crops */}
-        <Route path="/crops/fields"><KilimoLayout><Fields /></KilimoLayout></Route>
-        <Route path="/crops/plantings"><KilimoLayout><Plantings /></KilimoLayout></Route>
-        <Route path="/crops/harvests"><KilimoLayout><Harvests /></KilimoLayout></Route>
-        <Route path="/crops/incidents"><KilimoLayout><Incidents /></KilimoLayout></Route>
-        <Route path="/crops/calendar"><KilimoLayout><CropCalendar /></KilimoLayout></Route>
-        <Route path="/crops/analytics"><KilimoLayout><CropAnalytics /></KilimoLayout></Route>
+        <Route path="/crops/fields"><KilimoLayout><SubscriptionGate featureKey="crop" featureName="Crops"><Fields /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/crops/plantings"><KilimoLayout><SubscriptionGate featureKey="crop" featureName="Crops"><Plantings /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/crops/harvests"><KilimoLayout><SubscriptionGate featureKey="crop" featureName="Crops"><Harvests /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/crops/incidents"><KilimoLayout><SubscriptionGate featureKey="crop" featureName="Crops"><Incidents /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/crops/calendar"><KilimoLayout><SubscriptionGate featureKey="crop" featureName="Crops"><CropCalendar /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/crops/analytics"><KilimoLayout><SubscriptionGate featureKey="crop" featureName="Crops"><CropAnalytics /></SubscriptionGate></KilimoLayout></Route>
 
         {/* Livestock */}
-        <Route path="/livestock/animals"><KilimoLayout><Animals /></KilimoLayout></Route>
-        <Route path="/livestock/breeding"><KilimoLayout><Breeding /></KilimoLayout></Route>
-        <Route path="/livestock/health"><KilimoLayout><HealthLogs /></KilimoLayout></Route>
-        <Route path="/livestock/feed"><KilimoLayout><FeedRecords /></KilimoLayout></Route>
-        <Route path="/livestock/production"><KilimoLayout><Production /></KilimoLayout></Route>
-        <Route path="/livestock/mortality"><KilimoLayout><Mortality /></KilimoLayout></Route>
+        <Route path="/livestock/animals"><KilimoLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Animals /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/livestock/breeding"><KilimoLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Breeding /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/livestock/health"><KilimoLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><HealthLogs /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/livestock/feed"><KilimoLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><FeedRecords /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/livestock/production"><KilimoLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Production /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/livestock/mortality"><KilimoLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Mortality /></SubscriptionGate></KilimoLayout></Route>
 
         {/* Inventory */}
-        <Route path="/inventory/items"><KilimoLayout><InventoryItems /></KilimoLayout></Route>
-        <Route path="/inventory/transactions"><KilimoLayout><StockTransactions /></KilimoLayout></Route>
-        <Route path="/inventory/equipment"><KilimoLayout><Equipment /></KilimoLayout></Route>
-        <Route path="/inventory/suppliers"><KilimoLayout><Suppliers /></KilimoLayout></Route>
+        <Route path="/inventory/items"><KilimoLayout><SubscriptionGate featureKey="inventory" featureName="Inventory"><InventoryItems /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/inventory/transactions"><KilimoLayout><SubscriptionGate featureKey="inventory" featureName="Inventory"><StockTransactions /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/inventory/equipment"><KilimoLayout><SubscriptionGate featureKey="inventory" featureName="Inventory"><Equipment /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/inventory/suppliers"><KilimoLayout><SubscriptionGate featureKey="inventory" featureName="Inventory"><Suppliers /></SubscriptionGate></KilimoLayout></Route>
 
         {/* Finance */}
-        <Route path="/finance/transactions"><KilimoLayout><Transactions /></KilimoLayout></Route>
-        <Route path="/finance/budgets"><KilimoLayout><Budgets /></KilimoLayout></Route>
-        <Route path="/finance/report"><KilimoLayout><PLReport /></KilimoLayout></Route>
-        <Route path="/finance/budget-vs-actual"><KilimoLayout><BudgetVsActual /></KilimoLayout></Route>
+        <Route path="/finance/transactions"><KilimoLayout><SubscriptionGate featureKey="finance" featureName="Finance"><Transactions /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/finance/budgets"><KilimoLayout><SubscriptionGate featureKey="finance" featureName="Finance"><Budgets /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/finance/report"><KilimoLayout><SubscriptionGate featureKey="finance" featureName="Finance"><PLReport /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/finance/budget-vs-actual"><KilimoLayout><SubscriptionGate featureKey="finance" featureName="Finance"><BudgetVsActual /></SubscriptionGate></KilimoLayout></Route>
 
         {/* Disease Detection */}
-        <Route path="/disease/scan"><KilimoLayout><NewScanPage /></KilimoLayout></Route>
-        <Route path="/disease/history"><KilimoLayout><ScanHistoryPage /></KilimoLayout></Route>
-        <Route path="/disease/reports"><KilimoLayout><DiseaseReportsPage /></KilimoLayout></Route>
-        <Route path="/disease"><KilimoLayout><NewScanPage /></KilimoLayout></Route>
+        <Route path="/disease/scan"><KilimoLayout><SubscriptionGate featureKey="disease" featureName="Disease Detection"><NewScanPage /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/disease/history"><KilimoLayout><SubscriptionGate featureKey="disease" featureName="Disease Detection"><ScanHistoryPage /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/disease/reports"><KilimoLayout><SubscriptionGate featureKey="disease" featureName="Disease Detection"><DiseaseReportsPage /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/disease"><KilimoLayout><SubscriptionGate featureKey="disease" featureName="Disease Detection"><NewScanPage /></SubscriptionGate></KilimoLayout></Route>
 
         {/* IoT Engine */}
-        <Route path="/iot"><KilimoLayout><IoTPage /></KilimoLayout></Route>
-        <Route path="/iot/*"><KilimoLayout><IoTPage /></KilimoLayout></Route>
+        <Route path="/iot"><KilimoLayout><SubscriptionGate featureKey="iot" featureName="IoT Monitoring"><IoTPage /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/iot/*"><KilimoLayout><SubscriptionGate featureKey="iot" featureName="IoT Monitoring"><IoTPage /></SubscriptionGate></KilimoLayout></Route>
 
         {/* Reports Hub */}
-        <Route path="/reports"><KilimoLayout><ReportsPage /></KilimoLayout></Route>
-        <Route path="/reports/*"><KilimoLayout><ReportsPage /></KilimoLayout></Route>
+        <Route path="/reports"><KilimoLayout><SubscriptionGate featureKey="reports" featureName="Reports Hub"><ReportsPage /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/reports/*"><KilimoLayout><SubscriptionGate featureKey="reports" featureName="Reports Hub"><ReportsPage /></SubscriptionGate></KilimoLayout></Route>
 
         <Route path="/404" component={NotFound} />
         <Route component={NotFound} />

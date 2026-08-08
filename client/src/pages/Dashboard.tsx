@@ -2,6 +2,7 @@ import { useFarm } from "@/contexts/FarmContext";
 import { getAllWidgets, getQuickActions, type DashboardWidgetDefinition } from "@/lib/moduleRegistry";
 import { getAllServiceWidgets } from "@/lib/serviceRegistry";
 import { trpc } from "@/lib/trpc";
+import { useGrantedModules } from "@/hooks/useEntitlement";
 import { Link } from "wouter";
 import { Bell, ChevronRight, Menu } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,7 +38,10 @@ function getSizeClasses(size: string) {
 // ─── Global Quick Actions Component ───────────────────────────────────────────
 function GlobalQuickActions({ farmId, className }: { farmId: number; className?: string }) {
   const { enabledModules } = useFarm();
-  const actions = getQuickActions(enabledModules);
+  const { modules: grantedModules } = useGrantedModules();
+  const effectiveModules = enabledModules.filter(m => grantedModules.includes(m));
+  
+  const actions = getQuickActions(effectiveModules);
 
   if (actions.length === 0) return null;
 
@@ -88,8 +92,11 @@ export default function Dashboard() {
   const { currentFarm, enabledModules } = useFarm();
   const farmId = currentFarm?.farm.id ?? 0;
 
+  const { modules: grantedModules } = useGrantedModules();
+  const effectiveModules = enabledModules.filter(m => grantedModules.includes(m));
+
   // 1. Collect all raw widgets
-  const moduleWidgets = getAllWidgets(enabledModules);
+  const moduleWidgets = getAllWidgets(effectiveModules);
   const serviceWidgets = getAllServiceWidgets();
 
   const allWidgets = [

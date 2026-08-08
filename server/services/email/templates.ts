@@ -313,3 +313,32 @@ export function securityAlertTemplate(ctx: {
   const text = `Hi ${ctx.userName},\n\nSecurity Alert: ${ctx.alertTitle}\n\n${ctx.message}\n\nIf you did not authorize this, contact support immediately.`;
   return { subject, html, text };
 }
+
+export function trialStartedEmailTemplate(ctx: {
+  userName: string;
+  organizationName: string;
+  planName: string;
+  trialDays: number;
+  expiresAt: string;
+  billingUrl: string;
+}): { subject: string; html: string; text: string } {
+  const subject = `Your ${ctx.planName} trial has started! 🎉`;
+  const html = shell(
+    `<h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:${BRAND.textPrimary};">Welcome to ${ctx.planName}</h1>
+    <p style="margin:0 0 20px;font-size:16px;color:${BRAND.textSecondary};line-height:1.6;">
+      Hi ${ctx.userName}, your <strong>${ctx.trialDays}-day free trial</strong> of the KilimoHub ${ctx.planName} plan for <strong>${ctx.organizationName}</strong> has officially started!
+    </p>
+    <p style="margin:0 0 20px;font-size:16px;color:${BRAND.textSecondary};line-height:1.6;">
+      You now have access to all the features included in the plan until <strong>${ctx.expiresAt}</strong>. 
+      You can manage your subscription and billing details at any time from your organization settings.
+    </p>
+    ${button("Manage Subscription", ctx.billingUrl)}
+    ${divider}
+    <p style="margin:0;font-size:13px;color:${BRAND.textMuted};">
+      Need help? Reply to this email and our support team will assist you.
+    </p>`,
+    `Your ${ctx.trialDays}-day free trial of KilimoHub ${ctx.planName} has started.`
+  );
+  const text = `Hi ${ctx.userName},\n\nYour ${ctx.trialDays}-day free trial of the KilimoHub ${ctx.planName} plan for ${ctx.organizationName} has started.\n\nManage your subscription here: ${ctx.billingUrl}`;
+  return { subject, html, text };
+}

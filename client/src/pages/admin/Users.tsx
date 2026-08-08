@@ -118,7 +118,7 @@ export default function AdminUsers() {
                             <DropdownMenuItem 
                               className="cursor-pointer"
                               onClick={() => {
-                                if (confirm("Promote to Admin?")) updateRoleMutation.mutate({ id: user.id, role: "admin" });
+                                if (confirm("Promote to Admin?")) updateRoleMutation.mutate({ userId: user.id, role: "admin" });
                               }}
                             >
                               <ShieldCheck className="mr-2 h-4 w-4" /> Promote to Admin
@@ -127,7 +127,7 @@ export default function AdminUsers() {
                             <DropdownMenuItem 
                               className="cursor-pointer"
                               onClick={() => {
-                                if (confirm("Demote to User?")) updateRoleMutation.mutate({ id: user.id, role: "user" });
+                                if (confirm("Demote to User?")) updateRoleMutation.mutate({ userId: user.id, role: "user" });
                               }}
                             >
                               <ShieldOff className="mr-2 h-4 w-4" /> Demote to User
@@ -137,7 +137,7 @@ export default function AdminUsers() {
                           <DropdownMenuItem 
                             className="text-destructive cursor-pointer focus:text-destructive"
                             onClick={() => {
-                              if (confirm("Permanently delete this user?")) deleteUserMutation.mutate(user.id);
+                              if (confirm("Permanently delete this user?")) deleteUserMutation.mutate({ userId: user.id });
                             }}
                           >
                             <Trash2 className="mr-2 h-4 w-4" /> Delete User
@@ -186,16 +186,16 @@ export default function AdminUsers() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="border-border bg-card">
                       {user.role === "user" ? (
-                        <DropdownMenuItem className="cursor-pointer" onClick={() => updateRoleMutation.mutate({ id: user.id, role: "admin" })}>
+                        <DropdownMenuItem className="cursor-pointer" onClick={() => updateRoleMutation.mutate({ userId: user.id, role: "admin" })}>
                           <ShieldCheck className="mr-2 h-4 w-4" /> Make Admin
                         </DropdownMenuItem>
                       ) : (
-                        <DropdownMenuItem className="cursor-pointer" onClick={() => updateRoleMutation.mutate({ id: user.id, role: "user" })}>
+                        <DropdownMenuItem className="cursor-pointer" onClick={() => updateRoleMutation.mutate({ userId: user.id, role: "user" })}>
                           <ShieldOff className="mr-2 h-4 w-4" /> Make User
                         </DropdownMenuItem>
                       )}
                       <DropdownMenuSeparator className="bg-border" />
-                      <DropdownMenuItem className="text-destructive cursor-pointer focus:text-destructive" onClick={() => deleteUserMutation.mutate(user.id)}>
+                      <DropdownMenuItem className="text-destructive cursor-pointer focus:text-destructive" onClick={() => deleteUserMutation.mutate({ userId: user.id })}>
                         <Trash2 className="mr-2 h-4 w-4" /> Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>

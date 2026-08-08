@@ -255,7 +255,7 @@ export default function AdminOrganizations() {
                             className="text-destructive cursor-pointer focus:text-destructive"
                             onClick={() => {
                               if (confirm("Are you sure you want to delete this organization?")) {
-                                deleteMutation.mutate(org.id);
+                                deleteMutation.mutate({ organizationId: org.id });
                               }
                             }}
                           >
@@ -312,7 +312,7 @@ export default function AdminOrganizations() {
                         className="text-destructive cursor-pointer focus:text-destructive"
                         onClick={() => {
                           if (confirm("Are you sure?")) {
-                            deleteMutation.mutate(org.id);
+                            deleteMutation.mutate({ organizationId: org.id });
                           }
                         }}
                       >

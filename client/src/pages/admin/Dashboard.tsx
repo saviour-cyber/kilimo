@@ -29,26 +29,6 @@ import {
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
-// ─── Mock data ────────────────────────────────────────────────────────────────
-
-const growthData = [
-  { name: "Jan", users: 4000,  revenue: 2400000 },
-  { name: "Feb", users: 5000,  revenue: 2600000 },
-  { name: "Mar", users: 6500,  revenue: 3100000 },
-  { name: "Apr", users: 9000,  revenue: 3800000 },
-  { name: "May", users: 12000, revenue: 4500000 },
-  { name: "Jun", users: 18542, revenue: 5200000 },
-];
-
-const recentActivity = [
-  { user: "Alice Kamau",   action: "Created organization",       time: "2m ago",  status: "success" },
-  { user: "Bob Ochieng",   action: "Subscription upgraded",       time: "8m ago",  status: "success" },
-  { user: "Carol Wanjiru", action: "Farm data export requested",  time: "23m ago", status: "pending" },
-  { user: "David Mwangi",  action: "API rate limit exceeded",      time: "1h ago",  status: "warning" },
-  { user: "Eve Akinyi",    action: "New farm registered",         time: "2h ago",  status: "success" },
-  { user: "Frank Njoroge", action: "Payment failed",             time: "3h ago",  status: "error"   },
-];
-
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 /** Reusable admin card wrapper */
@@ -176,12 +156,14 @@ function ChartCard({
   dataKey,
   color,
   gradientId,
+  data,
   formatter,
 }: {
   title: string;
   dataKey: string;
   color: string;
   gradientId: string;
+  data: any[];
   formatter?: (v: number) => string;
 }) {
   return (
@@ -189,7 +171,7 @@ function ChartCard({
       <AdminCardHeader title={title} />
       <div className="px-2 pb-4 h-48 md:h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={growthData} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
+          <AreaChart data={data} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
             <defs>
               <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%"  stopColor={color} stopOpacity={0.25} />
@@ -241,8 +223,11 @@ function ChartCard({
 // ─── Main dashboard ───────────────────────────────────────────────────────────
 
 export default function AdminDashboard() {
-  const { data: stats, isLoading } = trpc.admin.getPlatformStats.useQuery();
+  const { data: stats, isLoading: statsLoading } = trpc.admin.getPlatformStats.useQuery();
+  const { data: analytics, isLoading: analyticsLoading } = trpc.admin.getDashboardAnalytics.useQuery();
   const [activityExpanded, setActivityExpanded] = useState(false);
+  
+  const isLoading = statsLoading || analyticsLoading;
 
   // KPI definitions
   const kpis = [
@@ -330,9 +315,12 @@ export default function AdminDashboard() {
     );
   }
 
+  const recentActivityData = analytics?.recentActivity || [];
+  const growthDataData = analytics?.growthData || [];
+
   const visibleActivity = activityExpanded
-    ? recentActivity
-    : recentActivity.slice(0, 4);
+    ? recentActivityData
+    : recentActivityData.slice(0, 4);
 
   return (
     <div className="space-y-4 md:space-y-5">
@@ -363,13 +351,15 @@ export default function AdminDashboard() {
           dataKey="users"
           color="#10B981"
           gradientId="grad-users"
+          data={growthDataData}
         />
         <ChartCard
           title="Monthly Revenue (KES)"
           dataKey="revenue"
           color="#3B82F6"
           gradientId="grad-revenue"
-          formatter={(v) => `KES ${(v / 1_000_000).toFixed(1)}M`}
+          data={growthDataData}
+          formatter={(v: number) => `KES ${(v / 1_000).toFixed(1)}k`}
         />
       </div>
 
@@ -555,13 +545,13 @@ export default function AdminDashboard() {
           ))}
         </div>
 
-        {recentActivity.length > 4 && (
+        {recentActivityData.length > 4 && (
           <div className="border-t border-white/[0.04] px-4 py-2.5 md:px-5">
             <button
               onClick={() => setActivityExpanded((e) => !e)}
               className="flex w-full items-center justify-center gap-1.5 text-xs text-slate-500 hover:text-slate-300 transition-colors py-0.5"
             >
-              {activityExpanded ? "Collapse" : `Show ${recentActivity.length - 4} more`}
+              {activityExpanded ? "Collapse" : `Show ${recentActivityData.length - 4} more`}
               <ChevronRight className={cn("h-3 w-3 transition-transform", activityExpanded && "rotate-90")} />
             </button>
           </div>
