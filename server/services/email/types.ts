@@ -15,6 +15,8 @@ export interface SendEmailOptions {
   from?: EmailAddress; // Overrides the default sender
   replyTo?: EmailAddress;
   tags?: Record<string, string>; // Metadata for analytics
+  templateKey?: string;
+  senderId?: number;
 }
 
 export interface SendEmailResult {

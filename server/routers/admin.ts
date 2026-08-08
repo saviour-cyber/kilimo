@@ -1,9 +1,10 @@
 import { adminProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
-import { users, organizations, farms, iotDevices, platformModules, platformServices, auditLogs, iotGateways, generatedReports, platformAnnouncements } from "../../drizzle/schema";
+import { users, organizations, farms, iotDevices, platformModules, platformServices, auditLogs, iotGateways, generatedReports, platformAnnouncements, platformEmailLogs } from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
-import { sql, count, eq, desc } from "drizzle-orm";
+import { sql, count, eq, desc, inArray } from "drizzle-orm";
 import { z } from "zod";
+import { emailService } from "../services/email";
 
 export const adminRouter = router({
   // ── Dashboard Stats ────────────────────────────────────────────────────────
@@ -408,4 +409,133 @@ export const adminRouter = router({
 
       return { success: true };
     }),
+
+  // ── Platform Email Center ───────────────────────────────────────────────────
+
+  getEmailRecipients: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+    // Fetch all active users
+    const allUsers = await db
+      .select({ id: users.id, name: users.name, email: users.email, role: users.role })
+      .from(users)
+      .where(sql`${users.email} IS NOT NULL`);
+
+    // Fetch all farm owners
+    const allFarms = await db
+      .select({ farmId: farms.id, farmName: farms.name, ownerId: farms.ownerId })
+      .from(farms);
+
+    return {
+      users: allUsers,
+      farms: allFarms,
+    };
+  }),
+
+  sendPlatformEmail: adminProcedure
+    .input(z.object({
+      recipientIds: z.array(z.number()),
+      subject: z.string().min(1),
+      message: z.string().min(1),
+      templateKey: z.enum(["platform_announcement", "payment_reminder", "security_alert", "custom"]),
+      callToActionUrl: z.string().optional(),
+      callToActionLabel: z.string().optional(),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      if (input.recipientIds.length === 0) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "No recipients selected." });
+      }
+
+      // Fetch the specific users to email
+      const targets = await db
+        .select({ name: users.name, email: users.email })
+        .from(users)
+        .where(inArray(users.id, input.recipientIds));
+
+      if (targets.length === 0) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "No valid recipients found." });
+      }
+
+      let sentCount = 0;
+      let failedCount = 0;
+
+      // Send to each target
+      for (const target of targets) {
+        if (!target.email) continue;
+        
+        try {
+          const to = { name: target.name || "User", email: target.email };
+          let result;
+
+          if (input.templateKey === "platform_announcement") {
+            result = await emailService.sendPlatformAnnouncement(to, {
+              subject: input.subject,
+              message: input.message,
+              callToActionUrl: input.callToActionUrl,
+              callToActionLabel: input.callToActionLabel,
+            }, ctx.user.id);
+          } else if (input.templateKey === "security_alert") {
+             result = await emailService.sendSecurityAlert(to, {
+              alertTitle: input.subject,
+              message: input.message,
+             }, ctx.user.id);
+          } else {
+             // Fallback to custom
+             result = await emailService.send({
+               to,
+               subject: input.subject,
+               html: `<p>${input.message.replace(/\n/g, '<br>')}</p>`,
+               text: input.message,
+               templateKey: "custom",
+               senderId: ctx.user.id,
+             });
+          }
+
+          if (result.success) sentCount++;
+          else failedCount++;
+        } catch (err) {
+          failedCount++;
+          console.error("Failed to send platform email to", target.email, err);
+        }
+      }
+
+      // Audit Log
+      await db.insert(auditLogs).values({
+        farmId: 0,
+        userId: ctx.user.id,
+        action: "PLATFORM_EMAIL_SENT",
+        entityType: "system",
+        description: `Sent platform email "${input.subject}" to ${sentCount} recipients.`,
+        metadata: { sentCount, failedCount, template: input.templateKey },
+      });
+
+      return { success: true, sentCount, failedCount };
+    }),
+
+  getPlatformEmailLogs: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+    return db
+      .select({
+        id: platformEmailLogs.id,
+        recipient: platformEmailLogs.recipient,
+        subject: platformEmailLogs.subject,
+        templateKey: platformEmailLogs.templateKey,
+        status: platformEmailLogs.status,
+        sentAt: platformEmailLogs.sentAt,
+        sender: {
+          id: users.id,
+          name: users.name,
+        }
+      })
+      .from(platformEmailLogs)
+      .leftJoin(users, eq(platformEmailLogs.senderId, users.id))
+      .orderBy(desc(platformEmailLogs.sentAt))
+      .limit(100);
+  }),
 });

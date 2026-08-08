@@ -17,7 +17,12 @@ import {
   welcomeEmailTemplate,
   farmInviteTemplate,
   organizationInviteTemplate,
+  platformAnnouncementTemplate,
+  paymentReminderTemplate,
+  securityAlertTemplate,
 } from "./templates";
+import { getDb } from "../../db";
+import { platformEmailLogs } from "../../../drizzle/schema";
 
 export class EmailService {
   private provider: IEmailProvider;
@@ -35,10 +40,33 @@ export class EmailService {
       email: process.env.EMAIL_FROM_ADDRESS ?? "noreply@kilimohub.co.ke",
     };
 
-    return this.provider.send({
+    const result = await this.provider.send({
       from: defaultFrom,
       ...options,
     });
+
+    // Log to platformEmailLogs
+    try {
+      const db = await getDb();
+      if (db) {
+        const recipients = Array.isArray(options.to) ? options.to : [options.to];
+        for (const recipient of recipients) {
+          await db.insert(platformEmailLogs).values({
+            senderId: options.senderId,
+            recipient: recipient.email,
+            subject: options.subject,
+            templateKey: options.templateKey ?? "custom",
+            status: result.success ? "sent" : "failed",
+            providerMessageId: result.messageId,
+            errorMessage: result.error,
+          });
+        }
+      }
+    } catch (dbError) {
+      console.error("[EmailService] Failed to log email to database:", dbError);
+    }
+
+    return result;
   }
 
   // ── High-level template helpers ──────────────────────────────────────────────
@@ -108,6 +136,54 @@ export class EmailService {
       inviteUrl,
       expiresInDays: 7,
     });
-    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text });
+    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "organization_invite" });
+  }
+
+  // ── Admin templates ──────────────────────────────────────────────────────────
+
+  /** Send platform announcement */
+  async sendPlatformAnnouncement(
+    to: { name: string; email: string },
+    ctx: { subject: string; message: string; callToActionUrl?: string; callToActionLabel?: string },
+    senderId?: number
+  ) {
+    const tpl = platformAnnouncementTemplate({
+      userName: to.name,
+      subject: ctx.subject,
+      message: ctx.message,
+      callToActionUrl: ctx.callToActionUrl,
+      callToActionLabel: ctx.callToActionLabel,
+    });
+    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "platform_announcement", senderId });
+  }
+
+  /** Send payment reminder */
+  async sendPaymentReminder(
+    to: { name: string; email: string },
+    ctx: { planName: string; amount: string; expiryDate: string; paymentUrl: string },
+    senderId?: number
+  ) {
+    const tpl = paymentReminderTemplate({
+      userName: to.name,
+      planName: ctx.planName,
+      amount: ctx.amount,
+      expiryDate: ctx.expiryDate,
+      paymentUrl: ctx.paymentUrl,
+    });
+    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "payment_reminder", senderId });
+  }
+
+  /** Send security alert */
+  async sendSecurityAlert(
+    to: { name: string; email: string },
+    ctx: { alertTitle: string; message: string },
+    senderId?: number
+  ) {
+    const tpl = securityAlertTemplate({
+      userName: to.name,
+      alertTitle: ctx.alertTitle,
+      message: ctx.message,
+    });
+    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "security_alert", senderId });
   }
 }

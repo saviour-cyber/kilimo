@@ -527,7 +527,24 @@ export const notifications = mysqlTable("notifications", {
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = typeof notifications.$inferInsert;
 
+// ─── Platform Email Logs ────────────────────────────────────────────────────────
 
+export const platformEmailLogs = mysqlTable("platformEmailLogs", {
+  id: int("id").autoincrement().primaryKey(),
+  senderId: int("senderId"), // Nullable for automated system emails
+  recipient: varchar("recipient", { length: 320 }).notNull(),
+  subject: varchar("subject", { length: 256 }).notNull(),
+  templateKey: varchar("templateKey", { length: 64 }).notNull(),
+  status: mysqlEnum("status", ["queued", "sent", "delivered", "failed"]).default("queued").notNull(),
+  providerMessageId: varchar("providerMessageId", { length: 128 }),
+  errorMessage: text("errorMessage"),
+  sentAt: timestamp("sentAt").defaultNow().notNull(),
+  deliveredAt: timestamp("deliveredAt"),
+  failedAt: timestamp("failedAt"),
+});
+
+export type PlatformEmailLog = typeof platformEmailLogs.$inferSelect;
+export type InsertPlatformEmailLog = typeof platformEmailLogs.$inferInsert;
 
 // ─── Disease Scans (AI Detections) ─────────────────────────────────────────────
 

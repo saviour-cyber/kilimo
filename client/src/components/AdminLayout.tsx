@@ -21,6 +21,7 @@ import {
   Users,
   X,
   Zap,
+  Mail,
 } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "wouter";
@@ -78,6 +79,7 @@ const ADMIN_MENU: NavGroup[] = [
       { label: "Audit Logs",        href: "/admin/audit",         icon: ShieldAlert },
       { label: "System Monitoring", href: "/admin/monitoring",    icon: Activity  },
       { label: "Announcements",     href: "/admin/announcements", icon: Bell      },
+      { label: "Email Center",      href: "/admin/email",         icon: Mail      },
     ],
   },
   {

@@ -245,3 +245,71 @@ export function organizationInviteTemplate(ctx: {
   const text = `${ctx.inviterName} invited you to join ${ctx.organizationName} as ${ctx.role}.\n\nAccept: ${ctx.inviteUrl}\n\nExpires in ${ctx.expiresInDays} days.`;
   return { subject, html, text };
 }
+
+export function platformAnnouncementTemplate(ctx: {
+  userName: string;
+  subject: string;
+  message: string;
+  callToActionUrl?: string;
+  callToActionLabel?: string;
+}): { subject: string; html: string; text: string } {
+  const subject = ctx.subject;
+  const html = shell(
+    `<h1 style="margin:0 0 16px;font-size:22px;font-weight:700;color:${BRAND.textPrimary};">${ctx.subject}</h1>
+    <p style="margin:0 0 20px;font-size:16px;color:${BRAND.textSecondary};line-height:1.6;white-space:pre-wrap;">Hello ${ctx.userName},\n\n${ctx.message}</p>
+    ${ctx.callToActionUrl && ctx.callToActionLabel ? button(ctx.callToActionLabel, ctx.callToActionUrl) : ""}
+    ${divider}
+    <p style="margin:0;font-size:13px;color:${BRAND.textMuted};">This is a system announcement from the KilimoHub team.</p>`,
+    "Important update from KilimoHub"
+  );
+  const text = `Hello ${ctx.userName},\n\n${ctx.message}\n\n${ctx.callToActionUrl ? `${ctx.callToActionLabel}: ${ctx.callToActionUrl}` : ""}`;
+  return { subject, html, text };
+}
+
+export function paymentReminderTemplate(ctx: {
+  userName: string;
+  planName: string;
+  amount: string;
+  expiryDate: string;
+  paymentUrl: string;
+}): { subject: string; html: string; text: string } {
+  const subject = `Action Required: KilimoHub Subscription Expiring Soon`;
+  const html = shell(
+    `<h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:${BRAND.textPrimary};">Subscription Expiring</h1>
+    <p style="margin:0 0 20px;font-size:16px;color:${BRAND.textSecondary};line-height:1.6;">
+      Hi ${ctx.userName}, your KilimoHub <strong>${ctx.planName}</strong> subscription will expire on <strong>${ctx.expiryDate}</strong>.
+    </p>
+    <p style="margin:0 0 20px;font-size:16px;color:${BRAND.textSecondary};line-height:1.6;">
+      To avoid any interruption in service, please renew your subscription for <strong>${ctx.amount}</strong>.
+    </p>
+    ${button("Renew Subscription", ctx.paymentUrl)}
+    ${divider}
+    <p style="margin:0;font-size:13px;color:${BRAND.textMuted};">
+      If you've already made a payment, please ignore this email.
+    </p>`,
+    "Your KilimoHub subscription is expiring soon"
+  );
+  const text = `Hi ${ctx.userName},\n\nYour KilimoHub ${ctx.planName} subscription expires on ${ctx.expiryDate}. Renew for ${ctx.amount}: ${ctx.paymentUrl}`;
+  return { subject, html, text };
+}
+
+export function securityAlertTemplate(ctx: {
+  userName: string;
+  alertTitle: string;
+  message: string;
+}): { subject: string; html: string; text: string } {
+  const subject = `Security Alert: ${ctx.alertTitle}`;
+  const html = shell(
+    `<h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:${BRAND.textPrimary};">Security Alert</h1>
+    <p style="margin:0 0 20px;font-size:16px;color:${BRAND.textSecondary};line-height:1.6;">
+      Hi ${ctx.userName},
+    </p>
+    ${infoBox(ctx.message, BRAND.danger)}
+    <p style="margin:0 0 20px;font-size:16px;color:${BRAND.textSecondary};line-height:1.6;">
+      If you did not authorize this action or suspect unauthorized access to your account, please contact our support team immediately.
+    </p>`,
+    "Important security alert regarding your KilimoHub account"
+  );
+  const text = `Hi ${ctx.userName},\n\nSecurity Alert: ${ctx.alertTitle}\n\n${ctx.message}\n\nIf you did not authorize this, contact support immediately.`;
+  return { subject, html, text };
+}

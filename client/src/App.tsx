@@ -24,6 +24,7 @@ import AdminSubscriptions from "./pages/admin/Subscriptions";
 import AdminSupport from "./pages/admin/Support";
 import AdminBilling from "./pages/admin/Billing";
 import AdminSettings from "./pages/admin/Settings";
+import AdminEmailCenter from "./pages/admin/EmailCenter";
 // Auth
 import Home from "./pages/Home";
 import CreateFarm from "./pages/CreateFarm";
@@ -212,6 +213,9 @@ function AdminAppRoutes() {
       </Route>
       <Route path="/admin/announcements">
         <AdminLayout><AdminAnnouncements /></AdminLayout>
+      </Route>
+      <Route path="/admin/email">
+        <AdminLayout><AdminEmailCenter /></AdminLayout>
       </Route>
       <Route path="/admin/subscriptions">
         <AdminLayout><AdminSubscriptions /></AdminLayout>
