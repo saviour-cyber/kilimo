@@ -8,7 +8,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 export default function AdminLogin() {
   const [, navigate] = useLocation();
-  const utils = trpc.useContext();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,14 +19,8 @@ export default function AdminLogin() {
   const env = import.meta.env.MODE === "production" ? "Production" : "Development";
   const appVersion = "v1.0.0"; // In a real app this might come from package.json or env
 
-  const loginMutation = trpc.auth.login.useMutation({
+  const loginMutation = trpc.auth.adminLogin.useMutation({
     onSuccess: async () => {
-      const me = await utils.auth.me.ensureData();
-      if (me?.role !== "admin") {
-        toast.error("This portal is restricted to platform administrators.");
-        await utils.auth.me.invalidate();
-        return;
-      }
       navigate("/admin");
     },
     onError: (err) => {

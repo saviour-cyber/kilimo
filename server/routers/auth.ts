@@ -68,18 +68,61 @@ export const authRouter = router({
         throw new TRPCError({ code: "UNAUTHORIZED", message: "Please verify your email address to log in." });
       }
 
-      // Auto-promote the designated admin email to role='admin' on every login.
-      // This ensures re-deployments or DB resets never lock out the superadmin.
-      const adminEmail = (process.env.ADMIN_EMAIL ?? "admin@kilimohub.com").trim().toLowerCase();
       const updateFields: Record<string, unknown> = { lastSignedIn: new Date() };
-      if (email === adminEmail && user.role !== "admin") {
-        updateFields.role = "admin";
-        user.role = "admin";
-      }
 
       await ctx.db
         .update(users)
         .set(updateFields)
+        .where(eq(users.id, user.id));
+
+      const token = await new SignJWT({ userId: user.id })
+        .setProtectedHeader({ alg: "HS256" })
+        .setIssuedAt()
+        .setExpirationTime("30d")
+        .sign(JWT_SECRET);
+
+      const cookieOptions = getSessionCookieOptions(ctx.req);
+      ctx.res.cookie(COOKIE_NAME, token, cookieOptions);
+
+      return { success: true, user: { id: user.id, name: user.name, email: user.email } };
+    }),
+
+  // ── Admin Login ──────────────────────────────────────────────────────────────
+  adminLogin: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+        password: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const email = input.email.trim().toLowerCase();
+
+      const userResult = await ctx.db
+        .select()
+        .from(users)
+        .where(eq(users.email, email))
+        .limit(1);
+      const user = userResult[0];
+
+      // Check user exists and is an admin
+      if (!user || user.role !== "admin") {
+        throw new TRPCError({ code: "UNAUTHORIZED", message: "Access denied. This portal is restricted to platform administrators." });
+      }
+
+      if (!user.password) {
+        throw new TRPCError({ code: "UNAUTHORIZED", message: "Invalid credentials." });
+      }
+
+      const isValid = await bcrypt.compare(input.password, user.password);
+      if (!isValid) {
+        throw new TRPCError({ code: "UNAUTHORIZED", message: "Invalid credentials." });
+      }
+
+      // Update last sign-in
+      await ctx.db
+        .update(users)
+        .set({ lastSignedIn: new Date() })
         .where(eq(users.id, user.id));
 
       const token = await new SignJWT({ userId: user.id })
