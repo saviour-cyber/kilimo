@@ -19,6 +19,7 @@ const BRAND = {
 
 /** Wraps any email body in the shared KilimoHub branded shell */
 function shell(content: string, previewText = ""): string {
+  const base = process.env.APP_BASE_URL ?? "https://kilimohub.onrender.com";
   return `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -43,7 +44,7 @@ function shell(content: string, previewText = ""): string {
           <!-- Header -->
           <tr>
             <td style="background-color:${BRAND.sidebar};border-radius:16px 16px 0 0;padding:24px 32px;text-align:center;">
-              <img src="https://kilimohub.onrender.com/logo.png" alt="KilimoHub" height="36" style="height:36px;object-fit:contain;" />
+              <img src="${base}/logo.png" alt="KilimoHub" height="36" style="height:36px;object-fit:contain;" />
             </td>
           </tr>
 
@@ -59,7 +60,7 @@ function shell(content: string, previewText = ""): string {
             <td style="padding:24px 32px;text-align:center;">
               <p style="margin:0 0 8px;font-size:13px;color:${BRAND.textMuted};">
                 You're receiving this email because you have an account at
-                <a href="https://kilimohub.onrender.com" style="color:${BRAND.primary};text-decoration:none;">KilimoHub</a>.
+                <a href="${base}" style="color:${BRAND.primary};text-decoration:none;">KilimoHub</a>.
               </p>
               <p style="margin:0;font-size:12px;color:${BRAND.textMuted};">
                 © ${new Date().getFullYear()} KilimoHub Technologies Ltd · Nairobi, Kenya

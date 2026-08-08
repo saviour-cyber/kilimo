@@ -31,6 +31,8 @@ import AcceptInvite from "./pages/AcceptInvite";
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 import VerifyEmail from "./pages/auth/VerifyEmail";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 // Core
 import Dashboard from "./pages/Dashboard";
@@ -88,6 +90,8 @@ function TenantAppRoutes() {
         <Route path="/register" component={Register} />
         <Route path="/login" component={Login} />
         <Route path="/verify-email" component={VerifyEmail} />
+        <Route path="/forgot-password" component={ForgotPassword} />
+        <Route path="/reset-password" component={ResetPassword} />
 
         {/* Protected routes inside KilimoLayout */}
         <Route path="/dashboard">

@@ -104,7 +104,7 @@ export default function Login() {
                 <label className="text-[13px] text-slate-700 font-semibold block">
                   Password
                 </label>
-                <a href="#" className="text-[13px] font-semibold text-[#10B981] hover:text-[#059669] transition-colors">
+                <a href="/forgot-password" className="text-[13px] font-semibold text-[#10B981] hover:text-[#059669] transition-colors">
                   Forgot Password?
                 </a>
               </div>
