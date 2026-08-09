@@ -5,7 +5,7 @@
  *   1. Not authenticated → /login
  *   2. role === 'admin'  → /admin  (Platform Admin context — never sees farm UI)
  *   3. Has farms         → /dashboard  (Farm Operations context)
- *   4. No farms          → /create-farm  (Org onboarding — create first farm)
+ *   4. No farms          → /dashboard  (Welcome screen which prompts to create first farm)
  */
 import { useEffect } from "react";
 import { useLocation } from "wouter";
@@ -38,12 +38,10 @@ export function useAuthRedirect() {
       return;
     }
     if (farmsLoading) return;
-    if (farms.length > 0) {
-      navigate("/dashboard");
-    } else {
-      navigate("/create-farm");
-    }
-  }, [loading, user, isPlatformAdmin, farmsLoading, farms, navigate]);
+    
+    // Always navigate to dashboard to allow KilimoLayout to render the Welcome screen for 0 farms
+    navigate("/dashboard");
+  }, [loading, user, isPlatformAdmin, farmsLoading, navigate]);
 
   return { loading: loading || (!isPlatformAdmin && !!user && farmsLoading) };
 }
