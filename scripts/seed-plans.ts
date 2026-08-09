@@ -89,7 +89,10 @@ const PLANS = [
 ];
 
 async function main() {
-  const connection = await mysql.createConnection(process.env.DATABASE_URL!);
+  const connection = await mysql.createConnection({
+    uri: process.env.DATABASE_URL!,
+    ssl: { rejectUnauthorized: false }
+  });
   const db = drizzle(connection);
 
   console.log("🌱 Seeding subscription plans...\n");

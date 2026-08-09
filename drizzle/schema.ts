@@ -1000,6 +1000,8 @@ export const subscriptionPlans = mysqlTable("subscriptionPlans", {
   maxDevices:   int("maxDevices"),
   maxStorageMb: int("maxStorageMb"),
   isActive:     boolean("isActive").default(true).notNull(),
+  isRecommended: boolean("isRecommended").default(false).notNull(),
+  isDefaultTrial: boolean("isDefaultTrial").default(false).notNull(),
   sortOrder:    int("sortOrder").default(0).notNull(),
   createdAt:    timestamp("createdAt").defaultNow().notNull(),
   updatedAt:    timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),

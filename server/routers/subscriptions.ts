@@ -2,7 +2,7 @@ import { adminProcedure, publicProcedure, protectedProcedure, router } from "../
 import { getDb } from "../db";
 import { subscriptionPlans, subscriptionPlanFeatures, subscriptions, subscriptionPayments, organizations, auditLogs } from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, ne } from "drizzle-orm";
 import { z } from "zod";
 import { getGrantedFeatures } from "../services/entitlements";
 
@@ -33,6 +33,8 @@ export const subscriptionsRouter = router({
       maxDevices: z.number().nullable().optional(),
       maxStorageMb: z.number().nullable().optional(),
       isActive: z.boolean().default(true),
+      isRecommended: z.boolean().default(false),
+      isDefaultTrial: z.boolean().default(false),
       sortOrder: z.number().default(0),
       features: z.array(z.object({
         featureKey: z.string(),
@@ -44,6 +46,11 @@ export const subscriptionsRouter = router({
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
       const { features, ...planData } = input;
+
+      // If this plan is being set as default trial, unset all others first
+      if (planData.isDefaultTrial) {
+        await db.update(subscriptionPlans).set({ isDefaultTrial: false });
+      }
 
       const [insertResult] = await db.insert(subscriptionPlans).values({
         ...planData,
@@ -88,6 +95,8 @@ export const subscriptionsRouter = router({
       maxDevices: z.number().nullable().optional(),
       maxStorageMb: z.number().nullable().optional(),
       isActive: z.boolean(),
+      isRecommended: z.boolean().default(false),
+      isDefaultTrial: z.boolean().default(false),
       sortOrder: z.number(),
       features: z.array(z.object({
         featureKey: z.string(),
@@ -99,6 +108,13 @@ export const subscriptionsRouter = router({
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
       const { id, features, ...planData } = input;
+
+      // If this plan is being set as default trial, unset all others first
+      if (planData.isDefaultTrial) {
+        await db.update(subscriptionPlans)
+          .set({ isDefaultTrial: false })
+          .where(ne(subscriptionPlans.id, id));
+      }
 
       await db.update(subscriptionPlans).set({
         ...planData,
@@ -124,6 +140,29 @@ export const subscriptionsRouter = router({
         entityType: "subscriptionPlan",
         entityId: id,
         metadata: { name: planData.name },
+      });
+
+      return { success: true };
+    }),
+
+  /** Admin shortcut: set one plan as the default trial and unset all others atomically */
+  setDefaultTrialPlan: adminProcedure
+    .input(z.object({ planId: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      await db.update(subscriptionPlans).set({ isDefaultTrial: false });
+      await db.update(subscriptionPlans)
+        .set({ isDefaultTrial: true })
+        .where(eq(subscriptionPlans.id, input.planId));
+
+      await db.insert(auditLogs).values({
+        userId: ctx.user.id,
+        action: "set_default_trial_plan",
+        entityType: "subscriptionPlan",
+        entityId: input.planId,
+        metadata: {},
       });
 
       return { success: true };

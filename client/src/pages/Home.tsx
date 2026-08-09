@@ -2,6 +2,8 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { useEffect, useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { PlanCard } from "@/components/onboarding/PlanCard";
 import {
   Brain,
   CloudSun,
@@ -51,6 +53,10 @@ export default function Home() {
   // Use the global PWA install state
   const { canInstall, isInstalled, triggerPrompt: triggerInstall } = usePWAInstall();
 
+  // Plans data
+  const { data: plans } = trpc.subscriptions.listPlans.useQuery();
+  const activePlans = (plans || []).filter(p => p.isActive);
+  const [billingInterval, setBillingInterval] = useState<"monthly" | "yearly">("monthly");
 
   // Splash screen timer
   useEffect(() => {
@@ -300,8 +306,65 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ─── PRICING ─────────────────────────────────────────────────────── */}
+      {activePlans.length > 0 && (
+        <section className="py-24 bg-white" id="pricing">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h3 className="text-sm font-bold tracking-widest text-[#10B981] uppercase mb-3">Simple Pricing</h3>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] leading-tight mb-8">
+                Choose the Right Plan <br className="hidden sm:block" />
+                <span className="text-[#10B981]">for Your Farm</span>
+              </h2>
+
+              {/* Billing toggle */}
+              <div className="flex items-center justify-center gap-3 p-1 bg-muted rounded-lg w-fit mx-auto">
+                <button
+                  onClick={() => setBillingInterval("monthly")}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
+                    billingInterval === "monthly"
+                      ? "bg-background shadow text-foreground"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  Monthly
+                </button>
+                <button
+                  onClick={() => setBillingInterval("yearly")}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-1.5 ${
+                    billingInterval === "yearly"
+                      ? "bg-background shadow text-foreground"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  Yearly
+                  <div className="bg-emerald-100 text-emerald-700 text-xs py-0.5 px-2 rounded-full font-semibold">Save up to 20%</div>
+                </button>
+              </div>
+            </div>
+
+            <div className={`grid gap-8 max-w-6xl mx-auto ${
+              activePlans.length === 1 ? "grid-cols-1 max-w-md" :
+              activePlans.length === 2 ? "md:grid-cols-2 max-w-3xl" :
+              "lg:grid-cols-3"
+            }`}>
+              {activePlans.map(plan => (
+                <PlanCard
+                  key={plan.id}
+                  plan={plan as any}
+                  billingInterval={billingInterval}
+                  ctaLabel="Get Started"
+                  onCta={() => navigate("/register")}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ─── CTA SECTION ─────────────────────────────────────────────────── */}
       {/* System bg, then CTA box uses primary #10B981 */}
+
       <section className="bg-[#F8FAFC] py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-[1400px] mx-auto">
           <div

@@ -103,6 +103,14 @@ function PlansManager() {
     },
   });
 
+  const setDefaultTrial = trpc.subscriptions.setDefaultTrialPlan.useMutation({
+    onSuccess: () => {
+      toast.success("Default trial plan updated");
+      utils.subscriptions.listPlans.invalidate();
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
   if (isLoading) {
     return <div className="grid gap-4 md:grid-cols-3"><Skeleton className="h-64" /><Skeleton className="h-64" /></div>;
   }
@@ -124,9 +132,11 @@ function PlansManager() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {plans?.map((plan) => (
           <Card key={plan.id} className={`border ${plan.isActive ? 'border-primary/20' : 'border-muted'} relative flex flex-col`}>
-            {!plan.isActive && (
-              <div className="absolute top-4 right-4"><Badge variant="outline">Inactive</Badge></div>
-            )}
+            <div className="absolute top-4 right-4 flex flex-col gap-1 items-end">
+              {!plan.isActive && <Badge variant="outline">Inactive</Badge>}
+              {plan.isRecommended && <Badge className="bg-primary hover:bg-primary/90 text-primary-foreground border-transparent">Recommended</Badge>}
+              {plan.isDefaultTrial && <Badge variant="secondary">Default Trial</Badge>}
+            </div>
             <CardHeader>
               <CardTitle className="text-xl">{plan.name}</CardTitle>
               <CardDescription className="h-10 text-sm overflow-hidden text-ellipsis line-clamp-2">
@@ -165,7 +175,7 @@ function PlansManager() {
                 </div>
               </ScrollArea>
 
-              <div className="mt-auto pt-4">
+              <div className="mt-auto pt-4 space-y-2">
                 <Button 
                   variant="outline" 
                   className="w-full"
@@ -177,6 +187,16 @@ function PlansManager() {
                   <Settings className="w-4 h-4 mr-2" />
                   Edit Plan
                 </Button>
+                {!plan.isDefaultTrial && (
+                  <Button
+                    variant="ghost"
+                    className="w-full text-xs h-8 text-muted-foreground hover:text-foreground"
+                    onClick={() => setDefaultTrial.mutate({ planId: plan.id })}
+                    disabled={setDefaultTrial.isPending}
+                  >
+                    Set as Default Trial
+                  </Button>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -231,6 +251,8 @@ function PlanForm({ initialData, availableFeatures, onSubmit, isPending }: {
     maxFarms: initialData?.maxFarms ?? null,
     maxUsers: initialData?.maxUsers ?? null,
     isActive: initialData?.isActive ?? true,
+    isRecommended: initialData?.isRecommended ?? false,
+    isDefaultTrial: initialData?.isDefaultTrial ?? false,
     sortOrder: initialData?.sortOrder ?? 0,
     features: initialData?.features?.map((f: any) => f.featureKey) || [],
   });
@@ -342,6 +364,29 @@ function PlanForm({ initialData, availableFeatures, onSubmit, isPending }: {
               id="is-active"
             />
             <Label htmlFor="is-active">Plan is active and available</Label>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Switch 
+              checked={formData.isRecommended}
+              onCheckedChange={c => setFormData(prev => ({ ...prev, isRecommended: c }))}
+              id="is-recommended"
+            />
+            <Label htmlFor="is-recommended">Mark as recommended plan (highlighted on pricing page)</Label>
+          </div>
+
+          <div className="flex flex-col space-y-1">
+            <div className="flex items-center space-x-2">
+              <Switch 
+                checked={formData.isDefaultTrial}
+                onCheckedChange={c => setFormData(prev => ({ ...prev, isDefaultTrial: c }))}
+                id="is-default-trial"
+              />
+              <Label htmlFor="is-default-trial">Use as default trial plan for new organizations</Label>
+            </div>
+            <p className="text-xs text-muted-foreground ml-11">
+              Note: Only one plan can be the default trial at a time. Checking this will uncheck any existing default trial plan.
+            </p>
           </div>
 
           <div className="space-y-3">

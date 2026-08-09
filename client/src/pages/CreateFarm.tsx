@@ -10,10 +10,15 @@ import { Leaf } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
+import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
 
 export default function CreateFarm() {
   const [, navigate] = useLocation();
-  const { refetchFarms, switchFarm } = useFarm();
+  const { farms, refetchFarms, switchFarm } = useFarm();
+  
+  // If the user has no farms at all, they need the full onboarding flow
+  const isFirstTimeUser = farms.length === 0;
+
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -39,6 +44,11 @@ export default function CreateFarm() {
     if (!form.name.trim()) return;
     createFarm.mutate(form);
   };
+
+  // Delegate to wizard for first-time setup
+  if (isFirstTimeUser) {
+    return <OnboardingWizard />;
+  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">

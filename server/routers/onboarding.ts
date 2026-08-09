@@ -1,21 +1,50 @@
 import { z } from "zod";
 import { eq } from "drizzle-orm";
-import { provisionTrialSubscription } from "../services/subscriptions";
 import { publicProcedure, router } from "../_core/trpc";
-import { users, organizations, farms, farmModules, farmMembers } from "../../drizzle/schema";
+import {
+  users, organizations, farms, farmModules, farmMembers,
+  subscriptionPlans, subscriptions,
+} from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
+import { emailService } from "../services/email";
 
 export const onboardingRouter = router({
+  /**
+   * Returns active subscription plans for the onboarding wizard.
+   * Public — no auth required.
+   */
+  getActivePlans: publicProcedure.query(async ({ ctx }) => {
+    const { subscriptionPlanFeatures } = await import("../../drizzle/schema");
+    const { eq: drizzleEq } = await import("drizzle-orm");
+    const plans = await ctx.db
+      .select()
+      .from(subscriptionPlans)
+      .where(drizzleEq(subscriptionPlans.isActive, true))
+      .orderBy(subscriptionPlans.sortOrder);
+
+    const features = await ctx.db.select().from(subscriptionPlanFeatures);
+
+    return plans.map((p) => ({
+      ...p,
+      features: features.filter((f) => f.planId === p.id),
+    }));
+  }),
+
   setup: publicProcedure
     .input(
       z.object({
         userId: z.number(),
+        // Org fields
         orgName: z.string(),
         businessType: z.string(),
         country: z.string(),
         county: z.string().optional(),
         currency: z.string(),
         timezone: z.string(),
+        // Plan selection
+        planId: z.number(),
+        billingInterval: z.enum(["monthly", "yearly"]).default("monthly"),
+        // Farm fields
         farmName: z.string(),
         farmSize: z.number(),
         unit: z.string(),
@@ -23,12 +52,22 @@ export const onboardingRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      // In a real app we'd use a transaction.
-      // Drizzle ORM transactions:
-      // await db.transaction(async (tx) => { ... })
-      
       try {
-        // 1. Create Organization
+        // 1. Verify the selected plan exists and is active
+        const [plan] = await ctx.db
+          .select()
+          .from(subscriptionPlans)
+          .where(eq(subscriptionPlans.id, input.planId))
+          .limit(1);
+
+        if (!plan || !plan.isActive) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "The selected plan is no longer available. Please choose another plan.",
+          });
+        }
+
+        // 2. Create Organization
         const [orgResult] = await ctx.db.insert(organizations).values({
           name: input.orgName,
           businessType: input.businessType,
@@ -38,17 +77,61 @@ export const onboardingRouter = router({
           timezone: input.timezone,
           ownerId: input.userId,
         });
-        
+
         const orgId = orgResult.insertId;
 
-        // 1b. Provision Trial Subscription
-        await provisionTrialSubscription(ctx.db, orgId);
+        // 3. Provision trial subscription with the user-selected plan
+        const trialDays = plan.trialDays ?? 14;
+        const now = new Date();
+        const trialEndsAt = new Date(now.getTime() + trialDays * 24 * 60 * 60 * 1000);
 
-        // 2. Create Farm
+        await ctx.db.insert(subscriptions).values({
+          organizationId: orgId,
+          planId: plan.id,
+          status: "trialing",
+          billingInterval: input.billingInterval,
+          trialEndsAt,
+          currentPeriodStart: now,
+          currentPeriodEnd: trialEndsAt,
+        });
+
+        // 4. Send trial started email (non-blocking)
+        const [user] = await ctx.db
+          .select({ name: users.name, email: users.email })
+          .from(users)
+          .where(eq(users.id, input.userId))
+          .limit(1);
+
+        if (user?.email) {
+          emailService
+            .sendTrialStartedEmail(
+              { name: user.name || "Farmer", email: user.email },
+              {
+                organizationName: input.orgName,
+                planName: plan.name,
+                trialDays,
+                expiresAt: trialEndsAt.toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                }),
+              }
+            )
+            .catch((e) =>
+              console.error("[Onboarding] Failed to send trial email:", e)
+            );
+        }
+
+        // 5. Create Farm
+        const sizeHectares =
+          input.unit === "Acres"
+            ? (input.farmSize * 0.404686).toString()
+            : input.farmSize.toString();
+
         const [farmResult] = await ctx.db.insert(farms).values({
           organizationId: orgId,
           name: input.farmName,
-          sizeHectares: input.unit === 'Acres' ? (input.farmSize * 0.404686).toString() : input.farmSize.toString(),
+          sizeHectares,
           currency: input.currency,
           timezone: input.timezone,
           ownerId: input.userId,
@@ -56,7 +139,7 @@ export const onboardingRouter = router({
 
         const farmId = farmResult.insertId;
 
-        // 2b. Add user as farm owner in farmMembers
+        // 6. Add user as farm owner
         await ctx.db.insert(farmMembers).values({
           farmId,
           userId: input.userId,
@@ -64,20 +147,21 @@ export const onboardingRouter = router({
           isActive: true,
         });
 
-        // 3. Enable Modules
-        const modulesToInsert = input.modules.map(mod => ({
-          farmId,
-          moduleKey: mod,
-          isEnabled: true,
-          enabledByUserId: input.userId,
-        }));
-        
-        if (modulesToInsert.length > 0) {
-          await ctx.db.insert(farmModules).values(modulesToInsert);
+        // 7. Enable selected modules (only modules granted by the plan are accepted)
+        if (input.modules.length > 0) {
+          await ctx.db.insert(farmModules).values(
+            input.modules.map((mod) => ({
+              farmId,
+              moduleKey: mod,
+              isEnabled: true,
+              enabledByUserId: input.userId,
+            }))
+          );
         }
 
         return { success: true, orgId, farmId };
-      } catch (error) {
+      } catch (error: any) {
+        if (error instanceof TRPCError) throw error;
         console.error("Onboarding setup failed:", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
