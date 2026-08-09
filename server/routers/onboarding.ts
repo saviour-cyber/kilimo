@@ -2,7 +2,7 @@ import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { publicProcedure, router } from "../_core/trpc";
 import {
-  users, organizations, farms, farmModules, farmMembers,
+  users, organizations, organizationMembers, farms, farmModules, farmMembers,
   subscriptionPlans, subscriptions,
 } from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
@@ -79,6 +79,14 @@ export const onboardingRouter = router({
         });
 
         const orgId = orgResult.insertId;
+
+        // 3a. Add the founding user as an organization owner member
+        await ctx.db.insert(organizationMembers).values({
+          organizationId: orgId,
+          userId: input.userId,
+          role: "owner",
+          isActive: true,
+        });
 
         // 3. Provision trial subscription with the user-selected plan
         const trialDays = plan.trialDays ?? 14;

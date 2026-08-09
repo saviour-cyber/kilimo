@@ -20,7 +20,7 @@ export async function checkFarmLimit(organizationId: number): Promise<void> {
     })
     .from(subscriptions)
     .innerJoin(subscriptionPlans, eq(subscriptions.planId, subscriptionPlans.id))
-    .where(and(eq(subscriptions.organizationId, organizationId), eq(subscriptions.status, "active")))
+    .where(and(eq(subscriptions.organizationId, organizationId), inArray(subscriptions.status, ["active", "trialing"])))
     .limit(1);
 
   // If no active subscription or unlimited, allow.
@@ -52,7 +52,7 @@ export async function checkUserLimit(organizationId: number): Promise<void> {
     })
     .from(subscriptions)
     .innerJoin(subscriptionPlans, eq(subscriptions.planId, subscriptionPlans.id))
-    .where(and(eq(subscriptions.organizationId, organizationId), eq(subscriptions.status, "active")))
+    .where(and(eq(subscriptions.organizationId, organizationId), inArray(subscriptions.status, ["active", "trialing"])))
     .limit(1);
 
   if (!planInfo.length || planInfo[0].maxUsers === null) return;
@@ -93,7 +93,7 @@ export async function checkDeviceLimit(organizationId: number): Promise<void> {
     })
     .from(subscriptions)
     .innerJoin(subscriptionPlans, eq(subscriptions.planId, subscriptionPlans.id))
-    .where(and(eq(subscriptions.organizationId, organizationId), eq(subscriptions.status, "active")))
+    .where(and(eq(subscriptions.organizationId, organizationId), inArray(subscriptions.status, ["active", "trialing"])))
     .limit(1);
 
   if (!planInfo.length || planInfo[0].maxDevices === null) return;

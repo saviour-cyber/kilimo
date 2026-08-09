@@ -94,12 +94,38 @@ export const farmsRouter = router({
 
       const { checkFarmLimit } = await import("../services/usageLimits");
 
-      // We assume user is part of organization 1 for now, or fetch from users table
-      // To be robust, let's fetch the user's primary organization
-      const { users, organizationMembers } = await import("../../drizzle/schema");
-      
-      const [member] = await db.select().from(organizationMembers).where(eq(organizationMembers.userId, ctx.user.id)).limit(1);
-      const orgId = member ? member.organizationId : 1;
+      // Resolve the user's organization from organizationMembers or organizations.ownerId
+      const { users: _users, organizationMembers, organizations } = await import("../../drizzle/schema");
+
+      // Resolve the user's organization:
+      // 1. First check organizationMembers (correct for all new users)
+      // 2. Fall back to organizations.ownerId (for users created before org-member fix)
+      let orgId: number | null = null;
+
+      const [orgMember] = await db
+        .select({ organizationId: organizationMembers.organizationId })
+        .from(organizationMembers)
+        .where(and(eq(organizationMembers.userId, ctx.user.id), eq(organizationMembers.isActive, true)))
+        .limit(1);
+
+      if (orgMember) {
+        orgId = orgMember.organizationId;
+      } else {
+        // Fallback: find an org where this user is the owner
+        const [ownedOrg] = await db
+          .select({ id: organizations.id })
+          .from(organizations)
+          .where(eq(organizations.ownerId, ctx.user.id))
+          .limit(1);
+        if (ownedOrg) orgId = ownedOrg.id;
+      }
+
+      if (!orgId) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You must belong to an organization before creating a farm. Please complete onboarding.",
+        });
+      }
 
       try {
         await checkFarmLimit(orgId);
