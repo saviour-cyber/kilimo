@@ -285,6 +285,8 @@ export function KilimoLayout({ children }: KilimoLayoutProps) {
     { enabled: !!currentFarm?.farm.id, refetchInterval: 30000 }
   );
 
+  const { modules: grantedModules, isLoading: modulesLoading } = useGrantedModules();
+
   if (loading || farmLoading) {
     return (
       <div className="flex h-screen bg-background">
@@ -321,8 +323,6 @@ export function KilimoLayout({ children }: KilimoLayoutProps) {
       </div>
     );
   }
-
-  const { modules: grantedModules, isLoading: modulesLoading } = useGrantedModules();
   
   // A module is enabled if the farm enabled it AND the org's subscription grants it
   const effectiveModules = enabledModules.filter(m => grantedModules.includes(m));
