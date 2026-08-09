@@ -27,8 +27,7 @@ const requireUser = t.middleware(async opts => {
 
 export const protectedProcedure = t.procedure.use(requireUser);
 
-import { users } from "../../drizzle/schema";
-import { eq } from "drizzle-orm";
+
 
 export const adminProcedure = t.procedure.use(
   t.middleware(async opts => {
@@ -38,16 +37,10 @@ export const adminProcedure = t.procedure.use(
       throw new TRPCError({ code: "UNAUTHORIZED", message: UNAUTHED_ERR_MSG });
     }
 
+    // SECURITY: Only users with role='admin' in the database may access admin procedures.
+    // Do NOT promote users here. If the user is not an admin, reject the request.
     if (ctx.user.role !== 'admin') {
-      try {
-        await ctx.db
-          .update(users)
-          .set({ role: 'admin' })
-          .where(eq(users.id, ctx.user.id));
-        ctx.user.role = 'admin';
-      } catch (err) {
-        console.error("Failed to update user role to admin:", err);
-      }
+      throw new TRPCError({ code: "FORBIDDEN", message: NOT_ADMIN_ERR_MSG });
     }
 
     return next({
@@ -58,3 +51,4 @@ export const adminProcedure = t.procedure.use(
     });
   }),
 );
+
