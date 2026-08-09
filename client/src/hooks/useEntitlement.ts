@@ -41,8 +41,9 @@ export function useEntitlement(featureKey?: string): UseEntitlementResult {
       { organizationId },
       {
         enabled: !!organizationId,
-        // Cache for 5 minutes — entitlements don't change frequently
-        staleTime: 5 * 60 * 1000,
+        // No staleTime — entitlements must always be fresh so newly granted modules
+        // appear immediately after plan selection or subscription changes.
+        staleTime: 0,
       }
     );
 

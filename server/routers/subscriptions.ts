@@ -1,6 +1,6 @@
 import { adminProcedure, publicProcedure, protectedProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
-import { subscriptionPlans, subscriptionPlanFeatures, subscriptions, subscriptionPayments, organizations, auditLogs } from "../../drizzle/schema";
+import { subscriptionPlans, subscriptionPlanFeatures, subscriptions, subscriptionPayments, organizations, auditLogs, farms, farmModules } from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
 import { eq, desc, ne } from "drizzle-orm";
 import { z } from "zod";
@@ -225,16 +225,72 @@ export const subscriptionsRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
 
+      // 1. Fetch the subscription to get the orgId
+      const [sub] = await db
+        .select()
+        .from(subscriptions)
+        .where(eq(subscriptions.id, input.subscriptionId))
+        .limit(1);
+
+      if (!sub) throw new TRPCError({ code: "NOT_FOUND", message: "Subscription not found." });
+
+      // 2. Update the plan
       await db.update(subscriptions)
         .set({ planId: input.newPlanId })
         .where(eq(subscriptions.id, input.subscriptionId));
+
+      // 3. Reconcile farmModules for all farms in this org.
+      // Fetch the new plan's module-type features.
+      const newPlanFeatures = await db
+        .select()
+        .from(subscriptionPlanFeatures)
+        .where(eq(subscriptionPlanFeatures.planId, input.newPlanId));
+
+      const newModuleKeys = newPlanFeatures
+        .filter((f) => f.featureType === "module")
+        .map((f) => f.featureKey);
+
+      // Always-on core modules
+      const coreModules = ["dashboard", "settings", "tasks", "notifications"];
+      const allModuleKeys = Array.from(new Set([...coreModules, ...newModuleKeys]));
+
+      // Get all farms in this org
+      const orgFarms = await db
+        .select({ id: farms.id })
+        .from(farms)
+        .where(eq(farms.organizationId, sub.organizationId));
+
+      // For each farm, upsert missing module rows as isEnabled=true.
+      // We do NOT delete rows for modules no longer in the plan — downgrade
+      // is enforced at runtime by getGrantedFeatures(). This preserves config
+      // so if the org upgrades again, previous settings are restored.
+      for (const farm of orgFarms) {
+        const existingModules = await db
+          .select({ moduleKey: farmModules.moduleKey })
+          .from(farmModules)
+          .where(eq(farmModules.farmId, farm.id));
+
+        const existingKeys = new Set(existingModules.map((m) => m.moduleKey));
+        const missingKeys = allModuleKeys.filter((k) => !existingKeys.has(k));
+
+        if (missingKeys.length > 0) {
+          await db.insert(farmModules).values(
+            missingKeys.map((mod) => ({
+              farmId: farm.id,
+              moduleKey: mod,
+              isEnabled: true,
+              enabledByUserId: ctx.user.id,
+            }))
+          );
+        }
+      }
 
       await db.insert(auditLogs).values({
         userId: ctx.user.id,
         action: "changed_subscription_plan",
         entityType: "subscription",
         entityId: input.subscriptionId,
-        metadata: { newPlanId: input.newPlanId },
+        metadata: { newPlanId: input.newPlanId, reconciledFarms: orgFarms.length },
       });
 
       return { success: true };

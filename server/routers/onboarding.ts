@@ -155,10 +155,30 @@ export const onboardingRouter = router({
           isActive: true,
         });
 
-        // 7. Enable selected modules (only modules granted by the plan are accepted)
-        if (input.modules.length > 0) {
+        // 7. Provision ALL modules granted by the plan into farmModules.
+        // The subscription plan is the source of truth for entitlement.
+        // We fetch the plan's features and enable all module-type features automatically.
+        // The user's wizard selections (input.modules) are respected but the plan always wins.
+        const { subscriptionPlanFeatures: planFeaturesTable } = await import("../../drizzle/schema");
+        const planFeatures = await ctx.db
+          .select()
+          .from(planFeaturesTable)
+          .where(eq(planFeaturesTable.planId, plan.id));
+
+        // Always-on core modules regardless of plan
+        const coreModules = ["dashboard", "settings", "tasks", "notifications"];
+
+        // All module-type features from the plan
+        const planModuleKeys = planFeatures
+          .filter((f) => f.featureType === "module")
+          .map((f) => f.featureKey);
+
+        // Union of core + plan modules, deduplicated
+        const allModulesToProvision = Array.from(new Set([...coreModules, ...planModuleKeys]));
+
+        if (allModulesToProvision.length > 0) {
           await ctx.db.insert(farmModules).values(
-            input.modules.map((mod) => ({
+            allModulesToProvision.map((mod) => ({
               farmId,
               moduleKey: mod,
               isEnabled: true,
