@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { useGrantedModules } from "@/hooks/useEntitlement";
 
 export type FarmRole = "owner" | "administrator" | "farm_manager" | "worker" | "veterinary_officer" | "crop_officer" | "viewer";
 
@@ -80,12 +81,17 @@ export function FarmProvider({ children }: { children: React.ReactNode }) {
     }
   }, [farms, farmsLoading, currentFarmId]);
 
+  const { modules: grantedModules } = useGrantedModules();
+
   const { data: modulesData = [] } = trpc.farms.getModules.useQuery(
     { farmId: currentFarm?.farm.id ?? 0 },
     { enabled: !!currentFarm?.farm.id }
   );
 
-  const enabledModules = modulesData.filter((m) => m.isEnabled).map((m) => m.moduleKey);
+  // Dynamic Entitlement Evaluation:
+  // A module is enabled if it is granted by the plan AND has not been explicitly disabled on this farm.
+  const explicitlyDisabled = modulesData.filter((m) => !m.isEnabled).map((m) => m.moduleKey);
+  const enabledModules = grantedModules.filter((key) => !explicitlyDisabled.includes(key));
 
   const switchFarm = (farmId: number) => {
     setCurrentFarmId(farmId);

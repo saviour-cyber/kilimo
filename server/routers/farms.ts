@@ -4,6 +4,7 @@ import { z } from "zod";
 import { farmMembers, farmModules, farms, users } from "../../drizzle/schema";
 import { getDb } from "../db";
 import { protectedProcedure, router } from "../_core/trpc";
+import { getGrantedFeatures } from "../services/entitlements";
 
 export async function assertFarmMember(farmId: number, userId: number) {
   const db = await getDb();
@@ -124,9 +125,12 @@ export const farmsRouter = router({
       });
 
       // Default modules
-      const defaultModules = ["dashboard", "crop", "livestock", "inventory", "finance", "tasks", "notifications", "settings"];
+      const coreModules = ["dashboard", "settings", "tasks", "notifications"];
+      const grantedFeatures = await getGrantedFeatures(db, orgId);
+      const modulesToEnable = Array.from(new Set([...coreModules, ...grantedFeatures]));
+      
       await db.insert(farmModules).values(
-        defaultModules.map((mod) => ({
+        modulesToEnable.map((mod) => ({
           farmId,
           moduleKey: mod,
           isEnabled: true,
