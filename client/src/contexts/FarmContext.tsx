@@ -81,7 +81,7 @@ export function FarmProvider({ children }: { children: React.ReactNode }) {
     }
   }, [farms, farmsLoading, currentFarmId]);
 
-  const { modules: grantedModules } = useGrantedModules();
+  const { modules: grantedModules } = useGrantedModules(currentFarm?.farm.organizationId);
 
   const { data: modulesData = [] } = trpc.farms.getModules.useQuery(
     { farmId: currentFarm?.farm.id ?? 0 },

@@ -32,9 +32,9 @@ interface UseEntitlementResult {
  * @param featureKey - The module or service key to check (e.g. "crop", "iot").
  *                     Pass undefined to only get the full list of granted features.
  */
-export function useEntitlement(featureKey?: string): UseEntitlementResult {
+export function useEntitlement(featureKey?: string, explicitOrganizationId?: number): UseEntitlementResult {
   const { currentFarm } = useFarm();
-  const organizationId = currentFarm?.farm.organizationId ?? 0;
+  const organizationId = explicitOrganizationId ?? currentFarm?.farm.organizationId ?? 0;
 
   const { data: grantedFeatures = [], isLoading } =
     trpc.subscriptions.getGrantedFeatures.useQuery(
@@ -71,11 +71,11 @@ export function useEntitlement(featureKey?: string): UseEntitlementResult {
  * including always-visible ones.
  * Replaces the old `enabledModules` prop pattern.
  */
-export function useGrantedModules(): {
+export function useGrantedModules(explicitOrganizationId?: number): {
   modules: string[];
   isLoading: boolean;
 } {
-  const { grantedFeatures, isLoading } = useEntitlement();
+  const { grantedFeatures, isLoading } = useEntitlement(undefined, explicitOrganizationId);
   const alwaysVisibleKeys = MODULE_REGISTRY.filter((m) => m.alwaysVisible).map((m) => m.key);
 
   const modules = Array.from(new Set([...alwaysVisibleKeys, ...grantedFeatures]));

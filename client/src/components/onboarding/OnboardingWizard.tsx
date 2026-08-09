@@ -9,14 +9,13 @@ import { Label } from "@/components/ui/label";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { PlanCard, type PlanData } from "./PlanCard";
 import { MODULE_REGISTRY } from "@/lib/moduleRegistry";
 import { toast } from "sonner";
 import {
-  Building2, CreditCard, Rocket, Settings2, Check, Lock,
+  Building2, CreditCard, Rocket, Settings2, Check,
   ChevronRight, ChevronLeft, Leaf,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -102,8 +101,6 @@ export function OnboardingWizard() {
     unit: "Hectares",
   });
 
-  const [selectedModules, setSelectedModules] = useState<string[]>([]);
-
   // Load plans from API (public endpoint)
   const { data: plans = [], isLoading: plansLoading } = trpc.subscriptions.listPlans.useQuery();
   const activePlans = plans.filter((p) => p.isActive) as PlanData[];
@@ -118,19 +115,11 @@ export function OnboardingWizard() {
     onError: (err) => toast.error(err.message),
   });
 
-  // Modules unlocked by selected plan
-  const grantedModuleKeys = selectedPlan?.features.map((f) => f.featureKey) ?? [];
-  const alwaysVisibleKeys = MODULE_REGISTRY.filter((m) => m.alwaysVisible).map((m) => m.key);
-  const selectableModules = MODULE_REGISTRY.filter(
-    (m) => !m.alwaysVisible && m.key !== "settings"
-  );
-
-  const toggleModule = (key: string) => {
-    if (!grantedModuleKeys.includes(key)) return; // locked
-    setSelectedModules((prev) =>
-      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
-    );
-  };
+  // Module-type features from the selected plan (for display only — backend auto-provisions)
+  const planModuleFeatures = (selectedPlan?.features ?? [])
+    .filter((f) => f.featureType === "module")
+    .map((f) => MODULE_REGISTRY.find((m) => m.key === f.featureKey))
+    .filter(Boolean) as typeof MODULE_REGISTRY;
 
   const handleFinish = () => {
     if (!user || !selectedPlan) return;
@@ -142,7 +131,7 @@ export function OnboardingWizard() {
       farmName: farm.farmName,
       farmSize: Number(farm.farmSize) || 0,
       unit: farm.unit,
-      modules: selectedModules,
+      modules: [], // backend auto-provisions all plan-granted modules
     });
   };
 
@@ -419,7 +408,7 @@ export function OnboardingWizard() {
       <div>
         <h2 className="text-xl font-bold text-foreground">Configure your farm</h2>
         <p className="text-sm text-muted-foreground mt-1">
-          Set up your first farm and choose which modules to enable.
+          Set up your first farm. All modules in your plan will be activated automatically.
         </p>
       </div>
 
@@ -459,48 +448,30 @@ export function OnboardingWizard() {
         </div>
       </div>
 
-      {/* Module selection */}
-      <div className="space-y-2">
-        <Label>Enable Modules</Label>
-        <p className="text-xs text-muted-foreground">
-          Modules included in your <strong>{selectedPlan?.name}</strong> plan. Locked modules require a plan upgrade.
-        </p>
-        <div className="grid grid-cols-2 gap-2 border rounded-xl p-4 bg-muted/20">
-          {selectableModules.map((mod) => {
-            const isGranted = grantedModuleKeys.includes(mod.key);
-            const isChecked = selectedModules.includes(mod.key);
-            const Icon = mod.icon;
-            return (
-              <div
-                key={mod.key}
-                onClick={() => toggleModule(mod.key)}
-                className={cn(
-                  "flex items-center gap-2.5 p-2.5 rounded-lg transition-colors",
-                  isGranted
-                    ? "cursor-pointer hover:bg-background"
-                    : "cursor-not-allowed opacity-50"
-                )}
-              >
-                {isGranted ? (
-                  <Checkbox
-                    id={`mod-${mod.key}`}
-                    checked={isChecked}
-                    onCheckedChange={() => toggleModule(mod.key)}
-                    className="pointer-events-none"
-                  />
-                ) : (
-                  <Lock className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                )}
-                <Icon className={cn("w-4 h-4 flex-shrink-0", mod.color)} />
-                <span className="text-sm font-medium">{mod.label}</span>
-                {!isGranted && (
-                  <Badge variant="outline" className="text-xs ml-auto py-0 px-1">Upgrade</Badge>
-                )}
-              </div>
-            );
-          })}
+      {/* Auto-provisioned modules — read-only display */}
+      {planModuleFeatures.length > 0 && (
+        <div className="space-y-2">
+          <Label>Modules included in your <strong>{selectedPlan?.name}</strong> plan</Label>
+          <p className="text-xs text-muted-foreground">
+            These will be automatically activated for your farm. You can disable any module later in Settings.
+          </p>
+          <div className="grid grid-cols-2 gap-2 border rounded-xl p-4 bg-muted/20">
+            {planModuleFeatures.map((mod) => {
+              const Icon = mod.icon;
+              return (
+                <div
+                  key={mod.key}
+                  className="flex items-center gap-2.5 p-2.5 rounded-lg bg-background/60"
+                >
+                  <Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                  <Icon className={cn("w-4 h-4 flex-shrink-0", mod.color)} />
+                  <span className="text-sm font-medium">{mod.label}</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="flex gap-3">
         <Button variant="outline" onClick={() => setStep(3)} className="flex-1">
