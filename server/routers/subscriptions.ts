@@ -5,6 +5,7 @@ import { TRPCError } from "@trpc/server";
 import { eq, desc, ne } from "drizzle-orm";
 import { z } from "zod";
 import { getGrantedFeatures } from "../services/entitlements";
+import { requireOrganizationMembership } from "../services/authorization";
 
 export const subscriptionsRouter = router({
   listPlans: publicProcedure.query(async () => {
@@ -302,6 +303,9 @@ export const subscriptionsRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       
+      // SECURITY: Verify user membership
+      await requireOrganizationMembership(db, ctx.user.id, input.organizationId);
+
       const [sub] = await db.select({
         subscription: subscriptions,
         plan: subscriptionPlans,
@@ -329,9 +333,13 @@ export const subscriptionsRouter = router({
    */
   getGrantedFeatures: protectedProcedure
     .input(z.object({ organizationId: z.number() }))
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      // SECURITY: Verify user membership
+      await requireOrganizationMembership(db, ctx.user.id, input.organizationId);
+
       return getGrantedFeatures(db, input.organizationId);
     }),
 

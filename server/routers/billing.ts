@@ -5,6 +5,7 @@ import { TRPCError } from "@trpc/server";
 import { eq, desc } from "drizzle-orm";
 import { z } from "zod";
 import { getPaymentGateway } from "../services/billing";
+import { requireOrganizationBillingPermission } from "../services/authorization";
 
 export const billingRouter = router({
   listPublicPlans: protectedProcedure.query(async () => {
@@ -29,6 +30,12 @@ export const billingRouter = router({
       provider: z.enum(["stripe", "mpesa"]),
     }))
     .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+      
+      // SECURITY: Verify that the user has permission to manage billing for this organization
+      await requireOrganizationBillingPermission(db, ctx.user.id, input.organizationId);
+
       // Create checkout session using selected provider
       const gateway = getPaymentGateway(input.provider);
       
@@ -52,6 +59,9 @@ export const billingRouter = router({
     .query(async ({ input, ctx }) => {
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      // SECURITY: Verify that the user has permission to view billing for this organization
+      await requireOrganizationBillingPermission(db, ctx.user.id, input.organizationId);
 
       return db
         .select()
