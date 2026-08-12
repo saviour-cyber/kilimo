@@ -155,14 +155,6 @@ export default function Dashboard() {
                   )}
                 </Button>
               </Link>
-              
-              <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
-                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-semibold text-sm">
-                  EJ
-                </div>
-                <span className="text-sm font-medium hidden sm:inline-block text-slate-700">Edward John</span>
-                <ChevronRight className="w-4 h-4 text-slate-400 rotate-90" />
-              </div>
             </div>
           </div>
         </header>

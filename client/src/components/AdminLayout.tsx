@@ -22,6 +22,7 @@ import {
   X,
   Zap,
   Mail,
+  ShoppingBag,
 } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "wouter";
@@ -62,6 +63,7 @@ const ADMIN_MENU: NavGroup[] = [
     items: [
       { label: "Business Modules",  href: "/admin/modules",   icon: Box },
       { label: "Platform Services", href: "/admin/services",  icon: Zap },
+      { label: "Marketplace",       href: "/admin/marketplace", icon: ShoppingBag },
     ],
   },
   {

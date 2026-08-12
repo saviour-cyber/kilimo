@@ -25,6 +25,7 @@ import { adminRouter } from "./routers/admin";
 import { systemRouter } from "./routers/system";
 import { subscriptionsRouter } from "./routers/subscriptions";
 import { billingRouter } from "./routers/billing";
+import { marketplaceRouter } from "./routers/marketplace";
 
 export const appRouter = router({
   auth: authRouter,
@@ -51,6 +52,7 @@ export const appRouter = router({
   onboarding: onboardingRouter,
   subscriptions: subscriptionsRouter,
   billing: billingRouter,
+  marketplace: marketplaceRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -37,8 +37,6 @@ const NAV_GROUPS: NavGroup[] = [
       { label: "Subscription & Billing", href: "/settings/organization/billing", icon: CreditCard },
     ]
   },
-    ]
-  },
   {
     title: "Platform",
     items: [

@@ -7,6 +7,7 @@ import {
   Package,
   PlusCircle,
   Settings,
+  ShoppingBag,
   Sprout,
   Stethoscope,
   Tractor,
@@ -316,6 +317,30 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     dashboardWidgets: [
       { id: "disease-kpi",     type: "kpi",     size: "small", priority: { level: "critical", order: 0 }, component: DiseaseKpiWidget },
       { id: "disease-summary", type: "summary", size: "medium", priority: { level: "high",     order: 0 }, component: DiseaseSummaryWidget },
+    ],
+  },
+
+  {
+    key: "marketplace",
+    label: "Marketplace",
+    icon: ShoppingBag,
+    basePath: "/marketplace",
+    color: "text-teal-600",
+    description: "Buy and sell farm produce and inputs",
+    minRole: "worker",
+    subItems: [
+      { label: "Browse",       path: "/marketplace/browse" },
+      { label: "My Listings",  path: "/marketplace/listings" },
+      { label: "Create Listing", path: "/marketplace/create" },
+    ],
+    quickActions: [
+      {
+        label: "Create Listing",
+        description: "List your produce or inputs for sale.",
+        icon: ShoppingBag,
+        path: "/marketplace/create",
+        color: "bg-teal-100 text-teal-700",
+      },
     ],
   },
 

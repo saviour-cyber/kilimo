@@ -42,6 +42,17 @@ import Tasks from "./pages/Tasks";
 import SettingsLayout from "./pages/settings/SettingsLayout";
 import { SERVICE_REGISTRY } from "./lib/serviceRegistry";
 
+// Admin
+import Subscriptions from "./pages/admin/Subscriptions";
+import AdminMarketplace from "./pages/admin/Marketplace";
+
+// Marketplace
+import Browse from "./pages/marketplace/Browse";
+import MyListings from "./pages/marketplace/MyListings";
+import CreateListing from "./pages/marketplace/CreateListing";
+import ListingDetail from "./pages/marketplace/ListingDetail";
+import EditListing from "./pages/marketplace/EditListing";
+
 // Crops
 import Fields from "./pages/crops/Fields";
 import Plantings from "./pages/crops/Plantings";
@@ -131,6 +142,13 @@ function TenantAppRoutes() {
             </React.Fragment>
           );
         })}
+
+        {/* Marketplace */}
+        <Route path="/marketplace/browse"><KilimoLayout><SubscriptionGate featureKey="marketplace" featureName="Marketplace"><Browse /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/marketplace/listings"><KilimoLayout><SubscriptionGate featureKey="marketplace" featureName="Marketplace"><MyListings /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/marketplace/create"><KilimoLayout><SubscriptionGate featureKey="marketplace" featureName="Marketplace"><CreateListing /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/marketplace/edit/:id"><KilimoLayout><SubscriptionGate featureKey="marketplace" featureName="Marketplace"><EditListing /></SubscriptionGate></KilimoLayout></Route>
+        <Route path="/marketplace/listing/:id"><KilimoLayout><SubscriptionGate featureKey="marketplace" featureName="Marketplace"><ListingDetail /></SubscriptionGate></KilimoLayout></Route>
 
         {/* Crops */}
         <Route path="/crops/fields"><KilimoLayout><SubscriptionGate featureKey="crop" featureName="Crops"><Fields /></SubscriptionGate></KilimoLayout></Route>
@@ -226,9 +244,8 @@ function AdminAppRoutes() {
       <Route path="/admin/email">
         <AdminLayout><AdminEmailCenter /></AdminLayout>
       </Route>
-      <Route path="/admin/subscriptions">
-        <AdminLayout><AdminSubscriptions /></AdminLayout>
-      </Route>
+      <Route path="/admin/subscriptions"><AdminLayout><Subscriptions /></AdminLayout></Route>
+      <Route path="/admin/marketplace"><AdminLayout><AdminMarketplace /></AdminLayout></Route>
       <Route path="/admin/support">
         <AdminLayout><AdminSupport /></AdminLayout>
       </Route>

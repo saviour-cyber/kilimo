@@ -2,8 +2,8 @@ import { z } from "zod";
 import { router, protectedProcedure } from "../_core/trpc";
 import { getAIProvider } from "../services/ai";
 import { getDb } from "../db";
-import { farms, farmModules, tasks, iotSensorState } from "../../drizzle/schema";
-import { eq, desc } from "drizzle-orm";
+import { farms, farmModules, tasks, iotSensorState, marketListings } from "../../drizzle/schema";
+import { eq, desc, and } from "drizzle-orm";
 import { weatherEngine } from "../services/weather";
 
 export const intelligenceRouter = router({
@@ -63,6 +63,13 @@ export const intelligenceRouter = router({
       const iotStates = await db.select().from(iotSensorState).where(eq(iotSensorState.farmId, input.farmId));
       const iotContext = iotStates.map((s: any) => `Sensor ${s.sensorId}: ${s.latestValue}`).join(', ');
 
+      const activeListings = activeModules.includes("marketplace") 
+        ? await db.select().from(marketListings).where(and(eq(marketListings.farmId, input.farmId), eq(marketListings.status, "active")))
+        : [];
+      const marketplaceContext = activeListings.length > 0
+        ? `Active Marketplace Listings: ${activeListings.map(l => `${l.title} (${l.price} ${l.currency})`).join(", ")}`
+        : "No active marketplace listings.";
+
       const contextPrompt = `You are Kili AI, an expert agricultural assistant integrated into KilimoHub Next.
 Current Context:
 - Farm Name: ${farm?.name || "Unknown"}
@@ -70,6 +77,7 @@ Current Context:
 - Enabled Modules: ${activeModules.join(", ")}
 - Recent Tasks: ${recentTasks.map(t => `${t.title} (${t.status})`).join(", ")}
 - Live IoT Sensors: ${iotContext || "No active sensors"}
+- ${marketplaceContext}
 
 ${weatherContext}
 
@@ -123,13 +131,24 @@ Guidelines:
       const iotStates = await db.select().from(iotSensorState).where(eq(iotSensorState.farmId, input.farmId));
       const iotContext = iotStates.map((s: any) => `Sensor ${s.sensorId}: ${s.latestValue}`).join(', ');
 
-      const context = `
-Farm Name: ${farm?.name || "Unknown"}
-Farm Type: ${farm?.farmType || "Unknown"}
-Enabled Modules: ${activeModules.join(", ")}
-Pending Tasks: ${recentTasks.filter(t => t.status === "pending").map(t => t.title).join(", ") || "None"}
-Overdue Tasks: ${recentTasks.filter(t => t.status === "pending" && t.dueDate && new Date(String(t.dueDate)) < new Date()).map(t => t.title).join(", ") || "None"}
-Live IoT Sensors: ${iotContext || "No active sensors"}
+      const activeListings = activeModules.includes("marketplace") 
+        ? await db.select().from(marketListings).where(and(eq(marketListings.farmId, input.farmId), eq(marketListings.status, "active")))
+        : [];
+      const marketplaceContext = activeListings.length > 0
+        ? `Active Marketplace Listings: ${activeListings.map(l => `${l.title} (${l.price} ${l.currency})`).join(", ")}`
+        : "No active marketplace listings.";
+
+      const context = `You are Kili AI, an expert agricultural assistant.
+Based on the following data for a farm, generate 3-5 concise, actionable recommendations for the farmer today.
+Data:
+- Farm Name: ${farm?.name || "Unknown"}
+- Farm Type: ${farm?.farmType || "Unknown"}
+- Enabled Modules: ${activeModules.join(", ")}
+- Recent Tasks: ${recentTasks.map(t => `${t.title} (${t.status})`).join(", ")}
+- Live IoT Sensors: ${iotContext || "No active sensors"}
+- ${marketplaceContext}
+- Pending Tasks: ${recentTasks.filter(t => t.status === "pending").map(t => t.title).join(", ") || "None"}
+- Overdue Tasks: ${recentTasks.filter(t => t.status === "pending" && t.dueDate && new Date(String(t.dueDate)) < new Date()).map(t => t.title).join(", ") || "None"}
 
 ${weatherContext}`;
 

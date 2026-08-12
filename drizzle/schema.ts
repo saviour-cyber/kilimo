@@ -1072,3 +1072,78 @@ export const subscriptionPayments = mysqlTable("subscriptionPayments", {
 
 export type SubscriptionPayment = typeof subscriptionPayments.$inferSelect;
 export type InsertSubscriptionPayment = typeof subscriptionPayments.$inferInsert;
+
+// ─── Marketplace ───────────────────────────────────────────────────────────────
+//
+// Marketplace is a Farm Module gated by the subscription entitlement system.
+// A listing belongs to an Organization and optionally identifies the originating Farm.
+// Images are stored via the Forge/S3 storage service — never as binary in MySQL.
+//
+// Flow:
+//   subscriptionPlanFeatures (featureKey="marketplace")
+//     → farmModules (moduleKey="marketplace", isEnabled=true)
+//       → MarketListing (organizationId, farmId)
+//         → MarketListingImages (storageKey)
+
+// ─── Market Categories ─────────────────────────────────────────────────────────
+
+export const marketCategories = mysqlTable("marketCategories", {
+  id:          int("id").autoincrement().primaryKey(),
+  name:        varchar("name", { length: 64 }).notNull(),
+  slug:        varchar("slug", { length: 64 }).notNull().unique(),       // e.g. "crops", "livestock"
+  description: text("description"),
+  iconName:    varchar("iconName", { length: 64 }),                      // Lucide icon name
+  sortOrder:   int("sortOrder").default(0).notNull(),
+  isActive:    boolean("isActive").default(true).notNull(),
+  createdAt:   timestamp("createdAt").defaultNow().notNull(),
+  updatedAt:   timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MarketCategory = typeof marketCategories.$inferSelect;
+export type InsertMarketCategory = typeof marketCategories.$inferInsert;
+
+// ─── Market Listings ───────────────────────────────────────────────────────────
+
+export const marketListings = mysqlTable("marketListings", {
+  id:            int("id").autoincrement().primaryKey(),
+  organizationId: int("organizationId").notNull(),                       // FK → organizations.id (ownership)
+  farmId:        int("farmId"),                                          // FK → farms.id (optional origin)
+  sellerUserId:  int("sellerUserId").notNull(),                          // FK → users.id (who created it)
+  categoryId:    int("categoryId"),                                      // FK → marketCategories.id
+  title:         varchar("title", { length: 128 }).notNull(),
+  description:   text("description"),
+  price:         decimal("price", { precision: 10, scale: 2 }).notNull(),
+  currency:      varchar("currency", { length: 8 }).default("KES").notNull(),
+  quantity:      decimal("quantity", { precision: 10, scale: 2 }),
+  unit:          varchar("unit", { length: 32 }),                        // "bags", "kg", "litres", "heads"
+  county:        varchar("county", { length: 64 }),
+  location:      varchar("location", { length: 256 }),
+  status:        mysqlEnum("status", [
+    "draft",
+    "active",
+    "paused",
+    "sold",
+    "archived",
+  ]).default("draft").notNull(),
+  publishedAt:   timestamp("publishedAt"),
+  createdAt:     timestamp("createdAt").defaultNow().notNull(),
+  updatedAt:     timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MarketListing = typeof marketListings.$inferSelect;
+export type InsertMarketListing = typeof marketListings.$inferInsert;
+
+// ─── Market Listing Images ─────────────────────────────────────────────────────
+
+export const marketListingImages = mysqlTable("marketListingImages", {
+  id:         int("id").autoincrement().primaryKey(),
+  listingId:  int("listingId").notNull(),                                // FK → marketListings.id
+  storageKey: varchar("storageKey", { length: 512 }).notNull(),          // Forge/S3 key (never raw binary)
+  url:        text("url").notNull(),                                     // Served URL /manus-storage/{key}
+  sortOrder:  int("sortOrder").default(0).notNull(),
+  isPrimary:  boolean("isPrimary").default(false).notNull(),
+  createdAt:  timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type MarketListingImage = typeof marketListingImages.$inferSelect;
+export type InsertMarketListingImage = typeof marketListingImages.$inferInsert;
