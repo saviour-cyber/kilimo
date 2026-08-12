@@ -1,7 +1,7 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { startLogin } from "@/const";
 import { useFarm } from "@/contexts/FarmContext";
-import { getVisibleModules, MODULE_REGISTRY } from "@/lib/moduleRegistry";
+import { getVisibleModules, MODULE_REGISTRY, SIDEBAR_SECTION_LABELS, SIDEBAR_SECTION_ORDER } from "@/lib/moduleRegistry";
 import { getSidebarServices, getFloatingWidgets, type PlatformServiceDefinition } from "@/lib/serviceRegistry";
 import { trpc } from "@/lib/trpc";
 import { useGrantedModules } from "@/hooks/useEntitlement";
@@ -373,67 +373,36 @@ export function KilimoLayout({ children }: KilimoLayoutProps) {
       {/* 2. Middle Content (Scrollable) */}
       <ScrollArea className="flex-1 min-h-0 overflow-hidden">
         <nav className={cn("space-y-0.5 py-4", collapsed ? "px-1.5" : "px-3")}>
-          {/* Dashboard */}
-          {visibleModules.find(m => m.key === "dashboard") && (
-            <NavItem mod={visibleModules.find(m => m.key === "dashboard") as any} collapsed={collapsed} />
-          )}
+          {SIDEBAR_SECTION_ORDER.map((section) => {
+            // Modules from the registry that belong to this section
+            const sectionModules = visibleModules.filter(m => m.sidebarSection === section);
 
-          {/* Farm Operations */}
-          {!collapsed && (
-            <div className="mt-4 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
-              Farm Operations
-            </div>
-          )}
-          {visibleModules.filter(m => ["crop", "livestock", "inventory", "finance", "tasks"].includes(m.key)).map((mod) => (
-            <NavItem key={mod.key} mod={mod as any} collapsed={collapsed} />
-          ))}
+            // Platform services slotted into the intelligence section
+            const sectionServices = section === "intelligence"
+              ? platformServices
+              : [];
 
-          {/* Intelligence */}
-          {!collapsed && (
-            <div className="mt-4 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
-              Intelligence
-            </div>
-          )}
-          {platformServices.filter(s => s.key === "kili-ai").map((service) => (
-            <ServiceNavItem key={service.key} service={service} collapsed={collapsed} />
-          ))}
-          {visibleModules.filter(m => m.key === "disease").map((mod) => (
-            <NavItem key={mod.key} mod={mod as any} collapsed={collapsed} />
-          ))}
+            if (sectionModules.length === 0 && sectionServices.length === 0) return null;
 
-          {/* Commerce */}
-          {visibleModules.some(m => m.key === "marketplace") && (
-            <>
-              {!collapsed && (
-                <div className="mt-4 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
-                  Commerce
-                </div>
-              )}
-              {visibleModules.filter(m => m.key === "marketplace").map((mod) => (
-                <NavItem key={mod.key} mod={mod as any} collapsed={collapsed} />
-              ))}
-            </>
-          )}
+            const sectionLabel = SIDEBAR_SECTION_LABELS[section];
 
-          {/* Platform */}
-          {!collapsed && (
-            <div className="mt-4 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
-              Platform
-            </div>
-          )}
-          {platformServices.filter(s => ["weather", "reports", "iot"].includes(s.key)).map((service) => (
-            <ServiceNavItem key={service.key} service={service} collapsed={collapsed} />
-          ))}
-
-          {/* Administration */}
-          {!collapsed && (
-            <div className="mt-4 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
-              Administration
-            </div>
-          )}
-          {visibleModules.filter(m => m.key === "settings").map((mod) => (
-            <NavItem key={mod.key} mod={mod as any} collapsed={collapsed} />
-          ))}
+            return (
+              <div key={section}>
+                {/* Section header — omitted for "overview" and when collapsed */}
+                {!collapsed && sectionLabel && (
+                  <div className="mt-4 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
+                    {sectionLabel}
+                  </div>
+                )}
+                {sectionModules.map((mod) => (
+                  <NavItem key={mod.key} mod={mod as any} collapsed={collapsed} />
+                ))}
+                {sectionServices.map((service) => (
+                  <ServiceNavItem key={service.key} service={service} collapsed={collapsed} />
+                ))}
+              </div>
+            );
+          })}
         </nav>
       </ScrollArea>
 

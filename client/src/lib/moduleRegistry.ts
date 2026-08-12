@@ -65,6 +65,19 @@ export interface ReportDefinition {
   customComponent?: React.FC<{ data: any; filters: any; dateRange?: { from: Date; to: Date } }>;
 }
 
+// ─── Sidebar Sections ────────────────────────────────────────────────────────
+/**
+ * The sidebar section a module belongs to.
+ * The sidebar auto-groups modules by this value — no hardcoded filters needed.
+ * Adding a new module only requires setting this field in the registry.
+ */
+export type SidebarSection =
+  | "overview"        // Dashboard
+  | "farm-operations" // Crop, Livestock, Inventory, Finance, Tasks
+  | "intelligence"    // Disease detection, Kili AI (handled via serviceRegistry)
+  | "commerce"        // Marketplace
+  | "administration"; // Settings
+
 // ─── Module Definition ───────────────────────────────────────────────────────
 export interface ModuleDefinition {
   key: string;
@@ -73,6 +86,11 @@ export interface ModuleDefinition {
   basePath: string;
   color: string;
   description: string;
+  /**
+   * Which sidebar section this module belongs to.
+   * The sidebar uses this to auto-group modules — no hardcoded filter lists.
+   */
+  sidebarSection: SidebarSection;
   alwaysVisible?: boolean;
   minRole?: "viewer" | "worker" | "manager" | "owner";
   subItems?: { label: string; path: string }[];
@@ -103,6 +121,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     basePath: "/dashboard",
     color: "text-emerald-600",
     description: "Overview and KPIs",
+    sidebarSection: "overview",
     alwaysVisible: true,
   },
 
@@ -113,6 +132,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     basePath: "/crops",
     color: "text-green-600",
     description: "Crop and field management",
+    sidebarSection: "farm-operations",
     subItems: [
       { label: "Fields", path: "/crops/fields" },
       { label: "Plantings", path: "/crops/plantings" },
@@ -150,6 +170,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     basePath: "/livestock",
     color: "text-amber-600",
     description: "Animal registry and health",
+    sidebarSection: "farm-operations",
     subItems: [
       { label: "Animals", path: "/livestock/animals" },
       { label: "Breeding", path: "/livestock/breeding" },
@@ -187,6 +208,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     basePath: "/inventory",
     color: "text-blue-600",
     description: "Inputs, stock, and equipment",
+    sidebarSection: "farm-operations",
     subItems: [
       { label: "Items", path: "/inventory/items" },
       { label: "Transactions", path: "/inventory/transactions" },
@@ -223,6 +245,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     basePath: "/finance",
     color: "text-violet-600",
     description: "Income, expenses, and reports",
+    sidebarSection: "farm-operations",
     subItems: [
       { label: "Transactions", path: "/finance/transactions" },
       { label: "Budgets", path: "/finance/budgets" },
@@ -276,6 +299,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     basePath: "/tasks",
     color: "text-orange-600",
     description: "Task and reminder management",
+    sidebarSection: "farm-operations",
     alwaysVisible: true,
     quickActions: [
       {
@@ -300,6 +324,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     basePath: "/disease",
     color: "text-orange-500",
     description: "AI-powered crop and livestock disease detection",
+    sidebarSection: "intelligence",
     subItems: [
       { label: "New Scan",     path: "/disease/scan" },
       { label: "Scan History", path: "/disease/history" },
@@ -327,6 +352,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     basePath: "/marketplace",
     color: "text-teal-600",
     description: "Buy and sell farm produce and inputs",
+    sidebarSection: "commerce",
     minRole: "worker",
     subItems: [
       { label: "Browse",       path: "/marketplace/browse" },
@@ -351,9 +377,30 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     basePath: "/settings",
     color: "text-slate-600",
     description: "Farm and user settings",
+    sidebarSection: "administration",
     alwaysVisible: true,
     minRole: "manager",
   },
+];
+
+// ─── Sidebar Section Helpers ──────────────────────────────────────────────────
+
+/** Human-readable label for each sidebar section */
+export const SIDEBAR_SECTION_LABELS: Record<SidebarSection, string> = {
+  "overview":        "",              // Dashboard has no group header
+  "farm-operations": "Farm Operations",
+  "intelligence":    "Intelligence",
+  "commerce":        "Commerce",
+  "administration":  "Administration",
+};
+
+/** Ordered list of sections as they appear in the sidebar */
+export const SIDEBAR_SECTION_ORDER: SidebarSection[] = [
+  "overview",
+  "farm-operations",
+  "intelligence",
+  "commerce",
+  "administration",
 ];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
