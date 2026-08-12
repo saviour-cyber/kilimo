@@ -43,7 +43,7 @@ export default function VerifyEmail() {
           <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center">
             <Sprout className="w-6 h-6 text-white" />
           </div>
-          <span className="font-bold text-2xl text-foreground tracking-tight">KilimoHub</span>
+          <span className="font-bold text-2xl text-foreground tracking-tight">SproutX</span>
         </div>
 
         <Card className="shadow-lg border-slate-200">

@@ -10,7 +10,7 @@ async function grantAdminSub() {
   });
 
   try {
-    const email = "admin@kilimohub.com";
+    const email = "admin@sproutxhub.com";
     
     // 1. Get user id
     const [users] = await conn.query("SELECT id FROM users WHERE email = ?", [email]) as any;

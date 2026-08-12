@@ -271,7 +271,7 @@ class SDKServer {
     }
 
     try {
-      const JWT_SECRET = new TextEncoder().encode(process.env.SESSION_SECRET || "kilimo-hub-secret-key-development");
+      const JWT_SECRET = new TextEncoder().encode(process.env.SESSION_SECRET || "sproutx-hub-secret-key-development");
       const { payload } = await jwtVerify(sessionToken, JWT_SECRET, { algorithms: ["HS256"] });
       
       const userId = payload.userId as number;

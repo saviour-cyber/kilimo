@@ -7,7 +7,7 @@ import mysql from 'mysql2/promise';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-const LOCAL_URL = 'mysql://root:eldavis45@localhost:3306/kilimohub';
+const LOCAL_URL = 'mysql://root:eldavis45@localhost:3306/sproutxhub';
 const CLOUD_URL = process.env.DATABASE_URL!;
 
 async function run() {

@@ -52,11 +52,11 @@ invoicesRouter.get("/:paymentId/download", async (req, res) => {
     doc
       .fontSize(20)
       .font("Helvetica-Bold")
-      .text("KILIMOHUB", { align: "right" })
+      .text("SPROUTXHUB", { align: "right" })
       .fontSize(10)
       .font("Helvetica")
       .text("123 Farming Avenue, Nairobi, Kenya", { align: "right" })
-      .text("contact@kilimohub.com", { align: "right" })
+      .text("contact@sproutxhub.com", { align: "right" })
       .moveDown(2);
 
     // Invoice Info
@@ -124,7 +124,7 @@ invoicesRouter.get("/:paymentId/download", async (req, res) => {
       .fontSize(10)
       .font("Helvetica-Oblique")
       .fillColor("gray")
-      .text("Thank you for choosing KilimoHub!", { align: "center" });
+      .text("Thank you for choosing SproutX!", { align: "center" });
 
     doc.end();
 

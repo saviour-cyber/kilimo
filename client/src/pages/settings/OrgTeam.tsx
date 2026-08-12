@@ -205,7 +205,7 @@ export default function OrgTeam() {
               <UserPlus className="w-5 h-5" /> Invite Team Member
             </DialogTitle>
             <DialogDescription>
-              The user must already have a KilimoHub account. Enter their registered email address.
+              The user must already have a SproutX account. Enter their registered email address.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">

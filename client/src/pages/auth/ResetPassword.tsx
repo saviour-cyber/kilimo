@@ -74,9 +74,9 @@ export default function ResetPassword() {
 
         {/* Brand Header */}
         <div className="flex items-center gap-2.5">
-          <img src="/logo.png" alt="KilimoHub" className="w-9 h-9 rounded-xl object-contain" />
+          <img src="/logo.png" alt="SproutX" className="w-9 h-9 rounded-xl object-contain" />
           <span className="text-[20px] font-bold text-slate-800 tracking-tight">
-            Kilimo<span className="text-[#10B981]">Hub</span>
+            SproutX<span className="text-[#10B981]">Hub</span>
           </span>
         </div>
 
@@ -198,7 +198,7 @@ export default function ResetPassword() {
 
         {/* Footer */}
         <p className="text-[12px] text-slate-400 font-medium">
-          © {currentYear} KilimoHub.
+          © {currentYear} SproutX.
         </p>
       </div>
     </div>

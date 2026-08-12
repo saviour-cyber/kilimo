@@ -10,7 +10,7 @@ function makeCtx(overrides?: Partial<AuthenticatedUser>): { ctx: TrpcContext; cl
   const user: AuthenticatedUser = {
     id: 1,
     openId: "test-user-1",
-    email: "test@kilimohub.com",
+    email: "test@sproutxhub.com",
     name: "Test Farmer",
     loginMethod: "test",
     role: "user",
@@ -35,7 +35,7 @@ describe("auth", () => {
     const caller = appRouter.createCaller(ctx);
     const result = await caller.auth.me();
     expect(result).toBeDefined();
-    expect(result?.email).toBe("test@kilimohub.com");
+    expect(result?.email).toBe("test@sproutxhub.com");
   });
 
   it("me returns null when unauthenticated", async () => {

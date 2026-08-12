@@ -32,7 +32,7 @@ export default function AdminMarketplace() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Marketplace Moderation</h1>
           <p className="text-muted-foreground mt-1">
-            Monitor and moderate all listings across the KilimoHub platform.
+            Monitor and moderate all listings across the SproutX platform.
           </p>
         </div>
       </div>

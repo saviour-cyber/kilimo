@@ -87,7 +87,7 @@ export default function AcceptInvite() {
 
           <div className="text-center space-y-2">
             <h1 className="text-2xl font-bold text-foreground">Join Farm</h1>
-            <p className="text-sm text-muted-foreground">You've been invited to join a farm on KilimoHub</p>
+            <p className="text-sm text-muted-foreground">You've been invited to join a farm on SproutX</p>
           </div>
 
           <div className="bg-slate-50 rounded-lg p-4 space-y-3">

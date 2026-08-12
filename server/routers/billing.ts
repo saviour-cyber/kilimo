@@ -39,7 +39,7 @@ export const billingRouter = router({
       // Create checkout session using selected provider
       const gateway = getPaymentGateway(input.provider);
       
-      const appBaseUrl = process.env.APP_BASE_URL || "https://kilimohub.onrender.com";
+      const appBaseUrl = process.env.APP_BASE_URL || "https://sproutxhub.onrender.com";
 
       const session = await gateway.createCheckoutSession({
         organizationId: input.organizationId,

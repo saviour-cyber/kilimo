@@ -2,7 +2,7 @@
  * Seed default subscription plans.
  * Run with: npx tsx scripts/seed-plans.ts
  *
- * This creates the three core KilimoHub plans:
+ * This creates the three core SproutX plans:
  *  - Starter (free / trial only)
  *  - Professional
  *  - Enterprise

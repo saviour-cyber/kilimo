@@ -112,7 +112,7 @@ export function InstallCard() {
         </div>
         <h3 className="text-lg font-medium text-emerald-900 mb-1">App is Installed</h3>
         <p className="text-sm text-emerald-700/80 max-w-sm">
-          You are currently using the installed version of KilimoHub.
+          You are currently using the installed version of SproutX.
         </p>
       </div>
     );
@@ -121,10 +121,10 @@ export function InstallCard() {
   if (hasNativePrompt) {
     return (
       <div className="bg-white border border-slate-200 rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-6">
-        <img src="/icon-192.png" alt="KilimoHub Logo" className="w-16 h-16 rounded-2xl shadow-sm border border-slate-100" />
+        <img src="/icon-192.png" alt="SproutX Logo" className="w-16 h-16 rounded-2xl shadow-sm border border-slate-100" />
         <div className="flex-1 text-center sm:text-left">
-          <h3 className="text-lg font-medium text-slate-900">Install KilimoHub</h3>
-          <p className="text-sm text-slate-500 mt-1">Add KilimoHub to your home screen for a faster, full-screen experience and offline capabilities.</p>
+          <h3 className="text-lg font-medium text-slate-900">Install SproutX</h3>
+          <p className="text-sm text-slate-500 mt-1">Add SproutX to your home screen for a faster, full-screen experience and offline capabilities.</p>
         </div>
         <button 
           onClick={triggerPrompt}
@@ -141,10 +141,10 @@ export function InstallCard() {
     return (
       <div className="bg-white border border-slate-200 rounded-2xl p-6">
         <div className="flex items-center gap-4 mb-6">
-          <img src="/icon-192.png" alt="KilimoHub Logo" className="w-12 h-12 rounded-xl shadow-sm border border-slate-100" />
+          <img src="/icon-192.png" alt="SproutX Logo" className="w-12 h-12 rounded-xl shadow-sm border border-slate-100" />
           <div>
             <h3 className="text-lg font-medium text-slate-900">Add to Home Screen</h3>
-            <p className="text-sm text-slate-500">Install KilimoHub on your iOS device</p>
+            <p className="text-sm text-slate-500">Install SproutX on your iOS device</p>
           </div>
         </div>
         
@@ -177,7 +177,7 @@ export function InstallCard() {
           <h3 className="text-base font-medium text-slate-900">Browser Installation</h3>
           <p className="text-sm text-slate-600 mt-1.5 leading-relaxed">
             Your current browser or device does not support automatic installation prompts. 
-            However, you can usually install the app manually by opening your browser's menu (often represented by 3 dots) and selecting <strong>"Install KilimoHub"</strong> or <strong>"Add to Home Screen"</strong>.
+            However, you can usually install the app manually by opening your browser's menu (often represented by 3 dots) and selecting <strong>"Install SproutX"</strong> or <strong>"Add to Home Screen"</strong>.
           </p>
         </div>
       </div>

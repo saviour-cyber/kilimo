@@ -40,7 +40,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     title: "Platform",
     items: [
-      { label: "About KilimoHub", href: "/settings/platform/about", icon: FileText },
+      { label: "About SproutX", href: "/settings/platform/about", icon: FileText },
     ]
   }
 ];

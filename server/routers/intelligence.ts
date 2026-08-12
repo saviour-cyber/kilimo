@@ -70,7 +70,7 @@ export const intelligenceRouter = router({
         ? `Active Marketplace Listings: ${activeListings.map(l => `${l.title} (${l.price} ${l.currency})`).join(", ")}`
         : "No active marketplace listings.";
 
-      const contextPrompt = `You are Kili AI, an expert agricultural assistant integrated into KilimoHub Next.
+      const contextPrompt = `You are Kili AI, an expert agricultural assistant integrated into SproutX Next.
 Current Context:
 - Farm Name: ${farm?.name || "Unknown"}
 - Farm Type: ${farm?.farmType || "Unknown"}

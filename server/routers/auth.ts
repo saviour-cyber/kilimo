@@ -11,7 +11,7 @@ import { createHash, randomBytes } from "crypto";
 import { emailService } from "../services/email";
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "kilimo-hub-secret-key-development",
+  process.env.JWT_SECRET || "sproutx-hub-secret-key-development",
 );
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

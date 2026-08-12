@@ -12,7 +12,7 @@ async function seedAdmin() {
   });
 
   try {
-    const email = "admin@kilimohub.com";
+    const email = "admin@sproutxhub.com";
     const rawPassword = "admin@123456";
 
     // Hash the password with bcrypt (10 rounds)

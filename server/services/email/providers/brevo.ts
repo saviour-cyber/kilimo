@@ -16,8 +16,8 @@ export class BrevoProvider implements IEmailProvider {
 
   async send(options: SendEmailOptions): Promise<SendEmailResult> {
     try {
-      const fromAddress = options.from?.email ?? (process.env.EMAIL_FROM_ADDRESS ?? "noreply@kilimohub.co.ke");
-      const fromName    = options.from?.name   ?? "KilimoHub";
+      const fromAddress = options.from?.email ?? (process.env.EMAIL_FROM_ADDRESS ?? "noreply@sproutxhub.co.ke");
+      const fromName    = options.from?.name   ?? "SproutX";
 
       const toList = Array.isArray(options.to) ? options.to : [options.to];
 

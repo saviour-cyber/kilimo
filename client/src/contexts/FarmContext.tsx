@@ -40,7 +40,7 @@ const FarmContext = createContext<FarmContextValue>({
   refetchFarms: () => {},
 });
 
-const STORAGE_KEY = "kilimohub_current_farm_id";
+const STORAGE_KEY = "sproutxhub_current_farm_id";
 
 const ROLE_PERMISSIONS: Record<FarmRole, ("read" | "write" | "manage" | "admin")[]> = {
   viewer: ["read"],

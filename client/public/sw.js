@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kilimo-hub-v3';
+const CACHE_NAME = 'sproutx-hub-v3';
 
 // All critical app-shell assets to precache on install
 const PRECACHE_URLS = [

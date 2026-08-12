@@ -40,8 +40,8 @@ export async function enforceSubscriptionsHandler(req: Request, res: Response) {
           try {
             await emailService.send({
               to: { email: org.email, name: org.name || undefined },
-              subject: "KilimoHub Subscription Past Due",
-              html: `<p>Hi ${org.name || 'there'},</p><p>Your KilimoHub subscription is past due. Please update your payment method to avoid suspension in 7 days.</p>`,
+              subject: "SproutX Subscription Past Due",
+              html: `<p>Hi ${org.name || 'there'},</p><p>Your SproutX subscription is past due. Please update your payment method to avoid suspension in 7 days.</p>`,
             });
             console.log(`[Subscription Enforcer] Sent past_due email to ${org.email}`);
           } catch (e) {
@@ -78,8 +78,8 @@ export async function enforceSubscriptionsHandler(req: Request, res: Response) {
           try {
             await emailService.send({
               to: { email: org.email, name: org.name || undefined },
-              subject: "KilimoHub Subscription Suspended",
-              html: `<p>Hi ${org.name || 'there'},</p><p>Your KilimoHub subscription has been suspended due to non-payment. Please log in and update your payment method to restore access.</p>`,
+              subject: "SproutX Subscription Suspended",
+              html: `<p>Hi ${org.name || 'there'},</p><p>Your SproutX subscription has been suspended due to non-payment. Please log in and update your payment method to restore access.</p>`,
             });
             console.log(`[Subscription Enforcer] Sent suspended email to ${org.email}`);
           } catch (e) {

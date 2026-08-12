@@ -78,7 +78,7 @@ export const reportsRouter = router({
           // In a real app, upload result.buffer to S3/GCS here.
           // For local dev, we mock a URL.
           const fileName = `${input.name.replace(/\s+/g, '_')}_${Date.now()}.${result.ext}`;
-          fileUrl = `https://kilimohub-mock.storage/exports/${fileName}`;
+          fileUrl = `https://sproutxhub-mock.storage/exports/${fileName}`;
         }
       }
 

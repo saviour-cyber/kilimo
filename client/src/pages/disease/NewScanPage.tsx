@@ -93,7 +93,7 @@ export default function NewScanPage() {
     try {
       // In production, upload image to storage and get a real URL.
       // For Phase 1, we pass a deterministic mock URL derived from the filename.
-      const mockImageUrl = `https://kilimohub-mock.storage/uploads/${Date.now()}-${fileName ?? "scan.jpg"}`;
+      const mockImageUrl = `https://sproutxhub-mock.storage/uploads/${Date.now()}-${fileName ?? "scan.jpg"}`;
 
       const res = await submitScan.mutateAsync({
         farmId: currentFarm.farm.id,

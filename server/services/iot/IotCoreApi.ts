@@ -9,7 +9,7 @@
  * AlertEngine, providers, or any other internal service directly.
  *
  * This creates a stable contract between the IoT Engine and the rest of
- * KilimoHub, allowing the underlying implementation to evolve without
+ * SproutX, allowing the underlying implementation to evolve without
  * breaking any dependent modules.
  */
 

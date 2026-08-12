@@ -61,16 +61,16 @@ export default function Login() {
 
         {/* Brand Header */}
         <div className="flex items-center gap-2.5">
-          <img src="/logo.png" alt="KilimoHub" className="w-9 h-9 rounded-xl object-contain" />
+          <img src="/logo.png" alt="SproutX" className="w-9 h-9 rounded-xl object-contain" />
           <span className="text-[20px] font-bold text-slate-800 tracking-tight">
-            Kilimo<span className="text-[#10B981]">Hub</span>
+            SproutX<span className="text-[#10B981]">Hub</span>
           </span>
         </div>
 
         {/* Welcome heading */}
         <div className="space-y-1">
           <h1 className="text-[26px] font-bold text-slate-900 tracking-tight">Welcome back</h1>
-          <p className="text-[14px] text-slate-500">Sign in to continue to KilimoHub.</p>
+          <p className="text-[14px] text-slate-500">Sign in to continue to SproutX.</p>
         </div>
 
         {/* Login Card */}
@@ -210,7 +210,7 @@ export default function Login() {
 
         {/* Footer */}
         <p className="text-[12px] text-slate-400 font-medium">
-          © {currentYear} KilimoHub.
+          © {currentYear} SproutX.
         </p>
 
       </div>
