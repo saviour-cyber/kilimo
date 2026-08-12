@@ -50,11 +50,8 @@ export default function ForgotPassword() {
       <div className="relative z-10 w-full max-w-[390px] flex flex-col items-center space-y-5 text-center">
 
         {/* Brand Header */}
-        <div className="flex items-center gap-2.5">
-          <img src="/logo.png" alt="SproutX" className="w-9 h-9 rounded-xl object-contain" />
-          <span className="text-[20px] font-bold text-slate-800 tracking-tight">
-            SproutX<span className="text-[#10B981]">Hub</span>
-          </span>
+        <div className="flex flex-col items-center gap-4 mb-4">
+          <img src="/logo.png" alt="SproutX" className="w-24 h-24 object-contain" />
         </div>
 
         {/* Welcome heading */}

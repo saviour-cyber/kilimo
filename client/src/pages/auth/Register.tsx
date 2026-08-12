@@ -60,11 +60,8 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-xl">
-        <div className="flex items-center justify-center gap-2 mb-8">
-          <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center">
-            <Sprout className="w-6 h-6 text-white" />
-          </div>
-          <span className="font-bold text-2xl text-foreground tracking-tight">SproutX</span>
+        <div className="flex flex-col items-center gap-4 mb-4">
+          <img src="/logo.png" alt="SproutX" className="w-24 h-24 object-contain" />
         </div>
 
         <Card className="shadow-lg border-slate-200">
