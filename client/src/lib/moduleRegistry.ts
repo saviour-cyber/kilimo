@@ -368,8 +368,13 @@ export function getVisibleModules(
   const roleHierarchy: Record<string, number> = {
     viewer: 1,
     worker: 2,
+    crop_officer: 2,
+    veterinary_officer: 2,
+    farm_manager: 3,
+    administrator: 4,
+    owner: 5,
+    // legacy aliases
     manager: 3,
-    owner: 4,
   };
   const userLevel = roleHierarchy[role ?? ""] ?? 0;
 

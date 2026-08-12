@@ -401,6 +401,20 @@ export function KilimoLayout({ children }: KilimoLayoutProps) {
             <NavItem key={mod.key} mod={mod as any} collapsed={collapsed} />
           ))}
 
+          {/* Commerce */}
+          {visibleModules.some(m => m.key === "marketplace") && (
+            <>
+              {!collapsed && (
+                <div className="mt-4 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
+                  Commerce
+                </div>
+              )}
+              {visibleModules.filter(m => m.key === "marketplace").map((mod) => (
+                <NavItem key={mod.key} mod={mod as any} collapsed={collapsed} />
+              ))}
+            </>
+          )}
+
           {/* Platform */}
           {!collapsed && (
             <div className="mt-4 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
