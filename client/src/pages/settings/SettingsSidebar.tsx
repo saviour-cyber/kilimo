@@ -37,12 +37,6 @@ const NAV_GROUPS: NavGroup[] = [
       { label: "Subscription & Billing", href: "/settings/organization/billing", icon: CreditCard },
     ]
   },
-  {
-    title: "Farm Settings",
-    items: [
-      { label: "Farm Profile", href: "/settings/farm/profile", icon: MapPin },
-      { label: "Modules", href: "/settings/farm/modules", icon: Layers },
-      { label: "IoT Configuration", href: "/settings/farm/iot", icon: Cpu },
     ]
   },
   {
