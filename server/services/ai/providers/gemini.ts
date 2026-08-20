@@ -12,7 +12,7 @@ export class GeminiProvider implements AIProvider {
   }
 
   private async callGemini(contents: any[], requireJson: boolean = false): Promise<string> {
-    const model = "gemini-2.5-flash";
+    const model = "gemini-3.6-flash";
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
     
     const body: any = {
