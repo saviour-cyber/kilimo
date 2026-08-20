@@ -66,9 +66,9 @@ export class GeminiProvider implements AIProvider {
 
       const text = await this.callGemini(geminiContents, false);
       return { message: text };
-    } catch (error) {
+    } catch (error: any) {
       console.error("Gemini chat error:", error);
-      return this.mockChat(messages);
+      throw new Error(`AI Service Error: ${error.message}`);
     }
   }
 
@@ -90,9 +90,9 @@ export class GeminiProvider implements AIProvider {
         { role: "user", parts: [{ text: `${systemPrompt}\n\nSymptoms: ${symptoms}` }] }
       ], true);
       return JSON.parse(text) as DiseaseDiagnosis;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Gemini analyzeDisease error:", error);
-      return this.mockAnalyzeDisease(symptoms, type);
+      throw new Error(`AI Service Error: ${error.message}`);
     }
   }
 
@@ -127,9 +127,9 @@ export class GeminiProvider implements AIProvider {
       ], true);
 
       return JSON.parse(text) as DiseaseDiagnosis;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Gemini analyzeDiseaseImage error:", error);
-      return this.mockAnalyzeDiseaseImage(imageUrl, type);
+      throw new Error(`AI Service Error: ${error.message}`);
     }
   }
 
@@ -155,23 +155,23 @@ Ensure the actions point to relevant SproutX paths (e.g. /crops/incidents, /live
         { role: "user", parts: [{ text: `${systemPrompt}\n\nContext:\n${context}` }] }
       ], true);
       return JSON.parse(text) as DashboardRecommendations;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Gemini getDashboardRecommendations error:", error);
-      return this.mockDashboard();
+      throw new Error(`AI Service Error: ${error.message}`);
     }
   }
 
   // --- Mock Methods ---
   private mockChat(messages: Message[]): ChatResponse {
-    return { message: "Mock Gemini Chat Response. Set GEMINI_API_KEY to use real AI." };
+    return { message: "I am currently running in offline mode. Please configure the AI API keys to enable live responses." };
   }
   private mockAnalyzeDisease(symptoms: string, type: string): DiseaseDiagnosis {
-    return { likelyDisease: "Mock Disease", confidence: "low", recommendations: ["Add GEMINI_API_KEY"], isolationRequired: false };
+    return { likelyDisease: "System Offline", confidence: "low", recommendations: ["Please check your API key configuration."], isolationRequired: false };
   }
   private mockAnalyzeDiseaseImage(imageUrl: string, type: string): DiseaseDiagnosis {
-    return { likelyDisease: "Mock Image Disease", confidence: "low", recommendations: ["Add GEMINI_API_KEY"], isolationRequired: false };
+    return { likelyDisease: "System Offline", confidence: "low", recommendations: ["Please check your API key configuration."], isolationRequired: false };
   }
   private mockDashboard(): DashboardRecommendations {
-    return { summary: "Mock summary", priority: "low", recommendations: ["Add GEMINI_API_KEY"], suggestedActions: [], relatedModules: [], confidence: 0, generatedAt: new Date().toISOString() };
+    return { summary: "Live insights unavailable.", priority: "low", recommendations: ["Please check your API key configuration."], suggestedActions: [], relatedModules: [], confidence: 0, generatedAt: new Date().toISOString() };
   }
 }
