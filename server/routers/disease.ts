@@ -81,7 +81,8 @@ export const diseaseRouter = router({
       z.object({
         farmId: z.number(),
         scanType: z.enum(["crop", "livestock", "other"]),
-        imageUrl: z.string().url({ message: "Must be a valid image URL" }),
+        imageBase64: z.string(),
+        imageContentType: z.string().default("image/jpeg"),
         relatedEntityId: z.number().optional(),
         notes: z.string().optional(),
       })
@@ -90,10 +91,20 @@ export const diseaseRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
 
+      // ── 0. Save image to local storage ──────────────────────────────────────
+      const { storagePut } = await import("../storage");
+      const ext = input.imageContentType === "image/png" ? "png" : input.imageContentType === "image/webp" ? "webp" : "jpg";
+      const key = `disease-scans/farm_${input.farmId}/scan.${ext}`;
+      const buffer = Buffer.from(input.imageBase64, "base64");
+      const { url: savedImageUrl } = await storagePut(key, buffer, input.imageContentType);
+
       // ── 1. Delegate to Kili AI Provider (never hardcode AI logic here) ──────
       const aiProvider = getAIProvider();
       const aiScanType = input.scanType === "other" ? "crop" : input.scanType;
-      const diagnosis = await aiProvider.analyzeDiseaseImage(input.imageUrl, aiScanType);
+      
+      // Pass a data URI to the AI Provider so it doesn't try to fetch a local URL over the network
+      const dataUri = `data:${input.imageContentType};base64,${input.imageBase64}`;
+      const diagnosis = await aiProvider.analyzeDiseaseImage(dataUri, aiScanType);
 
       const confidenceScore = confidenceToScore(diagnosis.confidence);
       const severity = confidenceToSeverity(diagnosis.confidence, diagnosis.isolationRequired);
@@ -103,7 +114,7 @@ export const diseaseRouter = router({
       await db.insert(diseaseScans).values({
         farmId: input.farmId,
         scanType: input.scanType,
-        imageUrl: input.imageUrl,
+        imageUrl: savedImageUrl, // Save the storage URL for the frontend to display
         detectedDisease: diagnosis.likelyDisease,
         confidenceScore,
         severity,

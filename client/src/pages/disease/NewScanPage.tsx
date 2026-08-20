@@ -42,6 +42,7 @@ export default function NewScanPage() {
   const [notes, setNotes] = useState("");
   const [preview, setPreview] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [state, setState] = useState<ScanState>("idle");
   const [result, setResult] = useState<ScanResult | null>(null);
   const [dragOver, setDragOver] = useState(false);
@@ -71,6 +72,7 @@ export default function NewScanPage() {
     const url = URL.createObjectURL(file);
     setPreview(url);
     setFileName(file.name);
+    setSelectedFile(file);
     setResult(null);
     setState("idle");
   }, []);
@@ -91,16 +93,32 @@ export default function NewScanPage() {
     if (!currentFarm || !preview) return;
     setState("scanning");
     try {
-      // In production, upload image to storage and get a real URL.
-      // For Phase 1, we pass a deterministic mock URL derived from the filename.
-      const mockImageUrl = `https://sproutxhub-mock.storage/uploads/${Date.now()}-${fileName ?? "scan.jpg"}`;
+      // 1. Get the actual file from the input or drop
+      const file = selectedFile;
+      if (!file) throw new Error("No file selected");
 
+      // 2. Convert to Base64
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          // Result is "data:image/jpeg;base64,....."
+          const b64 = result.split(",")[1];
+          resolve(b64);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+
+      // 3. Submit scan with real base64 data
       const res = await submitScan.mutateAsync({
         farmId: currentFarm.farm.id,
         scanType: effectiveScanType,
-        imageUrl: mockImageUrl,
+        imageBase64: base64,
+        imageContentType: file.type,
         notes: notes.trim() || undefined,
       });
+      
       setResult(res as ScanResult);
       setState("done");
       utils.disease.getSummary.invalidate({ farmId: currentFarm.farm.id });
@@ -115,6 +133,7 @@ export default function NewScanPage() {
   const reset = () => {
     setPreview(null);
     setFileName(null);
+    setSelectedFile(null);
     setResult(null);
     setNotes("");
     setState("idle");
