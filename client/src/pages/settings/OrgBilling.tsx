@@ -176,53 +176,57 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
         <Button>Upgrade Plan</Button>
       </DialogTrigger>
 
-      {/* Wide modal — centred, never full-screen, capped at 90 vh */}
-      <DialogContent className="w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col p-0">
+      {/* Force a wide modal. Use sm:max-w-[1100px] to override the default sm:max-w-lg from dialog.tsx! */}
+      <DialogContent className="w-[calc(100vw-32px)] sm:max-w-[1100px] max-w-[1100px] max-h-[90vh] overflow-hidden flex flex-col p-0">
 
         {/* ── Sticky header ── */}
         <div className="px-6 pt-6 pb-4 border-b border-slate-100 shrink-0">
-          <DialogTitle className="text-xl font-semibold text-slate-900">
-            Upgrade Your Plan
-          </DialogTitle>
-          <DialogDescription className="mt-1 text-sm text-slate-500">
-            Choose the plan that fits your operation.
-          </DialogDescription>
-
-          {/* Billing interval toggle */}
-          <div className="flex items-center gap-3 mt-4">
-            <div className="bg-slate-100 p-1 rounded-lg inline-flex">
-              <button
-                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${billingInterval === "monthly" ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-700"}`}
-                onClick={() => setBillingInterval("monthly")}
-              >
-                Monthly
-              </button>
-              <button
-                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${billingInterval === "yearly" ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-700"}`}
-                onClick={() => setBillingInterval("yearly")}
-              >
-                Yearly
-                <span className="ml-1.5 text-[11px] font-semibold text-green-600 bg-green-50 px-1.5 py-0.5 rounded-full">
-                  −20%
-                </span>
-              </button>
+          <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+            <div>
+              <DialogTitle className="text-xl font-semibold text-slate-900">
+                Upgrade Your Plan
+              </DialogTitle>
+              <DialogDescription className="mt-1 text-sm text-slate-500">
+                Choose the plan that fits your operation.
+              </DialogDescription>
             </div>
+          
+            <div className="flex flex-wrap items-center gap-4">
+              {/* Billing interval toggle */}
+              <div className="bg-slate-100 p-1 rounded-lg inline-flex">
+                <button
+                  className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${billingInterval === "monthly" ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-700"}`}
+                  onClick={() => setBillingInterval("monthly")}
+                >
+                  Monthly
+                </button>
+                <button
+                  className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${billingInterval === "yearly" ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-700"}`}
+                  onClick={() => setBillingInterval("yearly")}
+                >
+                  Yearly
+                  <span className="ml-1.5 text-[11px] font-semibold text-green-600 bg-green-50 px-1.5 py-0.5 rounded-full">
+                    −20%
+                  </span>
+                </button>
+              </div>
 
-            {/* Payment method switcher — inline on desktop */}
-            <div className="ml-auto flex items-center gap-2">
-              <span className="text-xs text-slate-500 font-medium">Pay via:</span>
-              <button
-                className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${paymentProvider === "stripe" ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"}`}
-                onClick={() => setPaymentProvider("stripe")}
-              >
-                Credit Card
-              </button>
-              <button
-                className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${paymentProvider === "mpesa" ? "bg-green-700 text-white border-green-700" : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"}`}
-                onClick={() => setPaymentProvider("mpesa")}
-              >
-                M-PESA
-              </button>
+              {/* Payment method switcher */}
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-500 font-medium hidden sm:inline-block">Pay via:</span>
+                <button
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${paymentProvider === "stripe" ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"}`}
+                  onClick={() => setPaymentProvider("stripe")}
+                >
+                  Credit Card
+                </button>
+                <button
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${paymentProvider === "mpesa" ? "bg-green-700 text-white border-green-700" : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"}`}
+                  onClick={() => setPaymentProvider("mpesa")}
+                >
+                  M-PESA
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -234,22 +238,22 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
               <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {plans?.map((p) => {
                 const isCurrent = p.id === currentPlanId;
                 const isEnt = isEnterprise(p);
                 const price = billingInterval === "yearly" ? p.yearlyPrice : p.monthlyPrice;
                 const isExpanded = expandedPlan === p.id;
 
-                // Key features to show collapsed (first 4)
-                const visibleFeatures = p.features.slice(0, 4);
-                const hiddenFeatures = p.features.slice(4);
+                // Key features to show collapsed (first 6)
+                const visibleFeatures = p.features.slice(0, 6);
+                const hiddenFeatures = p.features.slice(6);
 
                 return (
                   <div
                     key={p.id}
                     className={`
-                      relative flex flex-col rounded-2xl border p-5 transition-shadow
+                      relative flex flex-col rounded-2xl border p-5 transition-shadow min-w-0 h-full
                       ${isCurrent
                         ? "border-primary ring-2 ring-primary/20 bg-primary/5"
                         : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm"
@@ -258,14 +262,14 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
                   >
                     {/* Current plan badge */}
                     {isCurrent && (
-                      <span className="absolute -top-2.5 left-4 bg-primary text-primary-foreground text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
+                      <span className="absolute -top-3 left-4 bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-full shadow-sm uppercase tracking-wider">
                         Current Plan
                       </span>
                     )}
 
                     {/* Plan name + description */}
-                    <div className="mb-3">
-                      <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">
+                    <div className="mb-4 mt-2">
+                      <h3 className="text-base font-semibold text-slate-900 uppercase tracking-wide break-words">
                         {p.name}
                       </h3>
                       <p className="text-xs text-slate-500 mt-1 leading-relaxed line-clamp-2">
@@ -277,39 +281,47 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
                     <div className="mb-4">
                       {isEnt && Number(price) === 0 ? (
                         <>
-                          <span className="text-2xl font-bold text-slate-900">Custom</span>
-                          <p className="text-xs text-slate-500 mt-0.5">Contact us for pricing</p>
+                          <div className="text-sm font-medium text-slate-500 uppercase tracking-wider opacity-0">Custom</div>
+                          <div className="text-3xl font-bold text-slate-900 mt-1">Custom</div>
+                          <p className="text-xs text-slate-500 mt-1">pricing</p>
                         </>
                       ) : (
                         <>
-                          <span className="text-2xl font-bold text-slate-900">
-                            {p.currency} {Number(price).toLocaleString()}
-                          </span>
-                          <span className="text-xs text-slate-500 ml-1">
-                            /{billingInterval === "yearly" ? "yr" : "mo"}
-                          </span>
+                          <div className="text-sm font-medium text-slate-500 uppercase tracking-wider">{p.currency}</div>
+                          <div className="flex items-baseline gap-1 mt-1">
+                            <span className="text-3xl font-bold text-slate-900">
+                              {Number(price).toLocaleString()}
+                            </span>
+                            <span className="text-xs text-slate-500 font-medium">
+                              /{billingInterval === "yearly" ? "yr" : "mo"}
+                            </span>
+                          </div>
                         </>
                       )}
                     </div>
 
-                    {/* Usage limits */}
-                    <div className="flex gap-3 text-xs text-slate-600 mb-3">
-                      <span className="flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3 text-green-500 shrink-0" />
-                        {p.maxFarms ? `${p.maxFarms} farms` : "Unlimited farms"}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3 text-green-500 shrink-0" />
-                        {p.maxUsers ? `${p.maxUsers} users` : "Unlimited users"}
-                      </span>
+                    <div className="w-full h-px bg-slate-100 my-4"></div>
+
+                    {/* Usage limits - strictly vertical */}
+                    <div className="flex flex-col gap-2.5 text-xs text-slate-700 font-medium mb-4">
+                      <div className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                        <span>{p.maxFarms ? `${p.maxFarms} farms` : "Unlimited farms"}</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                        <span>{p.maxUsers ? `${p.maxUsers} users` : "Unlimited users"}</span>
+                      </div>
                     </div>
 
+                    <div className="text-xs font-semibold text-slate-900 mb-2 uppercase tracking-wide">Features</div>
+
                     {/* Key features — always visible */}
-                    <div className="space-y-1.5 mb-2 flex-1">
+                    <div className="space-y-2 mb-4 flex-1">
                       {visibleFeatures.map((f) => (
-                        <div key={f.featureKey} className="flex items-start gap-1.5 text-xs text-slate-700">
-                          <CheckCircle2 className="w-3 h-3 text-green-500 mt-0.5 shrink-0" />
-                          <span className="capitalize">{f.featureKey.replace(/_/g, " ")}</span>
+                        <div key={f.featureKey} className="flex items-start gap-2 text-xs text-slate-600">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-green-500 mt-0.5 shrink-0" />
+                          <span className="capitalize leading-tight">{f.featureKey.replace(/_/g, " ")}</span>
                         </div>
                       ))}
 
@@ -317,13 +329,13 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
                       {hiddenFeatures.length > 0 && (
                         <>
                           {isExpanded && hiddenFeatures.map((f) => (
-                            <div key={f.featureKey} className="flex items-start gap-1.5 text-xs text-slate-700">
-                              <CheckCircle2 className="w-3 h-3 text-green-500 mt-0.5 shrink-0" />
-                              <span className="capitalize">{f.featureKey.replace(/_/g, " ")}</span>
+                            <div key={f.featureKey} className="flex items-start gap-2 text-xs text-slate-600">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-green-500 mt-0.5 shrink-0" />
+                              <span className="capitalize leading-tight">{f.featureKey.replace(/_/g, " ")}</span>
                             </div>
                           ))}
                           <button
-                            className="text-xs text-primary font-medium hover:underline mt-1"
+                            className="text-xs text-primary font-medium hover:underline mt-2 flex items-center"
                             onClick={() => setExpandedPlan(isExpanded ? null : p.id)}
                           >
                             {isExpanded ? "− Show less" : `+ ${hiddenFeatures.length} more features`}
@@ -333,11 +345,11 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
                     </div>
 
                     {/* Action button — always at bottom */}
-                    <div className="mt-auto pt-4">
+                    <div className="mt-auto pt-5">
                       {isEnt ? (
                         <Button
                           variant="outline"
-                          className="w-full border-slate-300 text-slate-700 hover:bg-slate-50"
+                          className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 h-10"
                           onClick={() => window.open("mailto:sales@sproutx.app", "_blank")}
                         >
                           Contact Sales
@@ -345,7 +357,7 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
                       ) : (
                         <Button
                           variant={isCurrent ? "outline" : "default"}
-                          className={`w-full ${isCurrent ? "border-primary/30 text-primary cursor-default" : ""}`}
+                          className={`w-full h-10 ${isCurrent ? "border-primary/30 text-primary cursor-default hover:bg-transparent hover:text-primary" : ""}`}
                           disabled={isCurrent || checkout.isPending}
                           onClick={() =>
                             checkout.mutate({
