@@ -155,11 +155,11 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
   const [isOpen, setIsOpen] = useState(false);
   const [billingInterval, setBillingInterval] = useState<"monthly" | "yearly">("monthly");
   const [paymentProvider, setPaymentProvider] = useState<"stripe" | "mpesa">("stripe");
-  
+  const [expandedPlan, setExpandedPlan] = useState<number | null>(null);
+
   const { data: plans, isLoading } = trpc.billing.listPublicPlans.useQuery(undefined, { enabled: isOpen });
   const checkout = trpc.billing.createCheckoutSession.useMutation({
     onSuccess: (data) => {
-      // Redirect to Stripe or Mpesa placeholder
       window.location.href = data.url;
     },
     onError: (err) => {
@@ -167,125 +167,208 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
     }
   });
 
+  const isEnterprise = (p: { name: string; monthlyPrice: number | string }) =>
+    p.name.toLowerCase().includes("enterprise") || Number(p.monthlyPrice) === 0;
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button>Upgrade Plan</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-3xl">
-        <DialogHeader>
-          <DialogTitle>Choose a Plan</DialogTitle>
-          <DialogDescription>
-            Select the plan that best fits your farm's needs.
+
+      {/* Wide modal — centred, never full-screen, capped at 90 vh */}
+      <DialogContent className="w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col p-0">
+
+        {/* ── Sticky header ── */}
+        <div className="px-6 pt-6 pb-4 border-b border-slate-100 shrink-0">
+          <DialogTitle className="text-xl font-semibold text-slate-900">
+            Upgrade Your Plan
+          </DialogTitle>
+          <DialogDescription className="mt-1 text-sm text-slate-500">
+            Choose the plan that fits your operation.
           </DialogDescription>
-        </DialogHeader>
-        
-        {isLoading ? (
-          <div className="py-12 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
-        ) : (
-          <div className="space-y-6">
-            <div className="flex justify-center mb-6">
-              <div className="bg-slate-100 p-1 rounded-lg inline-flex">
-                <button 
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${billingInterval === 'monthly' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500'}`}
-                  onClick={() => setBillingInterval('monthly')}
-                >
-                  Monthly
-                </button>
-                <button 
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${billingInterval === 'yearly' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500'}`}
-                  onClick={() => setBillingInterval('yearly')}
-                >
-                  Yearly <span className="text-green-600 text-xs ml-1">-20%</span>
-                </button>
-              </div>
+
+          {/* Billing interval toggle */}
+          <div className="flex items-center gap-3 mt-4">
+            <div className="bg-slate-100 p-1 rounded-lg inline-flex">
+              <button
+                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${billingInterval === "monthly" ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-700"}`}
+                onClick={() => setBillingInterval("monthly")}
+              >
+                Monthly
+              </button>
+              <button
+                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${billingInterval === "yearly" ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-700"}`}
+                onClick={() => setBillingInterval("yearly")}
+              >
+                Yearly
+                <span className="ml-1.5 text-[11px] font-semibold text-green-600 bg-green-50 px-1.5 py-0.5 rounded-full">
+                  −20%
+                </span>
+              </button>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-4">
+            {/* Payment method switcher — inline on desktop */}
+            <div className="ml-auto flex items-center gap-2">
+              <span className="text-xs text-slate-500 font-medium">Pay via:</span>
+              <button
+                className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${paymentProvider === "stripe" ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"}`}
+                onClick={() => setPaymentProvider("stripe")}
+              >
+                Credit Card
+              </button>
+              <button
+                className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${paymentProvider === "mpesa" ? "bg-green-700 text-white border-green-700" : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"}`}
+                onClick={() => setPaymentProvider("mpesa")}
+              >
+                M-PESA
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Scrollable plan grid ── */}
+        <div className="overflow-y-auto px-6 py-5 flex-1">
+          {isLoading ? (
+            <div className="py-16 flex justify-center">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {plans?.map((p) => {
                 const isCurrent = p.id === currentPlanId;
-                const price = billingInterval === 'yearly' ? p.yearlyPrice : p.monthlyPrice;
-                
+                const isEnt = isEnterprise(p);
+                const price = billingInterval === "yearly" ? p.yearlyPrice : p.monthlyPrice;
+                const isExpanded = expandedPlan === p.id;
+
+                // Key features to show collapsed (first 4)
+                const visibleFeatures = p.features.slice(0, 4);
+                const hiddenFeatures = p.features.slice(4);
+
                 return (
-                  <Card key={p.id} className={`relative flex flex-col ${isCurrent ? 'border-primary ring-1 ring-primary' : 'border-slate-200'}`}>
+                  <div
+                    key={p.id}
+                    className={`
+                      relative flex flex-col rounded-2xl border p-5 transition-shadow
+                      ${isCurrent
+                        ? "border-primary ring-2 ring-primary/20 bg-primary/5"
+                        : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm"
+                      }
+                    `}
+                  >
+                    {/* Current plan badge */}
                     {isCurrent && (
-                      <div className="absolute top-0 right-0 -mt-2 -mr-2 bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded-full shadow-sm z-10">
-                        Current
-                      </div>
+                      <span className="absolute -top-2.5 left-4 bg-primary text-primary-foreground text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
+                        Current Plan
+                      </span>
                     )}
-                    <CardHeader className="pb-4">
-                      <CardTitle className="text-lg">{p.name}</CardTitle>
-                      <CardDescription className="h-10 text-xs">{p.description}</CardDescription>
-                      <div className="pt-2">
-                        <span className="text-3xl font-bold">{p.currency} {price.toString()}</span>
-                        <span className="text-sm text-slate-500">/{billingInterval === 'yearly' ? 'yr' : 'mo'}</span>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="flex-1 flex flex-col justify-between pt-0 pb-6">
-                      <div className="space-y-3 mb-6">
-                        <div className="text-sm">
-                          <CheckCircle2 className="w-4 h-4 inline mr-2 text-green-500" />
-                          {p.maxFarms ? `Up to ${p.maxFarms} farms` : 'Unlimited farms'}
+
+                    {/* Plan name + description */}
+                    <div className="mb-3">
+                      <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">
+                        {p.name}
+                      </h3>
+                      <p className="text-xs text-slate-500 mt-1 leading-relaxed line-clamp-2">
+                        {p.description || (isEnt ? "Full platform access for large operations." : "")}
+                      </p>
+                    </div>
+
+                    {/* Price */}
+                    <div className="mb-4">
+                      {isEnt && Number(price) === 0 ? (
+                        <>
+                          <span className="text-2xl font-bold text-slate-900">Custom</span>
+                          <p className="text-xs text-slate-500 mt-0.5">Contact us for pricing</p>
+                        </>
+                      ) : (
+                        <>
+                          <span className="text-2xl font-bold text-slate-900">
+                            {p.currency} {Number(price).toLocaleString()}
+                          </span>
+                          <span className="text-xs text-slate-500 ml-1">
+                            /{billingInterval === "yearly" ? "yr" : "mo"}
+                          </span>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Usage limits */}
+                    <div className="flex gap-3 text-xs text-slate-600 mb-3">
+                      <span className="flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-green-500 shrink-0" />
+                        {p.maxFarms ? `${p.maxFarms} farms` : "Unlimited farms"}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-green-500 shrink-0" />
+                        {p.maxUsers ? `${p.maxUsers} users` : "Unlimited users"}
+                      </span>
+                    </div>
+
+                    {/* Key features — always visible */}
+                    <div className="space-y-1.5 mb-2 flex-1">
+                      {visibleFeatures.map((f) => (
+                        <div key={f.featureKey} className="flex items-start gap-1.5 text-xs text-slate-700">
+                          <CheckCircle2 className="w-3 h-3 text-green-500 mt-0.5 shrink-0" />
+                          <span className="capitalize">{f.featureKey.replace(/_/g, " ")}</span>
                         </div>
-                        <div className="text-sm">
-                          <CheckCircle2 className="w-4 h-4 inline mr-2 text-green-500" />
-                          {p.maxUsers ? `Up to ${p.maxUsers} users` : 'Unlimited users'}
-                        </div>
-                        <div className="text-sm font-medium pt-2 border-t mt-2">Features</div>
-                        {p.features.map(f => (
-                          <div key={f.featureKey} className="text-xs flex items-start">
-                            <CheckCircle2 className="w-3 h-3 inline mr-1.5 text-green-500 mt-0.5 shrink-0" />
-                            <span>{f.featureKey}</span>
-                          </div>
-                        ))}
-                      </div>
-                      
-                      <Button 
-                        variant={isCurrent ? "outline" : "default"} 
-                        className="w-full"
-                        disabled={isCurrent || checkout.isPending}
-                        onClick={() => checkout.mutate({
-                          organizationId,
-                          planId: p.id,
-                          billingInterval,
-                          provider: paymentProvider,
-                        })}
-                      >
-                        {checkout.isPending && checkout.variables?.planId === p.id ? (
-                          <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                        ) : null}
-                        {isCurrent ? "Current Plan" : "Select Plan"}
-                      </Button>
-                    </CardContent>
-                  </Card>
+                      ))}
+
+                      {/* Expandable extra features */}
+                      {hiddenFeatures.length > 0 && (
+                        <>
+                          {isExpanded && hiddenFeatures.map((f) => (
+                            <div key={f.featureKey} className="flex items-start gap-1.5 text-xs text-slate-700">
+                              <CheckCircle2 className="w-3 h-3 text-green-500 mt-0.5 shrink-0" />
+                              <span className="capitalize">{f.featureKey.replace(/_/g, " ")}</span>
+                            </div>
+                          ))}
+                          <button
+                            className="text-xs text-primary font-medium hover:underline mt-1"
+                            onClick={() => setExpandedPlan(isExpanded ? null : p.id)}
+                          >
+                            {isExpanded ? "− Show less" : `+ ${hiddenFeatures.length} more features`}
+                          </button>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Action button — always at bottom */}
+                    <div className="mt-auto pt-4">
+                      {isEnt ? (
+                        <Button
+                          variant="outline"
+                          className="w-full border-slate-300 text-slate-700 hover:bg-slate-50"
+                          onClick={() => window.open("mailto:sales@sproutx.app", "_blank")}
+                        >
+                          Contact Sales
+                        </Button>
+                      ) : (
+                        <Button
+                          variant={isCurrent ? "outline" : "default"}
+                          className={`w-full ${isCurrent ? "border-primary/30 text-primary cursor-default" : ""}`}
+                          disabled={isCurrent || checkout.isPending}
+                          onClick={() =>
+                            checkout.mutate({
+                              organizationId,
+                              planId: p.id,
+                              billingInterval,
+                              provider: paymentProvider,
+                            })
+                          }
+                        >
+                          {checkout.isPending && checkout.variables?.planId === p.id ? (
+                            <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                          ) : null}
+                          {isCurrent ? "Current Plan" : "Select Plan"}
+                        </Button>
+                      )}
+                    </div>
+                  </div>
                 );
               })}
             </div>
-            
-            <div className="bg-slate-50 p-4 rounded-lg flex items-center justify-between border border-slate-100">
-              <div>
-                <h4 className="text-sm font-medium">Payment Method</h4>
-                <p className="text-xs text-slate-500">Select how you want to pay</p>
-              </div>
-              <div className="flex gap-2">
-                <Button 
-                  variant={paymentProvider === 'stripe' ? 'default' : 'outline'} 
-                  size="sm"
-                  onClick={() => setPaymentProvider('stripe')}
-                >
-                  Credit Card (Stripe)
-                </Button>
-                <Button 
-                  variant={paymentProvider === 'mpesa' ? 'default' : 'outline'} 
-                  size="sm"
-                  onClick={() => setPaymentProvider('mpesa')}
-                >
-                  M-PESA
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );
