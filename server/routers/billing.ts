@@ -39,7 +39,7 @@ export const billingRouter = router({
       // Create checkout session using selected provider
       const gateway = getPaymentGateway(input.provider);
       
-      const appBaseUrl = process.env.APP_BASE_URL || "https://KiliSensehub.onrender.com";
+      const appBaseUrl = process.env.APP_BASE_URL || "https://kilisense.onrender.com";
 
       const session = await gateway.createCheckoutSession({
         organizationId: input.organizationId,
@@ -70,3 +70,4 @@ export const billingRouter = router({
         .orderBy(desc(subscriptionPayments.createdAt));
     }),
 });
+

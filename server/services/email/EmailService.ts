@@ -6,9 +6,9 @@
 //   EMAIL_PROVIDER      = resend | brevo | console   (default: console)
 //   RESEND_API_KEY      = re_xxxxxxxxxxxx             (required for resend)
 //   BREVO_API_KEY       = xkeysib-xxxxxxxxxxxx        (required for brevo)
-//   EMAIL_FROM_ADDRESS  = noreply@KiliSensehub.co.ke     (default sender address)
+//   EMAIL_FROM_ADDRESS  = noreply@kilisense.co.ke     (default sender address)
 //   EMAIL_FROM_NAME     = KiliSense                   (default sender name)
-//   APP_BASE_URL        = https://KiliSensehub.onrender.com
+//   APP_BASE_URL        = https://kilisense.onrender.com
 
 import type { IEmailProvider, SendEmailOptions, SendEmailResult } from "./types";
 import {
@@ -38,7 +38,7 @@ export class EmailService {
   async send(options: SendEmailOptions): Promise<SendEmailResult> {
     const defaultFrom = {
       name: process.env.EMAIL_FROM_NAME ?? "KiliSense",
-      email: process.env.EMAIL_FROM_ADDRESS ?? "noreply@KiliSensehub.co.ke",
+      email: process.env.EMAIL_FROM_ADDRESS ?? "noreply@kilisense.co.ke",
     };
 
     const result = await this.provider.send({
@@ -74,7 +74,7 @@ export class EmailService {
 
   /** Send email verification link after registration */
   async sendVerificationEmail(to: { name: string; email: string }, token: string) {
-    const base = process.env.APP_BASE_URL ?? "https://KiliSensehub.onrender.com";
+    const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
     const verificationUrl = `${base}/verify-email?token=${token}`;
     const tpl = emailVerificationTemplate({
       userName: to.name,
@@ -86,7 +86,7 @@ export class EmailService {
 
   /** Send password reset link */
   async sendPasswordResetEmail(to: { name: string; email: string }, token: string) {
-    const base = process.env.APP_BASE_URL ?? "https://KiliSensehub.onrender.com";
+    const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
     const resetUrl = `${base}/reset-password?token=${token}`;
     const tpl = passwordResetTemplate({
       userName: to.name,
@@ -98,7 +98,7 @@ export class EmailService {
 
   /** Send welcome email after successful registration / email verification */
   async sendWelcomeEmail(to: { name: string; email: string }) {
-    const base = process.env.APP_BASE_URL ?? "https://KiliSensehub.onrender.com";
+    const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
     const tpl = welcomeEmailTemplate({
       userName: to.name,
       dashboardUrl: `${base}/dashboard`,
@@ -111,7 +111,7 @@ export class EmailService {
     to: { name?: string; email: string },
     ctx: { inviterName: string; farmName: string; role: string; inviteToken: string },
   ) {
-    const base = process.env.APP_BASE_URL ?? "https://KiliSensehub.onrender.com";
+    const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
     const inviteUrl = `${base}/accept-invite?token=${ctx.inviteToken}`;
     const tpl = farmInviteTemplate({
       inviterName: ctx.inviterName,
@@ -128,7 +128,7 @@ export class EmailService {
     to: { name?: string; email: string },
     ctx: { inviterName: string; organizationName: string; role: string; inviteToken: string },
   ) {
-    const base = process.env.APP_BASE_URL ?? "https://KiliSensehub.onrender.com";
+    const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
     const inviteUrl = `${base}/accept-org-invite?token=${ctx.inviteToken}`;
     const tpl = organizationInviteTemplate({
       inviterName: ctx.inviterName,
@@ -145,7 +145,7 @@ export class EmailService {
     to: { name: string; email: string },
     ctx: { organizationName: string; planName: string; trialDays: number; expiresAt: string }
   ) {
-    const base = process.env.APP_BASE_URL ?? "https://KiliSensehub.onrender.com";
+    const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
     const billingUrl = `${base}/settings/organization/billing`;
     const tpl = trialStartedEmailTemplate({
       ...ctx,
@@ -203,3 +203,5 @@ export class EmailService {
     return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "security_alert", senderId });
   }
 }
+
+

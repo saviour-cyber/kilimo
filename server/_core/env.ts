@@ -13,7 +13,8 @@
   emailProvider:    process.env.EMAIL_PROVIDER    ?? "console",
   resendApiKey:     process.env.RESEND_API_KEY    ?? "",
   brevoApiKey:      process.env.BREVO_API_KEY     ?? "",
-  emailFromAddress: process.env.EMAIL_FROM_ADDRESS ?? "noreply@KiliSensehub.co.ke",
+  emailFromAddress: process.env.EMAIL_FROM_ADDRESS ?? "noreply@kilisense.co.ke",
   emailFromName:    process.env.EMAIL_FROM_NAME    ?? "KiliSense",
-  appBaseUrl:       process.env.APP_BASE_URL       ?? "https://KiliSensehub.onrender.com",
+  appBaseUrl:       process.env.APP_BASE_URL       ?? "https://kilisense.onrender.com",
 };
+

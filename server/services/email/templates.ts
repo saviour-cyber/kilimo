@@ -19,7 +19,7 @@ const BRAND = {
 
 /** Wraps any email body in the shared KiliSense branded shell */
 function shell(content: string, previewText = ""): string {
-  const base = process.env.APP_BASE_URL ?? "https://KiliSensehub.onrender.com";
+  const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
   return `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -189,7 +189,7 @@ export function welcomeEmailTemplate(ctx: {
       <tbody>${featureRows}</tbody>
     </table>
     ${button("Go to Your Dashboard", ctx.dashboardUrl)}
-    ${infoBox("Need help getting started? Visit our <a href='https://KiliSensehub.onrender.com' style='color:${BRAND.primary};'>Help Center</a> or reply to this email and we'll assist you.")}`,
+    ${infoBox("Need help getting started? Visit our <a href='https://kilisense.onrender.com' style='color:${BRAND.primary};'>Help Center</a> or reply to this email and we'll assist you.")}`,
     `Welcome aboard, ${ctx.userName}! Your KiliSense account is ready.`,
   );
   const text = `Welcome to KiliSense, ${ctx.userName}!\n\nYour account is ready. Get started: ${ctx.dashboardUrl}`;
@@ -342,3 +342,4 @@ export function trialStartedEmailTemplate(ctx: {
   const text = `Hi ${ctx.userName},\n\nYour ${ctx.trialDays}-day free trial of the KiliSense ${ctx.planName} plan for ${ctx.organizationName} has started.\n\nManage your subscription here: ${ctx.billingUrl}`;
   return { subject, html, text };
 }
+

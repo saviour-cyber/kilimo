@@ -20,7 +20,7 @@ export class ResendProvider implements IEmailProvider {
 
       const from = options.from
         ? `${options.from.name ?? "KiliSense"} <${options.from.email}>`
-        : process.env.EMAIL_FROM_ADDRESS ?? "KiliSense <noreply@KiliSensehub.co.ke>";
+        : process.env.EMAIL_FROM_ADDRESS ?? "KiliSense <noreply@kilisense.co.ke>";
 
       const to = Array.isArray(options.to)
         ? options.to.map((a) => (a.name ? `${a.name} <${a.email}>` : a.email))
@@ -53,3 +53,4 @@ export class ResendProvider implements IEmailProvider {
     }
   }
 }
+

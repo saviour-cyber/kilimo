@@ -52,11 +52,11 @@ invoicesRouter.get("/:paymentId/download", async (req, res) => {
     doc
       .fontSize(20)
       .font("Helvetica-Bold")
-      .text("KiliSenseHUB", { align: "right" })
+      .text("KiliSense", { align: "right" })
       .fontSize(10)
       .font("Helvetica")
       .text("123 Farming Avenue, Nairobi, Kenya", { align: "right" })
-      .text("contact@KiliSensehub.com", { align: "right" })
+      .text("contact@KiliSense.com", { align: "right" })
       .moveDown(2);
 
     // Invoice Info
@@ -133,3 +133,4 @@ invoicesRouter.get("/:paymentId/download", async (req, res) => {
     res.status(500).send("Error generating invoice");
   }
 });
+
