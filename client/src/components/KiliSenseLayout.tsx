@@ -1,4 +1,4 @@
-import { useAuth } from "@/_core/hooks/useAuth";
+﻿import { useAuth } from "@/_core/hooks/useAuth";
 import { startLogin } from "@/const";
 import { useFarm } from "@/contexts/FarmContext";
 import { getVisibleModules, MODULE_REGISTRY, SIDEBAR_SECTION_LABELS, SIDEBAR_SECTION_ORDER } from "@/lib/moduleRegistry";
@@ -36,7 +36,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 import { InstallSidebarButton } from "./PWAInstallPrompt";
 
-interface SproutXLayoutProps {
+interface KiliSenseLayoutProps {
   children: React.ReactNode;
 }
 
@@ -274,7 +274,7 @@ function GlobalAnnouncementBanner() {
   );
 }
 
-export function SproutXLayout({ children }: SproutXLayoutProps) {
+export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
   const { user, isAuthenticated, loading, logout } = useAuth();
   const { currentFarm, enabledModules, role, isLoading: farmLoading } = useFarm();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -313,7 +313,7 @@ export function SproutXLayout({ children }: SproutXLayoutProps) {
             <Leaf className="w-8 h-8 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">SproutX Next</h1>
+            <h1 className="text-2xl font-bold text-foreground">KiliSense Next</h1>
             <p className="text-muted-foreground mt-2 text-sm">Enterprise farm management platform</p>
           </div>
           <Button onClick={() => window.location.href = "/login"} size="lg" className="w-full">
@@ -344,7 +344,7 @@ export function SproutXLayout({ children }: SproutXLayoutProps) {
         </div>
         {!collapsed && (
           <div>
-            <span className="font-bold text-sidebar-foreground text-sm leading-tight">SproutX</span>
+            <span className="font-bold text-sidebar-foreground text-sm leading-tight">KiliSense</span>
             <span className="block text-[10px] text-sidebar-foreground/40 leading-tight uppercase tracking-widest">Next</span>
           </div>
         )}
@@ -544,7 +544,7 @@ export function SproutXLayout({ children }: SproutXLayoutProps) {
                 <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
                   <Leaf className="w-8 h-8 text-primary" />
                 </div>
-                <h2 className="text-xl font-bold">Welcome to SproutX</h2>
+                <h2 className="text-xl font-bold">Welcome to KiliSense</h2>
                 <p className="text-muted-foreground text-sm">Create your first farm to get started managing your agricultural operations.</p>
                 <Button asChild>
                   <Link href="/farms/new">

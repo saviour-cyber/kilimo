@@ -1,4 +1,4 @@
-/**
+﻿/**
  * AuthRouter — Centralized post-authentication routing logic.
  *
  * Decision tree:
@@ -39,7 +39,7 @@ export function useAuthRedirect() {
     }
     if (farmsLoading) return;
     
-    // Always navigate to dashboard to allow SproutXLayout to render the Welcome screen for 0 farms
+    // Always navigate to dashboard to allow KiliSenseLayout to render the Welcome screen for 0 farms
     navigate("/dashboard");
   }, [loading, user, isPlatformAdmin, farmsLoading, navigate]);
 
@@ -52,5 +52,5 @@ export function useAuthRedirect() {
  */
 export function resolvePostLoginPath(role: string | null | undefined): string {
   if (role === "admin") return "/admin";
-  return "/dashboard"; // Farm check will happen inside SproutXLayout if needed
+  return "/dashboard"; // Farm check will happen inside KiliSenseLayout if needed
 }

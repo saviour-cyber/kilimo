@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { Loader2, User as UserIcon, ArrowRight, ShieldCheck, Mail } from "lucide-react";
@@ -51,7 +51,7 @@ export default function ForgotPassword() {
 
         {/* Brand Header */}
         <div className="flex flex-col items-center gap-4 mb-4">
-          <img src="/logo.png" alt="SproutX" className="w-24 h-24 object-contain" />
+          <img src="/logo.png" alt="KiliSense" className="w-24 h-24 object-contain" />
         </div>
 
         {/* Welcome heading */}
@@ -140,7 +140,7 @@ export default function ForgotPassword() {
 
         {/* Footer */}
         <p className="text-[12px] text-slate-400 font-medium">
-          © {currentYear} SproutX.
+          © {currentYear} KiliSense.
         </p>
       </div>
     </div>

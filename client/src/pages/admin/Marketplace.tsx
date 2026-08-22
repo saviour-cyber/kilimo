@@ -1,4 +1,4 @@
-import { trpc } from "@/lib/trpc";
+﻿import { trpc } from "@/lib/trpc";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -32,7 +32,7 @@ export default function AdminMarketplace() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Marketplace Moderation</h1>
           <p className="text-muted-foreground mt-1">
-            Monitor and moderate all listings across the SproutX platform.
+            Monitor and moderate all listings across the KiliSense platform.
           </p>
         </div>
       </div>

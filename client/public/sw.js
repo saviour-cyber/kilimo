@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sproutx-hub-v5';
+const CACHE_NAME = 'kilisense-v6';
 
 // All critical app-shell assets to precache on install
 const PRECACHE_URLS = [

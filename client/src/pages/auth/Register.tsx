@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -61,13 +61,13 @@ export default function Register() {
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-xl">
         <div className="flex flex-col items-center gap-4 mb-4">
-          <img src="/logo.png" alt="SproutX" className="w-24 h-24 object-contain" />
+          <img src="/logo.png" alt="KiliSense" className="w-24 h-24 object-contain" />
         </div>
 
         <Card className="shadow-lg border-slate-200">
           <CardHeader>
             <CardTitle className="text-2xl">
-              {step === 1 ? "Create your SproutX Account" : "Verify Your Email"}
+              {step === 1 ? "Create your KiliSense Account" : "Verify Your Email"}
             </CardTitle>
             <CardDescription className="text-base">
               {step === 1 
@@ -136,7 +136,7 @@ export default function Register() {
                 <h3 className="text-xl font-bold">Check your email</h3>
                 <p className="text-muted-foreground max-w-md mx-auto">
                   We've sent a verification link to <span className="font-semibold text-foreground">{formData.email}</span>. 
-                  Please click the link in that email to verify your account and access SproutX.
+                  Please click the link in that email to verify your account and access KiliSense.
                 </p>
                 <div className="pt-6">
                   <Button variant="outline" onClick={() => window.location.href = "/login"}>

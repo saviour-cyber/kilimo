@@ -1,4 +1,4 @@
-import { Link, useLocation } from "wouter";
+﻿import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { 
   User, Lock, Bell, 
@@ -40,7 +40,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     title: "Platform",
     items: [
-      { label: "About SproutX", href: "/settings/platform/about", icon: FileText },
+      { label: "About KiliSense", href: "/settings/platform/about", icon: FileText },
     ]
   }
 ];

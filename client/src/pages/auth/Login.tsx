@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { Loader2, Eye, EyeOff, Lock, User as UserIcon, ArrowRight, ShieldCheck } from "lucide-react";
@@ -61,13 +61,13 @@ export default function Login() {
 
         {/* Brand Header */}
         <div className="flex flex-col items-center gap-4 mb-4">
-          <img src="/logo.png" alt="SproutX" className="w-24 h-24 object-contain" />
+          <img src="/logo.png" alt="KiliSense" className="w-24 h-24 object-contain" />
         </div>
 
         {/* Welcome heading */}
         <div className="space-y-1">
           <h1 className="text-[26px] font-bold text-slate-900 tracking-tight">Welcome back</h1>
-          <p className="text-[14px] text-slate-500">Sign in to continue to SproutX.</p>
+          <p className="text-[14px] text-slate-500">Sign in to continue to KiliSense.</p>
         </div>
 
         {/* Login Card */}
@@ -207,7 +207,7 @@ export default function Login() {
 
         {/* Footer */}
         <p className="text-[12px] text-slate-400 font-medium">
-          © {currentYear} SproutX.
+          © {currentYear} KiliSense.
         </p>
 
       </div>

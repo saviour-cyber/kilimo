@@ -1,4 +1,4 @@
-import { useAuth } from "@/_core/hooks/useAuth";
+﻿import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { useEffect, useState } from "react";
@@ -85,7 +85,7 @@ export default function Home() {
   if (isStandalone && !splashFinished) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center">
-        <img src="/logo.png" alt="SproutX Logo" className="h-24 object-contain animate-pulse" />
+        <img src="/logo.png" alt="KiliSense Logo" className="h-24 object-contain animate-pulse" />
       </div>
     );
   }
@@ -99,7 +99,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-[#E2E8F0]">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
-            <img src="/logo.png" alt="SproutX" className="h-8 object-contain" />
+            <img src="/logo.png" alt="KiliSense" className="h-8 object-contain" />
           </div>
           <div className="flex items-center gap-6">
             {!loading && !isAuthenticated && (
@@ -165,7 +165,7 @@ export default function Home() {
 
               {/* System secondary text: #64748B */}
               <p className="text-lg text-[#64748B] mb-8 leading-relaxed">
-                SproutX is an all-in-one agriculture platform that helps farmers manage their farms, increase productivity and connect to markets.
+                KiliSense is an all-in-one agriculture platform that helps farmers manage their farms, increase productivity and connect to markets.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-10">
@@ -376,7 +376,7 @@ export default function Home() {
 
             <div className="p-10 lg:p-16 z-10 max-w-xl">
               <h2 className="text-3xl font-bold text-white mb-8 leading-tight">
-                Join thousands of smart farmers already growing with SproutX
+                Join thousands of smart farmers already growing with KiliSense
               </h2>
               <Button
                 size="lg"
@@ -414,9 +414,9 @@ export default function Home() {
             {/* Brand column */}
             <div className="lg:col-span-4">
               <div className="bg-white inline-block px-3 py-2 rounded-xl mb-6">
-                <img src="/logo.png" alt="SproutX" className="h-6 object-contain" />
+                <img src="/logo.png" alt="KiliSense" className="h-6 object-contain" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-4">SproutX</h3>
+              <h3 className="text-xl font-bold text-white mb-4">KiliSense</h3>
               <p className="text-[#64748B] mb-8 max-w-sm text-sm leading-relaxed">
                 Helping African farmers manage farms, access markets and grow with confidence.
               </p>
@@ -463,7 +463,7 @@ export default function Home() {
                 <h4 className="text-xs font-bold tracking-widest text-white uppercase mb-6">Contact</h4>
                 <ul className="space-y-4 text-sm text-[#64748B]">
                   <li className="flex gap-3"><MapPin className="w-4 h-4 text-[#10B981] shrink-0 mt-0.5" /><span>Nairobi, Kenya</span></li>
-                  <li className="flex gap-3"><Mail className="w-4 h-4 text-[#10B981] shrink-0 mt-0.5" /><span>support@sproutxhub.co.ke</span></li>
+                  <li className="flex gap-3"><Mail className="w-4 h-4 text-[#10B981] shrink-0 mt-0.5" /><span>support@KiliSensehub.co.ke</span></li>
                   <li className="flex gap-3"><Clock className="w-4 h-4 text-[#10B981] shrink-0 mt-0.5" /><span>Mon – Sat · 8:00am – 6:00pm EAT</span></li>
                 </ul>
               </div>
@@ -472,7 +472,7 @@ export default function Home() {
 
           {/* Bottom bar — system border: #1E293B (sidebar-accent) */}
           <div className="border-t border-[#1E293B] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-[#64748B]">© {new Date().getFullYear()} SproutX Technologies Ltd.</p>
+            <p className="text-sm text-[#64748B]">© {new Date().getFullYear()} KiliSense Technologies Ltd.</p>
             <div className="flex items-center gap-4 text-sm text-[#64748B] flex-wrap justify-center">
               {["Privacy Policy","Terms of Service","Cookie Policy"].map(l => (
                 <a key={l} href="#" className="hover:text-[#10B981] transition-colors">{l}</a>

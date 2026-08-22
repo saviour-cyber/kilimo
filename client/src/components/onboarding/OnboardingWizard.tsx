@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useFarm } from "@/contexts/FarmContext";
@@ -109,7 +109,7 @@ export function OnboardingWizard() {
     onSuccess: async (data) => {
       await refetchFarms();
       switchFarm(data.farmId);
-      toast.success("Welcome to SproutX! Your trial has started.");
+      toast.success("Welcome to KiliSense! Your trial has started.");
       navigate("/dashboard");
     },
     onError: (err) => toast.error(err.message),
@@ -141,7 +141,7 @@ export function OnboardingWizard() {
       <div>
         <h2 className="text-xl font-bold text-foreground">Set up your organization</h2>
         <p className="text-sm text-muted-foreground mt-1">
-          This represents your business on SproutX.
+          This represents your business on KiliSense.
         </p>
       </div>
 
@@ -496,7 +496,7 @@ export function OnboardingWizard() {
           <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
             <Leaf className="w-6 h-6 text-primary" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground">Welcome to SproutX</h1>
+          <h1 className="text-2xl font-bold text-foreground">Welcome to KiliSense</h1>
           <p className="text-sm text-muted-foreground mt-1">Let's get your farm set up in a few steps</p>
         </div>
 

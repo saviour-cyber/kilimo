@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -6,7 +6,7 @@ import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { FarmProvider } from "./contexts/FarmContext";
-import { SproutXLayout } from "./components/SproutXLayout";
+import { KiliSenseLayout } from "./components/KiliSenseLayout";
 import { SubscriptionGate } from "./components/SubscriptionGate";
 import { AdminLayout } from "./components/AdminLayout";
 import AdminLogin from "./pages/admin/Login";
@@ -106,18 +106,18 @@ function TenantAppRoutes() {
         <Route path="/forgot-password" component={ForgotPassword} />
         <Route path="/reset-password" component={ResetPassword} />
 
-        {/* Protected routes inside SproutXLayout */}
+        {/* Protected routes inside KiliSenseLayout */}
         <Route path="/dashboard">
-          <SproutXLayout><Dashboard /></SproutXLayout>
+          <KiliSenseLayout><Dashboard /></KiliSenseLayout>
         </Route>
         <Route path="/tasks">
-          <SproutXLayout><Tasks /></SproutXLayout>
+          <KiliSenseLayout><Tasks /></KiliSenseLayout>
         </Route>
         <Route path="/settings">
-          <SproutXLayout><SettingsLayout /></SproutXLayout>
+          <KiliSenseLayout><SettingsLayout /></KiliSenseLayout>
         </Route>
         <Route path="/settings/*">
-          <SproutXLayout><SettingsLayout /></SproutXLayout>
+          <KiliSenseLayout><SettingsLayout /></KiliSenseLayout>
         </Route>
 
         {/* Dynamic Platform Services */}
@@ -126,71 +126,71 @@ function TenantAppRoutes() {
           return (
             <React.Fragment key={service.key}>
               <Route path={service.basePath}>
-                <SproutXLayout>
+                <KiliSenseLayout>
                   <SubscriptionGate featureKey={service.key} featureName={(service as any).label || (service as any).name || service.key}>
                     <Page />
                   </SubscriptionGate>
-                </SproutXLayout>
+                </KiliSenseLayout>
               </Route>
               <Route path={`${service.basePath}/*`}>
-                <SproutXLayout>
+                <KiliSenseLayout>
                   <SubscriptionGate featureKey={service.key} featureName={(service as any).label || (service as any).name || service.key}>
                     <Page />
                   </SubscriptionGate>
-                </SproutXLayout>
+                </KiliSenseLayout>
               </Route>
             </React.Fragment>
           );
         })}
 
         {/* Marketplace */}
-        <Route path="/marketplace/browse"><SproutXLayout><SubscriptionGate featureKey="marketplace" featureName="Marketplace"><Browse /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/marketplace/listings"><SproutXLayout><SubscriptionGate featureKey="marketplace" featureName="Marketplace"><MyListings /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/marketplace/create"><SproutXLayout><SubscriptionGate featureKey="marketplace" featureName="Marketplace"><CreateListing /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/marketplace/edit/:id"><SproutXLayout><SubscriptionGate featureKey="marketplace" featureName="Marketplace"><EditListing /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/marketplace/listing/:id"><SproutXLayout><SubscriptionGate featureKey="marketplace" featureName="Marketplace"><ListingDetail /></SubscriptionGate></SproutXLayout></Route>
+        <Route path="/marketplace/browse"><KiliSenseLayout><SubscriptionGate featureKey="marketplace" featureName="Marketplace"><Browse /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/marketplace/listings"><KiliSenseLayout><SubscriptionGate featureKey="marketplace" featureName="Marketplace"><MyListings /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/marketplace/create"><KiliSenseLayout><SubscriptionGate featureKey="marketplace" featureName="Marketplace"><CreateListing /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/marketplace/edit/:id"><KiliSenseLayout><SubscriptionGate featureKey="marketplace" featureName="Marketplace"><EditListing /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/marketplace/listing/:id"><KiliSenseLayout><SubscriptionGate featureKey="marketplace" featureName="Marketplace"><ListingDetail /></SubscriptionGate></KiliSenseLayout></Route>
 
         {/* Crops */}
-        <Route path="/crops/fields"><SproutXLayout><SubscriptionGate featureKey="crop" featureName="Crops"><Fields /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/crops/plantings"><SproutXLayout><SubscriptionGate featureKey="crop" featureName="Crops"><Plantings /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/crops/harvests"><SproutXLayout><SubscriptionGate featureKey="crop" featureName="Crops"><Harvests /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/crops/incidents"><SproutXLayout><SubscriptionGate featureKey="crop" featureName="Crops"><Incidents /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/crops/calendar"><SproutXLayout><SubscriptionGate featureKey="crop" featureName="Crops"><CropCalendar /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/crops/analytics"><SproutXLayout><SubscriptionGate featureKey="crop" featureName="Crops"><CropAnalytics /></SubscriptionGate></SproutXLayout></Route>
+        <Route path="/crops/fields"><KiliSenseLayout><SubscriptionGate featureKey="crop" featureName="Crops"><Fields /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/crops/plantings"><KiliSenseLayout><SubscriptionGate featureKey="crop" featureName="Crops"><Plantings /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/crops/harvests"><KiliSenseLayout><SubscriptionGate featureKey="crop" featureName="Crops"><Harvests /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/crops/incidents"><KiliSenseLayout><SubscriptionGate featureKey="crop" featureName="Crops"><Incidents /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/crops/calendar"><KiliSenseLayout><SubscriptionGate featureKey="crop" featureName="Crops"><CropCalendar /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/crops/analytics"><KiliSenseLayout><SubscriptionGate featureKey="crop" featureName="Crops"><CropAnalytics /></SubscriptionGate></KiliSenseLayout></Route>
 
         {/* Livestock */}
-        <Route path="/livestock/animals"><SproutXLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Animals /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/livestock/breeding"><SproutXLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Breeding /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/livestock/health"><SproutXLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><HealthLogs /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/livestock/feed"><SproutXLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><FeedRecords /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/livestock/production"><SproutXLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Production /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/livestock/mortality"><SproutXLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Mortality /></SubscriptionGate></SproutXLayout></Route>
+        <Route path="/livestock/animals"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Animals /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/livestock/breeding"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Breeding /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/livestock/health"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><HealthLogs /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/livestock/feed"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><FeedRecords /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/livestock/production"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Production /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/livestock/mortality"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Mortality /></SubscriptionGate></KiliSenseLayout></Route>
 
         {/* Inventory */}
-        <Route path="/inventory/items"><SproutXLayout><SubscriptionGate featureKey="inventory" featureName="Inventory"><InventoryItems /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/inventory/transactions"><SproutXLayout><SubscriptionGate featureKey="inventory" featureName="Inventory"><StockTransactions /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/inventory/equipment"><SproutXLayout><SubscriptionGate featureKey="inventory" featureName="Inventory"><Equipment /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/inventory/suppliers"><SproutXLayout><SubscriptionGate featureKey="inventory" featureName="Inventory"><Suppliers /></SubscriptionGate></SproutXLayout></Route>
+        <Route path="/inventory/items"><KiliSenseLayout><SubscriptionGate featureKey="inventory" featureName="Inventory"><InventoryItems /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/inventory/transactions"><KiliSenseLayout><SubscriptionGate featureKey="inventory" featureName="Inventory"><StockTransactions /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/inventory/equipment"><KiliSenseLayout><SubscriptionGate featureKey="inventory" featureName="Inventory"><Equipment /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/inventory/suppliers"><KiliSenseLayout><SubscriptionGate featureKey="inventory" featureName="Inventory"><Suppliers /></SubscriptionGate></KiliSenseLayout></Route>
 
         {/* Finance */}
-        <Route path="/finance/transactions"><SproutXLayout><SubscriptionGate featureKey="finance" featureName="Finance"><Transactions /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/finance/budgets"><SproutXLayout><SubscriptionGate featureKey="finance" featureName="Finance"><Budgets /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/finance/report"><SproutXLayout><SubscriptionGate featureKey="finance" featureName="Finance"><PLReport /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/finance/budget-vs-actual"><SproutXLayout><SubscriptionGate featureKey="finance" featureName="Finance"><BudgetVsActual /></SubscriptionGate></SproutXLayout></Route>
+        <Route path="/finance/transactions"><KiliSenseLayout><SubscriptionGate featureKey="finance" featureName="Finance"><Transactions /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/finance/budgets"><KiliSenseLayout><SubscriptionGate featureKey="finance" featureName="Finance"><Budgets /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/finance/report"><KiliSenseLayout><SubscriptionGate featureKey="finance" featureName="Finance"><PLReport /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/finance/budget-vs-actual"><KiliSenseLayout><SubscriptionGate featureKey="finance" featureName="Finance"><BudgetVsActual /></SubscriptionGate></KiliSenseLayout></Route>
 
         {/* Disease Detection */}
-        <Route path="/disease/scan"><SproutXLayout><SubscriptionGate featureKey="disease" featureName="Disease Detection"><NewScanPage /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/disease/history"><SproutXLayout><SubscriptionGate featureKey="disease" featureName="Disease Detection"><ScanHistoryPage /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/disease/reports"><SproutXLayout><SubscriptionGate featureKey="disease" featureName="Disease Detection"><DiseaseReportsPage /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/disease"><SproutXLayout><SubscriptionGate featureKey="disease" featureName="Disease Detection"><NewScanPage /></SubscriptionGate></SproutXLayout></Route>
+        <Route path="/disease/scan"><KiliSenseLayout><SubscriptionGate featureKey="disease" featureName="Disease Detection"><NewScanPage /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/disease/history"><KiliSenseLayout><SubscriptionGate featureKey="disease" featureName="Disease Detection"><ScanHistoryPage /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/disease/reports"><KiliSenseLayout><SubscriptionGate featureKey="disease" featureName="Disease Detection"><DiseaseReportsPage /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/disease"><KiliSenseLayout><SubscriptionGate featureKey="disease" featureName="Disease Detection"><NewScanPage /></SubscriptionGate></KiliSenseLayout></Route>
 
         {/* IoT Engine */}
-        <Route path="/iot"><SproutXLayout><SubscriptionGate featureKey="iot" featureName="IoT Monitoring"><IoTPage /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/iot/*"><SproutXLayout><SubscriptionGate featureKey="iot" featureName="IoT Monitoring"><IoTPage /></SubscriptionGate></SproutXLayout></Route>
+        <Route path="/iot"><KiliSenseLayout><SubscriptionGate featureKey="iot" featureName="IoT Monitoring"><IoTPage /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/iot/*"><KiliSenseLayout><SubscriptionGate featureKey="iot" featureName="IoT Monitoring"><IoTPage /></SubscriptionGate></KiliSenseLayout></Route>
 
         {/* Reports Hub */}
-        <Route path="/reports"><SproutXLayout><SubscriptionGate featureKey="reports" featureName="Reports Hub"><ReportsPage /></SubscriptionGate></SproutXLayout></Route>
-        <Route path="/reports/*"><SproutXLayout><SubscriptionGate featureKey="reports" featureName="Reports Hub"><ReportsPage /></SubscriptionGate></SproutXLayout></Route>
+        <Route path="/reports"><KiliSenseLayout><SubscriptionGate featureKey="reports" featureName="Reports Hub"><ReportsPage /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/reports/*"><KiliSenseLayout><SubscriptionGate featureKey="reports" featureName="Reports Hub"><ReportsPage /></SubscriptionGate></KiliSenseLayout></Route>
 
         <Route path="/404" component={NotFound} />
         <Route component={NotFound} />

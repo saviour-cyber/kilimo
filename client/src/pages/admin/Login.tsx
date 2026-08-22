@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
@@ -54,13 +54,13 @@ export default function AdminLogin() {
         <div className="flex flex-col items-center justify-center mb-8 text-center space-y-4">
           <img 
             src="/logo.png" 
-            alt="SproutX Logo" 
+            alt="KiliSense Logo" 
             className="object-contain" 
             style={{ height: '76px' }}
           />
           <div className="space-y-1.5">
             <h1 className="text-[22px] font-semibold text-slate-900 tracking-tight">Platform Admin</h1>
-            <p className="text-[14px] text-slate-500 font-medium">Secure access to the SproutX Platform.</p>
+            <p className="text-[14px] text-slate-500 font-medium">Secure access to the KiliSense Platform.</p>
           </div>
         </div>
 
@@ -81,7 +81,7 @@ export default function AdminLogin() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@sproutxhub.com"
+                  placeholder="admin@KiliSensehub.com"
                   required
                   className="w-full h-[52px] pl-11 pr-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-slate-900 text-[14px] placeholder:text-slate-400"
                 />
@@ -154,7 +154,7 @@ export default function AdminLogin() {
 
         {/* Footer */}
         <div className="mt-8 flex flex-col items-center gap-1 text-[12px] text-slate-400 font-medium tracking-wide">
-          <p>© {currentYear} SproutX.</p>
+          <p>© {currentYear} KiliSense.</p>
           <p>{appVersion} • {env}</p>
         </div>
 

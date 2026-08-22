@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+﻿import React, { createContext, useContext, useEffect, useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useGrantedModules } from "@/hooks/useEntitlement";
@@ -40,7 +40,7 @@ const FarmContext = createContext<FarmContextValue>({
   refetchFarms: () => {},
 });
 
-const STORAGE_KEY = "sproutxhub_current_farm_id";
+const STORAGE_KEY = "KiliSensehub_current_farm_id";
 
 const ROLE_PERMISSIONS: Record<FarmRole, ("read" | "write" | "manage" | "admin")[]> = {
   viewer: ["read"],

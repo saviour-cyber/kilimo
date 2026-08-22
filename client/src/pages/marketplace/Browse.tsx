@@ -1,4 +1,4 @@
-import { trpc } from "@/lib/trpc";
+﻿import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -22,7 +22,7 @@ export default function Browse() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Marketplace</h1>
-        <p className="text-muted-foreground mt-1">Browse farm produce, livestock, and inputs across SproutX.</p>
+        <p className="text-muted-foreground mt-1">Browse farm produce, livestock, and inputs across KiliSense.</p>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">

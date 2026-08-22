@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { Loader2, Lock, EyeOff, Eye, ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
@@ -74,7 +74,7 @@ export default function ResetPassword() {
 
         {/* Brand Header */}
         <div className="flex flex-col items-center gap-4 mb-4">
-          <img src="/logo.png" alt="SproutX" className="w-24 h-24 object-contain" />
+          <img src="/logo.png" alt="KiliSense" className="w-24 h-24 object-contain" />
         </div>
 
         {/* Welcome heading */}
@@ -195,7 +195,7 @@ export default function ResetPassword() {
 
         {/* Footer */}
         <p className="text-[12px] text-slate-400 font-medium">
-          © {currentYear} SproutX.
+          © {currentYear} KiliSense.
         </p>
       </div>
     </div>

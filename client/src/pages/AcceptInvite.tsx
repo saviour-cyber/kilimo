@@ -1,4 +1,4 @@
-import { useAuth } from "@/_core/hooks/useAuth";
+﻿import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -87,7 +87,7 @@ export default function AcceptInvite() {
 
           <div className="text-center space-y-2">
             <h1 className="text-2xl font-bold text-foreground">Join Farm</h1>
-            <p className="text-sm text-muted-foreground">You've been invited to join a farm on SproutX</p>
+            <p className="text-sm text-muted-foreground">You've been invited to join a farm on KiliSense</p>
           </div>
 
           <div className="bg-slate-50 rounded-lg p-4 space-y-3">

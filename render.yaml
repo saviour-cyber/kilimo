@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: kilimohub
+    name: kilisense
     env: node
     region: frankfurt
     plan: starter
@@ -20,6 +20,6 @@ services:
       - key: OWNER_OPEN_ID
         sync: false
       - key: ADMIN_EMAIL
-        value: admin@kilimohub.com
+        value: admin@kilisense.com
       - key: ADMIN_PASSWORD
         sync: false

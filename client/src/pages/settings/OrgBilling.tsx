@@ -1,4 +1,4 @@
-import { useFarm } from "@/contexts/FarmContext";
+﻿import { useFarm } from "@/contexts/FarmContext";
 import { trpc } from "@/lib/trpc";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -350,7 +350,7 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
                         <Button
                           variant="outline"
                           className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 h-10"
-                          onClick={() => window.open("mailto:sales@sproutx.app", "_blank")}
+                          onClick={() => window.open("mailto:sales@KiliSense.app", "_blank")}
                         >
                           Contact Sales
                         </Button>

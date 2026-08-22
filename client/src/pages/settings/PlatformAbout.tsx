@@ -1,11 +1,11 @@
-import { MonitorPlay, ShieldCheck, Cpu } from "lucide-react";
+﻿import { MonitorPlay, ShieldCheck, Cpu } from "lucide-react";
 import { InstallCard } from "@/components/PWAInstallPrompt";
 
 export default function PlatformAbout() {
   return (
     <div className="max-w-3xl space-y-8 animate-in fade-in duration-500">
       <div>
-        <h3 className="text-2xl font-medium text-slate-900 tracking-tight">About SproutX</h3>
+        <h3 className="text-2xl font-medium text-slate-900 tracking-tight">About KiliSense</h3>
         <p className="text-slate-500 mt-1">Version 1.0.0 — Modern Farm Management Platform</p>
       </div>
 
@@ -45,7 +45,7 @@ export default function PlatformAbout() {
           <a href="#" className="hover:text-slate-900 transition-colors">Terms of Service</a>
           <a href="#" className="hover:text-slate-900 transition-colors">Contact Support</a>
           <span className="text-slate-300">|</span>
-          <span>© {new Date().getFullYear()} SproutX Next. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} KiliSense Next. All rights reserved.</span>
         </div>
       </section>
     </div>
