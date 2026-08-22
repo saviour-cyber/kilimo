@@ -190,7 +190,7 @@ export const onboardingRouter = router({
         console.error("Onboarding setup failed:", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to complete onboarding setup",
+          message: `Onboarding failed: ${error?.message ?? "Unknown error"}`,
         });
       }
     }),
