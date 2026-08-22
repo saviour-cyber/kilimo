@@ -190,9 +190,10 @@ export const onboardingRouter = router({
         console.error("Onboarding setup failed:", error); console.error("Raw DB Error:", error?.cause ?? error?.originalError ?? error?.sqlMessage ?? error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: `Onboarding failed: ${error?.message ?? "Unknown error"}`,
+          message: `Onboarding failed: ${error?.sqlMessage || error?.cause?.message || error?.message || "Unknown error"}`,
         });
       }
     }),
 });
+
 
