@@ -1,4 +1,4 @@
-import { AIProvider, ChatResponse, DiseaseDiagnosis, Message, DashboardRecommendations } from "../types";
+﻿import { AIProvider, ChatResponse, DiseaseDiagnosis, Message, DashboardRecommendations } from "../types";
 
 export class GeminiProvider implements AIProvider {
   private apiKey: string | undefined;
@@ -138,7 +138,7 @@ export class GeminiProvider implements AIProvider {
       return this.mockDashboard();
     }
 
-    const systemPrompt = `You are the lead agricultural intelligence AI for SproutX. Based on the provided farm context, generate a dashboard summary and recommendations. Return a JSON object exactly matching this schema:
+    const systemPrompt = `You are the lead agricultural intelligence AI for KiliSense. Based on the provided farm context, generate a dashboard summary and recommendations. Return a JSON object exactly matching this schema:
 {
   "summary": "A 2-3 sentence overview of the farm's current state",
   "priority": "low" | "medium" | "high" | "critical",
@@ -148,7 +148,7 @@ export class GeminiProvider implements AIProvider {
   "confidence": 0.9,
   "generatedAt": "ISO date string"
 }
-Ensure the actions point to relevant SproutX paths (e.g. /crops/incidents, /livestock/health, /inventory/items, /finance/report, /tasks).`;
+Ensure the actions point to relevant KiliSense paths (e.g. /crops/incidents, /livestock/health, /inventory/items, /finance/report, /tasks).`;
 
     try {
       const text = await this.callGemini([

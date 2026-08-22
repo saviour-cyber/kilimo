@@ -1,4 +1,4 @@
-// ─── Brevo Provider (formerly Sendinblue) ────────────────────────────────────
+﻿// ─── Brevo Provider (formerly Sendinblue) ────────────────────────────────────
 // Requires env var: BREVO_API_KEY
 // Uses Brevo's transactional email REST API v3 (no SDK dependency needed).
 // Docs: https://developers.brevo.com/reference/sendtransacemail
@@ -16,8 +16,8 @@ export class BrevoProvider implements IEmailProvider {
 
   async send(options: SendEmailOptions): Promise<SendEmailResult> {
     try {
-      const fromAddress = options.from?.email ?? (process.env.EMAIL_FROM_ADDRESS ?? "noreply@sproutxhub.co.ke");
-      const fromName    = options.from?.name   ?? "SproutX";
+      const fromAddress = options.from?.email ?? (process.env.EMAIL_FROM_ADDRESS ?? "noreply@KiliSensehub.co.ke");
+      const fromName    = options.from?.name   ?? "KiliSense";
 
       const toList = Array.isArray(options.to) ? options.to : [options.to];
 

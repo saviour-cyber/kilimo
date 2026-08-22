@@ -1,4 +1,4 @@
-/**
+﻿/**
  * IoT Core API — Phase 5
  *
  * THE SINGLE PUBLIC INTERFACE for the entire IoT Engine.
@@ -9,7 +9,7 @@
  * AlertEngine, providers, or any other internal service directly.
  *
  * This creates a stable contract between the IoT Engine and the rest of
- * SproutX, allowing the underlying implementation to evolve without
+ * KiliSense, allowing the underlying implementation to evolve without
  * breaking any dependent modules.
  */
 

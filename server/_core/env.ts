@@ -1,4 +1,4 @@
-export const ENV = {
+﻿export const ENV = {
   appId: process.env.VITE_APP_ID ?? "",
   cookieSecret: process.env.JWT_SECRET ?? "",
   databaseUrl: process.env.DATABASE_URL ?? "",
@@ -13,7 +13,7 @@ export const ENV = {
   emailProvider:    process.env.EMAIL_PROVIDER    ?? "console",
   resendApiKey:     process.env.RESEND_API_KEY    ?? "",
   brevoApiKey:      process.env.BREVO_API_KEY     ?? "",
-  emailFromAddress: process.env.EMAIL_FROM_ADDRESS ?? "noreply@sproutxhub.co.ke",
-  emailFromName:    process.env.EMAIL_FROM_NAME    ?? "SproutX",
-  appBaseUrl:       process.env.APP_BASE_URL       ?? "https://sproutxhub.onrender.com",
+  emailFromAddress: process.env.EMAIL_FROM_ADDRESS ?? "noreply@KiliSensehub.co.ke",
+  emailFromName:    process.env.EMAIL_FROM_NAME    ?? "KiliSense",
+  appBaseUrl:       process.env.APP_BASE_URL       ?? "https://KiliSensehub.onrender.com",
 };

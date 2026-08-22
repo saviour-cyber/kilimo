@@ -1,4 +1,4 @@
-# SproutX Next — Project TODO
+﻿# KiliSense Next — Project TODO
 
 ## Phase 1: Database Schema & Architecture
 - [x] Design and write full Drizzle schema (all tables)
@@ -14,7 +14,7 @@
 
 ## Phase 3: Global Layout & Dashboard
 - [x] App-wide theme (green/earth palette, Inter font, dark/light)
-- [x] SproutXLayout with dynamic sidebar and farm switcher in header
+- [x] KiliSenseLayout with dynamic sidebar and farm switcher in header
 - [x] Dashboard page with KPI cards (active crops, livestock count, pending tasks, revenue)
 - [x] Recent activity feed
 - [x] Recharts graphs (revenue trend, crop yield, livestock growth)

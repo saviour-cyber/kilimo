@@ -1,4 +1,4 @@
-/**
+﻿/**
  * sync-local-to-tidb.ts
  * Copies the entire local MySQL database to TiDB cloud.
  * DESTRUCTIVE: Drops and recreates all tables in TiDB.
@@ -7,7 +7,7 @@ import mysql from 'mysql2/promise';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-const LOCAL_URL = 'mysql://root:eldavis45@localhost:3306/sproutxhub';
+const LOCAL_URL = 'mysql://root:eldavis45@localhost:3306/KiliSensehub';
 const CLOUD_URL = process.env.DATABASE_URL!;
 
 async function run() {

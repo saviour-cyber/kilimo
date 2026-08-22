@@ -1,4 +1,4 @@
-import Stripe from "stripe";
+﻿import Stripe from "stripe";
 import { getDb } from "../../db";
 import { subscriptionPlans } from "../../../drizzle/schema";
 import { eq } from "drizzle-orm";
@@ -51,7 +51,7 @@ export class StripeService implements IPaymentGateway {
           price_data: {
             currency: plan.currency.toLowerCase(),
             product_data: {
-              name: `SproutX ${plan.name} Plan (${options.billingInterval})`,
+              name: `KiliSense ${plan.name} Plan (${options.billingInterval})`,
               description: plan.description || undefined,
             },
             unit_amount: unitAmount,

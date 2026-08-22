@@ -1,4 +1,4 @@
-import { z } from "zod";
+﻿import { z } from "zod";
 import { publicProcedure, router } from "../_core/trpc";
 import { users, emailVerificationTokens, passwordResetTokens } from "../../drizzle/schema";
 import { eq, and, gt } from "drizzle-orm";
@@ -11,7 +11,7 @@ import { createHash, randomBytes } from "crypto";
 import { emailService } from "../services/email";
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "sproutx-hub-secret-key-development",
+  process.env.JWT_SECRET || "kilisense-secret-key-development",
 );
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

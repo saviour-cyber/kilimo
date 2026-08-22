@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+﻿import { describe, expect, it } from "vitest";
 import { appRouter } from "./routers";
 import { COOKIE_NAME } from "../shared/const";
 import type { TrpcContext } from "./_core/context";
@@ -10,7 +10,7 @@ function makeCtx(overrides?: Partial<AuthenticatedUser>): { ctx: TrpcContext; cl
   const user: AuthenticatedUser = {
     id: 1,
     openId: "test-user-1",
-    email: "test@sproutxhub.com",
+    email: "test@KiliSensehub.com",
     name: "Test Farmer",
     loginMethod: "test",
     role: "user",
@@ -35,7 +35,7 @@ describe("auth", () => {
     const caller = appRouter.createCaller(ctx);
     const result = await caller.auth.me();
     expect(result).toBeDefined();
-    expect(result?.email).toBe("test@sproutxhub.com");
+    expect(result?.email).toBe("test@KiliSensehub.com");
   });
 
   it("me returns null when unauthenticated", async () => {

@@ -1,8 +1,8 @@
-/**
+﻿/**
  * Seed default subscription plans.
  * Run with: npx tsx scripts/seed-plans.ts
  *
- * This creates the three core SproutX plans:
+ * This creates the three core KiliSense plans:
  *  - Starter (free / trial only)
  *  - Professional
  *  - Enterprise

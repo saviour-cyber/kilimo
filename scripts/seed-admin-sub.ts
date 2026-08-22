@@ -1,4 +1,4 @@
-import mysql from "mysql2/promise";
+﻿import mysql from "mysql2/promise";
 import { config } from "dotenv";
 
 config();
@@ -10,7 +10,7 @@ async function grantAdminSub() {
   });
 
   try {
-    const email = "admin@sproutxhub.com";
+    const email = "admin@KiliSensehub.com";
     
     // 1. Get user id
     const [users] = await conn.query("SELECT id FROM users WHERE email = ?", [email]) as any;

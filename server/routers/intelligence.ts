@@ -1,4 +1,4 @@
-import { z } from "zod";
+﻿import { z } from "zod";
 import { router, protectedProcedure } from "../_core/trpc";
 import { getAIProvider } from "../services/ai";
 import { getDb } from "../db";
@@ -70,7 +70,7 @@ export const intelligenceRouter = router({
         ? `Active Marketplace Listings: ${activeListings.map(l => `${l.title} (${l.price} ${l.currency})`).join(", ")}`
         : "No active marketplace listings.";
 
-      const contextPrompt = `You are Kili AI, an expert agricultural assistant integrated into SproutX Next.
+      const contextPrompt = `You are Kili AI, an expert agricultural assistant integrated into KiliSense Next.
 Current Context:
 - Farm Name: ${farm?.name || "Unknown"}
 - Farm Type: ${farm?.farmType || "Unknown"}

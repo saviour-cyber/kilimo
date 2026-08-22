@@ -1,4 +1,4 @@
-// ─── Resend Provider ──────────────────────────────────────────────────────────
+﻿// ─── Resend Provider ──────────────────────────────────────────────────────────
 // Requires env var: RESEND_API_KEY
 // Docs: https://resend.com/docs
 
@@ -19,8 +19,8 @@ export class ResendProvider implements IEmailProvider {
       const client = new Resend(this.apiKey);
 
       const from = options.from
-        ? `${options.from.name ?? "SproutX"} <${options.from.email}>`
-        : process.env.EMAIL_FROM_ADDRESS ?? "SproutX <noreply@sproutxhub.co.ke>";
+        ? `${options.from.name ?? "KiliSense"} <${options.from.email}>`
+        : process.env.EMAIL_FROM_ADDRESS ?? "KiliSense <noreply@KiliSensehub.co.ke>";
 
       const to = Array.isArray(options.to)
         ? options.to.map((a) => (a.name ? `${a.name} <${a.email}>` : a.email))

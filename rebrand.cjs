@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const path = require('path');
 
 const IGNORED_DIRS = ['node_modules', 'dist', 'build', '.git', 'uploads', 'postgres-data'];
@@ -8,16 +8,16 @@ function replaceInFile(filePath) {
   const original = content;
 
   // Replace exact occurrences first
-  content = content.replace(/KilimoHub/g, 'SproutX');
-  content = content.replace(/Kilimo Hub/g, 'SproutX');
-  content = content.replace(/KilimoLayout/g, 'SproutXLayout');
+  content = content.replace(/KilimoHub/g, 'KiliSense');
+  content = content.replace(/Kilimo Hub/g, 'KiliSense');
+  content = content.replace(/KilimoLayout/g, 'KiliSenseLayout');
   
   // Then replace the rest with appropriate casing
-  content = content.replace(/Kilimo/g, 'SproutX');
+  content = content.replace(/Kilimo/g, 'KiliSense');
   content = content.replace(/kilimo/gi, (match) => {
-    if (match === 'kilimo') return 'sproutx';
-    if (match === 'Kilimo') return 'SproutX';
-    if (match === 'KILIMO') return 'SPROUTX';
+    if (match === 'kilimo') return 'KiliSense';
+    if (match === 'Kilimo') return 'KiliSense';
+    if (match === 'KILIMO') return 'KiliSense';
     return match;
   });
 

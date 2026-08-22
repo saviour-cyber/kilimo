@@ -1,4 +1,4 @@
-import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
+﻿import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
 import { subscriptionPlans, subscriptionPlanFeatures, subscriptionPayments } from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
@@ -39,7 +39,7 @@ export const billingRouter = router({
       // Create checkout session using selected provider
       const gateway = getPaymentGateway(input.provider);
       
-      const appBaseUrl = process.env.APP_BASE_URL || "https://sproutxhub.onrender.com";
+      const appBaseUrl = process.env.APP_BASE_URL || "https://KiliSensehub.onrender.com";
 
       const session = await gateway.createCheckoutSession({
         organizationId: input.organizationId,

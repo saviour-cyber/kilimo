@@ -1,4 +1,4 @@
-/**
+﻿/**
  * seed-admin.ts
  * Creates (or resets) the platform superadmin account.
  *
@@ -6,7 +6,7 @@
  *
  * Env vars required:
  *   DATABASE_URL  – MySQL connection string
- *   ADMIN_EMAIL   – Desired admin email  (default: admin@sproutxhub.com)
+ *   ADMIN_EMAIL   – Desired admin email  (default: admin@KiliSensehub.com)
  *   ADMIN_PASSWORD – Plain-text password  (default: Admin@123456)
  */
 
@@ -14,7 +14,7 @@ import "dotenv/config";
 import bcrypt from "bcryptjs";
 import mysql from "mysql2/promise";
 
-const ADMIN_EMAIL    = process.env.ADMIN_EMAIL    ?? "admin@sproutxhub.com";
+const ADMIN_EMAIL    = process.env.ADMIN_EMAIL    ?? "admin@KiliSensehub.com";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "Admin@123456";
 const ADMIN_NAME     = "Platform Superadmin";
 

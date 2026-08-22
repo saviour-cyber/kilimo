@@ -1,4 +1,4 @@
-import type { CreateExpressContextOptions } from "@trpc/server/adapters/express";
+﻿import type { CreateExpressContextOptions } from "@trpc/server/adapters/express";
 import type { User } from "../../drizzle/schema";
 import { getDb } from "../db";
 import { users } from "../../drizzle/schema";
@@ -14,7 +14,7 @@ export type TrpcContext = {
 };
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "sproutx-hub-secret-key-development"
+  process.env.JWT_SECRET || "kilisense-secret-key-development"
 );
 
 import { parse } from "cookie";

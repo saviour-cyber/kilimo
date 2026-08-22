@@ -1,4 +1,4 @@
-import { z } from "zod";
+﻿import { z } from "zod";
 import { eq, and, desc } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
@@ -78,7 +78,7 @@ export const reportsRouter = router({
           // In a real app, upload result.buffer to S3/GCS here.
           // For local dev, we mock a URL.
           const fileName = `${input.name.replace(/\s+/g, '_')}_${Date.now()}.${result.ext}`;
-          fileUrl = `https://sproutxhub-mock.storage/exports/${fileName}`;
+          fileUrl = `https://KiliSensehub-mock.storage/exports/${fileName}`;
         }
       }
 

@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs";
+﻿import bcrypt from "bcryptjs";
 import mysql from "mysql2/promise";
 import { config } from "dotenv";
 
@@ -12,7 +12,7 @@ async function seedAdmin() {
   });
 
   try {
-    const email = "admin@sproutxhub.com";
+    const email = "admin@KiliSensehub.com";
     const rawPassword = "admin@123456";
 
     // Hash the password with bcrypt (10 rounds)

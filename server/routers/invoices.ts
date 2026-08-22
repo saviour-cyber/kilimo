@@ -1,4 +1,4 @@
-import { Router } from "express";
+﻿import { Router } from "express";
 import PDFDocument from "pdfkit";
 import { getDb } from "../db";
 import { subscriptionPayments, organizations, subscriptions, subscriptionPlans } from "../../drizzle/schema";
@@ -52,11 +52,11 @@ invoicesRouter.get("/:paymentId/download", async (req, res) => {
     doc
       .fontSize(20)
       .font("Helvetica-Bold")
-      .text("SPROUTXHUB", { align: "right" })
+      .text("KiliSenseHUB", { align: "right" })
       .fontSize(10)
       .font("Helvetica")
       .text("123 Farming Avenue, Nairobi, Kenya", { align: "right" })
-      .text("contact@sproutxhub.com", { align: "right" })
+      .text("contact@KiliSensehub.com", { align: "right" })
       .moveDown(2);
 
     // Invoice Info
@@ -124,7 +124,7 @@ invoicesRouter.get("/:paymentId/download", async (req, res) => {
       .fontSize(10)
       .font("Helvetica-Oblique")
       .fillColor("gray")
-      .text("Thank you for choosing SproutX!", { align: "center" });
+      .text("Thank you for choosing KiliSense!", { align: "center" });
 
     doc.end();
 
