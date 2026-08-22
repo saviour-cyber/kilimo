@@ -1,4 +1,4 @@
-{
+﻿{
   "version": "7",
   "dialect": "mysql",
   "entries": [
@@ -26,7 +26,7 @@
     {
       "idx": 3,
       "version": "5",
-      "when": 1756000000000,
+      "when": 1787400000000,
       "tag": "0003_kilisense_updates",
       "breakpoints": true
     }
