@@ -9,11 +9,28 @@ import {
 } from "../types";
 
 export class OpenMeteoProvider implements WeatherProvider {
-  private async getCoordinates(locationStr: string): Promise<{ lat: number; lon: number } | null> {
+  private readonly baseUrl: string;
+  private readonly geoUrl: string;
+  private readonly archiveUrl: string;
+  private readonly apiKey: string | undefined;
+
+  constructor() {
+    // Allows easy toggling to commercial endpoints via environment variables
+    this.baseUrl = process.env.OPEN_METEO_API_URL || "https://api.open-meteo.com/v1";
+    this.geoUrl = process.env.OPEN_METEO_GEO_URL || "https://geocoding-api.open-meteo.com/v1";
+    this.archiveUrl = process.env.OPEN_METEO_ARCHIVE_URL || "https://archive-api.open-meteo.com/v1";
+    this.apiKey = process.env.OPEN_METEO_API_KEY;
+  }
+
+  private buildUrl(base: string, endpoint: string, queryParams: string): string {
+    const url = `${base}/${endpoint}?${queryParams}`;
+    return this.apiKey ? `${url}&apikey=${this.apiKey}` : url;
+  }
+
+  public async getCoordinates(locationStr: string): Promise<{ lat: number; lon: number } | null> {
     try {
-      const response = await fetch(
-        `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(locationStr)}&count=1`
-      );
+      const url = this.buildUrl(this.geoUrl, "search", `name=${encodeURIComponent(locationStr)}&count=1`);
+      const response = await fetch(url);
       if (!response.ok) return null;
       
       const data = await response.json();
@@ -51,12 +68,18 @@ export class OpenMeteoProvider implements WeatherProvider {
     return arr[(val % 16)];
   }
 
-  public async getCurrentWeather(locationStr: string): Promise<WeatherCondition> {
-    const coords = await this.getCoordinates(locationStr);
-    const lat = coords?.lat ?? -1.2833;
-    const lon = coords?.lon ?? 36.8167;
+  private async resolveLocation(location: string | { lat: number; lon: number }): Promise<{ lat: number; lon: number }> {
+    if (typeof location === "string") {
+      const coords = await this.getCoordinates(location);
+      return { lat: coords?.lat ?? -1.2833, lon: coords?.lon ?? 36.8167 }; // Default to Nairobi
+    }
+    return location;
+  }
 
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,precipitation,weather_code&timezone=auto`;
+  public async getCurrentWeather(location: string | { lat: number; lon: number }): Promise<WeatherCondition> {
+    const { lat, lon } = await this.resolveLocation(location);
+
+    const url = this.buildUrl(this.baseUrl, "forecast", `latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,precipitation,weather_code&timezone=auto`);
     const response = await fetch(url);
     if (!response.ok) throw new Error("Failed to fetch current weather");
     const data = await response.json();
@@ -73,12 +96,10 @@ export class OpenMeteoProvider implements WeatherProvider {
     };
   }
 
-  public async getHourlyForecast(locationStr: string): Promise<HourlyForecast[]> {
-    const coords = await this.getCoordinates(locationStr);
-    const lat = coords?.lat ?? -1.2833;
-    const lon = coords?.lon ?? 36.8167;
+  public async getHourlyForecast(location: string | { lat: number; lon: number }): Promise<HourlyForecast[]> {
+    const { lat, lon } = await this.resolveLocation(location);
 
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,precipitation_probability,wind_speed_10m,weather_code&forecast_days=2&timezone=auto`;
+    const url = this.buildUrl(this.baseUrl, "forecast", `latitude=${lat}&longitude=${lon}&hourly=temperature_2m,precipitation_probability,wind_speed_10m,weather_code&forecast_days=2&timezone=auto`);
     const response = await fetch(url);
     if (!response.ok) throw new Error("Failed to fetch hourly forecast");
     const data = await response.json();
@@ -96,12 +117,10 @@ export class OpenMeteoProvider implements WeatherProvider {
     return hourly;
   }
 
-  public async getDailyForecast(locationStr: string): Promise<WeatherForecast[]> {
-    const coords = await this.getCoordinates(locationStr);
-    const lat = coords?.lat ?? -1.2833;
-    const lon = coords?.lon ?? 36.8167;
+  public async getDailyForecast(location: string | { lat: number; lon: number }): Promise<WeatherForecast[]> {
+    const { lat, lon } = await this.resolveLocation(location);
 
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`;
+    const url = this.buildUrl(this.baseUrl, "forecast", `latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`);
     const response = await fetch(url);
     if (!response.ok) throw new Error("Failed to fetch daily forecast");
     const data = await response.json();
@@ -115,8 +134,8 @@ export class OpenMeteoProvider implements WeatherProvider {
     })).slice(0, 7);
   }
 
-  public async getWeatherAlerts(locationStr: string): Promise<WeatherAlert[]> {
-    const current = await this.getCurrentWeather(locationStr);
+  public async getWeatherAlerts(location: string | { lat: number; lon: number }): Promise<WeatherAlert[]> {
+    const current = await this.getCurrentWeather(location);
     return this.generateAlertsFromCondition(current);
   }
 
@@ -176,8 +195,8 @@ export class OpenMeteoProvider implements WeatherProvider {
     return alerts;
   }
 
-  public async getAgriculturalInsights(locationStr: string): Promise<AgriculturalInsights> {
-    const current = await this.getCurrentWeather(locationStr);
+  public async getAgriculturalInsights(location: string | { lat: number; lon: number }): Promise<AgriculturalInsights> {
+    const current = await this.getCurrentWeather(location);
     
     let sprayingConditions: "optimal" | "marginal" | "poor" = "optimal";
     if (current.isRaining || current.windSpeed > 20) sprayingConditions = "poor";
@@ -195,20 +214,17 @@ export class OpenMeteoProvider implements WeatherProvider {
     };
   }
 
-  public async getHistoricalWeather(locationStr: string, date: string): Promise<WeatherCondition> {
-    // OpenMeteo historical API is on a different endpoint (archive-api)
-    const coords = await this.getCoordinates(locationStr);
-    const lat = coords?.lat ?? -1.2833;
-    const lon = coords?.lon ?? 36.8167;
+  public async getHistoricalWeather(location: string | { lat: number; lon: number }, date: string): Promise<WeatherCondition> {
+    const { lat, lon } = await this.resolveLocation(location);
 
-    const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${date}&end_date=${date}&daily=temperature_2m_mean,precipitation_sum,wind_speed_10m_max&timezone=auto`;
+    const url = this.buildUrl(this.archiveUrl, "archive", `latitude=${lat}&longitude=${lon}&start_date=${date}&end_date=${date}&daily=temperature_2m_mean,precipitation_sum,wind_speed_10m_max&timezone=auto`);
     const response = await fetch(url);
     if (!response.ok) throw new Error("Failed to fetch historical weather");
     const data = await response.json();
 
     return {
       temperature: data.daily.temperature_2m_mean[0] ?? 0,
-      humidity: 0, // historical archive doesn't always provide easy humidity mean without hourly
+      humidity: 0,
       windSpeed: data.daily.wind_speed_10m_max[0] ?? 0,
       isRaining: (data.daily.precipitation_sum[0] ?? 0) > 0,
       description: "Historical data",
@@ -216,13 +232,10 @@ export class OpenMeteoProvider implements WeatherProvider {
     };
   }
 
-  public async getWeatherForLocation(locationStr: string): Promise<WeatherData> {
-    const coords = await this.getCoordinates(locationStr);
-    const lat = coords?.lat ?? -1.2833;
-    const lon = coords?.lon ?? 36.8167;
+  public async getWeatherForLocation(location: string | { lat: number; lon: number }): Promise<WeatherData> {
+    const { lat, lon } = await this.resolveLocation(location);
 
-    // Fetch everything in one go for efficiency
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,precipitation,weather_code&hourly=temperature_2m,precipitation_probability,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`;
+    const url = this.buildUrl(this.baseUrl, "forecast", `latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,precipitation,weather_code&hourly=temperature_2m,precipitation_probability,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`);
     
     const response = await fetch(url);
     if (!response.ok) throw new Error("Failed to fetch weather data");

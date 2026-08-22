@@ -1,52 +1,112 @@
 import { getDb } from "../../db";
-import { farms, farmMembers, notifications } from "../../../drizzle/schema";
+import { farms, farmMembers, notifications, weatherCache } from "../../../drizzle/schema";
 import { eq, and, gte } from "drizzle-orm";
 import { IWeatherEngine, WeatherData, WeatherProvider } from "./types";
 import { OpenMeteoProvider } from "./providers/openMeteo";
 
-interface CacheEntry {
-  data: WeatherData;
-  timestamp: number;
-}
-
 export class WeatherEngine implements IWeatherEngine {
-  private provider: WeatherProvider;
-  private cache: Map<number, CacheEntry>;
+  private provider: OpenMeteoProvider;
   
   // Cache durations
   private readonly CACHE_DURATION_MS = 15 * 60 * 1000; // 15 minutes
 
   constructor() {
     this.provider = new OpenMeteoProvider();
-    this.cache = new Map();
   }
 
   public async getWeatherForFarm(farmId: number): Promise<WeatherData> {
-    const cached = this.cache.get(farmId);
-    if (cached && (Date.now() - cached.timestamp < this.CACHE_DURATION_MS)) {
-      return { ...cached.data, isCached: true };
+    const db = await getDb();
+    if (!db) throw new Error("Database not available");
+
+    const [farm] = await db.select().from(farms).where(eq(farms.id, farmId));
+    if (!farm) throw new Error(`Farm ${farmId} not found`);
+
+    let lat = farm.latitude ? Number(farm.latitude) : null;
+    let lon = farm.longitude ? Number(farm.longitude) : null;
+
+    if (lat === null || lon === null) {
+      const locationStr = farm.location || farm.county || "Nairobi, Kenya";
+      const coords = await this.provider.getCoordinates(locationStr);
+      if (coords) {
+        lat = coords.lat;
+        lon = coords.lon;
+        // Save the resolved coordinates back to the farm
+        await db.update(farms).set({ latitude: lat.toString(), longitude: lon.toString() }).where(eq(farms.id, farmId));
+      } else {
+        // Fallback to Nairobi if completely unresolvable
+        lat = -1.2833;
+        lon = 36.8167;
+      }
     }
 
-    return this.refreshForecast(farmId);
+    // Check DB cache using rounded coordinates to group nearby farms
+    const cacheLat = Math.round(lat * 100) / 100;
+    const cacheLon = Math.round(lon * 100) / 100;
+
+    const [cached] = await db.select()
+      .from(weatherCache)
+      .where(
+        and(
+          eq(weatherCache.latitude, cacheLat.toString()),
+          eq(weatherCache.longitude, cacheLon.toString()),
+          eq(weatherCache.dataType, "all")
+        )
+      );
+
+    if (cached && cached.expiresAt.getTime() > Date.now()) {
+      return { ...(cached.payload as WeatherData), isCached: true };
+    }
+
+    return this.refreshForecast(farmId, { lat, lon }, cacheLat, cacheLon);
   }
 
-  public async refreshForecast(farmId: number): Promise<WeatherData> {
+  public async refreshForecast(farmId: number, coords?: { lat: number; lon: number }, cacheLat?: number, cacheLon?: number): Promise<WeatherData> {
     try {
       const db = await getDb();
       if (!db) throw new Error("Database not available");
 
-      const [farm] = await db.select().from(farms).where(eq(farms.id, farmId));
-      if (!farm) throw new Error(`Farm ${farmId} not found`);
+      let lat = coords?.lat;
+      let lon = coords?.lon;
 
-      // Use the stored location string, falling back to county/sub-county, then default
-      const locationStr = farm.location || farm.county || "Nairobi, Kenya";
+      if (lat === undefined || lon === undefined) {
+        const [farm] = await db.select().from(farms).where(eq(farms.id, farmId));
+        if (!farm) throw new Error(`Farm ${farmId} not found`);
+
+        lat = farm.latitude ? Number(farm.latitude) : undefined;
+        lon = farm.longitude ? Number(farm.longitude) : undefined;
+
+        if (lat === undefined || lon === undefined) {
+          const locationStr = farm.location || farm.county || "Nairobi, Kenya";
+          const resCoords = await this.provider.getCoordinates(locationStr);
+          lat = resCoords?.lat ?? -1.2833;
+          lon = resCoords?.lon ?? 36.8167;
+          await db.update(farms).set({ latitude: lat.toString(), longitude: lon.toString() }).where(eq(farms.id, farmId));
+        }
+      }
+
+      const weatherData = await this.provider.getWeatherForLocation({ lat, lon });
       
-      const weatherData = await this.provider.getWeatherForLocation(locationStr);
-      
-      // Update Cache
-      this.cache.set(farmId, {
-        data: weatherData,
-        timestamp: Date.now()
+      const cLat = cacheLat ?? Math.round(lat * 100) / 100;
+      const cLon = cacheLon ?? Math.round(lon * 100) / 100;
+
+      // Ensure we clean up any old cache entry for this coordinate block, or just insert new one
+      // (a real system might do an upsert or delete old entries)
+      await db.delete(weatherCache).where(
+        and(
+          eq(weatherCache.latitude, cLat.toString()),
+          eq(weatherCache.longitude, cLon.toString()),
+          eq(weatherCache.dataType, "all")
+        )
+      );
+
+      await db.insert(weatherCache).values({
+        latitude: cLat.toString(),
+        longitude: cLon.toString(),
+        dataType: "all",
+        provider: "open-meteo",
+        payload: weatherData,
+        fetchedAt: new Date(),
+        expiresAt: new Date(Date.now() + this.CACHE_DURATION_MS),
       });
 
       // Fire-and-forget: publish alerts to notifications — never let this crash the weather response
@@ -57,12 +117,6 @@ export class WeatherEngine implements IWeatherEngine {
       return { ...weatherData, isCached: false };
     } catch (error) {
       console.error(`[WeatherEngine] refreshForecast error for farm ${farmId}:`, error);
-      // Graceful fallback to cache even if expired
-      const cached = this.cache.get(farmId);
-      if (cached) {
-        console.warn(`[WeatherEngine] Serving stale cache for farm ${farmId}`);
-        return { ...cached.data, isCached: true };
-      }
       throw error;
     }
   }

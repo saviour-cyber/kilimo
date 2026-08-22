@@ -86,6 +86,8 @@ export const farms = mysqlTable("farms", {
   subCounty: varchar("subCounty", { length: 64 }),
   ward: varchar("ward", { length: 64 }),
   location: varchar("location", { length: 256 }),
+  latitude: decimal("latitude", { precision: 10, scale: 6 }),
+  longitude: decimal("longitude", { precision: 10, scale: 6 }),
   farmType: mysqlEnum("farmType", ["crop", "livestock", "mixed", "aquaculture", "poultry", "other"]).default("mixed").notNull(),
   sizeHectares: decimal("sizeHectares", { precision: 10, scale: 2 }),
   logoUrl: text("logoUrl"),
@@ -147,6 +149,22 @@ export const farmModules = mysqlTable("farmModules", {
 
 export type FarmModule = typeof farmModules.$inferSelect;
 export type InsertFarmModule = typeof farmModules.$inferInsert;
+
+// ─── Weather Cache ─────────────────────────────────────────────────────────────
+
+export const weatherCache = mysqlTable("weatherCache", {
+  id: int("id").autoincrement().primaryKey(),
+  latitude: decimal("latitude", { precision: 10, scale: 2 }).notNull(), // rounded to 2 decimal places for grouping
+  longitude: decimal("longitude", { precision: 10, scale: 2 }).notNull(),
+  dataType: varchar("dataType", { length: 32 }).notNull(), // 'current', 'hourly', 'daily', 'all'
+  provider: varchar("provider", { length: 64 }).default("open-meteo").notNull(),
+  payload: json("payload").notNull(),
+  fetchedAt: timestamp("fetchedAt").defaultNow().notNull(),
+  expiresAt: timestamp("expiresAt").notNull(),
+});
+
+export type WeatherCache = typeof weatherCache.$inferSelect;
+export type InsertWeatherCache = typeof weatherCache.$inferInsert;
 
 // ─── Fields / Plots ────────────────────────────────────────────────────────────
 

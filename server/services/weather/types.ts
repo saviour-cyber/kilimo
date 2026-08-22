@@ -52,25 +52,25 @@ export interface WeatherData {
 
 export interface WeatherProvider {
   /** Retrieves only current conditions */
-  getCurrentWeather(locationStr: string): Promise<WeatherCondition>;
+  getCurrentWeather(location: string | { lat: number; lon: number }): Promise<WeatherCondition>;
   
   /** Retrieves hourly forecast for the next 24-48 hours */
-  getHourlyForecast(locationStr: string): Promise<HourlyForecast[]>;
+  getHourlyForecast(location: string | { lat: number; lon: number }): Promise<HourlyForecast[]>;
   
   /** Retrieves 7-day daily forecast */
-  getDailyForecast(locationStr: string): Promise<WeatherForecast[]>;
+  getDailyForecast(location: string | { lat: number; lon: number }): Promise<WeatherForecast[]>;
   
   /** Retrieves active weather alerts */
-  getWeatherAlerts(locationStr: string): Promise<WeatherAlert[]>;
+  getWeatherAlerts(location: string | { lat: number; lon: number }): Promise<WeatherAlert[]>;
   
   /** Computes specific agricultural weather insights */
-  getAgriculturalInsights(locationStr: string): Promise<AgriculturalInsights>;
+  getAgriculturalInsights(location: string | { lat: number; lon: number }): Promise<AgriculturalInsights>;
   
   /** Retrieves historical weather data for a specific date */
-  getHistoricalWeather(locationStr: string, date: string): Promise<WeatherCondition>;
+  getHistoricalWeather(location: string | { lat: number; lon: number }, date: string): Promise<WeatherCondition>;
 
   /** Legacy/Convenience method to fetch all at once (often more efficient for APIs like OpenMeteo) */
-  getWeatherForLocation(locationStr: string): Promise<WeatherData>;
+  getWeatherForLocation(location: string | { lat: number; lon: number }): Promise<WeatherData>;
 }
 
 export interface IWeatherEngine {
