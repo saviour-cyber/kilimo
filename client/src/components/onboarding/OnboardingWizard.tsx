@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// ─── Step metadata ────────────────────────────────────────────────────────────
+// â”€â”€â”€ Step metadata â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const STEPS = [
   { id: 1, label: "Organization", icon: Building2 },
   { id: 2, label: "Choose Plan",  icon: CreditCard },
@@ -28,7 +28,7 @@ const STEPS = [
   { id: 4, label: "Farm Setup",   icon: Settings2 },
 ];
 
-// ─── Progress indicator ───────────────────────────────────────────────────────
+// â”€â”€â”€ Progress indicator â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function StepIndicator({ currentStep }: { currentStep: number }) {
   return (
     <div className="flex items-center justify-center gap-0 mb-8">
@@ -75,7 +75,7 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
   );
 }
 
-// ─── Main Wizard ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ Main Wizard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export function OnboardingWizard() {
   const [, navigate] = useLocation();
   const { user } = useAuth();
@@ -115,7 +115,7 @@ export function OnboardingWizard() {
     onError: (err) => toast.error(err.message),
   });
 
-  // Module-type features from the selected plan (for display only — backend auto-provisions)
+  // Module-type features from the selected plan (for display only â€” backend auto-provisions)
   const planModuleFeatures = (selectedPlan?.features ?? [])
     .filter((f) => f.featureType === "module")
     .map((f) => MODULE_REGISTRY.find((m) => m.key === f.featureKey))
@@ -135,8 +135,8 @@ export function OnboardingWizard() {
     });
   };
 
-  // ── Step 1: Organization Setup ──────────────────────────────────────────────
-  const Step1 = () => (
+  // â”€â”€ Step 1: Organization Setup â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  const renderStep1 = () => (
     <div className="space-y-5">
       <div>
         <h2 className="text-xl font-bold text-foreground">Set up your organization</h2>
@@ -217,11 +217,11 @@ export function OnboardingWizard() {
                 <SelectItem value="USD">USD ($)</SelectItem>
                 <SelectItem value="UGX">UGX (USh)</SelectItem>
                 <SelectItem value="TZS">TZS (TSh)</SelectItem>
-                <SelectItem value="NGN">NGN (₦)</SelectItem>
-                <SelectItem value="GHS">GHS (₵)</SelectItem>
+                <SelectItem value="NGN">NGN (â‚¦)</SelectItem>
+                <SelectItem value="GHS">GHS (â‚µ)</SelectItem>
                 <SelectItem value="ZAR">ZAR (R)</SelectItem>
-                <SelectItem value="EUR">EUR (€)</SelectItem>
-                <SelectItem value="GBP">GBP (£)</SelectItem>
+                <SelectItem value="EUR">EUR (â‚¬)</SelectItem>
+                <SelectItem value="GBP">GBP (Â£)</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -255,8 +255,8 @@ export function OnboardingWizard() {
     </div>
   );
 
-  // ── Step 2: Choose Plan ─────────────────────────────────────────────────────
-  const Step2 = () => (
+  // â”€â”€ Step 2: Choose Plan â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  const renderStep2 = () => (
     <div className="space-y-5">
       <div>
         <h2 className="text-xl font-bold text-foreground">Choose your plan</h2>
@@ -337,8 +337,8 @@ export function OnboardingWizard() {
     </div>
   );
 
-  // ── Step 3: Start Trial ─────────────────────────────────────────────────────
-  const Step3 = () => (
+  // â”€â”€ Step 3: Start Trial â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  const renderStep3 = () => (
     <div className="space-y-5">
       <div>
         <h2 className="text-xl font-bold text-foreground">Start your free trial</h2>
@@ -379,7 +379,7 @@ export function OnboardingWizard() {
         </div>
         <div className="h-px bg-border" />
         <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400">
-          <span className="text-sm font-medium">🎉 Free trial period</span>
+          <span className="text-sm font-medium">ðŸŽ‰ Free trial period</span>
           <span className="font-bold">{selectedPlan?.trialDays} days</span>
         </div>
       </div>
@@ -402,8 +402,8 @@ export function OnboardingWizard() {
     </div>
   );
 
-  // ── Step 4: Configure Farm ──────────────────────────────────────────────────
-  const Step4 = () => (
+  // â”€â”€ Step 4: Configure Farm â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  const renderStep4 = () => (
     <div className="space-y-5">
       <div>
         <h2 className="text-xl font-bold text-foreground">Configure your farm</h2>
@@ -448,7 +448,7 @@ export function OnboardingWizard() {
         </div>
       </div>
 
-      {/* Auto-provisioned modules — read-only display */}
+      {/* Auto-provisioned modules â€” read-only display */}
       {planModuleFeatures.length > 0 && (
         <div className="space-y-2">
           <Label>Modules included in your <strong>{selectedPlan?.name}</strong> plan</Label>
@@ -482,7 +482,7 @@ export function OnboardingWizard() {
           onClick={handleFinish}
           disabled={!farm.farmName.trim() || setupMutation.isPending}
         >
-          {setupMutation.isPending ? "Setting up..." : "Launch My Farm 🚀"}
+          {setupMutation.isPending ? "Setting up..." : "Launch My Farm ðŸš€"}
         </Button>
       </div>
     </div>
@@ -503,12 +503,13 @@ export function OnboardingWizard() {
         <StepIndicator currentStep={step} />
 
         <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
-          {step === 1 && <Step1 />}
-          {step === 2 && <Step2 />}
-          {step === 3 && <Step3 />}
-          {step === 4 && <Step4 />}
+          {step === 1 && renderStep1()}
+          {step === 2 && renderStep2()}
+          {step === 3 && renderStep3()}
+          {step === 4 && renderStep4()}
         </div>
       </div>
     </div>
   );
 }
+
