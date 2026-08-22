@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { publicProcedure, router } from "../_core/trpc";
 import {
   users, organizations, organizationMembers, farms, farmModules, farmMembers,
-  subscriptionPlans, subscriptions,
+  subscriptionPlans, subscriptions, subscriptionPlanFeatures
 } from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
 import { emailService } from "../services/email";
@@ -14,12 +14,10 @@ export const onboardingRouter = router({
    * Public — no auth required.
    */
   getActivePlans: publicProcedure.query(async ({ ctx }) => {
-    const { subscriptionPlanFeatures } = await import("../../drizzle/schema");
-    const { eq: drizzleEq } = await import("drizzle-orm");
     const plans = await ctx.db
       .select()
       .from(subscriptionPlans)
-      .where(drizzleEq(subscriptionPlans.isActive, true))
+      .where(eq(subscriptionPlans.isActive, true))
       .orderBy(subscriptionPlans.sortOrder);
 
     const features = await ctx.db.select().from(subscriptionPlanFeatures);
@@ -159,11 +157,10 @@ export const onboardingRouter = router({
         // The subscription plan is the source of truth for entitlement.
         // We fetch the plan's features and enable all module-type features automatically.
         // The user's wizard selections (input.modules) are respected but the plan always wins.
-        const { subscriptionPlanFeatures: planFeaturesTable } = await import("../../drizzle/schema");
         const planFeatures = await ctx.db
           .select()
-          .from(planFeaturesTable)
-          .where(eq(planFeaturesTable.planId, plan.id));
+          .from(subscriptionPlanFeatures)
+          .where(eq(subscriptionPlanFeatures.planId, plan.id));
 
         // Always-on core modules regardless of plan
         const coreModules = ["dashboard", "settings", "tasks", "notifications"];
