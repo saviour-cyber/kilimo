@@ -56,7 +56,7 @@ export default function AdminLogin() {
             src="/logo.png" 
             alt="KiliSense Logo" 
             className="object-contain" 
-            style={{ height: '76px' }}
+            style={{ height: '140px' }}
           />
           <div className="space-y-1.5">
             <h1 className="text-[22px] font-semibold text-slate-900 tracking-tight">Platform Admin</h1>
@@ -162,3 +162,4 @@ export default function AdminLogin() {
     </div>
   );
 }
+

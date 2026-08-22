@@ -85,7 +85,7 @@ export default function Home() {
   if (isStandalone && !splashFinished) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center">
-        <img src="/logo.png" alt="KiliSense Logo" className="h-24 object-contain animate-pulse" />
+        <img src="/logo.png" alt="KiliSense Logo" className="h-48 object-contain animate-pulse" />
       </div>
     );
   }
@@ -99,7 +99,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-[#E2E8F0]">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
-            <img src="/logo.png" alt="KiliSense" className="h-8 object-contain" />
+            <img src="/logo.png" alt="KiliSense" className="h-16 object-contain" />
           </div>
           <div className="flex items-center gap-6">
             {!loading && !isAuthenticated && (
@@ -414,7 +414,7 @@ export default function Home() {
             {/* Brand column */}
             <div className="lg:col-span-4">
               <div className="bg-white inline-block px-3 py-2 rounded-xl mb-6">
-                <img src="/logo.png" alt="KiliSense" className="h-6 object-contain" />
+                <img src="/logo.png" alt="KiliSense" className="h-12 object-contain" />
               </div>
               <h3 className="text-xl font-bold text-white mb-4">KiliSense</h3>
               <p className="text-[#64748B] mb-8 max-w-sm text-sm leading-relaxed">
@@ -494,3 +494,4 @@ export default function Home() {
     </div>
   );
 }
+

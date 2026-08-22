@@ -40,7 +40,7 @@ export default function VerifyEmail() {
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-md">
         <div className="flex flex-col items-center gap-4 mb-4">
-          <img src="/logo.png" alt="KiliSense" className="w-24 h-24 object-contain" />
+          <img src="/logo.png" alt="KiliSense" className="w-40 h-40 object-contain drop-shadow-md" />
         </div>
 
         <Card className="shadow-lg border-slate-200">
@@ -98,3 +98,4 @@ export default function VerifyEmail() {
     </div>
   );
 }
+

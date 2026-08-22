@@ -74,7 +74,7 @@ export default function ResetPassword() {
 
         {/* Brand Header */}
         <div className="flex flex-col items-center gap-4 mb-4">
-          <img src="/logo.png" alt="KiliSense" className="w-24 h-24 object-contain" />
+          <img src="/logo.png" alt="KiliSense" className="w-40 h-40 object-contain drop-shadow-md" />
         </div>
 
         {/* Welcome heading */}
@@ -201,3 +201,4 @@ export default function ResetPassword() {
     </div>
   );
 }
+
