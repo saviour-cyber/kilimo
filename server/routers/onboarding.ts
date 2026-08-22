@@ -1,4 +1,4 @@
-import { z } from "zod";
+﻿import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { publicProcedure, router } from "../_core/trpc";
 import {
@@ -11,7 +11,7 @@ import { emailService } from "../services/email";
 export const onboardingRouter = router({
   /**
    * Returns active subscription plans for the onboarding wizard.
-   * Public — no auth required.
+   * Public â€” no auth required.
    */
   getActivePlans: publicProcedure.query(async ({ ctx }) => {
     const plans = await ctx.db
@@ -187,7 +187,7 @@ export const onboardingRouter = router({
         return { success: true, orgId, farmId };
       } catch (error: any) {
         if (error instanceof TRPCError) throw error;
-        console.error("Onboarding setup failed:", error);
+        console.error("Onboarding setup failed:", error); console.error("Raw DB Error:", error?.cause ?? error?.originalError ?? error?.sqlMessage ?? error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: `Onboarding failed: ${error?.message ?? "Unknown error"}`,
@@ -195,3 +195,4 @@ export const onboardingRouter = router({
       }
     }),
 });
+
