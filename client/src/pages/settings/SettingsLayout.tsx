@@ -90,24 +90,24 @@ export default function SettingsLayout() {
   if (isPlatformAbout || isPlatformAboutRel) content = <PlatformAbout />;
 
   return (
-    <div className="min-h-full flex flex-col bg-white">
-      {/* Header */}
-      <div className="border-b bg-white px-8 py-6 shrink-0 sticky top-0 z-10">
-        <div className="flex items-center gap-4 max-w-[1400px] mx-auto">
-          <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center">
-            <Settings className="w-6 h-6 text-slate-600" />
+    <div className="min-h-full flex flex-col">
+      <div className="border-b bg-card px-4 sm:px-8 py-5 shrink-0 sticky top-0 z-10 shadow-sm">
+        <div className="flex items-center gap-3 max-w-[1400px] mx-auto">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <Settings className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Platform Settings</h1>
-            <p className="text-sm text-slate-500 mt-1">Manage your profile, organization, and active farm</p>
+            <h1 className="text-xl font-bold text-foreground tracking-tight">Platform Settings</h1>
+            <p className="text-xs text-muted-foreground mt-0.5">Manage your profile, organization, and active farm</p>
           </div>
         </div>
       </div>
 
-      {/* Nested Layout */}
-      <div className="flex-1 flex max-w-[1400px] w-full mx-auto px-8 py-10 gap-16">
-        <SettingsSidebar />
-        <main className="flex-1 pb-24 min-w-0">
+      <div className="flex-1 flex flex-col md:flex-row max-w-[1400px] w-full mx-auto px-4 sm:px-8 py-8 gap-8 md:gap-12">
+        <div className="hidden md:block">
+          <SettingsSidebar />
+        </div>
+        <main className="flex-1 min-w-0">
           {content}
         </main>
       </div>

@@ -1,4 +1,4 @@
-﻿import { Link, useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { 
   User, Lock, Bell, 
@@ -49,32 +49,30 @@ export function SettingsSidebar() {
   const [location] = useLocation();
 
   return (
-    <nav className="w-80 shrink-0 flex flex-col gap-8 pb-8 sticky top-8 self-start">
+    <nav className="w-64 shrink-0 flex flex-col gap-6 pb-8 sticky top-8 self-start">
       {NAV_GROUPS.map((group) => (
-        <div key={group.title} className="flex flex-col gap-2">
-          <h4 className="px-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+        <div key={group.title} className="flex flex-col gap-1.5">
+          <h4 className="px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
             {group.title}
           </h4>
           <div className="flex flex-col gap-0.5">
             {group.items.map((item) => {
               // useLocation inside a nested route returns the nested path (e.g. /user/profile)
-              const nestedPath = item.href.replace("/settings", "");
-              const isActive = location === nestedPath || location === item.href;
-              const Icon = item.icon;
+              // but we might also get the full path (/settings/user/profile)
+              const isActive = location.endsWith(item.href.replace('/settings', '')) || location.endsWith(item.href);
               return (
-                <Link key={item.href} href={item.disabled ? "~" : `~${item.href}`}>
-                  <a 
+                <Link key={item.href} href={item.href}>
+                  <div
                     className={cn(
-                      "flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg transition-all",
-                      isActive 
-                        ? "bg-slate-100 text-slate-900 shadow-sm ring-1 ring-slate-200/50" 
-                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
-                      item.disabled && "opacity-50 cursor-not-allowed pointer-events-none"
+                      "flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer",
+                      isActive
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                     )}
                   >
-                    <Icon className={cn("w-4 h-4", isActive ? "text-slate-900" : "text-slate-500")} />
+                    <item.icon className={cn("w-4 h-4", isActive ? "text-primary-foreground/90" : "text-muted-foreground")} />
                     {item.label}
-                  </a>
+                  </div>
                 </Link>
               );
             })}

@@ -4,6 +4,7 @@ import { AIChatBox, type Message } from "@/components/AIChatBox";
 import { Sparkles, Brain, CloudRain, ShieldAlert } from "lucide-react";
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function KiliAIPage() {
   const { currentFarm } = useFarm();
@@ -41,21 +42,17 @@ export default function KiliAIPage() {
 
   return (
     <div className="flex flex-col h-full bg-slate-50/50">
-      <div className="p-4 sm:p-6 pb-0 max-w-[1600px] mx-auto w-full">
-        <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4 mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
-              <Sparkles className="w-5 h-5 text-green-700" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Kili AI Workspace</h1>
-              <p className="text-sm text-slate-500">Platform Intelligence Engine</p>
-            </div>
-          </div>
-        </header>
+      <div className="max-w-[1600px] mx-auto w-full px-4 pt-4 sm:px-6 sm:pt-6">
+        <PageHeader 
+          title="Kili AI Workspace" 
+          description="Platform Intelligence Engine"
+          icon={Sparkles}
+          iconColor="text-green-700"
+          iconBg="bg-green-100"
+        />
       </div>
 
-      <div className="flex-1 overflow-hidden p-4 sm:p-6 pt-0 max-w-[1600px] mx-auto w-full">
+      <div className="flex-1 overflow-hidden p-4 sm:p-6 max-w-[1600px] mx-auto w-full">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
           
           {/* Main Chat Interface */}

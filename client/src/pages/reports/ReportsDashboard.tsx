@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useFarm } from "@/contexts/FarmContext";
 import { trpc } from "@/lib/trpc";
 import { format } from "date-fns";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function ReportsDashboard() {
   const { currentFarm } = useFarm();
@@ -21,24 +22,20 @@ export default function ReportsDashboard() {
   if (!currentFarm) return null;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center">
-            <FileText className="w-5 h-5 text-indigo-600" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-slate-900">Reports Hub</h1>
-            <p className="text-sm text-slate-500">Centralized workspace for platform-wide analytics and exports</p>
-          </div>
-        </div>
-        <Button asChild className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2 rounded-xl">
+    <div className="max-w-[1600px] mx-auto w-full px-4 py-4 sm:px-6 sm:py-6 space-y-6">
+      <PageHeader 
+        title="Reports Hub" 
+        description="Centralized workspace for platform-wide analytics and exports"
+        icon={FileText}
+        iconColor="text-indigo-600"
+        iconBg="bg-indigo-100"
+      >
+        <Button asChild className="gap-2">
           <Link href="/reports/wizard">
             <PlusCircle className="w-4 h-4" /> Generate Report
           </Link>
         </Button>
-      </div>
+      </PageHeader>
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

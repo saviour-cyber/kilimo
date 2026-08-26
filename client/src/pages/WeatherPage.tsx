@@ -4,6 +4,7 @@ import { useFarm } from "@/contexts/FarmContext";
 import { trpc } from "@/lib/trpc";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function WeatherPage() {
   const { currentFarm } = useFarm();
@@ -15,21 +16,17 @@ export default function WeatherPage() {
 
   return (
     <div className="flex flex-col h-full bg-slate-50/50">
-      <div className="p-4 sm:p-6 pb-0 max-w-[1600px] mx-auto w-full">
-        <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4 mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
-              <CloudRain className="w-5 h-5 text-blue-700" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Weather Engine</h1>
-              <p className="text-sm text-slate-500">Platform Services Workspace</p>
-            </div>
-          </div>
-        </header>
+      <div className="max-w-[1600px] mx-auto w-full px-4 pt-4 sm:px-6 sm:pt-6">
+        <PageHeader 
+          title="Weather Engine" 
+          description="Platform Services Workspace"
+          icon={CloudRain}
+          iconColor="text-blue-700"
+          iconBg="bg-blue-100"
+        />
       </div>
 
-      <div className="flex-1 overflow-auto p-4 sm:p-6 pt-0 max-w-[1600px] mx-auto w-full">
+      <div className="flex-1 overflow-auto p-4 sm:p-6 max-w-[1600px] mx-auto w-full">
         {!currentFarm ? (
           <Card className="border shadow-sm bg-white">
             <CardContent className="p-12 text-center text-slate-500">

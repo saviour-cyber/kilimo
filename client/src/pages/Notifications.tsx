@@ -6,6 +6,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Bell, BellOff, CheckCheck } from "lucide-react";
 import { toast } from "sonner";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 const TYPE_STYLES: Record<string, string> = {
   info: "bg-blue-100 text-blue-700",
@@ -37,32 +40,31 @@ export default function Notifications() {
   const unreadCount = (notifications as any[]).filter((n: any) => !n.isRead).length;
 
   return (
-    <div className="p-6 space-y-5 max-w-3xl mx-auto">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center">
-            <Bell className="w-5 h-5 text-blue-600" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-foreground">Notifications</h1>
-            <p className="text-xs text-muted-foreground">{unreadCount} unread</p>
-          </div>
-        </div>
+    <div className="p-4 sm:p-6 max-w-[1600px] mx-auto w-full">
+      <PageHeader 
+        title="Notifications" 
+        description={`${unreadCount} unread`}
+        icon={Bell}
+        iconColor="text-blue-600"
+        iconBg="bg-blue-100"
+      >
         {unreadCount > 0 && (
           <Button variant="outline" size="sm" onClick={() => markAllRead.mutate({ farmId })}>
             <CheckCheck className="w-4 h-4 mr-1.5" />Mark all read
           </Button>
         )}
-      </div>
+      </PageHeader>
 
-      {isLoading ? (
-        <div className="space-y-2">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16" />)}</div>
-      ) : notifications.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <BellOff className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="font-medium">No notifications</p>
-        </div>
-      ) : (
+      <div className="max-w-3xl space-y-4">
+        {isLoading ? (
+          <LoadingSkeleton variant="list" />
+        ) : notifications.length === 0 ? (
+          <EmptyState 
+            icon={BellOff} 
+            title="No notifications" 
+            description="You're all caught up!" 
+          />
+        ) : (
         <div className="space-y-2">
           {(notifications as any[]).map((n: any) => (
             <Card

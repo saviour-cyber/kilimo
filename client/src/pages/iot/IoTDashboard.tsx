@@ -5,6 +5,7 @@ import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 const CATEGORY_ICONS: Record<string, React.ElementType> = {
   soil:          Droplets,
@@ -51,23 +52,6 @@ export default function IoTDashboard() {
   if (!currentFarm) return null;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
-
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-cyan-100 flex items-center justify-center">
-            <Cpu className="w-5 h-5 text-cyan-600" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-slate-900">IoT Engine</h1>
-            <p className="text-sm text-slate-500">Smart Farming Platform — Live Sensor Data</p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <Button asChild variant="outline" className="gap-2 text-indigo-600 hover:text-indigo-700">
-            <Link href="/iot/rules">
-              <Settings2 className="w-4 h-4" /> Rules Engine
             </Link>
           </Button>
           <Button asChild variant="outline" className="gap-2">

@@ -1,11 +1,13 @@
-﻿import { trpc } from "@/lib/trpc";
+import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Tag, MapPin, Search, Store } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 export default function Browse() {
   const [, setLocation] = useLocation();
@@ -19,11 +21,14 @@ export default function Browse() {
   });
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Marketplace</h1>
-        <p className="text-muted-foreground mt-1">Browse farm produce, livestock, and inputs across KiliSense.</p>
-      </div>
+    <div className="p-4 sm:p-6 max-w-[1600px] mx-auto w-full space-y-6">
+      <PageHeader 
+        title="Marketplace" 
+        description="Browse farm produce, livestock, and inputs across KiliSense"
+        icon={Store}
+        iconColor="text-teal-600"
+        iconBg="bg-teal-100"
+      />
 
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
@@ -57,22 +62,18 @@ export default function Browse() {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-72 rounded-xl" />)}
-        </div>
+        <LoadingSkeleton variant="cards" />
       ) : listings?.length === 0 ? (
-        <Card className="border-dashed bg-muted/30">
-          <CardContent className="flex flex-col items-center justify-center p-16 text-center">
-            <Store className="w-12 h-12 text-muted-foreground mb-4 opacity-50" />
-            <h3 className="text-xl font-semibold mb-2">No listings found</h3>
-            <p className="text-muted-foreground">Try adjusting your filters or search term.</p>
-          </CardContent>
-        </Card>
+        <EmptyState 
+          icon={Store} 
+          title="No listings found" 
+          description="Try adjusting your filters or search term." 
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {listings?.map(({ listing, category, primaryImage, orgName }) => (
             <Card 
-              key={listing.id} 
+              key={listing.id}
               className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group"
               onClick={() => setLocation(`/marketplace/listing/${listing.id}`)}
             >
