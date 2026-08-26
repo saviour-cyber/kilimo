@@ -1,4 +1,4 @@
-﻿import { useAuth } from "@/_core/hooks/useAuth";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { useEffect, useState } from "react";
@@ -413,9 +413,7 @@ export default function Home() {
 
             {/* Brand column */}
             <div className="lg:col-span-4">
-              <div className="bg-white inline-block px-3 py-2 rounded-xl mb-6">
-                <img src="/logo.png" alt="KiliSense" className="h-12 object-contain" />
-              </div>
+              <img src="/logo.png" alt="KiliSense" className="h-12 object-contain mb-6" />
               <h3 className="text-xl font-bold text-white mb-4">KiliSense</h3>
               <p className="text-[#64748B] mb-8 max-w-sm text-sm leading-relaxed">
                 Helping African farmers manage farms, access markets and grow with confidence.

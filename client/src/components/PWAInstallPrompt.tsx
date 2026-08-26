@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Download, Smartphone, Share, Plus, CheckCircle2, MonitorPlay } from "lucide-react";
 import { Link } from "wouter";
 import { cn } from "@/lib/utils";
@@ -121,7 +121,7 @@ export function InstallCard() {
   if (hasNativePrompt) {
     return (
       <div className="bg-white border border-slate-200 rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-6">
-        <img src="/icon-192.png" alt="KiliSense Logo" className="w-16 h-16 rounded-2xl shadow-sm border border-slate-100" />
+        <img src="/icon-192.png" alt="KiliSense Logo" className="w-16 h-16 rounded-2xl shadow-sm" />
         <div className="flex-1 text-center sm:text-left">
           <h3 className="text-lg font-medium text-slate-900">Install KiliSense</h3>
           <p className="text-sm text-slate-500 mt-1">Add KiliSense to your home screen for a faster, full-screen experience and offline capabilities.</p>
@@ -141,7 +141,7 @@ export function InstallCard() {
     return (
       <div className="bg-white border border-slate-200 rounded-2xl p-6">
         <div className="flex items-center gap-4 mb-6">
-          <img src="/icon-192.png" alt="KiliSense Logo" className="w-12 h-12 rounded-xl shadow-sm border border-slate-100" />
+          <img src="/icon-192.png" alt="KiliSense Logo" className="w-12 h-12 rounded-xl shadow-sm" />
           <div>
             <h3 className="text-lg font-medium text-slate-900">Add to Home Screen</h3>
             <p className="text-sm text-slate-500">Install KiliSense on your iOS device</p>

@@ -1,4 +1,4 @@
-﻿import { useAuth } from "@/_core/hooks/useAuth";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { startLogin } from "@/const";
 import { useFarm } from "@/contexts/FarmContext";
 import { getVisibleModules, MODULE_REGISTRY, SIDEBAR_SECTION_LABELS, SIDEBAR_SECTION_ORDER } from "@/lib/moduleRegistry";
@@ -338,17 +338,15 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
       {/* 1. Header (Fixed) */}
       <div className={cn("flex flex-col shrink-0", collapsed ? "items-center" : "")}>
         {/* Logo */}
-      <div className={cn("flex items-center gap-2.5 px-4 py-4 shrink-0", collapsed && "justify-center px-2")}>
-        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
-          <Leaf className="w-4.5 h-4.5 text-primary-foreground" />
+        <div className={cn("flex items-center gap-2.5 px-4 py-4 shrink-0", collapsed && "justify-center px-2")}>
+          <img src="/logo.png" alt="KiliSense" className={cn("object-contain shrink-0", collapsed ? "h-8 w-8" : "h-8")} />
+          {!collapsed && (
+            <div>
+              <span className="font-bold text-sidebar-foreground text-sm leading-tight">KiliSense</span>
+              <span className="block text-[10px] text-sidebar-foreground/40 leading-tight uppercase tracking-widest">Next</span>
+            </div>
+          )}
         </div>
-        {!collapsed && (
-          <div>
-            <span className="font-bold text-sidebar-foreground text-sm leading-tight">KiliSense</span>
-            <span className="block text-[10px] text-sidebar-foreground/40 leading-tight uppercase tracking-widest">Next</span>
-          </div>
-        )}
-      </div>
 
       <Separator className="bg-sidebar-border" />
 
