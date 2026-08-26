@@ -52,6 +52,18 @@ export default function IoTDashboard() {
   if (!currentFarm) return null;
 
   return (
+    <div className="max-w-[1600px] mx-auto w-full px-4 py-4 sm:px-6 sm:py-6 space-y-6">
+      <PageHeader 
+        title="IoT Operations Center" 
+        description="Monitor sensor fleets and automate responses"
+        icon={Cpu}
+        iconColor="text-cyan-600"
+        iconBg="bg-cyan-100"
+      >
+        <div className="flex gap-2">
+          <Button asChild variant="outline" className="gap-2 text-indigo-600 hover:text-indigo-700">
+            <Link href="/iot/rules">
+              <Settings2 className="w-4 h-4" /> Rules Engine
             </Link>
           </Button>
           <Button asChild variant="outline" className="gap-2">
@@ -60,8 +72,7 @@ export default function IoTDashboard() {
             </Link>
           </Button>
         </div>
-      </div>
-
+      </PageHeader>
       {/* Status KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
