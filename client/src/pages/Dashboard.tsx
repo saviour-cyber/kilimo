@@ -181,7 +181,7 @@ export default function Dashboard() {
 
         {/* ── ZONE 3: MAIN DYNAMIC GRID ────────────────────────────────────── */}
         <section aria-label="Dashboard Layout">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {mainGrid.map(({ id, size, component: Widget }) => (
               <Widget key={id} farmId={farmId} className={getSizeClasses(size)} />
             ))}

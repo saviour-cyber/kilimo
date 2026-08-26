@@ -14,6 +14,8 @@ import { CalendarDays, Plus, Sprout } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import CropsLayout from "./CropsLayout";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 const STAGE_COLORS: Record<string, string> = {
   seedling: "bg-lime-100 text-lime-700",
@@ -172,46 +174,44 @@ export default function Plantings() {
       </div>
 
       {isLoading ? (
-        <div className="space-y-3">
-          {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-20" />)}
-        </div>
+        <LoadingSkeleton variant="list" />
       ) : plantings.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <Sprout className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="font-medium">No plantings found</p>
-          <p className="text-sm">Record your first planting to track crop progress</p>
-        </div>
+        <EmptyState 
+          icon={Sprout} 
+          title="No plantings found" 
+          description="Record your first planting to track crop progress" 
+        />
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2">
           {plantings.map((p) => (
             <Card key={p.id} className="border-0 shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="p-4">
+              <CardContent className="p-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-semibold text-foreground">{p.cropName}</h3>
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <h3 className="font-semibold text-foreground text-sm">{p.cropName}</h3>
                       {p.variety && <span className="text-xs text-muted-foreground">({p.variety})</span>}
-                      <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium", STAGE_COLORS[p.growthStage])}>
+                      <span className={cn("text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-medium", STAGE_COLORS[p.growthStage])}>
                         {p.growthStage.replace("_", " ")}
                       </span>
-                      <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium", STATUS_COLORS[p.status])}>
+                      <span className={cn("text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-medium", STATUS_COLORS[p.status])}>
                         {p.status}
                       </span>
                     </div>
-                    <div className="flex items-center gap-4 mt-1.5 text-xs text-muted-foreground flex-wrap">
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
                       <span className="flex items-center gap-1">
                         <CalendarDays className="w-3 h-3" />
                         Planted: {String(p.plantingDate).slice(0, 10)}
                       </span>
                       {p.expectedHarvestDate && (
-                        <span>Expected harvest: {String(p.expectedHarvestDate).slice(0, 10)}</span>
+                        <span>Harvest: {String(p.expectedHarvestDate).slice(0, 10)}</span>
                       )}
-                      {p.season && <span>Season: {p.season}</span>}
+                      {p.season && <span>{p.season}</span>}
                       {p.quantityPlanted && <span>{p.quantityPlanted} {p.quantityUnit}</span>}
                     </div>
                   </div>
                   {can("write") && (
-                    <Button variant="ghost" size="sm" onClick={() => setEditPlanting(p)}>Edit</Button>
+                    <Button variant="ghost" size="sm" className="h-8 px-2" onClick={() => setEditPlanting(p)}>Edit</Button>
                   )}
                 </div>
               </CardContent>

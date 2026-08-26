@@ -14,6 +14,8 @@ import { Leaf, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import CropsLayout from "./CropsLayout";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 const QUALITY_COLORS: Record<string, string> = {
   excellent: "bg-emerald-100 text-emerald-700",
@@ -138,29 +140,30 @@ export default function Harvests() {
       </div>
 
       {isLoading ? (
-        <div className="space-y-3">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16" />)}</div>
+        <LoadingSkeleton variant="list" />
       ) : harvests.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <Leaf className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="font-medium">No harvests recorded</p>
-        </div>
+        <EmptyState 
+          icon={Leaf} 
+          title="No harvests recorded" 
+          description="Log harvests to track your crop yields" 
+        />
       ) : (
         <div className="space-y-2">
           {harvests.map((h) => (
             <Card key={h.id} className="border-0 shadow-sm">
-              <CardContent className="p-4">
+              <CardContent className="p-3">
                 <div className="flex items-center justify-between gap-3 flex-wrap">
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-semibold text-foreground">{h.cropName}</span>
-                      <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium", QUALITY_COLORS[h.quality ?? "good"])}>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-semibold text-foreground text-sm">{h.cropName}</span>
+                      <span className={cn("text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-medium", QUALITY_COLORS[h.quality ?? "good"])}>
                         {h.quality}
                       </span>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-0.5">{String(h.harvestDate).slice(0, 10)}</p>
+                    <p className="text-xs text-muted-foreground">{String(h.harvestDate).slice(0, 10)}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-foreground">{h.yieldAmount} {h.yieldUnit}</p>
+                    <p className="font-bold text-foreground text-sm">{h.yieldAmount} {h.yieldUnit}</p>
                     {h.soldAmount && <p className="text-xs text-muted-foreground">Sold: {h.soldAmount} {h.yieldUnit}</p>}
                   </div>
                 </div>

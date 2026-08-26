@@ -14,6 +14,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import CropsLayout from "./CropsLayout";
 import { DiseaseDetector } from "@/components/intelligence/DiseaseDetector";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 const SEVERITY_COLORS: Record<string, string> = {
   low: "bg-blue-100 text-blue-700",
@@ -161,32 +163,32 @@ export default function Incidents() {
       </div>
 
       {isLoading ? (
-        <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-20" />)}</div>
+        <LoadingSkeleton variant="list" />
       ) : incidents.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <Bug className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="font-medium">No incidents reported</p>
-          <p className="text-sm">Report disease, pest, or weather incidents</p>
-        </div>
+        <EmptyState 
+          icon={Bug} 
+          title="No incidents reported" 
+          description="Report disease, pest, or weather incidents" 
+        />
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2">
           {incidents.map((inc) => (
             <Card key={inc.id} className="border-0 shadow-sm">
-              <CardContent className="p-4">
+              <CardContent className="p-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <AlertTriangle className={cn("w-4 h-4", inc.severity === "critical" ? "text-red-500" : inc.severity === "high" ? "text-orange-500" : "text-amber-500")} />
-                      <span className="font-semibold text-foreground">{inc.name}</span>
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <AlertTriangle className={cn("w-3.5 h-3.5", inc.severity === "critical" ? "text-red-500" : inc.severity === "high" ? "text-orange-500" : "text-amber-500")} />
+                      <span className="font-semibold text-foreground text-sm">{inc.name}</span>
                       <span className="text-xs text-muted-foreground capitalize">{inc.incidentType}</span>
-                      <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium", SEVERITY_COLORS[inc.severity])}>{inc.severity}</span>
-                      <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium", STATUS_COLORS[inc.status])}>{inc.status}</span>
+                      <span className={cn("text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-medium", SEVERITY_COLORS[inc.severity])}>{inc.severity}</span>
+                      <span className={cn("text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-medium", STATUS_COLORS[inc.status])}>{inc.status}</span>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">Detected: {String(inc.detectedDate).slice(0, 10)}</p>
-                    {inc.treatment && <p className="text-xs text-muted-foreground mt-0.5">Treatment: {inc.treatment}</p>}
+                    <p className="text-xs text-muted-foreground">Detected: {String(inc.detectedDate).slice(0, 10)}</p>
+                    {inc.treatment && <p className="text-xs text-muted-foreground">Treatment: {inc.treatment}</p>}
                   </div>
                   {can("write") && (
-                    <Button variant="ghost" size="sm" onClick={() => setUpdateIncident(inc)}>Update</Button>
+                    <Button variant="ghost" size="sm" className="h-8 px-2" onClick={() => setUpdateIncident(inc)}>Update</Button>
                   )}
                 </div>
               </CardContent>

@@ -12,6 +12,8 @@ import { PiggyBank, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import FinanceLayout from "./FinanceLayout";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 function BudgetForm({ farmId, onClose }: { farmId: number; onClose: () => void }) {
   const utils = trpc.useUtils();
@@ -104,20 +106,21 @@ export default function Budgets() {
       </div>
 
       {isLoading ? (
-        <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24" />)}</div>
+        <LoadingSkeleton variant="cards" />
       ) : budgets.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <PiggyBank className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="font-medium">No budgets created</p>
-        </div>
+        <EmptyState 
+          icon={PiggyBank} 
+          title="No budgets created" 
+          description="Create income and expense budgets to plan your farm finances" 
+        />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {budgets.map((b) => (
             <Card key={b.id} className="border-0 shadow-sm">
-              <CardContent className="p-4 space-y-2">
+              <CardContent className="p-3 space-y-1.5">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <h3 className="font-semibold text-foreground">{b.name}</h3>
+                    <h3 className="font-semibold text-foreground text-sm">{b.name}</h3>
                     <p className="text-xs text-muted-foreground capitalize">{b.type} · {b.category} · {b.period}</p>
                     {b.season && <p className="text-xs text-muted-foreground">{b.season}</p>}
                   </div>
@@ -127,7 +130,7 @@ export default function Budgets() {
                     </Button>
                   )}
                 </div>
-                <div className={cn("text-2xl font-bold", b.type === "income" ? "text-green-600" : "text-red-600")}>
+                <div className={cn("text-xl font-bold", b.type === "income" ? "text-green-600" : "text-red-600")}>
                   {fmt(b.amount)}
                 </div>
               </CardContent>

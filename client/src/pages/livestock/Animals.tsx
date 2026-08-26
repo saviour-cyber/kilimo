@@ -14,6 +14,8 @@ import { Beef, Plus, Tag } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import LivestockLayout from "./LivestockLayout";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 const STATUS_COLORS: Record<string, string> = {
   active: "bg-emerald-100 text-emerald-700",
@@ -167,41 +169,39 @@ export default function Animals() {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-28" />)}
-        </div>
+        <LoadingSkeleton variant="cards" />
       ) : animals.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <Beef className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="font-medium">No animals registered</p>
-          <p className="text-sm">Add your first animal to start tracking</p>
-        </div>
+        <EmptyState 
+          icon={Beef} 
+          title="No animals registered" 
+          description="Add your first animal to start tracking" 
+        />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {animals.map((animal) => (
             <Card key={animal.id} className="border-0 shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="p-4">
+              <CardContent className="p-3">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1 flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
                       {animal.tagNumber && (
                         <span className="flex items-center gap-1 text-xs font-mono bg-muted px-1.5 py-0.5 rounded">
                           <Tag className="w-3 h-3" />{animal.tagNumber}
                         </span>
                       )}
-                      <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium", STATUS_COLORS[animal.status])}>
+                      <span className={cn("text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-medium", STATUS_COLORS[animal.status])}>
                         {animal.status}
                       </span>
                     </div>
-                    <h3 className="font-semibold text-foreground">{animal.name ?? animal.species}</h3>
-                    <div className="text-xs text-muted-foreground space-y-0.5">
+                    <h3 className="font-semibold text-foreground text-sm leading-none">{animal.name ?? animal.species}</h3>
+                    <div className="text-xs text-muted-foreground pt-1 space-y-0.5">
                       <p>{animal.species}{animal.breed ? ` · ${animal.breed}` : ""}</p>
                       <p className="capitalize">{animal.gender}{animal.weight ? ` · ${animal.weight} ${animal.weightUnit}` : ""}</p>
                       {animal.dateOfBirth && <p>Born: {String(animal.dateOfBirth).slice(0, 10)}</p>}
                     </div>
                   </div>
                   {can("write") && (
-                    <Button variant="ghost" size="sm" onClick={() => setEditAnimal(animal)}>Edit</Button>
+                    <Button variant="ghost" size="sm" className="h-8 px-2" onClick={() => setEditAnimal(animal)}>Edit</Button>
                   )}
                 </div>
               </CardContent>

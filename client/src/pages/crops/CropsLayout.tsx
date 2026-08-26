@@ -1,6 +1,8 @@
 import { Leaf } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
+import { PageHeader } from "@/components/shared/PageHeader";
+
 const CROPS_TABS = [
   { label: "Fields", path: "/crops/fields" },
   { label: "Plantings", path: "/crops/plantings" },
@@ -15,16 +17,12 @@ export default function CropsLayout({ children }: { children: React.ReactNode })
   const active = CROPS_TABS.find((t) => location.startsWith(t.path))?.path ?? "/crops/fields";
 
   return (
-    <div className="p-6 space-y-5 max-w-7xl mx-auto">
-      <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-green-100 flex items-center justify-center">
-          <Leaf className="w-5 h-5 text-green-600" />
-        </div>
-        <div>
-          <h1 className="text-xl font-bold text-foreground">Crops</h1>
-          <p className="text-xs text-muted-foreground">Field management, planting, and harvesting</p>
-        </div>
-      </div>
+    <div className="px-4 sm:px-6 pt-4 pb-8 space-y-4 max-w-7xl mx-auto">
+      <PageHeader 
+        title="Crops" 
+        description="Field management, planting, and harvesting" 
+        icon={Leaf} 
+      />
 
       <div className="flex gap-1 border-b border-border overflow-x-auto pb-0">
         {CROPS_TABS.map((tab) => (

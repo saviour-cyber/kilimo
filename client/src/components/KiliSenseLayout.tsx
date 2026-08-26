@@ -279,6 +279,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
   const { currentFarm, enabledModules, role, isLoading: farmLoading } = useFarm();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [location] = useLocation();
 
   const { data: notifCount } = trpc.notifications.unreadCount.useQuery(
     { farmId: currentFarm?.farm.id ?? 0 },
@@ -338,7 +339,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
       {/* 1. Header (Fixed) */}
       <div className={cn("flex flex-col shrink-0", collapsed ? "items-center" : "")}>
         {/* Logo */}
-        <div className={cn("flex items-center gap-2.5 px-4 py-4 shrink-0", collapsed && "justify-center px-2")}>
+        <div className={cn("flex items-center gap-2.5 px-3 py-3 shrink-0", collapsed && "justify-center px-2")}>
           <img src="/logo.png" alt="KiliSense" className={cn("object-contain shrink-0", collapsed ? "h-8 w-8" : "h-8")} />
           {!collapsed && (
             <div>
@@ -554,6 +555,31 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
             </div>
           )}
         </main>
+
+        {/* Mobile Bottom Navigation */}
+        {currentFarm && (
+          <nav className="lg:hidden flex items-center justify-around border-t border-border bg-background/95 backdrop-blur-sm pb-safe shrink-0 h-16">
+            {visibleModules.slice(0, 4).map((mod) => {
+              const Icon = mod.icon;
+              const isActive = location.startsWith(mod.basePath);
+              return (
+                <Link key={mod.key} href={mod.basePath}>
+                  <div className={cn("flex flex-col items-center justify-center flex-1 h-16 px-2 gap-1 transition-colors", isActive ? "text-primary" : "text-muted-foreground hover:text-foreground")}>
+                    <Icon className="w-5 h-5" />
+                    <span className="text-[10px] font-medium leading-none whitespace-nowrap">{mod.label}</span>
+                  </div>
+                </Link>
+              );
+            })}
+            <button 
+              onClick={() => setMobileOpen(true)}
+              className="flex flex-col items-center justify-center flex-1 h-16 px-2 gap-1 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Menu className="w-5 h-5" />
+              <span className="text-[10px] font-medium leading-none">More</span>
+            </button>
+          </nav>
+        )}
       </div>
 
       {floatingWidgets.map((Widget, idx) => (

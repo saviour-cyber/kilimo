@@ -12,6 +12,8 @@ import { Skull, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import LivestockLayout from "./LivestockLayout";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 function MortalityForm({ farmId, onClose }: { farmId: number; onClose: () => void }) {
   const utils = trpc.useUtils();
@@ -117,12 +119,13 @@ export default function Mortality() {
       </div>
 
       {isLoading ? (
-        <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-14" />)}</div>
+        <LoadingSkeleton variant="list" />
       ) : records.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <Skull className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="font-medium">No mortality records</p>
-        </div>
+        <EmptyState 
+          icon={Skull} 
+          title="No mortality records" 
+          description="Record animal deaths and causes" 
+        />
       ) : (
         <div className="space-y-2">
           {records.map((r) => (

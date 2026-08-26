@@ -13,6 +13,8 @@ import { Droplets, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import LivestockLayout from "./LivestockLayout";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 function ProductionForm({ farmId, onClose }: { farmId: number; onClose: () => void }) {
   const utils = trpc.useUtils();
@@ -153,12 +155,13 @@ export default function Production() {
       )}
 
       {isLoading ? (
-        <div className="space-y-2">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-14" />)}</div>
+        <LoadingSkeleton variant="list" />
       ) : records.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <Droplets className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="font-medium">No production records</p>
-        </div>
+        <EmptyState 
+          icon={Droplets} 
+          title="No production records" 
+          description="Record milk, eggs, wool, and other yields" 
+        />
       ) : (
         <div className="space-y-2">
           {records.slice(0, 30).map((r) => (

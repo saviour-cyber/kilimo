@@ -13,6 +13,8 @@ import { ArrowDown, ArrowUp, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import FinanceLayout from "./FinanceLayout";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 const CATEGORIES = {
   income: ["crop_sales", "livestock_sales", "milk_sales", "egg_sales", "grants", "loans", "other_income"],
@@ -171,21 +173,23 @@ export default function Transactions() {
       </div>
 
       {isLoading ? (
-        <div className="space-y-2">{Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-14" />)}</div>
+        <LoadingSkeleton variant="list" />
       ) : transactions.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <p className="font-medium">No transactions yet</p>
-        </div>
+        <EmptyState 
+          icon={ArrowDown} 
+          title="No transactions yet" 
+          description="Record income and expenses to track your farm finances" 
+        />
       ) : (
         <div className="space-y-2">
           {transactions.map((t) => {
             const isIncome = t.type === "income";
             return (
               <Card key={t.id} className="border-0 shadow-sm">
-                <CardContent className="p-4">
+                <CardContent className="p-3">
                   <div className="flex items-center gap-3">
-                    <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0", isIncome ? "bg-green-100" : "bg-red-100")}>
-                      {isIncome ? <ArrowDown className="w-4 h-4 text-green-600" /> : <ArrowUp className="w-4 h-4 text-red-600" />}
+                    <div className={cn("w-7 h-7 rounded-lg flex items-center justify-center shrink-0", isIncome ? "bg-green-100" : "bg-red-100")}>
+                      {isIncome ? <ArrowDown className="w-3.5 h-3.5 text-green-600" /> : <ArrowUp className="w-3.5 h-3.5 text-red-600" />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm text-foreground">{t.description}</p>

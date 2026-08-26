@@ -1,6 +1,8 @@
 import { PawPrint } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
+import { PageHeader } from "@/components/shared/PageHeader";
+
 const LIVESTOCK_TABS = [
   { label: "Animals", path: "/livestock/animals" },
   { label: "Health Logs", path: "/livestock/health" },
@@ -15,16 +17,12 @@ export default function LivestockLayout({ children }: { children: React.ReactNod
   const active = LIVESTOCK_TABS.find((t) => location.startsWith(t.path))?.path ?? "/livestock/animals";
 
   return (
-    <div className="p-6 space-y-5 max-w-7xl mx-auto">
-      <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center">
-          <PawPrint className="w-5 h-5 text-amber-600" />
-        </div>
-        <div>
-          <h1 className="text-xl font-bold text-foreground">Livestock</h1>
-          <p className="text-xs text-muted-foreground">Animals, health, feeding, and production</p>
-        </div>
-      </div>
+    <div className="px-4 sm:px-6 pt-4 pb-8 space-y-4 max-w-7xl mx-auto">
+      <PageHeader 
+        title="Livestock" 
+        description="Animals, health, feeding, and production" 
+        icon={PawPrint} 
+      />
 
       <div className="flex gap-1 border-b border-border overflow-x-auto pb-0">
         {LIVESTOCK_TABS.map((tab) => (

@@ -1,6 +1,8 @@
 import { Package } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
+import { PageHeader } from "@/components/shared/PageHeader";
+
 const INVENTORY_TABS = [
   { label: "Items", path: "/inventory/items" },
   { label: "Stock Transactions", path: "/inventory/transactions" },
@@ -13,16 +15,12 @@ export default function InventoryLayout({ children }: { children: React.ReactNod
   const active = INVENTORY_TABS.find((t) => location.startsWith(t.path))?.path ?? "/inventory/items";
 
   return (
-    <div className="p-6 space-y-5 max-w-7xl mx-auto">
-      <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-orange-100 flex items-center justify-center">
-          <Package className="w-5 h-5 text-orange-600" />
-        </div>
-        <div>
-          <h1 className="text-xl font-bold text-foreground">Inventory</h1>
-          <p className="text-xs text-muted-foreground">Stock, supplies, suppliers, and equipment</p>
-        </div>
-      </div>
+    <div className="px-4 sm:px-6 pt-4 pb-8 space-y-4 max-w-7xl mx-auto">
+      <PageHeader 
+        title="Inventory" 
+        description="Stock, supplies, suppliers, and equipment" 
+        icon={Package} 
+      />
 
       <div className="flex gap-1 border-b border-border overflow-x-auto pb-0">
         {INVENTORY_TABS.map((tab) => (

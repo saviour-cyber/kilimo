@@ -13,6 +13,8 @@ import { Heart, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import LivestockLayout from "./LivestockLayout";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 const OUTCOME_COLORS: Record<string, string> = {
   pending: "bg-amber-100 text-amber-700",
@@ -122,12 +124,13 @@ export default function Breeding() {
       </div>
 
       {isLoading ? (
-        <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-20" />)}</div>
+        <LoadingSkeleton variant="list" />
       ) : records.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <Heart className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="font-medium">No breeding records</p>
-        </div>
+        <EmptyState 
+          icon={Heart} 
+          title="No breeding records" 
+          description="Track matings and expected deliveries" 
+        />
       ) : (
         <div className="space-y-3">
           {records.map((r) => (

@@ -14,6 +14,8 @@ import { Activity, Plus, Syringe } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import LivestockLayout from "./LivestockLayout";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 const LOG_TYPE_COLORS: Record<string, string> = {
   vaccination: "bg-blue-100 text-blue-700",
@@ -137,22 +139,23 @@ export default function HealthLogs() {
       </div>
 
       {isLoading ? (
-        <div className="space-y-3">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16" />)}</div>
+        <LoadingSkeleton variant="list" />
       ) : logs.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <Activity className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="font-medium">No health records</p>
-        </div>
+        <EmptyState 
+          icon={Activity} 
+          title="No health records" 
+          description="Log health treatments and checkups" 
+        />
       ) : (
         <div className="space-y-2">
           {logs.map((log) => (
             <Card key={log.id} className="border-0 shadow-sm">
-              <CardContent className="p-4">
+              <CardContent className="p-3">
                 <div className="flex items-center justify-between gap-3 flex-wrap">
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium", LOG_TYPE_COLORS[log.logType])}>{log.logType}</span>
-                      <span className="font-semibold text-foreground">{log.title}</span>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className={cn("text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-medium", LOG_TYPE_COLORS[log.logType])}>{log.logType}</span>
+                      <span className="font-semibold text-foreground text-sm">{log.title}</span>
                     </div>
                     <p className="text-xs text-muted-foreground mt-0.5">
                       {String(log.performedDate).slice(0, 10)}

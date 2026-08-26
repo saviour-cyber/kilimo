@@ -14,6 +14,8 @@ import { AlertTriangle, Package, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import InventoryLayout from "./InventoryLayout";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 const CATEGORY_COLORS: Record<string, string> = {
   seeds: "bg-green-100 text-green-700",
@@ -168,32 +170,31 @@ export default function InventoryItems() {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-28" />)}
-        </div>
+        <LoadingSkeleton variant="cards" />
       ) : filtered.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <Package className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="font-medium">No items found</p>
-        </div>
+        <EmptyState 
+          icon={Package} 
+          title="No items found" 
+          description="Add inventory items to track stock levels" 
+        />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((item) => {
             const isLow = item.minimumStock && parseFloat(String(item.currentStock)) <= parseFloat(String(item.minimumStock));
             return (
               <Card key={item.id} className={cn("border-0 shadow-sm hover:shadow-md transition-shadow", isLow && "ring-1 ring-amber-400")}>
-                <CardContent className="p-4">
+                <CardContent className="p-3">
                   <div className="flex items-start justify-between">
-                    <div className="space-y-1.5 flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium", CATEGORY_COLORS[item.category ?? "other"])}>
+                    <div className="space-y-1 flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <span className={cn("text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-medium", CATEGORY_COLORS[item.category ?? "other"])}>
                           {item.category}
                         </span>
                         {isLow && <AlertTriangle className="w-3.5 h-3.5 text-amber-500" />}
                       </div>
-                      <h3 className="font-semibold text-foreground">{item.name}</h3>
+                      <h3 className="font-semibold text-foreground text-sm">{item.name}</h3>
                       <div className="flex items-baseline gap-1">
-                        <span className={cn("text-2xl font-bold", isLow ? "text-amber-600" : "text-foreground")}>
+                        <span className={cn("text-xl font-bold", isLow ? "text-amber-600" : "text-foreground")}>
                           {item.currentStock}
                         </span>
                         <span className="text-xs text-muted-foreground">{item.unit}</span>
@@ -203,7 +204,7 @@ export default function InventoryItems() {
                       )}
                     </div>
                     {can("write") && (
-                      <Button variant="ghost" size="sm" onClick={() => setEditItem(item)}>Edit</Button>
+                      <Button variant="ghost" size="sm" className="h-8 px-2" onClick={() => setEditItem(item)}>Edit</Button>
                     )}
                   </div>
                 </CardContent>

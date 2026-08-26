@@ -13,6 +13,8 @@ import { Wrench, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import InventoryLayout from "./InventoryLayout";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 const STATUS_COLORS: Record<string, string> = {
   operational: "bg-green-100 text-green-700",
@@ -126,32 +128,31 @@ export default function Equipment() {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-28" />)}
-        </div>
+        <LoadingSkeleton variant="cards" />
       ) : items.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <Wrench className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="font-medium">No equipment registered</p>
-        </div>
+        <EmptyState 
+          icon={Wrench} 
+          title="No equipment registered" 
+          description="Track machinery, tools, and vehicles" 
+        />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {items.map((eq) => (
             <Card key={eq.id} className="border-0 shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="p-4">
+              <CardContent className="p-3">
                 <div className="flex items-start justify-between">
-                  <div className="space-y-1.5">
-                    <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium", STATUS_COLORS[eq.status ?? "operational"])}>
+                  <div className="space-y-1">
+                    <span className={cn("text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-medium", STATUS_COLORS[eq.status ?? "operational"])}>
                       {eq.status}
                     </span>
-                    <h3 className="font-semibold text-foreground">{eq.name}</h3>
+                    <h3 className="font-semibold text-foreground text-sm">{eq.name}</h3>
                     <p className="text-xs text-muted-foreground capitalize">{eq.category}</p>
                     {eq.nextMaintenanceDate && (
-                      <p className="text-xs text-muted-foreground">Next maintenance: {String(eq.nextMaintenanceDate).slice(0, 10)}</p>
+                      <p className="text-xs text-muted-foreground">Next maint: {String(eq.nextMaintenanceDate).slice(0, 10)}</p>
                     )}
                   </div>
                   {can("write") && (
-                    <Button variant="ghost" size="sm" onClick={() => setEditItem(eq)}>Edit</Button>
+                    <Button variant="ghost" size="sm" className="h-8 px-2" onClick={() => setEditItem(eq)}>Edit</Button>
                   )}
                 </div>
               </CardContent>

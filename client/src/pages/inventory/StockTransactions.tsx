@@ -13,6 +13,8 @@ import { ArrowDown, ArrowUp, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import InventoryLayout from "./InventoryLayout";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 function TransactionForm({ farmId, onClose }: { farmId: number; onClose: () => void }) {
   const utils = trpc.useUtils();
@@ -118,21 +120,23 @@ export default function StockTransactions() {
       </div>
 
       {isLoading ? (
-        <div className="space-y-2">{Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-14" />)}</div>
+        <LoadingSkeleton variant="list" />
       ) : transactions.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <p className="font-medium">No transactions yet</p>
-        </div>
+        <EmptyState 
+          icon={ArrowDown} 
+          title="No transactions yet" 
+          description="Record stock movements to track your inventory" 
+        />
       ) : (
         <div className="space-y-2">
           {transactions.map((t) => {
             const isIn = t.transactionType === "stock_in";
             return (
               <Card key={t.id} className="border-0 shadow-sm">
-                <CardContent className="p-4">
+                <CardContent className="p-3">
                   <div className="flex items-center gap-3">
-                    <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0", isIn ? "bg-green-100" : "bg-red-100")}>
-                      {isIn ? <ArrowDown className="w-4 h-4 text-green-600" /> : <ArrowUp className="w-4 h-4 text-red-600" />}
+                    <div className={cn("w-7 h-7 rounded-lg flex items-center justify-center shrink-0", isIn ? "bg-green-100" : "bg-red-100")}>
+                      {isIn ? <ArrowDown className="w-3.5 h-3.5 text-green-600" /> : <ArrowUp className="w-3.5 h-3.5 text-red-600" />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm text-foreground">Item #{t.itemId} · <span className="capitalize">{t.transactionType.replace("_", " ")}</span></p>

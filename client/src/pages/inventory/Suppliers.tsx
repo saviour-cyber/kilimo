@@ -11,6 +11,8 @@ import { Building2, Mail, Phone, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import InventoryLayout from "./InventoryLayout";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 function SupplierForm({ farmId, supplier, onClose }: { farmId: number; supplier?: any; onClose: () => void }) {
   const utils = trpc.useUtils();
@@ -90,22 +92,21 @@ export default function Suppliers() {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24" />)}
-        </div>
+        <LoadingSkeleton variant="cards" />
       ) : suppliers.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <Building2 className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="font-medium">No suppliers added</p>
-        </div>
+        <EmptyState 
+          icon={Building2} 
+          title="No suppliers added" 
+          description="Add your input and service suppliers" 
+        />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {suppliers.map((s) => (
             <Card key={s.id} className="border-0 shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="p-4">
+              <CardContent className="p-3">
                 <div className="flex items-start justify-between">
-                  <div className="space-y-1.5">
-                    <h3 className="font-semibold text-foreground">{s.name}</h3>
+                  <div className="space-y-1">
+                    <h3 className="font-semibold text-foreground text-sm">{s.name}</h3>
                     {s.contactName && <p className="text-xs text-muted-foreground">{s.contactName}</p>}
                     {s.phone && (
                       <div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -119,7 +120,7 @@ export default function Suppliers() {
                     )}
                   </div>
                   {can("write") && (
-                    <Button variant="ghost" size="sm" onClick={() => setEditSupplier(s)}>Edit</Button>
+                    <Button variant="ghost" size="sm" className="h-8 px-2" onClick={() => setEditSupplier(s)}>Edit</Button>
                   )}
                 </div>
               </CardContent>

@@ -12,14 +12,16 @@ import { MapPin, Plus, Ruler } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import CropsLayout from "./CropsLayout";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 function FieldCard({ field, farmId, onEdit }: { field: any; farmId: number; onEdit: () => void }) {
   return (
     <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
-      <CardContent className="p-4">
+      <CardContent className="p-3">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
-            <h3 className="font-semibold text-foreground">{field.name}</h3>
+            <h3 className="font-semibold text-foreground text-sm">{field.name}</h3>
             {field.location && (
               <div className="flex items-center gap-1 text-xs text-muted-foreground">
                 <MapPin className="w-3 h-3" />
@@ -36,7 +38,7 @@ function FieldCard({ field, farmId, onEdit }: { field: any; farmId: number; onEd
               <span className="text-xs text-muted-foreground">Soil: {field.soilType}</span>
             )}
           </div>
-          <Button variant="ghost" size="sm" onClick={onEdit} className="text-xs">Edit</Button>
+          <Button variant="ghost" size="sm" onClick={onEdit} className="h-8 px-2 text-xs">Edit</Button>
         </div>
         {field.notes && <p className="text-xs text-muted-foreground mt-2 border-t border-border pt-2">{field.notes}</p>}
       </CardContent>
@@ -129,15 +131,13 @@ export default function Fields() {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-28" />)}
-        </div>
+        <LoadingSkeleton variant="cards" />
       ) : fields.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <MapPin className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="font-medium">No fields yet</p>
-          <p className="text-sm">Add your first field to start tracking crops</p>
-        </div>
+        <EmptyState 
+          icon={MapPin} 
+          title="No fields yet" 
+          description="Add your first field to start tracking crops" 
+        />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {fields.map((field) => (
