@@ -46,7 +46,7 @@ function BreedingForm({ farmId, onClose }: { farmId: number; onClose: () => void
     create.mutate({
       farmId,
       damId: parseInt(form.damId),
-      sireId: form.sireId ? parseInt(form.sireId) : undefined,
+      sireId: form.sireId && form.sireId !== "external" ? parseInt(form.sireId) : undefined,
       sireDescription: form.sireDescription || undefined,
       breedingDate: form.breedingDate,
       expectedDeliveryDate: form.expectedDeliveryDate || undefined,

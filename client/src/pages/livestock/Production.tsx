@@ -87,7 +87,15 @@ function ProductionForm({ farmId, onClose }: { farmId: number; onClose: () => vo
         </div>
         <div className="space-y-1.5 col-span-2">
           <Label>Quality</Label>
-          <Input value={form.quality} onChange={(e) => setForm({ ...form, quality: e.target.value })} placeholder="e.g. Grade A" />
+          <Select value={form.quality} onValueChange={(v) => setForm({ ...form, quality: v })}>
+            <SelectTrigger><SelectValue placeholder="Select quality (optional)" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="excellent">Excellent</SelectItem>
+              <SelectItem value="good">Good</SelectItem>
+              <SelectItem value="fair">Fair</SelectItem>
+              <SelectItem value="poor">Poor</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <div className="flex gap-2 justify-end">

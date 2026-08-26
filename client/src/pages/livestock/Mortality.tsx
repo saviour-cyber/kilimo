@@ -20,6 +20,7 @@ function MortalityForm({ farmId, onClose }: { farmId: number; onClose: () => voi
     animalId: "",
     deathDate: new Date().toISOString().slice(0, 10),
     cause: "",
+    causeCategory: "unknown" as "disease" | "injury" | "natural" | "predator" | "unknown" | "other",
     disposalMethod: "",
     notes: "",
   });
@@ -35,8 +36,8 @@ function MortalityForm({ farmId, onClose }: { farmId: number; onClose: () => voi
       farmId,
       animalId: parseInt(form.animalId),
       deathDate: form.deathDate,
-        cause: form.cause || undefined,
-      causeCategory: (form.disposalMethod as any) || "unknown",
+      cause: form.cause || undefined,
+      causeCategory: form.causeCategory,
       notes: form.notes || undefined,
     });
   };
@@ -59,7 +60,21 @@ function MortalityForm({ farmId, onClose }: { farmId: number; onClose: () => voi
         </div>
         <div className="space-y-1.5">
           <Label>Cause</Label>
-          <Input value={form.cause} onChange={(e) => setForm({ ...form, cause: e.target.value })} placeholder="e.g. Disease, Injury" />
+          <Input value={form.cause} onChange={(e) => setForm({ ...form, cause: e.target.value })} placeholder="e.g. Pneumonia, broken leg" />
+        </div>
+        <div className="space-y-1.5">
+          <Label>Cause Category</Label>
+          <Select value={form.causeCategory} onValueChange={(v) => setForm({ ...form, causeCategory: v as any })}>
+            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="disease">Disease</SelectItem>
+              <SelectItem value="injury">Injury</SelectItem>
+              <SelectItem value="natural">Natural</SelectItem>
+              <SelectItem value="predator">Predator</SelectItem>
+              <SelectItem value="unknown">Unknown</SelectItem>
+              <SelectItem value="other">Other</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div className="space-y-1.5 col-span-2">
           <Label>Disposal Method</Label>
