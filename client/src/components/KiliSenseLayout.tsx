@@ -35,6 +35,7 @@ import { Skeleton } from "./ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 import { InstallSidebarButton } from "./PWAInstallPrompt";
+import { MobileMoreMenu } from "./MobileMoreMenu";
 
 interface KiliSenseLayoutProps {
   children: React.ReactNode;
@@ -279,6 +280,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
   const { currentFarm, enabledModules, role, isLoading: farmLoading } = useFarm();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
   const [location] = useLocation();
 
   const { data: notifCount } = trpc.notifications.unreadCount.useQuery(
@@ -469,31 +471,11 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
         <SidebarContent collapsed={sidebarCollapsed} />
       </aside>
 
-      {/* Mobile Sidebar Overlay */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
-          <aside className="absolute left-0 top-0 bottom-0 w-[280px] bg-sidebar border-r border-sidebar-border shadow-xl">
-            <SidebarContent collapsed={false} />
-          </aside>
-        </div>
-      )}
-
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Bar */}
         <header className="h-14 border-b border-border bg-background/95 backdrop-blur-sm flex items-center gap-3 px-4 shrink-0">
-          {/* Mobile menu toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden"
-            onClick={() => setMobileOpen(true)}
-          >
-            <Menu className="w-5 h-5" />
-          </Button>
-
-          {/* Desktop sidebar toggle */}
+          {/* Desktop sidebar collapse toggle — hidden on mobile */}
           <Button
             variant="ghost"
             size="icon"
@@ -571,8 +553,9 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
                 </Link>
               );
             })}
-            <button 
-              onClick={() => setMobileOpen(true)}
+            {/* More — opens dedicated MobileMoreMenu, NOT the desktop sidebar */}
+            <button
+              onClick={() => setMobileMoreOpen(true)}
               className="flex flex-col items-center justify-center flex-1 h-16 px-2 gap-1 text-muted-foreground hover:text-foreground transition-colors"
             >
               <Menu className="w-5 h-5" />
@@ -580,6 +563,10 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
             </button>
           </nav>
         )}
+
+        {/* Mobile More Sheet — dedicated mobile-only nav, never the desktop sidebar */}
+        <MobileMoreMenu open={mobileMoreOpen} onClose={() => setMobileMoreOpen(false)} />
+
       </div>
 
       {floatingWidgets.map((Widget, idx) => (
