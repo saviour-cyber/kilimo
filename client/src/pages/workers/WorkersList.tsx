@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useFarm } from "@/_core/hooks/useFarm";
-import { trpc } from "@/_core/trpc";
+import { useFarm } from "@/contexts/FarmContext";
+import { trpc } from "@/lib/trpc";
 import { Plus, Search, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ export default function WorkersList() {
     { enabled: !!farmId }
   );
 
-  const filteredWorkers = workers.filter(w => 
+  const filteredWorkers = workers.filter((w: any) => 
     (w.firstName + " " + w.lastName).toLowerCase().includes(searchTerm.toLowerCase()) ||
     w.position?.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -52,7 +52,7 @@ export default function WorkersList() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredWorkers.map(worker => (
+          {filteredWorkers.map((worker: any) => (
             <div key={worker.id} className="bg-card border border-border rounded-xl p-4 flex gap-4 items-start">
               <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
                 <span className="font-semibold text-slate-600">

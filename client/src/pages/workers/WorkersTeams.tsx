@@ -1,5 +1,5 @@
-import { useFarm } from "@/_core/hooks/useFarm";
-import { trpc } from "@/_core/trpc";
+import { useFarm } from "@/contexts/FarmContext";
+import { trpc } from "@/lib/trpc";
 import { Users, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -34,7 +34,7 @@ export default function WorkersTeams() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {teams.map(team => (
+          {teams.map((team: any) => (
             <div key={team.id} className="bg-card border border-border rounded-xl p-4">
               <h4 className="font-semibold">{team.name}</h4>
               <p className="text-sm text-muted-foreground">{team.description}</p>

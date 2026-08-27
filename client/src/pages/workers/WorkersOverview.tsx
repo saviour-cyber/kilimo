@@ -1,5 +1,5 @@
-import { useFarm } from "@/_core/hooks/useFarm";
-import { trpc } from "@/_core/trpc";
+import { useFarm } from "@/contexts/FarmContext";
+import { trpc } from "@/lib/trpc";
 import { Users, UserCheck, UserMinus, AlertCircle } from "lucide-react";
 
 export default function WorkersOverview() {
@@ -11,9 +11,9 @@ export default function WorkersOverview() {
     { enabled: !!farmId }
   );
 
-  const activeCount = workers.filter(w => w.status === "active").length;
-  const onLeaveCount = workers.filter(w => w.status === "on_leave").length;
-  const inactiveCount = workers.filter(w => w.status === "inactive" || w.status === "terminated").length;
+  const activeCount = workers.filter((w: any) => w.status === "active").length;
+  const onLeaveCount = workers.filter((w: any) => w.status === "on_leave").length;
+  const inactiveCount = workers.filter((w: any) => w.status === "inactive" || w.status === "terminated").length;
 
   return (
     <div className="space-y-6">

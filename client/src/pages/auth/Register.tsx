@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
-import { Loader2, Eye, EyeOff, Lock, User as UserIcon, Mail, Building, ArrowRight, ShieldCheck } from "lucide-react";
+import { Loader2, Eye, EyeOff, Lock, User as UserIcon, Mail, Phone, Globe, ArrowRight, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AuthCard } from "@/components/shared/AuthCard";
@@ -12,7 +12,8 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [organizationName, setOrganizationName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [country, setCountry] = useState("KE");
   const [showPassword, setShowPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const utils = trpc.useUtils();
@@ -33,7 +34,8 @@ export default function Register() {
         password, 
         firstName,
         lastName,
-        organizationName: organizationName || undefined
+        phone,
+        country,
       });
       await utils.auth.me.invalidate();
       const me = await utils.auth.me.fetch();
@@ -110,17 +112,34 @@ export default function Register() {
             />
           </div>
         </div>
-        
+
         <div className="space-y-1.5">
-          <label className="text-sm font-medium leading-none">Organization (Optional)</label>
+          <label className="text-sm font-medium leading-none">Phone Number</label>
           <div className="relative">
-            <Building className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Phone className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              id="org"
+              id="phone"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="+254 700 000 000"
+              required
+              className="pl-9"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium leading-none">Country</label>
+          <div className="relative">
+            <Globe className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              id="country"
               type="text"
-              value={organizationName}
-              onChange={(e) => setOrganizationName(e.target.value)}
-              placeholder="Farm Name Ltd"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              placeholder="KE"
+              required
               className="pl-9"
             />
           </div>
@@ -166,7 +185,7 @@ export default function Register() {
 
         <Button
           type="submit"
-          disabled={registerMutation.isPending || !email || !password || !name || !agreeTerms}
+          disabled={registerMutation.isPending || !email || !password || !firstName || !lastName || !phone || !agreeTerms}
           className="w-full h-11 text-base font-medium mt-2"
         >
           {registerMutation.isPending ? (

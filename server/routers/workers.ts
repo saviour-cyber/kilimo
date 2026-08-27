@@ -5,7 +5,7 @@ import { workers, workerTeams, workerAttendance } from "../../drizzle/schema";
 import { getDb } from "../db";
 import { protectedProcedure, router } from "../_core/trpc";
 import { assertFarmMember, assertMinRole } from "./farms";
-import { assertEntitlement } from "../services/entitlements";
+
 
 export const workersRouter = router({
   // ?????? Teams ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
@@ -15,7 +15,6 @@ export const workersRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
-      await assertEntitlement(db, member.farm.organizationId, "workers");
       
       return db.select().from(workerTeams).where(eq(workerTeams.farmId, input.farmId)).orderBy(desc(workerTeams.createdAt));
     }),
@@ -27,7 +26,6 @@ export const workersRouter = router({
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
       assertMinRole(member, "farm_manager");
-      await assertEntitlement(db, member.farm.organizationId, "workers");
 
       const [result] = await db.insert(workerTeams).values({
         farmId: input.farmId,
@@ -44,7 +42,6 @@ export const workersRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
-      await assertEntitlement(db, member.farm.organizationId, "workers");
       
       const conditions: any[] = [eq(workers.farmId, input.farmId)];
       if (input.status) conditions.push(eq(workers.status, input.status as any));
@@ -59,7 +56,6 @@ export const workersRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
-      await assertEntitlement(db, member.farm.organizationId, "workers");
 
       const [worker] = await db.select().from(workers).where(and(eq(workers.id, input.workerId), eq(workers.farmId, input.farmId))).limit(1);
       if (!worker) throw new TRPCError({ code: "NOT_FOUND", message: "Worker not found" });
@@ -85,7 +81,6 @@ export const workersRouter = router({
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
       assertMinRole(member, "farm_manager");
-      await assertEntitlement(db, member.farm.organizationId, "workers");
 
       const [result] = await db.insert(workers).values({
         farmId: input.farmId,
@@ -124,7 +119,6 @@ export const workersRouter = router({
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
       assertMinRole(member, "farm_manager");
-      await assertEntitlement(db, member.farm.organizationId, "workers");
 
       // Verify ownership
       const [existing] = await db.select({ id: workers.id }).from(workers).where(and(eq(workers.id, input.workerId), eq(workers.farmId, input.farmId))).limit(1);
@@ -163,7 +157,6 @@ export const workersRouter = router({
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
       assertMinRole(member, "farm_manager");
-      await assertEntitlement(db, member.farm.organizationId, "workers");
 
       // Verify worker belongs to farm
       const [worker] = await db.select({ id: workers.id }).from(workers).where(and(eq(workers.id, input.workerId), eq(workers.farmId, input.farmId))).limit(1);
@@ -200,7 +193,6 @@ export const workersRouter = router({
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const member = await assertFarmMember(input.farmId, ctx.user.id);
-      await assertEntitlement(db, member.farm.organizationId, "workers");
       
       const conditions: any[] = [eq(workerAttendance.farmId, input.farmId)];
       // Skipping complex date bounds for simplicity here, can just return top N

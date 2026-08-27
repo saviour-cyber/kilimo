@@ -1,5 +1,5 @@
-import { useFarm } from "@/_core/hooks/useFarm";
-import { trpc } from "@/_core/trpc";
+import { useFarm } from "@/contexts/FarmContext";
+import { trpc } from "@/lib/trpc";
 import { ClipboardList } from "lucide-react";
 
 export default function WorkersAssignments() {
