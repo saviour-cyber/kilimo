@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
@@ -60,7 +60,7 @@ export default function AdminLogin() {
           />
           <div className="space-y-1.5">
             <h1 className="text-[22px] font-semibold text-slate-900 tracking-tight">Platform Admin</h1>
-            <p className="text-[14px] text-slate-500 font-medium">Secure access to the KiliSense Platform.</p>
+            <p className="text-[14px] text-muted-foreground font-medium">Secure access to the KiliSense Platform.</p>
           </div>
         </div>
 
@@ -73,7 +73,7 @@ export default function AdminLogin() {
                 Username or Email
               </label>
               <div className="relative flex items-center group">
-                <div className="absolute left-4 text-slate-400 group-focus-within:text-emerald-600 transition-colors">
+                <div className="absolute left-4 text-muted-foreground group-focus-within:text-emerald-600 transition-colors">
                   <UserIcon className="w-4 h-4" />
                 </div>
                 <input
@@ -83,7 +83,7 @@ export default function AdminLogin() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@KiliSensehub.com"
                   required
-                  className="w-full h-[52px] pl-11 pr-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-slate-900 text-[14px] placeholder:text-slate-400"
+                  className="w-full h-[52px] pl-11 pr-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-slate-900 text-[14px] placeholder:text-muted-foreground"
                 />
               </div>
             </div>
@@ -93,7 +93,7 @@ export default function AdminLogin() {
                 Password
               </label>
               <div className="relative flex items-center group">
-                <div className="absolute left-4 text-slate-400 group-focus-within:text-emerald-600 transition-colors">
+                <div className="absolute left-4 text-muted-foreground group-focus-within:text-emerald-600 transition-colors">
                   <Lock className="w-4 h-4" />
                 </div>
                 <input
@@ -103,12 +103,12 @@ export default function AdminLogin() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full h-[52px] pl-11 pr-12 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-slate-900 text-[14px] placeholder:text-slate-400"
+                  className="w-full h-[52px] pl-11 pr-12 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-slate-900 text-[14px] placeholder:text-muted-foreground"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-600 transition-colors rounded-lg"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-muted-foreground hover:text-muted-foreground transition-colors rounded-lg"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -125,12 +125,12 @@ export default function AdminLogin() {
                 />
                 <label
                   htmlFor="remember"
-                  className="text-[13px] font-medium leading-none text-slate-600 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer select-none"
+                  className="text-[13px] font-medium leading-none text-muted-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer select-none"
                 >
                   Remember Me
                 </label>
               </div>
-              <a href="#" className="text-[13px] font-medium text-slate-500 hover:text-emerald-600 transition-colors">
+              <a href="#" className="text-[13px] font-medium text-muted-foreground hover:text-emerald-600 transition-colors">
                 Forgot Password?
               </a>
             </div>
@@ -153,7 +153,7 @@ export default function AdminLogin() {
         </div>
 
         {/* Footer */}
-        <div className="mt-8 flex flex-col items-center gap-1 text-[12px] text-slate-400 font-medium tracking-wide">
+        <div className="mt-8 flex flex-col items-center gap-1 text-[12px] text-muted-foreground font-medium tracking-wide">
           <p>© {currentYear} KiliSense.</p>
           <p>{appVersion} • {env}</p>
         </div>

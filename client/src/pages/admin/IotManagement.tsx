@@ -30,7 +30,7 @@ export default function AdminIotManagement() {
               </div>
             </div>
             {isLoading ? <Skeleton className="h-9 w-20" /> : <p className="text-3xl font-bold text-slate-900">{stats?.gateways.total}</p>}
-            <p className="text-sm text-slate-500 mt-1">Total Gateways</p>
+            <p className="text-sm text-muted-foreground mt-1">Total Gateways</p>
           </CardContent>
         </Card>
 
@@ -42,7 +42,7 @@ export default function AdminIotManagement() {
               </div>
             </div>
             {isLoading ? <Skeleton className="h-9 w-20" /> : <p className="text-3xl font-bold text-slate-900">{stats?.devices.active}</p>}
-            <p className="text-sm text-slate-500 mt-1">Active Sensors</p>
+            <p className="text-sm text-muted-foreground mt-1">Active Sensors</p>
           </CardContent>
         </Card>
 
@@ -54,7 +54,7 @@ export default function AdminIotManagement() {
               </div>
             </div>
             {isLoading ? <Skeleton className="h-9 w-20" /> : <p className="text-3xl font-bold text-slate-900">{Number(stats?.devices.total) - Number(stats?.devices.active)}</p>}
-            <p className="text-sm text-slate-500 mt-1">Offline Sensors</p>
+            <p className="text-sm text-muted-foreground mt-1">Offline Sensors</p>
           </CardContent>
         </Card>
 
@@ -66,7 +66,7 @@ export default function AdminIotManagement() {
               </div>
             </div>
             {isLoading ? <Skeleton className="h-9 w-20" /> : <p className="text-3xl font-bold text-slate-900">12.4M</p>}
-            <p className="text-sm text-slate-500 mt-1">Events / Hour</p>
+            <p className="text-sm text-muted-foreground mt-1">Events / Hour</p>
           </CardContent>
         </Card>
       </div>
@@ -77,7 +77,7 @@ export default function AdminIotManagement() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="text-slate-800 flex items-center gap-2">
-                  <Map className="w-5 h-5 text-slate-500" />
+                  <Map className="w-5 h-5 text-muted-foreground" />
                   Global Gateway Map
                 </CardTitle>
                 <CardDescription>Live deployment map across regions</CardDescription>
@@ -88,9 +88,9 @@ export default function AdminIotManagement() {
             {/* Minimal wireframe map visualization */}
             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#94a3b8 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
             <div className="relative z-10 text-center">
-              <Map className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-              <p className="text-slate-500 font-medium">Interactive Map Module Loading...</p>
-              <p className="text-slate-400 text-sm mt-1">Connecting to geospatial services</p>
+              <Map className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground font-medium">Interactive Map Module Loading...</p>
+              <p className="text-muted-foreground text-sm mt-1">Connecting to geospatial services</p>
             </div>
             
             {/* Simulated Active Nodes */}
@@ -121,7 +121,7 @@ export default function AdminIotManagement() {
                 </div>
                 <p className="text-xs text-amber-600 mt-1">High packet loss detected in the last hour.</p>
               </div>
-              <Button variant="outline" className="w-full text-slate-600 border-slate-200 mt-4">
+              <Button variant="outline" className="w-full text-muted-foreground border-slate-200 mt-4">
                 View All Alerts
               </Button>
             </div>

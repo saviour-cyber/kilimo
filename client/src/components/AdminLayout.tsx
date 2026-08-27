@@ -27,7 +27,7 @@ import {
 import React from "react";
 import { Link, useLocation } from "wouter";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Types Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -46,7 +46,7 @@ interface NavGroup {
   items: NavItem[];
 }
 
-// ─── Menu definition ─────────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Menu definition Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 const ADMIN_MENU: NavGroup[] = [
   {
@@ -93,7 +93,7 @@ const ADMIN_MENU: NavGroup[] = [
   },
 ];
 
-// ─── Nav list (shared by all breakpoints) ────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Nav list (shared by all breakpoints) Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 // Labels are shown/hidden via Tailwind responsive classes so we only render once.
 
 function NavList({
@@ -107,10 +107,10 @@ function NavList({
     <nav className="flex flex-col gap-4 px-2 py-4">
       {ADMIN_MENU.map((group) => (
         <div key={group.group}>
-          {/* Group label — hidden when icon-only */}
+          {/* Group label Ã¢â‚¬â€ hidden when icon-only */}
           <p
             className={cn(
-              "mb-1 px-2 text-[10px] font-bold uppercase tracking-widest text-slate-500",
+              "mb-1 px-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground",
               // Tablet icon sidebar: hide
               "md:hidden",
               // Desktop expanded: show
@@ -144,8 +144,8 @@ function NavList({
                       "group relative flex items-center gap-2.5 rounded-lg px-2 py-[7px] text-sm font-medium",
                       "transition-colors duration-150",
                       isActive
-                        ? "bg-emerald-500/[0.14] text-emerald-400"
-                        : "text-slate-300 hover:bg-white/[0.06] hover:text-white",
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
                       // Icon-only: center icon
                       "md:justify-center md:px-0",
                       !collapsed ? "lg:justify-start lg:px-2" : "lg:justify-center lg:px-0",
@@ -153,7 +153,7 @@ function NavList({
                   >
                     {/* Active indicator bar */}
                     {isActive && (
-                      <span className="absolute inset-y-1 left-0 w-[3px] rounded-r-full bg-emerald-400 md:hidden lg:block" />
+                      <span className="absolute inset-y-1 left-0 w-[3px] rounded-r-full bg-primary md:hidden lg:block" />
                     )}
 
                     {/* Icon */}
@@ -162,12 +162,12 @@ function NavList({
                         "shrink-0 transition-transform duration-150 group-hover:scale-105",
                         "w-[18px] h-[18px]",
                         isActive
-                          ? "text-emerald-400"
-                          : (item.accent ?? "text-slate-400 group-hover:text-slate-200"),
+                          ? "text-primary"
+                          : (item.accent ?? "text-muted-foreground group-hover:text-accent-foreground"),
                       )}
                     />
 
-                    {/* Label — hidden in icon-only modes */}
+                    {/* Label Ã¢â‚¬â€ hidden in icon-only modes */}
                     <span
                       className={cn(
                         "truncate leading-none",
@@ -180,11 +180,11 @@ function NavList({
                       {item.label}
                     </span>
 
-                    {/* Active dot — only in expanded mode */}
+                    {/* Active dot Ã¢â‚¬â€ only in expanded mode */}
                     {isActive && (
                       <span
                         className={cn(
-                          "ml-auto h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400",
+                          "ml-auto h-1.5 w-1.5 shrink-0 rounded-full bg-primary",
                           "md:hidden",
                           !collapsed ? "lg:block" : "lg:hidden",
                         )}
@@ -201,7 +201,7 @@ function NavList({
   );
 }
 
-// ─── Main layout ─────────────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Main layout Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 export function AdminLayout({ children }: AdminLayoutProps) {
   const { user, logout, loading } = useAuth();
@@ -251,7 +251,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center animate-pulse">
             <ShieldAlert className="w-4 h-4 text-primary-foreground" />
           </div>
-          <p className="text-sm text-muted-foreground">Loading admin console…</p>
+          <p className="text-sm text-muted-foreground">Loading admin consoleÃ¢â‚¬Â¦</p>
         </div>
       </div>
     );
@@ -269,23 +269,23 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <div className="flex h-dvh overflow-hidden bg-background text-foreground">
 
-      {/* ── Mobile backdrop overlay ── */}
+      {/* Ã¢â€â‚¬Ã¢â€â‚¬ Mobile backdrop overlay Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <div
         aria-hidden="true"
         onClick={() => setDrawerOpen(false)}
         className={cn(
-          "fixed inset-0 z-40 bg-black/70 backdrop-blur-sm transition-opacity duration-300",
+          "fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300",
           "md:hidden",
           drawerOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
         )}
       />
 
-      {/* ──────────────────────────────────────────
+      {/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
           SIDEBAR
           Mobile  : fixed off-canvas drawer, 78 vw, max 280 px
           Tablet  : always visible, 64 px wide, icon-only
           Desktop : 224 px expanded / 64 px collapsed
-      ──────────────────────────────────────────── */}
+      Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-50 flex shrink-0 flex-col border-r border-border bg-card",
@@ -299,14 +299,14 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           collapsed ? "lg:w-16" : "lg:w-56",
         )}
       >
-        {/* ── Sidebar header ── */}
+        {/* Ã¢â€â‚¬Ã¢â€â‚¬ Sidebar header Ã¢â€â‚¬Ã¢â€â‚¬ */}
         <div className="flex h-[60px] shrink-0 items-center border-b border-border px-3 gap-2.5">
           {/* Logo mark */}
           <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-primary shadow-sm shadow-primary/20">
             <ShieldAlert className="h-3.5 w-3.5 text-primary-foreground" />
           </div>
 
-          {/* Brand name — visible on mobile drawer + desktop expanded */}
+          {/* Brand name Ã¢â‚¬â€ visible on mobile drawer + desktop expanded */}
           <span
             className={cn(
               "truncate text-sm font-semibold tracking-tight text-foreground",
@@ -342,12 +342,12 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           </button>
         </div>
 
-        {/* ── Nav scroll area ── */}
+        {/* Ã¢â€â‚¬Ã¢â€â‚¬ Nav scroll area Ã¢â€â‚¬Ã¢â€â‚¬ */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-none">
           <NavList location={location} collapsed={collapsed} />
         </div>
 
-        {/* ── User footer ── */}
+        {/* Ã¢â€â‚¬Ã¢â€â‚¬ User footer Ã¢â€â‚¬Ã¢â€â‚¬ */}
         <div
           className={cn(
             "flex shrink-0 items-center gap-2.5 border-t border-border p-3",
@@ -360,7 +360,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             {initials}
           </div>
 
-          {/* Name + email — hidden in icon-only modes */}
+          {/* Name + email Ã¢â‚¬â€ hidden in icon-only modes */}
           <div
             className={cn(
               "min-w-0 flex-1",
@@ -383,14 +383,14 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         </div>
       </aside>
 
-      {/* ──────────────────────────────────────────
+      {/* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
           MAIN CONTENT AREA
-      ──────────────────────────────────────────── */}
+      Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
 
-        {/* ── Top header bar ── */}
+        {/* Ã¢â€â‚¬Ã¢â€â‚¬ Top header bar Ã¢â€â‚¬Ã¢â€â‚¬ */}
         <header className="flex h-[60px] shrink-0 items-center gap-3 border-b border-border bg-card px-4">
-          {/* Hamburger — mobile only */}
+          {/* Hamburger Ã¢â‚¬â€ mobile only */}
           <button
             onClick={() => setDrawerOpen(true)}
             className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors md:hidden"
@@ -404,13 +404,13 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
           <div className="flex-1" />
 
-          {/* Search bar — tablet+ */}
+          {/* Search bar Ã¢â‚¬â€ tablet+ */}
           <div className="hidden md:flex items-center gap-2 rounded-md border border-border bg-background px-3 py-1.5 text-muted-foreground w-52 lg:w-64">
             <svg className="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <span className="text-xs flex-1">Quick search…</span>
-            <kbd className="rounded bg-secondary px-1 py-0.5 font-mono text-[10px] text-muted-foreground">⌘K</kbd>
+            <span className="text-xs flex-1">Quick searchÃ¢â‚¬Â¦</span>
+            <kbd className="rounded bg-secondary px-1 py-0.5 font-mono text-[10px] text-muted-foreground">Ã¢Å’ËœK</kbd>
           </div>
 
           {/* Notifications */}
@@ -419,7 +419,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-primary" />
           </button>
 
-          {/* User — tablet+ */}
+          {/* User Ã¢â‚¬â€ tablet+ */}
           <div className="hidden md:flex items-center gap-2 border-l border-border pl-3">
             <div className="flex h-7 w-7 items-center justify-center rounded-full bg-secondary text-xs font-semibold text-foreground border border-border">
               {initials}
@@ -427,7 +427,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           </div>
         </header>
 
-        {/* ── Scrollable page content ── */}
+        {/* Ã¢â€â‚¬Ã¢â€â‚¬ Scrollable page content Ã¢â€â‚¬Ã¢â€â‚¬ */}
         <main className="flex-1 overflow-y-auto">
           <div className="mx-auto max-w-[1440px] p-4 md:p-5 lg:p-6">
             {children}

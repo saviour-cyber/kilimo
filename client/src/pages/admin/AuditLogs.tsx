@@ -13,7 +13,7 @@ export default function AdminAuditLogs() {
   const getIconForAction = (action: string) => {
     if (action.includes("MODULE")) return <Box className="w-3.5 h-3.5 text-purple-500" />;
     if (action.includes("SERVICE")) return <Server className="w-3.5 h-3.5 text-blue-500" />;
-    if (action.includes("USER")) return <User className="w-3.5 h-3.5 text-emerald-500" />;
+    if (action.includes("USER")) return <User className="w-3.5 h-3.5 text-primary" />;
     return <Activity className="w-3.5 h-3.5 text-muted-foreground" />;
   };
 
@@ -82,7 +82,7 @@ export default function AdminAuditLogs() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {log.entityType ?? "—"}
+                      {log.entityType ?? "â€”"}
                     </TableCell>
                     <TableCell className="text-xs text-muted-foreground max-w-[300px] truncate">
                       {log.description ?? JSON.stringify(log.metadata)}

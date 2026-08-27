@@ -42,7 +42,7 @@ export default function AdminMonitoring() {
               </span>
             </div>
             <p className="text-3xl font-bold text-slate-900">{metrics.current.cpu}%</p>
-            <p className="text-sm text-slate-500 mt-1">CPU Usage (Avg)</p>
+            <p className="text-sm text-muted-foreground mt-1">CPU Usage (Avg)</p>
           </CardContent>
         </Card>
 
@@ -54,7 +54,7 @@ export default function AdminMonitoring() {
               </div>
             </div>
             <p className="text-3xl font-bold text-slate-900">{metrics.current.memory}%</p>
-            <p className="text-sm text-slate-500 mt-1">Memory Usage</p>
+            <p className="text-sm text-muted-foreground mt-1">Memory Usage</p>
           </CardContent>
         </Card>
 
@@ -66,26 +66,26 @@ export default function AdminMonitoring() {
               </div>
             </div>
             <p className="text-3xl font-bold text-slate-900">{metrics.current.activeConnections}</p>
-            <p className="text-sm text-slate-500 mt-1">Active DB Connections</p>
+            <p className="text-sm text-muted-foreground mt-1">Active DB Connections</p>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 bg-slate-900">
+        <Card className="border-slate-200 bg-background">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-2 bg-slate-800 rounded-lg">
-                <Activity className="w-5 h-5 text-slate-300" />
+              <div className="p-2 bg-accent rounded-lg">
+                <Activity className="w-5 h-5 text-muted-foreground" />
               </div>
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                 </span>
-                <span className="text-xs font-medium text-emerald-400 uppercase tracking-wider">Live</span>
+                <span className="text-xs font-medium text-primary uppercase tracking-wider">Live</span>
               </div>
             </div>
             <p className="text-3xl font-bold text-white">{metrics.current.uptime}</p>
-            <p className="text-sm text-slate-400 mt-1">System Uptime</p>
+            <p className="text-sm text-muted-foreground mt-1">System Uptime</p>
           </CardContent>
         </Card>
       </div>

@@ -30,7 +30,7 @@ export default function AdminReports() {
               </div>
             </div>
             {isLoading ? <Skeleton className="h-9 w-20" /> : <p className="text-3xl font-bold text-slate-900">{analytics?.totalReportsGenerated}</p>}
-            <p className="text-sm text-slate-500 mt-1">Total Reports Generated (All Time)</p>
+            <p className="text-sm text-muted-foreground mt-1">Total Reports Generated (All Time)</p>
           </CardContent>
         </Card>
 
@@ -42,7 +42,7 @@ export default function AdminReports() {
               </div>
             </div>
             <p className="text-3xl font-bold text-slate-900">+24%</p>
-            <p className="text-sm text-slate-500 mt-1">Report Usage Growth (MoM)</p>
+            <p className="text-sm text-muted-foreground mt-1">Report Usage Growth (MoM)</p>
           </CardContent>
         </Card>
 
@@ -54,7 +54,7 @@ export default function AdminReports() {
               </div>
             </div>
             <p className="text-3xl font-bold text-slate-900">8,204</p>
-            <p className="text-sm text-slate-500 mt-1">Unique Farms Generating Data</p>
+            <p className="text-sm text-muted-foreground mt-1">Unique Farms Generating Data</p>
           </CardContent>
         </Card>
       </div>
@@ -82,18 +82,18 @@ export default function AdminReports() {
                 </TableRow>
               ) : analytics?.recentReports?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={3} className="text-center py-8 text-slate-500">
+                  <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
                     No reports generated yet.
                   </TableCell>
                 </TableRow>
               ) : (
                 analytics?.recentReports?.map((report) => (
                   <TableRow key={report.id}>
-                    <TableCell className="font-mono text-sm text-slate-600">#{report.id}</TableCell>
+                    <TableCell className="font-mono text-sm text-muted-foreground">#{report.id}</TableCell>
                     <TableCell>
                       <div className="font-medium text-slate-800 capitalize">{report.type.replace(/_/g, ' ')}</div>
                     </TableCell>
-                    <TableCell className="text-slate-500 text-sm">
+                    <TableCell className="text-muted-foreground text-sm">
                       {format(new Date(report.createdAt!), "MMM d, yyyy h:mm a")}
                     </TableCell>
                   </TableRow>

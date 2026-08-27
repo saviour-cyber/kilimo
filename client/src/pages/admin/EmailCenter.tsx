@@ -193,23 +193,23 @@ export default function EmailCenter() {
                 <TableBody>
                   {isLogsLoading ? (
                     <TableRow>
-                      <TableCell colSpan={5} className="text-center py-8 text-slate-500">Loading...</TableCell>
+                      <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">Loading...</TableCell>
                     </TableRow>
                   ) : logs?.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={5} className="text-center py-8 text-slate-500">No email logs found.</TableCell>
+                      <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">No email logs found.</TableCell>
                     </TableRow>
                   ) : (
                     logs?.map((log) => (
                       <TableRow key={log.id}>
                         <TableCell className="font-medium">{log.recipient}</TableCell>
-                        <TableCell className="text-slate-600 line-clamp-1 max-w-[250px]">{log.subject}</TableCell>
+                        <TableCell className="text-muted-foreground line-clamp-1 max-w-[250px]">{log.subject}</TableCell>
                         <TableCell>
-                          <Badge variant="outline" className="text-xs bg-slate-50 text-slate-600 font-normal capitalize">
+                          <Badge variant="outline" className="text-xs bg-slate-50 text-muted-foreground font-normal capitalize">
                             {log.templateKey.replace('_', ' ')}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-slate-500 text-sm">
+                        <TableCell className="text-muted-foreground text-sm">
                           {format(new Date(log.sentAt), "MMM d, yyyy h:mm a")}
                         </TableCell>
                         <TableCell className="text-right">

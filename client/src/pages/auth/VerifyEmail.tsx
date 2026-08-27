@@ -1,10 +1,10 @@
-﻿import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Loader2, CheckCircle2, XCircle, Sprout, ArrowRight } from "lucide-react";
+import { Loader2, CheckCircle2, XCircle, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
+import { AuthCard } from "@/components/shared/AuthCard";
 
 export default function VerifyEmail() {
   const [, setLocation] = useLocation();
@@ -37,65 +37,58 @@ export default function VerifyEmail() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
-      <div className="w-full max-w-md">
-        <div className="flex flex-col items-center gap-4 mb-4">
-          <img src="/logo.png" alt="KiliSense" className="w-40 h-40 object-contain drop-shadow-md" />
+    <AuthCard
+      title={
+        status === "loading" ? "Verifying email..." : 
+        status === "success" ? "Email Verified!" : 
+        "Verification Failed"
+      }
+      description={
+        status === "loading" ? "Please wait while we confirm your email address." :
+        status === "success" ? "Your email has been verified and your account is active." :
+        "We could not verify your email address."
+      }
+    >
+      <div className="flex flex-col items-center justify-center space-y-6 pt-2 pb-2">
+        {status === "loading" && (
+          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+            <Loader2 className="w-8 h-8 animate-spin" />
+          </div>
+        )}
+        {status === "success" && (
+          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+            <CheckCircle2 className="w-8 h-8" />
+          </div>
+        )}
+        {status === "error" && (
+          <div className="w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center text-destructive">
+            <XCircle className="w-8 h-8" />
+          </div>
+        )}
+        
+        {status === "error" && errorMessage && (
+          <p className="text-sm text-destructive font-medium text-center">{errorMessage}</p>
+        )}
+        
+        <div className="w-full pt-4">
+          {status === "success" && (
+            <Button onClick={() => window.location.href = "/dashboard"} className="w-full h-11 text-base">
+              Go to Dashboard
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          )}
+          {status === "error" && (
+            <Button onClick={() => setLocation("/login")} variant="outline" className="w-full h-11">
+              Return to Login
+            </Button>
+          )}
+          {status === "loading" && (
+            <Button disabled variant="outline" className="w-full h-11">
+              Please wait...
+            </Button>
+          )}
         </div>
-
-        <Card className="shadow-lg border-slate-200">
-          <CardHeader className="text-center">
-            {status === "loading" && (
-              <CardTitle className="text-2xl flex flex-col items-center gap-4">
-                <Loader2 className="w-12 h-12 text-emerald-600 animate-spin" />
-                Verifying your email...
-              </CardTitle>
-            )}
-            {status === "success" && (
-              <CardTitle className="text-2xl flex flex-col items-center gap-4">
-                <CheckCircle2 className="w-12 h-12 text-emerald-600" />
-                Email Verified!
-              </CardTitle>
-            )}
-            {status === "error" && (
-              <CardTitle className="text-2xl flex flex-col items-center gap-4">
-                <XCircle className="w-12 h-12 text-destructive" />
-                Verification Failed
-              </CardTitle>
-            )}
-          </CardHeader>
-          <CardContent className="text-center">
-            {status === "loading" && (
-              <p className="text-muted-foreground">Please wait while we confirm your email address.</p>
-            )}
-            {status === "success" && (
-              <p className="text-muted-foreground">Your email has been verified and your account is now fully active. You have been logged in automatically.</p>
-            )}
-            {status === "error" && (
-              <p className="text-destructive font-medium">{errorMessage}</p>
-            )}
-          </CardContent>
-          <CardFooter className="flex justify-center border-t p-6">
-            {status === "success" && (
-              <Button onClick={() => window.location.href = "/dashboard"} className="w-full bg-emerald-600 hover:bg-emerald-700">
-                Go to Dashboard
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            )}
-            {status === "error" && (
-              <Button onClick={() => setLocation("/login")} variant="outline" className="w-full">
-                Return to Login
-              </Button>
-            )}
-            {status === "loading" && (
-              <Button disabled variant="outline" className="w-full">
-                Please wait...
-              </Button>
-            )}
-          </CardFooter>
-        </Card>
       </div>
-    </div>
+    </AuthCard>
   );
 }
-

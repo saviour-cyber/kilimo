@@ -13,7 +13,7 @@ export default function Billing() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">Billing & Invoices</h1>
-        <p className="text-slate-500 mt-2">
+        <p className="text-muted-foreground mt-2">
           Manage platform revenue, tenant invoices, and payment gateways.
         </p>
       </div>
@@ -29,7 +29,7 @@ export default function Billing() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="p-8 text-center bg-slate-50 border border-dashed rounded-lg text-slate-500">
+          <div className="p-8 text-center bg-slate-50 border border-dashed rounded-lg text-muted-foreground">
             Billing interface coming soon.
           </div>
         </CardContent>

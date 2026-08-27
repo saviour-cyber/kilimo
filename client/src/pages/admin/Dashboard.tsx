@@ -29,7 +29,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Sub-components Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 /** Reusable admin card wrapper */
 function AdminCard({
@@ -63,9 +63,9 @@ function AdminCardHeader({
   return (
     <div className="flex items-start justify-between gap-4 px-4 pt-4 pb-3 md:px-5">
       <div>
-        <h3 className="text-sm font-semibold text-slate-100">{title}</h3>
+        <h3 className="text-sm font-semibold text-foreground">{title}</h3>
         {subtitle && (
-          <p className="mt-0.5 text-xs text-slate-500">{subtitle}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">{subtitle}</p>
         )}
       </div>
       {action && <div className="shrink-0">{action}</div>}
@@ -73,7 +73,7 @@ function AdminCardHeader({
   );
 }
 
-/** KPI card — compact on mobile, spacious on desktop */
+/** KPI card Ã¢â‚¬â€ compact on mobile, spacious on desktop */
 function KpiCard({
   title,
   value,
@@ -90,20 +90,20 @@ function KpiCard({
   trend?: string;
 }) {
   return (
-    <AdminCard className="flex flex-col gap-3 p-4 hover:border-white/[0.12] transition-colors cursor-default group">
+    <AdminCard className="flex flex-col gap-3 p-4 hover:border-primary/20 transition-colors cursor-default group">
       <div className="flex items-center justify-between">
         <div className={cn("flex h-9 w-9 items-center justify-center rounded-lg", bg)}>
           <Icon className={cn("h-4 w-4", accent)} />
         </div>
         {trend && (
-          <div className="flex items-center gap-0.5 text-emerald-400 text-xs font-medium">
+          <div className="flex items-center gap-0.5 text-primary text-xs font-medium">
             <ArrowUpRight className="h-3 w-3" />
             {trend}
           </div>
         )}
       </div>
       <div>
-        <p className="text-xs text-slate-500 font-medium">{title}</p>
+        <p className="text-xs text-muted-foreground font-medium">{title}</p>
         <p className="mt-0.5 text-xl font-bold text-white tracking-tight">{value}</p>
       </div>
     </AdminCard>
@@ -113,8 +113,8 @@ function KpiCard({
 /** Status badge */
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, { cls: string; icon: React.ElementType; label: string }> = {
-    success: { cls: "text-emerald-400 bg-emerald-400/10", icon: CheckCircle2, label: "Success" },
-    pending: { cls: "text-amber-400 bg-amber-400/10",   icon: Clock,         label: "Pending" },
+    success: { cls: "text-primary bg-emerald-400/10", icon: CheckCircle2, label: "Success" },
+    pending: { cls: "text-amber-600 bg-amber-400/10",   icon: Clock,         label: "Pending" },
     warning: { cls: "text-orange-400 bg-orange-400/10", icon: AlertTriangle, label: "Warning" },
     error:   { cls: "text-rose-400 bg-rose-400/10",     icon: AlertTriangle, label: "Error"   },
   };
@@ -141,11 +141,11 @@ function HealthRow({
   const dot = status === "ok" ? "bg-emerald-400" : status === "warn" ? "bg-amber-400" : "bg-rose-400";
   return (
     <div className="flex items-center justify-between py-2 text-sm border-b border-white/[0.04] last:border-0">
-      <div className="flex items-center gap-2 text-slate-300">
+      <div className="flex items-center gap-2 text-muted-foreground">
         <span className={cn("h-1.5 w-1.5 rounded-full shrink-0", dot)} />
         {label}
       </div>
-      <span className="text-slate-400 text-xs font-mono">{value}</span>
+      <span className="text-muted-foreground text-xs font-mono">{value}</span>
     </div>
   );
 }
@@ -220,7 +220,7 @@ function ChartCard({
   );
 }
 
-// ─── Main dashboard ───────────────────────────────────────────────────────────
+// Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Main dashboard Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 export default function AdminDashboard() {
   const { data: stats, isLoading: statsLoading } = trpc.admin.getPlatformStats.useQuery();
@@ -233,25 +233,25 @@ export default function AdminDashboard() {
   const kpis = [
     {
       title: "Organizations",
-      value: stats?.totalOrganizations?.toLocaleString() ?? "—",
+      value: stats?.totalOrganizations?.toLocaleString() ?? "Ã¢â‚¬â€",
       icon: Building2,
-      accent: "text-blue-400",
+      accent: "text-blue-600",
       bg: "bg-blue-400/10",
       trend: "+12%",
     },
     {
       title: "Active Farms",
-      value: stats?.activeFarms?.toLocaleString() ?? "—",
+      value: stats?.activeFarms?.toLocaleString() ?? "Ã¢â‚¬â€",
       icon: Sprout,
-      accent: "text-emerald-400",
+      accent: "text-primary",
       bg: "bg-emerald-400/10",
       trend: "+8%",
     },
     {
       title: "Total Users",
-      value: stats?.totalUsers?.toLocaleString() ?? "—",
+      value: stats?.totalUsers?.toLocaleString() ?? "Ã¢â‚¬â€",
       icon: Users,
-      accent: "text-purple-400",
+      accent: "text-purple-600",
       bg: "bg-purple-400/10",
       trend: "+23%",
     },
@@ -259,7 +259,7 @@ export default function AdminDashboard() {
       title: "Monthly Revenue",
       value: `KES ${(stats?.monthlyRevenue ?? 0).toLocaleString()}`,
       icon: Banknote,
-      accent: "text-amber-400",
+      accent: "text-amber-600",
       bg: "bg-amber-400/10",
       trend: "+5%",
     },
@@ -267,30 +267,30 @@ export default function AdminDashboard() {
       title: "API Requests",
       value: stats
         ? `${((stats.apiRequestsToday ?? 0) / 1_000_000).toFixed(1)}M`
-        : "—",
+        : "Ã¢â‚¬â€",
       icon: Activity,
       accent: "text-rose-400",
       bg: "bg-rose-400/10",
     },
     {
       title: "Online Devices",
-      value: stats?.onlineDevices?.toLocaleString() ?? "—",
+      value: stats?.onlineDevices?.toLocaleString() ?? "Ã¢â‚¬â€",
       icon: Wifi,
       accent: "text-cyan-400",
       bg: "bg-cyan-400/10",
     },
     {
       title: "AI Requests",
-      value: stats?.aiRequestsToday?.toLocaleString() ?? "—",
+      value: stats?.aiRequestsToday?.toLocaleString() ?? "Ã¢â‚¬â€",
       icon: Sparkles,
-      accent: "text-indigo-400",
+      accent: "text-indigo-600",
       bg: "bg-indigo-400/10",
     },
     {
       title: "Storage Used",
-      value: `${stats?.storageUsedTb ?? "—"} TB`,
+      value: `${stats?.storageUsedTb ?? "Ã¢â‚¬â€"} TB`,
       icon: HardDrive,
-      accent: "text-slate-400",
+      accent: "text-muted-foreground",
       bg: "bg-slate-400/10",
     },
   ];
@@ -325,26 +325,26 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-4 md:space-y-5">
 
-      {/* ── Page title ── */}
+      {/* Ã¢â€â‚¬Ã¢â€â‚¬ Page title Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <div>
         <h1 className="text-lg font-bold text-white md:text-xl">Platform Overview</h1>
-        <p className="mt-0.5 text-xs text-slate-500">
+        <p className="mt-0.5 text-xs text-muted-foreground">
           Real-time platform health and business metrics
         </p>
       </div>
 
-      {/* ── KPI Grid
+      {/* Ã¢â€â‚¬Ã¢â€â‚¬ KPI Grid
            Mobile:  2 columns
            Tablet:  4 columns
            Desktop: 4 columns (2 rows of 4)
-      ── */}
+      Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {kpis.map((k) => (
           <KpiCard key={k.title} {...k} />
         ))}
       </div>
 
-      {/* ── Charts row ── */}
+      {/* Ã¢â€â‚¬Ã¢â€â‚¬ Charts row Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <div className="grid gap-4 lg:grid-cols-2">
         <ChartCard
           title="User Growth"
@@ -363,7 +363,7 @@ export default function AdminDashboard() {
         />
       </div>
 
-      {/* ── System Health + AI Status ── */}
+      {/* Ã¢â€â‚¬Ã¢â€â‚¬ System Health + AI Status Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <div className="grid gap-4 md:grid-cols-2">
         {/* System Health */}
         <AdminCard>
@@ -371,7 +371,7 @@ export default function AdminDashboard() {
             title="System Health"
             subtitle="Live service status"
             action={
-              <span className="flex items-center gap-1 rounded-full bg-emerald-400/10 px-2 py-1 text-[10px] font-medium text-emerald-400">
+              <span className="flex items-center gap-1 rounded-full bg-emerald-400/10 px-2 py-1 text-[10px] font-medium text-primary">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 All Systems Operational
               </span>
@@ -393,7 +393,7 @@ export default function AdminDashboard() {
             title="AI Engine"
             subtitle="Model performance this session"
             action={
-              <span className="flex items-center gap-1 rounded-full bg-purple-400/10 px-2 py-1 text-[10px] font-medium text-purple-400">
+              <span className="flex items-center gap-1 rounded-full bg-purple-400/10 px-2 py-1 text-[10px] font-medium text-purple-600">
                 <Sparkles className="h-2.5 w-2.5" />
                 Active
               </span>
@@ -401,15 +401,15 @@ export default function AdminDashboard() {
           />
           <div className="px-4 pb-4 md:px-5 space-y-3">
             {[
-              { label: "Requests today",  value: stats?.aiRequestsToday?.toLocaleString() ?? "—", pct: 68  },
+              { label: "Requests today",  value: stats?.aiRequestsToday?.toLocaleString() ?? "Ã¢â‚¬â€", pct: 68  },
               { label: "Avg latency",     value: "1.2 s",                                           pct: 42  },
               { label: "Error rate",      value: "0.03%",                                           pct: 3   },
               { label: "Cache hit rate",  value: "79%",                                             pct: 79  },
             ].map(({ label, value, pct }) => (
               <div key={label}>
                 <div className="mb-1 flex items-center justify-between text-xs">
-                  <span className="text-slate-400">{label}</span>
-                  <span className="font-semibold text-slate-200">{value}</span>
+                  <span className="text-muted-foreground">{label}</span>
+                  <span className="font-semibold text-foreground">{value}</span>
                 </div>
                 <div className="h-1 w-full rounded-full bg-white/5">
                   <div
@@ -423,7 +423,7 @@ export default function AdminDashboard() {
         </AdminCard>
       </div>
 
-      {/* ── IoT Status + Billing ── */}
+      {/* Ã¢â€â‚¬Ã¢â€â‚¬ IoT Status + Billing Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <div className="grid gap-4 md:grid-cols-2">
         {/* IoT Status */}
         <AdminCard>
@@ -439,14 +439,14 @@ export default function AdminDashboard() {
           />
           <div className="grid grid-cols-3 gap-3 px-4 pb-4 md:px-5">
             {[
-              { label: "Total Devices", value: stats?.onlineDevices?.toLocaleString() ?? "—", icon: Server, color: "text-cyan-400" },
-              { label: "Active Now",    value: Math.floor((stats?.onlineDevices ?? 0) * 0.87).toLocaleString(), icon: Zap, color: "text-emerald-400" },
-              { label: "Alerts",        value: "3",                                              icon: AlertTriangle, color: "text-amber-400" },
+              { label: "Total Devices", value: stats?.onlineDevices?.toLocaleString() ?? "Ã¢â‚¬â€", icon: Server, color: "text-cyan-400" },
+              { label: "Active Now",    value: Math.floor((stats?.onlineDevices ?? 0) * 0.87).toLocaleString(), icon: Zap, color: "text-primary" },
+              { label: "Alerts",        value: "3",                                              icon: AlertTriangle, color: "text-amber-600" },
             ].map(({ label, value, icon: Icon, color }) => (
               <div key={label} className="rounded-lg bg-white/[0.03] p-3 text-center">
                 <Icon className={cn("mx-auto mb-1 h-4 w-4", color)} />
                 <p className="text-base font-bold text-white">{value}</p>
-                <p className="text-[10px] text-slate-500">{label}</p>
+                <p className="text-[10px] text-muted-foreground">{label}</p>
               </div>
             ))}
           </div>
@@ -463,21 +463,21 @@ export default function AdminDashboard() {
             title="Billing Overview"
             subtitle="Current billing period"
             action={
-              <a href="/admin/billing" className="flex items-center gap-1 text-xs text-emerald-400 hover:text-emerald-300 transition-colors font-medium">
+              <a href="/admin/billing" className="flex items-center gap-1 text-xs text-primary hover:text-primary transition-colors font-medium">
                 Details <ChevronRight className="h-3 w-3" />
               </a>
             }
           />
           <div className="px-4 pb-4 md:px-5 space-y-3">
             {[
-              { label: "MRR",               value: `KES ${(stats?.monthlyRevenue ?? 0).toLocaleString()}`, color: "text-emerald-400" },
-              { label: "ARR",               value: `KES ${((stats?.monthlyRevenue ?? 0) * 12).toLocaleString()}`, color: "text-blue-400" },
-              { label: "Paying accounts",   value: stats?.totalOrganizations?.toLocaleString() ?? "—",    color: "text-purple-400" },
-              { label: "Avg revenue / org", value: `KES ${Math.round((stats?.monthlyRevenue ?? 0) / Math.max(stats?.totalOrganizations ?? 1, 1)).toLocaleString()}`, color: "text-amber-400" },
-              { label: "Outstanding dues",  value: "KES 0",                                                color: "text-slate-400" },
+              { label: "MRR",               value: `KES ${(stats?.monthlyRevenue ?? 0).toLocaleString()}`, color: "text-primary" },
+              { label: "ARR",               value: `KES ${((stats?.monthlyRevenue ?? 0) * 12).toLocaleString()}`, color: "text-blue-600" },
+              { label: "Paying accounts",   value: stats?.totalOrganizations?.toLocaleString() ?? "Ã¢â‚¬â€",    color: "text-purple-600" },
+              { label: "Avg revenue / org", value: `KES ${Math.round((stats?.monthlyRevenue ?? 0) / Math.max(stats?.totalOrganizations ?? 1, 1)).toLocaleString()}`, color: "text-amber-600" },
+              { label: "Outstanding dues",  value: "KES 0",                                                color: "text-muted-foreground" },
             ].map(({ label, value, color }) => (
               <div key={label} className="flex items-center justify-between py-1.5 border-b border-white/[0.04] last:border-0">
-                <span className="text-xs text-slate-400">{label}</span>
+                <span className="text-xs text-muted-foreground">{label}</span>
                 <span className={cn("text-sm font-semibold", color)}>{value}</span>
               </div>
             ))}
@@ -485,7 +485,7 @@ export default function AdminDashboard() {
         </AdminCard>
       </div>
 
-      {/* ── Recent Activity ── */}
+      {/* Ã¢â€â‚¬Ã¢â€â‚¬ Recent Activity Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <AdminCard>
         <AdminCardHeader
           title="Recent Activity"
@@ -493,7 +493,7 @@ export default function AdminDashboard() {
           action={
             <button
               onClick={() => setActivityExpanded((e) => !e)}
-              className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors font-medium"
+              className="text-xs text-primary hover:text-primary transition-colors font-medium"
             >
               {activityExpanded ? "Show less" : "View all"}
             </button>
@@ -505,10 +505,10 @@ export default function AdminDashboard() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/[0.06] text-left">
-                <th className="px-5 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500">User</th>
-                <th className="px-5 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500">Action</th>
-                <th className="px-5 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500">Status</th>
-                <th className="px-5 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500 text-right">Time</th>
+                <th className="px-5 pb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">User</th>
+                <th className="px-5 pb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Action</th>
+                <th className="px-5 pb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Status</th>
+                <th className="px-5 pb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground text-right">Time</th>
               </tr>
             </thead>
             <tbody>
@@ -517,10 +517,10 @@ export default function AdminDashboard() {
                   key={i}
                   className="border-b border-white/[0.04] last:border-0 hover:bg-white/[0.02] transition-colors"
                 >
-                  <td className="px-5 py-3 font-medium text-slate-200">{row.user}</td>
-                  <td className="px-5 py-3 text-slate-400">{row.action}</td>
+                  <td className="px-5 py-3 font-medium text-foreground">{row.user}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{row.action}</td>
                   <td className="px-5 py-3"><StatusBadge status={row.status} /></td>
-                  <td className="px-5 py-3 text-slate-500 text-xs text-right">{row.time}</td>
+                  <td className="px-5 py-3 text-muted-foreground text-xs text-right">{row.time}</td>
                 </tr>
               ))}
             </tbody>
@@ -533,12 +533,12 @@ export default function AdminDashboard() {
             <div key={i} className="px-4 py-3">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-slate-200 truncate">{row.user}</p>
-                  <p className="text-xs text-slate-400 mt-0.5">{row.action}</p>
+                  <p className="text-sm font-medium text-foreground truncate">{row.user}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{row.action}</p>
                 </div>
                 <div className="flex shrink-0 flex-col items-end gap-1">
                   <StatusBadge status={row.status} />
-                  <span className="text-[10px] text-slate-600">{row.time}</span>
+                  <span className="text-[10px] text-muted-foreground">{row.time}</span>
                 </div>
               </div>
             </div>
@@ -549,7 +549,7 @@ export default function AdminDashboard() {
           <div className="border-t border-white/[0.04] px-4 py-2.5 md:px-5">
             <button
               onClick={() => setActivityExpanded((e) => !e)}
-              className="flex w-full items-center justify-center gap-1.5 text-xs text-slate-500 hover:text-slate-300 transition-colors py-0.5"
+              className="flex w-full items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-muted-foreground transition-colors py-0.5"
             >
               {activityExpanded ? "Collapse" : `Show ${recentActivityData.length - 4} more`}
               <ChevronRight className={cn("h-3 w-3 transition-transform", activityExpanded && "rotate-90")} />
@@ -558,7 +558,7 @@ export default function AdminDashboard() {
         )}
       </AdminCard>
 
-      {/* ── Mobile floating quick-action ── */}
+      {/* Ã¢â€â‚¬Ã¢â€â‚¬ Mobile floating quick-action Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <div className="fixed bottom-5 right-4 z-30 flex flex-col items-end gap-2 md:hidden">
         <a
           href="/admin/organizations"

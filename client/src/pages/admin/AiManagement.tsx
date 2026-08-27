@@ -56,7 +56,7 @@ export default function AdminAiManagement() {
               </div>
             </div>
             <p className="text-3xl font-bold text-slate-900">1.2M</p>
-            <p className="text-sm text-slate-500 mt-1">Tokens Processed Today</p>
+            <p className="text-sm text-muted-foreground mt-1">Tokens Processed Today</p>
           </CardContent>
         </Card>
 
@@ -68,7 +68,7 @@ export default function AdminAiManagement() {
               </div>
             </div>
             <p className="text-3xl font-bold text-slate-900">4,285</p>
-            <p className="text-sm text-slate-500 mt-1">AI Requests Today</p>
+            <p className="text-sm text-muted-foreground mt-1">AI Requests Today</p>
           </CardContent>
         </Card>
 
@@ -80,7 +80,7 @@ export default function AdminAiManagement() {
               </div>
             </div>
             <p className="text-3xl font-bold text-slate-900">0.05s</p>
-            <p className="text-sm text-slate-500 mt-1">Avg Response Latency</p>
+            <p className="text-sm text-muted-foreground mt-1">Avg Response Latency</p>
           </CardContent>
         </Card>
       </div>
@@ -105,20 +105,20 @@ export default function AdminAiManagement() {
                 <TableRow key={model.id}>
                   <TableCell>
                     <div className="font-semibold text-slate-800">{model.name}</div>
-                    <div className="text-xs text-slate-500 mt-0.5">{model.description}</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">{model.description}</div>
                   </TableCell>
                   <TableCell>
                     {model.status === "Active" ? (
                       <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none">Active</Badge>
                     ) : (
-                      <Badge className="bg-slate-100 text-slate-500 hover:bg-slate-100 border-none">Disabled</Badge>
+                      <Badge className="bg-slate-100 text-muted-foreground hover:bg-slate-100 border-none">Disabled</Badge>
                     )}
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-col gap-1.5">
-                      <div className="flex items-center justify-between text-xs text-slate-600 font-medium">
+                      <div className="flex items-center justify-between text-xs text-muted-foreground font-medium">
                         <span>{model.usage}%</span>
-                        <span className="text-slate-400">{model.limit}</span>
+                        <span className="text-muted-foreground">{model.limit}</span>
                       </div>
                       <Progress value={model.usage} className="h-1.5" />
                     </div>

@@ -75,7 +75,7 @@ export default function AdminAnnouncements() {
         
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-slate-900 hover:bg-slate-800 text-white gap-2">
+            <Button className="bg-background hover:bg-accent text-white gap-2">
               <Plus className="w-4 h-4" /> New Announcement
             </Button>
           </DialogTrigger>
@@ -134,23 +134,23 @@ export default function AdminAnnouncements() {
             <TableBody>
               {isLoading ? (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center py-8 text-slate-500">Loading...</TableCell>
+                  <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">Loading...</TableCell>
                 </TableRow>
               ) : announcements?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center py-8 text-slate-500">No announcements found.</TableCell>
+                  <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">No announcements found.</TableCell>
                 </TableRow>
               ) : (
                 announcements?.map((ann) => (
                   <TableRow key={ann.id}>
                     <TableCell>
                       <div className="font-semibold text-slate-800">{ann.title}</div>
-                      <div className="text-xs text-slate-500 mt-1 line-clamp-1">{ann.content}</div>
+                      <div className="text-xs text-muted-foreground mt-1 line-clamp-1">{ann.content}</div>
                     </TableCell>
                     <TableCell>
                       <Badge className={`${getBadgeColor(ann.type)} border-none capitalize`}>{ann.type}</Badge>
                     </TableCell>
-                    <TableCell className="text-slate-500 text-sm">
+                    <TableCell className="text-muted-foreground text-sm">
                       {format(new Date(ann.createdAt), "MMM d, yyyy h:mm a")}
                     </TableCell>
                     <TableCell className="text-right">
