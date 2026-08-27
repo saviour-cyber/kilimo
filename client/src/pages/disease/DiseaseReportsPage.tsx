@@ -7,7 +7,7 @@ import { DiseaseKpiWidget, DiseaseSummaryWidget } from "@/components/widgets/mod
 import { PageHeader } from "@/components/shared/PageHeader";
 import { cn } from "@/lib/utils";
 
-// ─── Severity Bar ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ Severity Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function SeverityBar({ label, count, total, color }: { label: string; count: number; total: number; color: string }) {
   const pct = total === 0 ? 0 : Math.round((count / total) * 100);
   return (
@@ -21,7 +21,7 @@ function SeverityBar({ label, count, total, color }: { label: string; count: num
   );
 }
 
-// ─── Analytics Card ───────────────────────────────────────────────────────────
+// â”€â”€â”€ Analytics Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function AnalyticsCard({ title, icon: Icon, iconColor, children }: {
   title: string;
   icon: React.ElementType;
@@ -39,7 +39,7 @@ function AnalyticsCard({ title, icon: Icon, iconColor, children }: {
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Main Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function DiseaseReportsPage() {
   const { currentFarm } = useFarm();
   const { data: allScans = [] } = trpc.disease.getScans.useQuery(
@@ -80,10 +80,10 @@ export default function DiseaseReportsPage() {
         title="Disease Reports"
         description="Aggregate insights from all disease scans"
         icon={BarChart3}
-        iconBg="bg-violet-100"
-        iconColor="text-violet-600"
+        iconBg="bg-primary/10"
+        iconColor="text-primary"
         action={
-          <Button asChild className="bg-violet-600 hover:bg-violet-700 text-white gap-2">
+          <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground text-white gap-2">
             <Link href={`/farms/${currentFarm?.farm.id}/disease/scans/new`}>
               <PlusCircle className="w-4 h-4" /> New Scan
             </Link>
@@ -128,11 +128,11 @@ export default function DiseaseReportsPage() {
             <div className="space-y-2.5">
               {topDiseases.map(([disease, count], i) => (
                 <div key={disease} className="flex items-center gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-violet-100 text-violet-700 text-[10px] font-bold flex items-center justify-center shrink-0">
+                  <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center shrink-0">
                     {i + 1}
                   </span>
                   <span className="text-sm text-foreground flex-1 truncate">{disease}</span>
-                  <span className="text-xs font-semibold text-violet-700 bg-violet-50 px-2 py-0.5 rounded-full border border-violet-100">
+                  <span className="text-xs font-semibold text-primary bg-primary/5 px-2 py-0.5 rounded-full border border-violet-100">
                     {count}x
                   </span>
                 </div>

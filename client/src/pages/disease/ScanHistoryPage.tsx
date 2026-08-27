@@ -15,7 +15,7 @@ import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 import { cn } from "@/lib/utils";
 import type { DiseaseScan } from "../../../../drizzle/schema";
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function severityBadge(severity: string | null) {
   const map: Record<string, string> = {
     critical: "bg-red-100 text-red-700 border border-red-200",
@@ -37,7 +37,7 @@ function statusInfo(status: string) {
   return map[status] ?? map.pending_review;
 }
 
-// ─── Scan Row ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Scan Row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function ScanRow({ scan, farmId }: { scan: DiseaseScan; farmId: number }) {
   const { label, icon: StatusIcon, color } = statusInfo(scan.status);
   const utils = trpc.useUtils();
@@ -74,7 +74,7 @@ function ScanRow({ scan, farmId }: { scan: DiseaseScan; farmId: number }) {
       <div className="flex-1 min-w-0">
         <div className="flex items-start gap-2 flex-wrap">
           <p className="font-semibold text-foreground text-sm truncate max-w-xs">
-            {scan.detectedDisease ?? "Analysis pending…"}
+            {scan.detectedDisease ?? "Analysis pendingâ€¦"}
           </p>
           <span className={cn("text-[10px] font-bold uppercase px-2 py-0.5 rounded-full", severityBadge(scan.severity))}>
             {scan.severity}
@@ -109,7 +109,7 @@ function ScanRow({ scan, farmId }: { scan: DiseaseScan; farmId: number }) {
         <Button
           size="sm"
           variant="outline"
-          className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity border-violet-200 text-violet-700 hover:bg-violet-50 text-xs"
+          className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity border-violet-200 text-primary hover:bg-violet-50 text-xs"
           disabled={updateStatus.isPending}
           onClick={() => updateStatus.mutate({ id: scan.id, farmId, status: next })}
         >
@@ -120,7 +120,7 @@ function ScanRow({ scan, farmId }: { scan: DiseaseScan; farmId: number }) {
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Main Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function ScanHistoryPage() {
   const { currentFarm } = useFarm();
   const [searchQuery, setSearchQuery] = useState("");
@@ -149,10 +149,10 @@ export default function ScanHistoryPage() {
         title="Scan History"
         description="All disease detection scans for this farm"
         icon={Stethoscope}
-        iconBg="bg-violet-100"
-        iconColor="text-violet-600"
+        iconBg="bg-primary/10"
+        iconColor="text-primary"
         action={
-          <Button asChild className="bg-violet-600 hover:bg-violet-700 text-white gap-2">
+          <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground text-white gap-2">
             <a href="/disease/scan">
               <PlusCircle className="w-4 h-4" /> New Scan
             </a>
@@ -167,7 +167,7 @@ export default function ScanHistoryPage() {
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by disease name…"
+            placeholder="Search by disease nameâ€¦"
             className="pl-9"
           />
         </div>
@@ -210,7 +210,7 @@ export default function ScanHistoryPage() {
               : "Run your first disease scan to start detecting issues early."
           }
           action={
-            <Button asChild className="bg-violet-600 hover:bg-violet-700 text-white gap-2">
+            <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground text-white gap-2">
               <a href="/disease/scan"><PlusCircle className="w-4 h-4" /> Run First Scan</a>
             </Button>
           }

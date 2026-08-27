@@ -23,14 +23,14 @@ export default function LivestockLayout({ children }: { children: React.ReactNod
         icon={PawPrint} 
       />
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex gap-1 border-b border-border overflow-x-auto pb-0">
         {LIVESTOCK_TABS.map((tab) => (
           <Link key={tab.path} href={tab.path}>
             <button
-              className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors whitespace-nowrap ${
+              className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 active === tab.path
-                  ? "bg-[#166534] text-white shadow-sm"
-                  : "bg-card text-muted-foreground border border-border hover:bg-accent hover:text-foreground"
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
               {tab.label}

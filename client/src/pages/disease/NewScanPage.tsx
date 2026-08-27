@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PageHeader } from "@/components/shared/PageHeader";
 import { cn } from "@/lib/utils";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 type ScanType = "crop" | "livestock" | "other";
 type ScanState = "idle" | "uploading" | "scanning" | "done" | "error";
 
@@ -24,7 +24,7 @@ interface ScanResult {
   recommendation: string;
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function severityConfig(severity: string) {
   const map: Record<string, { color: string; bg: string; border: string; icon: typeof AlertTriangle }> = {
     critical: { color: "text-red-700",    bg: "bg-red-50",     border: "border-red-200",    icon: AlertTriangle },
@@ -35,7 +35,7 @@ function severityConfig(severity: string) {
   return map[severity] ?? { color: "text-muted-foreground", bg: "bg-muted", border: "border-border", icon: Stethoscope };
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function NewScanPage() {
   const { currentFarm } = useFarm();
   const utils = trpc.useUtils();
@@ -137,13 +137,13 @@ export default function NewScanPage() {
     <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
       <PageHeader
         title="New Disease Scan"
-        description="Upload a photo — Kili AI will analyse it for diseases"
+        description="Upload a photo â€” Kili AI will analyse it for diseases"
         icon={Stethoscope}
-        iconBg="bg-violet-100"
-        iconColor="text-violet-600"
+        iconBg="bg-primary/10"
+        iconColor="text-primary"
         action={state === "scanning" ? (
-          <Badge className="bg-violet-100 text-violet-700 border border-violet-200 animate-pulse gap-1.5">
-            <Loader2 className="w-3 h-3 animate-spin" /> Analysing…
+          <Badge className="bg-primary/10 text-primary border border-primary/20 animate-pulse gap-1.5">
+            <Loader2 className="w-3 h-3 animate-spin" /> Analysingâ€¦
           </Badge>
         ) : undefined}
       />
@@ -169,8 +169,8 @@ export default function NewScanPage() {
       <div
         className={cn(
           "relative rounded-2xl border-2 border-dashed transition-all duration-200 cursor-pointer bg-card",
-          dragOver ? "border-violet-500 bg-violet-50 scale-[1.01]" : "border-border hover:border-violet-300 hover:bg-violet-50/30",
-          preview ? "border-solid border-violet-200" : ""
+          dragOver ? "border-violet-500 bg-violet-50 scale-[1.01]" : "border-border hover:border-violet-300 hover:bg-primary/10/30",
+          preview ? "border-solid border-primary/20" : ""
         )}
         onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
         onDragLeave={() => setDragOver(false)}
@@ -195,14 +195,14 @@ export default function NewScanPage() {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center gap-3 py-16">
-            <div className="w-14 h-14 rounded-2xl bg-violet-100 flex items-center justify-center">
+            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
               <ImagePlus className="w-7 h-7 text-violet-500" />
             </div>
             <div className="text-center">
               <p className="font-semibold text-foreground">Drag & drop or click to upload</p>
               <p className="text-sm text-muted-foreground mt-1">PNG, JPG, WEBP up to 10 MB</p>
             </div>
-            <Button size="sm" variant="outline" className="mt-1 border-violet-200 text-violet-700 hover:bg-violet-50">
+            <Button size="sm" variant="outline" className="mt-1 border-primary/20 text-primary hover:bg-primary/10">
               <Upload className="w-4 h-4 mr-2" /> Choose Image
             </Button>
           </div>
@@ -217,7 +217,7 @@ export default function NewScanPage() {
         <Textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          placeholder="Describe visible symptoms, affected area, duration…"
+          placeholder="Describe visible symptoms, affected area, durationâ€¦"
           className="resize-none h-24"
           disabled={state === "scanning"}
         />
@@ -228,10 +228,10 @@ export default function NewScanPage() {
         <Button
           onClick={handleScan}
           disabled={!preview || state === "scanning" || !currentFarm}
-          className="w-full h-11 bg-violet-600 hover:bg-violet-700 text-white font-semibold gap-2"
+          className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground text-white font-semibold gap-2"
         >
           {state === "scanning" ? (
-            <><Loader2 className="w-4 h-4 animate-spin" /> Running AI Analysis…</>
+            <><Loader2 className="w-4 h-4 animate-spin" /> Running AI Analysisâ€¦</>
           ) : (
             <><Stethoscope className="w-4 h-4" /> Analyse with Kili AI</>
           )}
@@ -258,7 +258,7 @@ export default function NewScanPage() {
               <p className="text-xs text-muted-foreground mt-0.5">
                 Scan type: <span className="capitalize font-medium">{effectiveScanType}</span>
                 {result.diagnosis.isolationRequired && (
-                  <span className="ml-2 text-red-600 font-semibold">⚠ Isolation recommended</span>
+                  <span className="ml-2 text-red-600 font-semibold">âš  Isolation recommended</span>
                 )}
               </p>
             </div>
@@ -282,7 +282,7 @@ export default function NewScanPage() {
             <Button onClick={reset} variant="outline" className="flex-1">
               Scan Another Image
             </Button>
-            <Button asChild className="flex-1 bg-violet-600 hover:bg-violet-700 text-white gap-1.5">
+            <Button asChild className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground text-white gap-1.5">
               <a href="/disease/history">
                 View All Scans <ChevronRight className="w-4 h-4" />
               </a>
