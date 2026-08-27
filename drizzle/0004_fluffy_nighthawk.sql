@@ -1,4 +1,9 @@
-CREATE TABLE `marketCategories` (
+-- Migration: 0004_fluffy_nighthawk
+-- Adds marketplace tables, workers tables, and worker task assignment column.
+-- All statements are idempotent (IF NOT EXISTS) to be safe against partial prior applies.
+
+-- 1. Marketplace: Categories
+CREATE TABLE IF NOT EXISTS `marketCategories` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`name` varchar(64) NOT NULL,
 	`slug` varchar(64) NOT NULL,
@@ -12,7 +17,9 @@ CREATE TABLE `marketCategories` (
 	CONSTRAINT `marketCategories_slug_unique` UNIQUE(`slug`)
 );
 --> statement-breakpoint
-CREATE TABLE `marketListingImages` (
+
+-- 2. Marketplace: Listing Images
+CREATE TABLE IF NOT EXISTS `marketListingImages` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`listingId` int NOT NULL,
 	`storageKey` varchar(512) NOT NULL,
@@ -23,7 +30,9 @@ CREATE TABLE `marketListingImages` (
 	CONSTRAINT `marketListingImages_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
-CREATE TABLE `marketListings` (
+
+-- 3. Marketplace: Listings
+CREATE TABLE IF NOT EXISTS `marketListings` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`organizationId` int NOT NULL,
 	`farmId` int,
@@ -44,7 +53,9 @@ CREATE TABLE `marketListings` (
 	CONSTRAINT `marketListings_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
-CREATE TABLE `weatherCache` (
+
+-- 4. Weather Cache (may already exist from 0003, IF NOT EXISTS handles it)
+CREATE TABLE IF NOT EXISTS `weatherCache` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`latitude` decimal(10,2) NOT NULL,
 	`longitude` decimal(10,2) NOT NULL,
@@ -56,7 +67,9 @@ CREATE TABLE `weatherCache` (
 	CONSTRAINT `weatherCache_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
-CREATE TABLE `workerAttendance` (
+
+-- 5. Workers: Attendance
+CREATE TABLE IF NOT EXISTS `workerAttendance` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`farmId` int NOT NULL,
 	`workerId` int NOT NULL,
@@ -68,7 +81,9 @@ CREATE TABLE `workerAttendance` (
 	CONSTRAINT `workerAttendance_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
-CREATE TABLE `workerTeams` (
+
+-- 6. Workers: Teams
+CREATE TABLE IF NOT EXISTS `workerTeams` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`farmId` int NOT NULL,
 	`name` varchar(128) NOT NULL,
@@ -78,7 +93,9 @@ CREATE TABLE `workerTeams` (
 	CONSTRAINT `workerTeams_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
-CREATE TABLE `workers` (
+
+-- 7. Workers: Main table
+CREATE TABLE IF NOT EXISTS `workers` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`farmId` int NOT NULL,
 	`firstName` varchar(128) NOT NULL,
@@ -98,8 +115,19 @@ CREATE TABLE `workers` (
 	CONSTRAINT `workers_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
-ALTER TABLE `farms` ADD `latitude` decimal(10,6);--> statement-breakpoint
-ALTER TABLE `farms` ADD `longitude` decimal(10,6);--> statement-breakpoint
-ALTER TABLE `subscriptionPlans` ADD `isRecommended` boolean DEFAULT false NOT NULL;--> statement-breakpoint
-ALTER TABLE `subscriptionPlans` ADD `isDefaultTrial` boolean DEFAULT false NOT NULL;--> statement-breakpoint
-ALTER TABLE `tasks` ADD `assignedToWorkerId` int;
+
+-- 8. Farms: geo columns (may already exist from 0003, IF NOT EXISTS handles it)
+ALTER TABLE `farms`
+  ADD COLUMN IF NOT EXISTS `latitude` decimal(10,6),
+  ADD COLUMN IF NOT EXISTS `longitude` decimal(10,6);
+--> statement-breakpoint
+
+-- 9. Subscription Plans: flags (may already exist from 0003, IF NOT EXISTS handles it)
+ALTER TABLE `subscriptionPlans`
+  ADD COLUMN IF NOT EXISTS `isRecommended` boolean DEFAULT false NOT NULL,
+  ADD COLUMN IF NOT EXISTS `isDefaultTrial` boolean DEFAULT false NOT NULL;
+--> statement-breakpoint
+
+-- 10. Tasks: worker assignment foreign key
+ALTER TABLE `tasks`
+  ADD COLUMN IF NOT EXISTS `assignedToWorkerId` int;
