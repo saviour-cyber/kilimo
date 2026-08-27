@@ -35,7 +35,7 @@ export function MarketplaceWidget({ farmId, className }: { farmId: number; class
             <span className="text-sm text-muted-foreground mb-2">No market opportunities available yet.</span>
             <Link href="/marketplace/create">
               <span className="text-xs font-semibold text-teal-600 hover:underline cursor-pointer">
-                List My Product ->
+                List My Product →
               </span>
             </Link>
           </div>
