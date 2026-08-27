@@ -12,7 +12,7 @@ import {
   float,
 } from "drizzle-orm/mysql-core";
 
-// ─── Core Users ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Core Users â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const users = mysqlTable("users", {
   id: int("id").autoincrement().primaryKey(),
@@ -37,7 +37,7 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// ─── Organizations (Tenants) ───────────────────────────────────────────────────
+// â”€â”€â”€ Organizations (Tenants) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const organizations = mysqlTable("organizations", {
   id: int("id").autoincrement().primaryKey(),
@@ -61,7 +61,7 @@ export const organizations = mysqlTable("organizations", {
 export type Organization = typeof organizations.$inferSelect;
 export type InsertOrganization = typeof organizations.$inferInsert;
 
-// ─── Organization Members (Pool of Users) ──────────────────────────────────────
+// â”€â”€â”€ Organization Members (Pool of Users) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const organizationMembers = mysqlTable("organizationMembers", {
   id: int("id").autoincrement().primaryKey(),
@@ -75,7 +75,7 @@ export const organizationMembers = mysqlTable("organizationMembers", {
 export type OrganizationMember = typeof organizationMembers.$inferSelect;
 export type InsertOrganizationMember = typeof organizationMembers.$inferInsert;
 
-// ─── Farms ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Farms â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const farms = mysqlTable("farms", {
   id: int("id").autoincrement().primaryKey(),
@@ -102,7 +102,7 @@ export const farms = mysqlTable("farms", {
 export type Farm = typeof farms.$inferSelect;
 export type InsertFarm = typeof farms.$inferInsert;
 
-// ─── Farm Members (RBAC) ───────────────────────────────────────────────────────
+// â”€â”€â”€ Farm Members (RBAC) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const farmMembers = mysqlTable("farmMembers", {
   id: int("id").autoincrement().primaryKey(),
@@ -117,7 +117,7 @@ export const farmMembers = mysqlTable("farmMembers", {
 export type FarmMember = typeof farmMembers.$inferSelect;
 export type InsertFarmMember = typeof farmMembers.$inferInsert;
 
-// ─── Farm Invitations ──────────────────────────────────────────────────────────
+// â”€â”€â”€ Farm Invitations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const farmInvites = mysqlTable("farmInvites", {
   id: int("id").autoincrement().primaryKey(),
@@ -136,7 +136,7 @@ export const farmInvites = mysqlTable("farmInvites", {
 export type FarmInvite = typeof farmInvites.$inferSelect;
 export type InsertFarmInvite = typeof farmInvites.$inferInsert;
 
-// ─── Module Registry ───────────────────────────────────────────────────────────
+// â”€â”€â”€ Module Registry â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const farmModules = mysqlTable("farmModules", {
   id: int("id").autoincrement().primaryKey(),
@@ -150,7 +150,7 @@ export const farmModules = mysqlTable("farmModules", {
 export type FarmModule = typeof farmModules.$inferSelect;
 export type InsertFarmModule = typeof farmModules.$inferInsert;
 
-// ─── Weather Cache ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ Weather Cache â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const weatherCache = mysqlTable("weatherCache", {
   id: int("id").autoincrement().primaryKey(),
@@ -166,7 +166,7 @@ export const weatherCache = mysqlTable("weatherCache", {
 export type WeatherCache = typeof weatherCache.$inferSelect;
 export type InsertWeatherCache = typeof weatherCache.$inferInsert;
 
-// ─── Fields / Plots ────────────────────────────────────────────────────────────
+// â”€â”€â”€ Fields / Plots â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const fields = mysqlTable("fields", {
   id: int("id").autoincrement().primaryKey(),
@@ -184,7 +184,7 @@ export const fields = mysqlTable("fields", {
 export type Field = typeof fields.$inferSelect;
 export type InsertField = typeof fields.$inferInsert;
 
-// ─── Crop Plantings ────────────────────────────────────────────────────────────
+// â”€â”€â”€ Crop Plantings â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const cropPlantings = mysqlTable("cropPlantings", {
   id: int("id").autoincrement().primaryKey(),
@@ -209,7 +209,7 @@ export const cropPlantings = mysqlTable("cropPlantings", {
 export type CropPlanting = typeof cropPlantings.$inferSelect;
 export type InsertCropPlanting = typeof cropPlantings.$inferInsert;
 
-// ─── Harvest Logs ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ Harvest Logs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const harvestLogs = mysqlTable("harvestLogs", {
   id: int("id").autoincrement().primaryKey(),
@@ -231,7 +231,7 @@ export const harvestLogs = mysqlTable("harvestLogs", {
 export type HarvestLog = typeof harvestLogs.$inferSelect;
 export type InsertHarvestLog = typeof harvestLogs.$inferInsert;
 
-// ─── Disease / Pest Incidents ──────────────────────────────────────────────────
+// â”€â”€â”€ Disease / Pest Incidents â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const cropIncidents = mysqlTable("cropIncidents", {
   id: int("id").autoincrement().primaryKey(),
@@ -254,7 +254,7 @@ export const cropIncidents = mysqlTable("cropIncidents", {
 export type CropIncident = typeof cropIncidents.$inferSelect;
 export type InsertCropIncident = typeof cropIncidents.$inferInsert;
 
-// ─── Animals ───────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Animals â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const animals = mysqlTable("animals", {
   id: int("id").autoincrement().primaryKey(),
@@ -280,7 +280,7 @@ export const animals = mysqlTable("animals", {
 export type Animal = typeof animals.$inferSelect;
 export type InsertAnimal = typeof animals.$inferInsert;
 
-// ─── Breeding Records ──────────────────────────────────────────────────────────
+// â”€â”€â”€ Breeding Records â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const breedingRecords = mysqlTable("breedingRecords", {
   id: int("id").autoincrement().primaryKey(),
@@ -301,7 +301,7 @@ export const breedingRecords = mysqlTable("breedingRecords", {
 export type BreedingRecord = typeof breedingRecords.$inferSelect;
 export type InsertBreedingRecord = typeof breedingRecords.$inferInsert;
 
-// ─── Vaccination / Health Logs ─────────────────────────────────────────────────
+// â”€â”€â”€ Vaccination / Health Logs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const healthLogs = mysqlTable("healthLogs", {
   id: int("id").autoincrement().primaryKey(),
@@ -323,7 +323,7 @@ export const healthLogs = mysqlTable("healthLogs", {
 export type HealthLog = typeof healthLogs.$inferSelect;
 export type InsertHealthLog = typeof healthLogs.$inferInsert;
 
-// ─── Feed Records ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ Feed Records â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const feedRecords = mysqlTable("feedRecords", {
   id: int("id").autoincrement().primaryKey(),
@@ -342,7 +342,7 @@ export const feedRecords = mysqlTable("feedRecords", {
 export type FeedRecord = typeof feedRecords.$inferSelect;
 export type InsertFeedRecord = typeof feedRecords.$inferInsert;
 
-// ─── Production Records (Milk, Eggs) ──────────────────────────────────────────
+// â”€â”€â”€ Production Records (Milk, Eggs) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const productionRecords = mysqlTable("productionRecords", {
   id: int("id").autoincrement().primaryKey(),
@@ -361,7 +361,7 @@ export const productionRecords = mysqlTable("productionRecords", {
 export type ProductionRecord = typeof productionRecords.$inferSelect;
 export type InsertProductionRecord = typeof productionRecords.$inferInsert;
 
-// ─── Mortality Records ─────────────────────────────────────────────────────────
+// â”€â”€â”€ Mortality Records â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const mortalityRecords = mysqlTable("mortalityRecords", {
   id: int("id").autoincrement().primaryKey(),
@@ -378,7 +378,7 @@ export const mortalityRecords = mysqlTable("mortalityRecords", {
 export type MortalityRecord = typeof mortalityRecords.$inferSelect;
 export type InsertMortalityRecord = typeof mortalityRecords.$inferInsert;
 
-// ─── Inventory Items ───────────────────────────────────────────────────────────
+// â”€â”€â”€ Inventory Items â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const inventoryItems = mysqlTable("inventoryItems", {
   id: int("id").autoincrement().primaryKey(),
@@ -400,7 +400,7 @@ export const inventoryItems = mysqlTable("inventoryItems", {
 export type InventoryItem = typeof inventoryItems.$inferSelect;
 export type InsertInventoryItem = typeof inventoryItems.$inferInsert;
 
-// ─── Stock Transactions ────────────────────────────────────────────────────────
+// â”€â”€â”€ Stock Transactions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const stockTransactions = mysqlTable("stockTransactions", {
   id: int("id").autoincrement().primaryKey(),
@@ -420,7 +420,7 @@ export const stockTransactions = mysqlTable("stockTransactions", {
 export type StockTransaction = typeof stockTransactions.$inferSelect;
 export type InsertStockTransaction = typeof stockTransactions.$inferInsert;
 
-// ─── Suppliers ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Suppliers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const suppliers = mysqlTable("suppliers", {
   id: int("id").autoincrement().primaryKey(),
@@ -439,7 +439,7 @@ export const suppliers = mysqlTable("suppliers", {
 export type Supplier = typeof suppliers.$inferSelect;
 export type InsertSupplier = typeof suppliers.$inferInsert;
 
-// ─── Equipment ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Equipment â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const equipment = mysqlTable("equipment", {
   id: int("id").autoincrement().primaryKey(),
@@ -461,7 +461,7 @@ export const equipment = mysqlTable("equipment", {
 export type Equipment = typeof equipment.$inferSelect;
 export type InsertEquipment = typeof equipment.$inferInsert;
 
-// ─── Finance Transactions ──────────────────────────────────────────────────────
+// â”€â”€â”€ Finance Transactions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const financeTransactions = mysqlTable("financeTransactions", {
   id: int("id").autoincrement().primaryKey(),
@@ -483,7 +483,7 @@ export const financeTransactions = mysqlTable("financeTransactions", {
 export type FinanceTransaction = typeof financeTransactions.$inferSelect;
 export type InsertFinanceTransaction = typeof financeTransactions.$inferInsert;
 
-// ─── Budgets ───────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Budgets â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const budgets = mysqlTable("budgets", {
   id: int("id").autoincrement().primaryKey(),
@@ -503,7 +503,7 @@ export const budgets = mysqlTable("budgets", {
 export type Budget = typeof budgets.$inferSelect;
 export type InsertBudget = typeof budgets.$inferInsert;
 
-// ─── Tasks ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Tasks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const tasks = mysqlTable("tasks", {
   id: int("id").autoincrement().primaryKey(),
@@ -516,6 +516,7 @@ export const tasks = mysqlTable("tasks", {
   dueDate: date("dueDate"),
   completedAt: timestamp("completedAt"),
   assignedToUserId: int("assignedToUserId"),
+  assignedToWorkerId: int("assignedToWorkerId"),
   createdByUserId: int("createdByUserId"),
   relatedEntityType: varchar("relatedEntityType", { length: 64 }), // 'animal', 'planting', 'equipment', etc.
   relatedEntityId: int("relatedEntityId"),
@@ -526,7 +527,7 @@ export const tasks = mysqlTable("tasks", {
 export type Task = typeof tasks.$inferSelect;
 export type InsertTask = typeof tasks.$inferInsert;
 
-// ─── Notifications ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ Notifications â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const notifications = mysqlTable("notifications", {
   id: int("id").autoincrement().primaryKey(),
@@ -545,7 +546,7 @@ export const notifications = mysqlTable("notifications", {
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = typeof notifications.$inferInsert;
 
-// ─── Platform Email Logs ────────────────────────────────────────────────────────
+// â”€â”€â”€ Platform Email Logs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const platformEmailLogs = mysqlTable("platformEmailLogs", {
   id: int("id").autoincrement().primaryKey(),
@@ -564,7 +565,7 @@ export const platformEmailLogs = mysqlTable("platformEmailLogs", {
 export type PlatformEmailLog = typeof platformEmailLogs.$inferSelect;
 export type InsertPlatformEmailLog = typeof platformEmailLogs.$inferInsert;
 
-// ─── Disease Scans (AI Detections) ─────────────────────────────────────────────
+// â”€â”€â”€ Disease Scans (AI Detections) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const diseaseScans = mysqlTable("diseaseScans", {
   id: int("id").autoincrement().primaryKey(),
@@ -586,7 +587,7 @@ export const diseaseScans = mysqlTable("diseaseScans", {
 export type DiseaseScan = typeof diseaseScans.$inferSelect;
 export type InsertDiseaseScan = typeof diseaseScans.$inferInsert;
 
-// ─── Generated Reports ─────────────────────────────────────────────────────────
+// â”€â”€â”€ Generated Reports â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const generatedReports = mysqlTable("generatedReports", {
   id: int("id").autoincrement().primaryKey(),
@@ -604,7 +605,7 @@ export const generatedReports = mysqlTable("generatedReports", {
 export type GeneratedReport = typeof generatedReports.$inferSelect;
 export type InsertGeneratedReport = typeof generatedReports.$inferInsert;
 
-// ─── Scheduled Reports ─────────────────────────────────────────────────────────
+// â”€â”€â”€ Scheduled Reports â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const scheduledReports = mysqlTable("scheduledReports", {
   id: int("id").autoincrement().primaryKey(),
@@ -625,7 +626,7 @@ export const scheduledReports = mysqlTable("scheduledReports", {
 export type ScheduledReport = typeof scheduledReports.$inferSelect;
 export type InsertScheduledReport = typeof scheduledReports.$inferInsert;
 
-// ─── IoT Engine ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ IoT Engine â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const iotDevices = mysqlTable("iotDevices", {
   id:                  int("id").autoincrement().primaryKey(),
@@ -645,9 +646,9 @@ export const iotDevices = mysqlTable("iotDevices", {
   lastCommunicationAt: timestamp("lastCommunicationAt"),
   isSimulated:         boolean("isSimulated").default(true).notNull(),
   // Phase 5: structural links
-  gatewayId:           int("gatewayId"),         // FK → iotGateways.id
-  groupId:             int("groupId"),            // FK → iotDeviceGroups.id
-  twinId:              int("twinId"),             // FK → iotDigitalTwins.id
+  gatewayId:           int("gatewayId"),         // FK â†’ iotGateways.id
+  groupId:             int("groupId"),            // FK â†’ iotDeviceGroups.id
+  twinId:              int("twinId"),             // FK â†’ iotDigitalTwins.id
   createdAt:           timestamp("createdAt").defaultNow().notNull(),
   updatedAt:           timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -655,7 +656,7 @@ export const iotDevices = mysqlTable("iotDevices", {
 export type IotDevice = typeof iotDevices.$inferSelect;
 export type InsertIotDevice = typeof iotDevices.$inferInsert;
 
-// ─── IoT Sensors ───────────────────────────────────────────────────────────────
+// â”€â”€â”€ IoT Sensors â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const iotSensors = mysqlTable("iotSensors", {
   id:           int("id").autoincrement().primaryKey(),
@@ -677,7 +678,7 @@ export const iotSensors = mysqlTable("iotSensors", {
   ]).notNull(),
   category:     mysqlEnum("category", ["soil", "environmental", "water", "livestock", "equipment"]).notNull(),
   label:        varchar("label", { length: 128 }),     // e.g. "Field A Soil Probe 1"
-  unit:         varchar("unit", { length: 32 }),       // e.g. "%", "°C", "L/h"
+  unit:         varchar("unit", { length: 32 }),       // e.g. "%", "Â°C", "L/h"
   minVal:     float("minVal"),
   maxVal:     float("maxVal"),
   alertMin:   float("alertMin"),                    // threshold: notify if below
@@ -696,7 +697,7 @@ export const iotSensors = mysqlTable("iotSensors", {
 export type IotSensor = typeof iotSensors.$inferSelect;
 export type InsertIotSensor = typeof iotSensors.$inferInsert;
 
-// ─── IoT Telemetry ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ IoT Telemetry â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const iotTelemetry = mysqlTable("iotTelemetry", {
   id:          int("id").autoincrement().primaryKey(),
@@ -711,7 +712,7 @@ export const iotTelemetry = mysqlTable("iotTelemetry", {
 export type IotTelemetry = typeof iotTelemetry.$inferSelect;
 export type InsertIotTelemetry = typeof iotTelemetry.$inferInsert;
 
-// ─── IoT Alerts ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ IoT Alerts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const iotAlerts = mysqlTable("iotAlerts", {
   id:          int("id").autoincrement().primaryKey(),
@@ -730,7 +731,7 @@ export const iotAlerts = mysqlTable("iotAlerts", {
 export type IotAlert = typeof iotAlerts.$inferSelect;
 export type InsertIotAlert = typeof iotAlerts.$inferInsert;
 
-// ─── IoT Sensor State (Current) ────────────────────────────────────────────────
+// â”€â”€â”€ IoT Sensor State (Current) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const iotSensorState = mysqlTable("iotSensorState", {
   id:               int("id").autoincrement().primaryKey(),
@@ -749,7 +750,7 @@ export const iotSensorState = mysqlTable("iotSensorState", {
 export type IotSensorState = typeof iotSensorState.$inferSelect;
 export type InsertIotSensorState = typeof iotSensorState.$inferInsert;
 
-// ─── IoT Alert Rules (Rules Engine) ────────────────────────────────────────────
+// â”€â”€â”€ IoT Alert Rules (Rules Engine) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const iotAlertRules = mysqlTable("iotAlertRules", {
   id:                   int("id").autoincrement().primaryKey(),
@@ -779,7 +780,7 @@ export const iotAlertRules = mysqlTable("iotAlertRules", {
 export type IotAlertRule = typeof iotAlertRules.$inferSelect;
 export type InsertIotAlertRule = typeof iotAlertRules.$inferInsert;
 
-// ─── IoT Gateways ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ IoT Gateways â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const iotGateways = mysqlTable("iotGateways", {
   id:           int("id").autoincrement().primaryKey(),
@@ -799,7 +800,7 @@ export const iotGateways = mysqlTable("iotGateways", {
 export type IotGateway = typeof iotGateways.$inferSelect;
 export type InsertIotGateway = typeof iotGateways.$inferInsert;
 
-// ─── IoT Device Groups ─────────────────────────────────────────────────────────
+// â”€â”€â”€ IoT Device Groups â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const iotDeviceGroups = mysqlTable("iotDeviceGroups", {
   id:          int("id").autoincrement().primaryKey(),
@@ -825,7 +826,7 @@ export const iotDeviceGroupMembers = mysqlTable("iotDeviceGroupMembers", {
 export type IotDeviceGroupMember = typeof iotDeviceGroupMembers.$inferSelect;
 export type InsertIotDeviceGroupMember = typeof iotDeviceGroupMembers.$inferInsert;
 
-// ─── IoT Digital Twins ────────────────────────────────────────────────────────
+// â”€â”€â”€ IoT Digital Twins â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const iotDigitalTwins = mysqlTable("iotDigitalTwins", {
   id:           int("id").autoincrement().primaryKey(),
@@ -845,7 +846,7 @@ export const iotDigitalTwins = mysqlTable("iotDigitalTwins", {
 export type IotDigitalTwin = typeof iotDigitalTwins.$inferSelect;
 export type InsertIotDigitalTwin = typeof iotDigitalTwins.$inferInsert;
 
-// ─── IoT Commands ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ IoT Commands â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const iotCommands = mysqlTable("iotCommands", {
   id:          int("id").autoincrement().primaryKey(),
@@ -870,7 +871,7 @@ export const iotCommands = mysqlTable("iotCommands", {
 export type IotCommand = typeof iotCommands.$inferSelect;
 export type InsertIotCommand = typeof iotCommands.$inferInsert;
 
-// ─── IoT Event History ─────────────────────────────────────────────────────────
+// â”€â”€â”€ IoT Event History â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const iotEvents = mysqlTable("iotEvents", {
   id:          int("id").autoincrement().primaryKey(),
@@ -887,7 +888,7 @@ export const iotEvents = mysqlTable("iotEvents", {
 export type IotEvent = typeof iotEvents.$inferSelect;
 export type InsertIotEvent = typeof iotEvents.$inferInsert;
 
-// ─── IoT Sensor Calibration Log ───────────────────────────────────────────────
+// â”€â”€â”€ IoT Sensor Calibration Log â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const iotSensorCalibrationLog = mysqlTable("iotSensorCalibrationLog", {
   id:                int("id").autoincrement().primaryKey(),
@@ -907,7 +908,7 @@ export type IotSensorCalibrationLog = typeof iotSensorCalibrationLog.$inferSelec
 export type InsertIotSensorCalibrationLog = typeof iotSensorCalibrationLog.$inferInsert;
 
 
-// ─── Email Verification Tokens ─────────────────────────────────────────────────
+// â”€â”€â”€ Email Verification Tokens â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Stores single-use tokens sent to users for email verification after registration.
 // Each token is hashed (SHA-256) before storage; only the hash is persisted.
 
@@ -923,7 +924,7 @@ export const emailVerificationTokens = mysqlTable("emailVerificationTokens", {
 export type EmailVerificationToken = typeof emailVerificationTokens.$inferSelect;
 export type InsertEmailVerificationToken = typeof emailVerificationTokens.$inferInsert;
 
-// ─── Password Reset Tokens ──────────────────────────────────────────────────────
+// â”€â”€â”€ Password Reset Tokens â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Stores single-use tokens for password reset flows.
 // Tokens expire in 30 minutes and are invalidated immediately after use.
 
@@ -938,7 +939,7 @@ export const passwordResetTokens = mysqlTable("passwordResetTokens", {
 
 export type PasswordResetToken = typeof passwordResetTokens.$inferSelect;
 export type InsertPasswordResetToken = typeof passwordResetTokens.$inferInsert;
-// ─── Platform Administration ───────────────────────────────────────────────────
+// â”€â”€â”€ Platform Administration â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const platformModules = mysqlTable("platformModules", {
   id: varchar("id", { length: 64 }).primaryKey(),
@@ -974,7 +975,7 @@ export const auditLogs = mysqlTable("activitylogs", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
-// Type aliases – auditLogs is the canonical activity log table (SQL: activitylogs)
+// Type aliases â€“ auditLogs is the canonical activity log table (SQL: activitylogs)
 export type AuditLog = typeof auditLogs.$inferSelect;
 export type InsertAuditLog = typeof auditLogs.$inferInsert;
 // Keep backward-compat aliases for any code that imported ActivityLog
@@ -992,17 +993,17 @@ export const platformAnnouncements = mysqlTable("platformannouncements", {
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
-// ─── Subscription Domain ───────────────────────────────────────────────────────
+// â”€â”€â”€ Subscription Domain â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 //
-// Organization (1) ──▶ Subscription (1) ──▶ Plan (N)
-//                                        ──▶ PlanFeatures (N)
-//                   ──▶ Payments (N)
+// Organization (1) â”€â”€â–¶ Subscription (1) â”€â”€â–¶ Plan (N)
+//                                        â”€â”€â–¶ PlanFeatures (N)
+//                   â”€â”€â–¶ Payments (N)
 //
 // The subscription belongs to the Organization, not to an individual user.
 // Plans define what modules/services are included and what usage limits apply.
 // Payments are recorded provider-agnostically; provider key is stored per row.
 
-// ─── Subscription Plans ────────────────────────────────────────────────────────
+// â”€â”€â”€ Subscription Plans â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const subscriptionPlans = mysqlTable("subscriptionPlans", {
   id:           int("id").autoincrement().primaryKey(),
@@ -1012,7 +1013,7 @@ export const subscriptionPlans = mysqlTable("subscriptionPlans", {
   yearlyPrice:  decimal("yearlyPrice",  { precision: 10, scale: 2 }).notNull().default("0"),
   currency:     varchar("currency", { length: 8 }).notNull().default("KES"),
   trialDays:    int("trialDays").default(14).notNull(),
-  // Usage limits — NULL means unlimited
+  // Usage limits â€” NULL means unlimited
   maxFarms:     int("maxFarms"),
   maxUsers:     int("maxUsers"),
   maxDevices:   int("maxDevices"),
@@ -1028,11 +1029,11 @@ export const subscriptionPlans = mysqlTable("subscriptionPlans", {
 export type SubscriptionPlan = typeof subscriptionPlans.$inferSelect;
 export type InsertSubscriptionPlan = typeof subscriptionPlans.$inferInsert;
 
-// ─── Subscription Plan Features (Entitlements) ────────────────────────────────
+// â”€â”€â”€ Subscription Plan Features (Entitlements) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const subscriptionPlanFeatures = mysqlTable("subscriptionPlanFeatures", {
   id:          int("id").autoincrement().primaryKey(),
-  planId:      int("planId").notNull(),                              // FK → subscriptionPlans.id
+  planId:      int("planId").notNull(),                              // FK â†’ subscriptionPlans.id
   featureKey:  varchar("featureKey", { length: 64 }).notNull(),     // maps to MODULE_REGISTRY or SERVICE_REGISTRY key
   featureType: mysqlEnum("featureType", ["module", "service"]).notNull().default("module"),
   createdAt:   timestamp("createdAt").defaultNow().notNull(),
@@ -1041,12 +1042,12 @@ export const subscriptionPlanFeatures = mysqlTable("subscriptionPlanFeatures", {
 export type SubscriptionPlanFeature = typeof subscriptionPlanFeatures.$inferSelect;
 export type InsertSubscriptionPlanFeature = typeof subscriptionPlanFeatures.$inferInsert;
 
-// ─── Subscriptions ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ Subscriptions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const subscriptions = mysqlTable("subscriptions", {
   id:                 int("id").autoincrement().primaryKey(),
-  organizationId:     int("organizationId").notNull().unique(),       // FK → organizations.id (1 active sub per org)
-  planId:             int("planId").notNull(),                        // FK → subscriptionPlans.id
+  organizationId:     int("organizationId").notNull().unique(),       // FK â†’ organizations.id (1 active sub per org)
+  planId:             int("planId").notNull(),                        // FK â†’ subscriptionPlans.id
   status:             mysqlEnum("status", [
     "trialing",
     "active",
@@ -1068,12 +1069,12 @@ export const subscriptions = mysqlTable("subscriptions", {
 export type Subscription = typeof subscriptions.$inferSelect;
 export type InsertSubscription = typeof subscriptions.$inferInsert;
 
-// ─── Subscription Payments ─────────────────────────────────────────────────────
+// â”€â”€â”€ Subscription Payments â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const subscriptionPayments = mysqlTable("subscriptionPayments", {
   id:                    int("id").autoincrement().primaryKey(),
-  subscriptionId:        int("subscriptionId").notNull(),             // FK → subscriptions.id
-  organizationId:        int("organizationId").notNull(),             // FK → organizations.id (denormalized for fast queries)
+  subscriptionId:        int("subscriptionId").notNull(),             // FK â†’ subscriptions.id
+  organizationId:        int("organizationId").notNull(),             // FK â†’ organizations.id (denormalized for fast queries)
   amount:                decimal("amount", { precision: 10, scale: 2 }).notNull(),
   currency:              varchar("currency", { length: 8 }).notNull().default("KES"),
   status:                mysqlEnum("status", ["pending", "successful", "failed", "refunded"]).notNull().default("pending"),
@@ -1091,19 +1092,19 @@ export const subscriptionPayments = mysqlTable("subscriptionPayments", {
 export type SubscriptionPayment = typeof subscriptionPayments.$inferSelect;
 export type InsertSubscriptionPayment = typeof subscriptionPayments.$inferInsert;
 
-// ─── Marketplace ───────────────────────────────────────────────────────────────
+// â”€â”€â”€ Marketplace â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 //
 // Marketplace is a Farm Module gated by the subscription entitlement system.
 // A listing belongs to an Organization and optionally identifies the originating Farm.
-// Images are stored via the Forge/S3 storage service — never as binary in MySQL.
+// Images are stored via the Forge/S3 storage service â€” never as binary in MySQL.
 //
 // Flow:
 //   subscriptionPlanFeatures (featureKey="marketplace")
-//     → farmModules (moduleKey="marketplace", isEnabled=true)
-//       → MarketListing (organizationId, farmId)
-//         → MarketListingImages (storageKey)
+//     â†’ farmModules (moduleKey="marketplace", isEnabled=true)
+//       â†’ MarketListing (organizationId, farmId)
+//         â†’ MarketListingImages (storageKey)
 
-// ─── Market Categories ─────────────────────────────────────────────────────────
+// â”€â”€â”€ Market Categories â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const marketCategories = mysqlTable("marketCategories", {
   id:          int("id").autoincrement().primaryKey(),
@@ -1120,14 +1121,14 @@ export const marketCategories = mysqlTable("marketCategories", {
 export type MarketCategory = typeof marketCategories.$inferSelect;
 export type InsertMarketCategory = typeof marketCategories.$inferInsert;
 
-// ─── Market Listings ───────────────────────────────────────────────────────────
+// â”€â”€â”€ Market Listings â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const marketListings = mysqlTable("marketListings", {
   id:            int("id").autoincrement().primaryKey(),
-  organizationId: int("organizationId").notNull(),                       // FK → organizations.id (ownership)
-  farmId:        int("farmId"),                                          // FK → farms.id (optional origin)
-  sellerUserId:  int("sellerUserId").notNull(),                          // FK → users.id (who created it)
-  categoryId:    int("categoryId"),                                      // FK → marketCategories.id
+  organizationId: int("organizationId").notNull(),                       // FK â†’ organizations.id (ownership)
+  farmId:        int("farmId"),                                          // FK â†’ farms.id (optional origin)
+  sellerUserId:  int("sellerUserId").notNull(),                          // FK â†’ users.id (who created it)
+  categoryId:    int("categoryId"),                                      // FK â†’ marketCategories.id
   title:         varchar("title", { length: 128 }).notNull(),
   description:   text("description"),
   price:         decimal("price", { precision: 10, scale: 2 }).notNull(),
@@ -1151,11 +1152,11 @@ export const marketListings = mysqlTable("marketListings", {
 export type MarketListing = typeof marketListings.$inferSelect;
 export type InsertMarketListing = typeof marketListings.$inferInsert;
 
-// ─── Market Listing Images ─────────────────────────────────────────────────────
+// â”€â”€â”€ Market Listing Images â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const marketListingImages = mysqlTable("marketListingImages", {
   id:         int("id").autoincrement().primaryKey(),
-  listingId:  int("listingId").notNull(),                                // FK → marketListings.id
+  listingId:  int("listingId").notNull(),                                // FK â†’ marketListings.id
   storageKey: varchar("storageKey", { length: 512 }).notNull(),          // Forge/S3 key (never raw binary)
   url:        text("url").notNull(),                                     // Served URL /manus-storage/{key}
   sortOrder:  int("sortOrder").default(0).notNull(),
@@ -1165,3 +1166,51 @@ export const marketListingImages = mysqlTable("marketListingImages", {
 
 export type MarketListingImage = typeof marketListingImages.$inferSelect;
 export type InsertMarketListingImage = typeof marketListingImages.$inferInsert;
+
+// ?????? Workers Module ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+
+export const workerTeams = mysqlTable("workerTeams", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  name: varchar("name", { length: 128 }).notNull(),
+  description: text("description"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export const workers = mysqlTable("workers", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  firstName: varchar("firstName", { length: 128 }).notNull(),
+  lastName: varchar("lastName", { length: 128 }).notNull(),
+  phone: varchar("phone", { length: 32 }),
+  email: varchar("email", { length: 256 }),
+  photoUrl: text("photoUrl"),
+  position: varchar("position", { length: 128 }),
+  employmentType: mysqlEnum("employmentType", ["full_time", "part_time", "seasonal", "contractor", "temporary"]).default("full_time").notNull(),
+  status: mysqlEnum("status", ["active", "inactive", "on_leave", "terminated"]).default("active").notNull(),
+  teamId: int("teamId"),
+  startDate: date("startDate"),
+  skills: text("skills"),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export const workerAttendance = mysqlTable("workerAttendance", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  workerId: int("workerId").notNull(),
+  date: date("date").notNull(),
+  status: mysqlEnum("status", ["present", "absent", "half_day", "on_leave"]).default("present").notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type WorkerTeam = typeof workerTeams.$inferSelect;
+export type InsertWorkerTeam = typeof workerTeams.$inferInsert;
+export type Worker = typeof workers.$inferSelect;
+export type InsertWorker = typeof workers.$inferInsert;
+export type WorkerAttendance = typeof workerAttendance.$inferSelect;
+export type InsertWorkerAttendance = typeof workerAttendance.$inferInsert;

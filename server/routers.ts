@@ -26,12 +26,14 @@ import { systemRouter } from "./routers/system";
 import { subscriptionsRouter } from "./routers/subscriptions";
 import { billingRouter } from "./routers/billing";
 import { marketplaceRouter } from "./routers/marketplace";
+import { workersRouter } from "./routers/workers";
 
 export const appRouter = router({
   auth: authRouter,
   users: usersRouter,
   organizations: organizationsRouter,
   farms: farmsRouter,
+  workers: workersRouter,
   invites: invitesRouter,
   dashboard: dashboardRouter,
   crops: cropsRouter,

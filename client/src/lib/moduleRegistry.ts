@@ -12,6 +12,8 @@ import {
   Stethoscope,
   Tractor,
   TrendingUp,
+  Users,
+  UserPlus,
   type LucideIcon,
 } from "lucide-react";
 import type React from "react";
@@ -236,6 +238,40 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     ],
   },
 
+
+  {
+    key: "workers",
+    label: "Workers",
+    icon: Users,
+    basePath: "/workers",
+    defaultPath: "/workers/all",
+    color: "text-indigo-600",
+    description: "Farm workforce management",
+    sidebarSection: "farm-operations",
+    subItems: [
+      { label: "Overview", path: "/workers" },
+      { label: "All Workers", path: "/workers/all" },
+      { label: "Teams", path: "/workers/teams" },
+      { label: "Attendance", path: "/workers/attendance" },
+      { label: "Assignments", path: "/workers/assignments" },
+    ],
+    quickActions: [
+      {
+        label: "Add Worker",
+        description: "Register a new farm worker.",
+        icon: UserPlus,
+        path: "/workers/all",
+        color: "bg-indigo-100 text-indigo-700",
+      },
+      {
+        label: "Log Attendance",
+        description: "Record daily attendance.",
+        icon: CheckSquare,
+        path: "/workers/attendance",
+        color: "bg-teal-100 text-teal-700",
+      },
+    ]
+  },
 
   {
     key: "finance",
@@ -493,6 +529,7 @@ export const NAVIGATION_PRIORITY = [
   "inventory",
   "marketplace",
   "finance",
+  "workers",
   "tasks",
   "weather",
   "intelligence",

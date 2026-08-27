@@ -29,6 +29,13 @@
       "when": 1787400000000,
       "tag": "0003_kilisense_updates",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1787850224603,
+      "tag": "0004_fluffy_nighthawk",
+      "breakpoints": true
     }
   ]
 }

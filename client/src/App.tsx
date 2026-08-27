@@ -60,6 +60,13 @@ import Harvests from "./pages/crops/Harvests";
 import Incidents from "./pages/crops/Incidents";
 import CropCalendar from "./pages/crops/CropCalendar";
 import CropAnalytics from "./pages/crops/CropAnalytics";
+// Workers
+import WorkersLayout from "./pages/workers/WorkersLayout";
+import WorkersOverview from "./pages/workers/WorkersOverview";
+import WorkersList from "./pages/workers/WorkersList";
+import WorkersTeams from "./pages/workers/WorkersTeams";
+import WorkersAttendance from "./pages/workers/WorkersAttendance";
+import WorkersAssignments from "./pages/workers/WorkersAssignments";
 
 // Livestock
 import Animals from "./pages/livestock/Animals";
@@ -157,6 +164,13 @@ function TenantAppRoutes() {
         <Route path="/crops/incidents"><KiliSenseLayout><SubscriptionGate featureKey="crop" featureName="Crops"><Incidents /></SubscriptionGate></KiliSenseLayout></Route>
         <Route path="/crops/calendar"><KiliSenseLayout><SubscriptionGate featureKey="crop" featureName="Crops"><CropCalendar /></SubscriptionGate></KiliSenseLayout></Route>
         <Route path="/crops/analytics"><KiliSenseLayout><SubscriptionGate featureKey="crop" featureName="Crops"><CropAnalytics /></SubscriptionGate></KiliSenseLayout></Route>
+        {/* Workers */}
+        <Route path="/workers/overview"><KiliSenseLayout><SubscriptionGate featureKey="workers" featureName="Workers"><WorkersLayout><WorkersOverview /></WorkersLayout></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/workers/all"><KiliSenseLayout><SubscriptionGate featureKey="workers" featureName="Workers"><WorkersLayout><WorkersList /></WorkersLayout></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/workers/teams"><KiliSenseLayout><SubscriptionGate featureKey="workers" featureName="Workers"><WorkersLayout><WorkersTeams /></WorkersLayout></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/workers/attendance"><KiliSenseLayout><SubscriptionGate featureKey="workers" featureName="Workers"><WorkersLayout><WorkersAttendance /></WorkersLayout></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/workers/assignments"><KiliSenseLayout><SubscriptionGate featureKey="workers" featureName="Workers"><WorkersLayout><WorkersAssignments /></WorkersLayout></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/workers"><KiliSenseLayout><SubscriptionGate featureKey="workers" featureName="Workers"><WorkersLayout><WorkersOverview /></WorkersLayout></SubscriptionGate></KiliSenseLayout></Route>
 
         {/* Livestock */}
         <Route path="/livestock/animals"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Animals /></SubscriptionGate></KiliSenseLayout></Route>
