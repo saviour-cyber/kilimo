@@ -1,11 +1,67 @@
+import { useState } from "react";
 import { useFarm } from "@/contexts/FarmContext";
 import { trpc } from "@/lib/trpc";
-import { Users, Plus } from "lucide-react";
+import { Users, Plus, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+
+function TeamForm({ farmId, onClose }: { farmId: number, onClose: () => void }) {
+  const utils = trpc.useUtils();
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+
+  const createMutation = trpc.workers.createTeam.useMutation({
+    onSuccess: () => {
+      toast.success("Team created successfully");
+      utils.workers.listTeams.invalidate({ farmId });
+      onClose();
+    },
+    onError: (err) => toast.error(err.message)
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    createMutation.mutate({
+      farmId,
+      name,
+      description,
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4 pt-4">
+      <div className="space-y-2">
+        <Label>Team Name</Label>
+        <Input value={name} onChange={e => setName(e.target.value)} required placeholder="e.g. Harvesting Crew" />
+      </div>
+      <div className="space-y-2">
+        <Label>Description</Label>
+        <Textarea 
+          value={description} 
+          onChange={e => setDescription(e.target.value)} 
+          placeholder="Brief description of the team's duties"
+          rows={3}
+        />
+      </div>
+      <div className="pt-4 flex justify-end gap-2">
+        <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
+        <Button type="submit" disabled={createMutation.isPending || !name.trim()}>
+          {createMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+          Create Team
+        </Button>
+      </div>
+    </form>
+  );
+}
 
 export default function WorkersTeams() {
-  const { currentFarm } = useFarm();
+  const { currentFarm, can } = useFarm();
   const farmId = currentFarm?.farm.id;
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const { data: teams = [], isLoading } = trpc.workers.listTeams.useQuery(
     { farmId: farmId! },
@@ -16,10 +72,21 @@ export default function WorkersTeams() {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-semibold">Teams</h2>
-        <Button className="bg-primary text-primary-foreground">
-          <Plus className="w-4 h-4 mr-2" />
-          Create Team
-        </Button>
+        
+        {can("write") && (
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-primary text-primary-foreground">
+                <Plus className="w-4 h-4 mr-2" />
+                Create Team
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader><DialogTitle>Create Team</DialogTitle></DialogHeader>
+              {farmId && <TeamForm farmId={farmId} onClose={() => setDialogOpen(false)} />}
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
 
       {isLoading ? (

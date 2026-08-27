@@ -1,14 +1,102 @@
 import { useState } from "react";
 import { useFarm } from "@/contexts/FarmContext";
 import { trpc } from "@/lib/trpc";
-import { Plus, Search, User } from "lucide-react";
+import { Plus, Search, User, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "sonner";
+
+function WorkerForm({ farmId, onClose }: { farmId: number, onClose: () => void }) {
+  const utils = trpc.useUtils();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [position, setPosition] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [employmentType, setEmploymentType] = useState("full_time");
+
+  const createMutation = trpc.workers.createWorker.useMutation({
+    onSuccess: () => {
+      toast.success("Worker added successfully");
+      utils.workers.listWorkers.invalidate({ farmId });
+      onClose();
+    },
+    onError: (err) => toast.error(err.message)
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    createMutation.mutate({
+      farmId,
+      firstName,
+      lastName,
+      position,
+      phone,
+      email,
+      employmentType: employmentType as any,
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4 pt-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label>First Name</Label>
+          <Input value={firstName} onChange={e => setFirstName(e.target.value)} required />
+        </div>
+        <div className="space-y-2">
+          <Label>Last Name</Label>
+          <Input value={lastName} onChange={e => setLastName(e.target.value)} required />
+        </div>
+      </div>
+      <div className="space-y-2">
+        <Label>Position / Role</Label>
+        <Input value={position} onChange={e => setPosition(e.target.value)} placeholder="e.g. Tractor Driver" />
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label>Phone</Label>
+          <Input value={phone} onChange={e => setPhone(e.target.value)} />
+        </div>
+        <div className="space-y-2">
+          <Label>Email</Label>
+          <Input value={email} type="email" onChange={e => setEmail(e.target.value)} />
+        </div>
+      </div>
+      <div className="space-y-2">
+        <Label>Employment Type</Label>
+        <Select value={employmentType} onValueChange={setEmploymentType}>
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="full_time">Full Time</SelectItem>
+            <SelectItem value="part_time">Part Time</SelectItem>
+            <SelectItem value="seasonal">Seasonal</SelectItem>
+            <SelectItem value="contractor">Contractor</SelectItem>
+            <SelectItem value="temporary">Temporary</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="pt-4 flex justify-end gap-2">
+        <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
+        <Button type="submit" disabled={createMutation.isPending}>
+          {createMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+          Save Worker
+        </Button>
+      </div>
+    </form>
+  );
+}
 
 export default function WorkersList() {
-  const { currentFarm } = useFarm();
+  const { currentFarm, can } = useFarm();
   const farmId = currentFarm?.farm.id;
   const [searchTerm, setSearchTerm] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const { data: workers = [], isLoading } = trpc.workers.listWorkers.useQuery(
     { farmId: farmId! },
@@ -32,10 +120,21 @@ export default function WorkersList() {
             className="pl-9"
           />
         </div>
-        <Button className="w-full sm:w-auto bg-primary text-primary-foreground">
-          <Plus className="w-4 h-4 mr-2" />
-          Add Worker
-        </Button>
+        
+        {can("write") && (
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="w-full sm:w-auto bg-primary text-primary-foreground">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Worker
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader><DialogTitle>Add Worker</DialogTitle></DialogHeader>
+              {farmId && <WorkerForm farmId={farmId} onClose={() => setDialogOpen(false)} />}
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
 
       {isLoading ? (
