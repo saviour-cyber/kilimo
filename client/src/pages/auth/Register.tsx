@@ -10,7 +10,8 @@ import { resolvePostLoginPath } from "@/components/AuthRouter";
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [organizationName, setOrganizationName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
@@ -30,7 +31,8 @@ export default function Register() {
       await registerMutation.mutateAsync({ 
         email, 
         password, 
-        name,
+        firstName,
+        lastName,
         organizationName: organizationName || undefined
       });
       await utils.auth.me.invalidate();
@@ -64,18 +66,31 @@ export default function Register() {
       }
     >
       <form onSubmit={handleRegister} className="space-y-4">
-        <div className="space-y-1.5">
-          <label className="text-sm font-medium leading-none">Full Name</label>
-          <div className="relative">
-            <UserIcon className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium leading-none">First Name</label>
+            <div className="relative">
+              <UserIcon className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                id="firstName"
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="John"
+                required
+                className="pl-9"
+              />
+            </div>
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium leading-none">Last Name</label>
             <Input
-              id="name"
+              id="lastName"
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="John Doe"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              placeholder="Doe"
               required
-              className="pl-9"
             />
           </div>
         </div>

@@ -42,22 +42,22 @@ export function MarketplaceWidget({ farmId, className }: { farmId: number; class
         ) : (
           <div className="flex flex-col divide-y divide-border">
             {items.map((item) => (
-              <Link key={item.id} href={`/marketplace/listing/${item.id}`}>
+              <Link key={item.listing.id} href={`/marketplace/listing/${item.listing.id}`}>
                 <div className="flex items-start justify-between px-4 py-3 hover:bg-muted cursor-pointer transition-colors">
                   <div className="flex flex-col gap-1 min-w-0">
-                    <span className="text-[13px] font-semibold text-foreground truncate">{item.title}</span>
-                    {item.location && (
+                    <span className="text-[13px] font-semibold text-foreground truncate">{item.listing.title}</span>
+                    {item.listing.location && (
                       <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
-                        <MapPin className="w-3 h-3" /> {item.location}
+                        <MapPin className="w-3 h-3" /> {item.listing.location}
                       </span>
                     )}
                   </div>
                   <div className="flex flex-col items-end shrink-0 ml-3">
                     <span className="text-[13px] font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100">
-                      KES {Number(item.price).toLocaleString()}
+                      KES {Number(item.listing.price).toLocaleString()}
                     </span>
                     <span className="text-[10px] text-muted-foreground mt-1 uppercase tracking-wider">
-                      {item.unit}
+                      {item.listing.unit}
                     </span>
                   </div>
                 </div>

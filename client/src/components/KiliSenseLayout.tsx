@@ -1,7 +1,7 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { startLogin } from "@/const";
 import { useFarm } from "@/contexts/FarmContext";
-import { getVisibleModules, MODULE_REGISTRY, SIDEBAR_SECTION_LABELS, SIDEBAR_SECTION_ORDER } from "@/lib/moduleRegistry";
+import { getVisibleModules, getMobileNavSplit, MODULE_REGISTRY, SIDEBAR_SECTION_LABELS, SIDEBAR_SECTION_ORDER } from "@/lib/moduleRegistry";
 import { getSidebarServices, getFloatingWidgets, type PlatformServiceDefinition } from "@/lib/serviceRegistry";
 import { trpc } from "@/lib/trpc";
 import { useGrantedModules } from "@/hooks/useEntitlement";
@@ -517,7 +517,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
         {/* Mobile Bottom Navigation */}
         {currentFarm && (
           <nav className="lg:hidden flex items-center justify-around border-t border-border bg-background/95 backdrop-blur-sm pb-safe shrink-0 h-16">
-            {visibleModules.slice(0, 4).map((mod) => {
+            {getMobileNavSplit(visibleModules, platformServices).bottomNavModules.map((mod) => {
               const Icon = mod.icon;
               const isActive = location.startsWith(mod.basePath);
               return (

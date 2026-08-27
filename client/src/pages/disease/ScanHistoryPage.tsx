@@ -199,7 +199,7 @@ export default function ScanHistoryPage() {
 
       {/* Scan list */}
       {isLoading ? (
-        <LoadingSkeleton rows={4} />
+        <LoadingSkeleton count={4} />
       ) : filteredScans.length === 0 ? (
         <EmptyState
           icon={Stethoscope}

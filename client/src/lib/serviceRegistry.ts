@@ -40,6 +40,7 @@ export interface PlatformServiceDefinition {
   showInSidebar?: boolean;
   icon?: LucideIcon;
   basePath?: string;
+  defaultPath?: string;
   color?: string;
   
   // Full page component for dynamic routing
