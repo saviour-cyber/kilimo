@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Seed default subscription plans.
  * Run with: npx tsx scripts/seed-plans.ts
  *
@@ -53,6 +53,7 @@ const PLANS = [
       { featureKey: "livestock", featureType: "module" as const },
       { featureKey: "inventory", featureType: "module" as const },
       { featureKey: "finance", featureType: "module" as const },
+      { featureKey: "workers", featureType: "module" as const },
       { featureKey: "tasks", featureType: "module" as const },
       { featureKey: "disease", featureType: "module" as const },
       { featureKey: "reports", featureType: "module" as const },
@@ -77,6 +78,7 @@ const PLANS = [
       { featureKey: "livestock", featureType: "module" as const },
       { featureKey: "inventory", featureType: "module" as const },
       { featureKey: "finance", featureType: "module" as const },
+      { featureKey: "workers", featureType: "module" as const },
       { featureKey: "tasks", featureType: "module" as const },
       { featureKey: "disease", featureType: "module" as const },
       { featureKey: "reports", featureType: "module" as const },
