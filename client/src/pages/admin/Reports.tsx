@@ -13,8 +13,8 @@ export default function AdminReports() {
     <div className="space-y-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
-          <BarChart2 className="w-6 h-6 text-slate-700" />
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Platform Analytics</h1>
+          <BarChart2 className="w-6 h-6 text-muted-foreground" />
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">Platform Analytics</h1>
         </div>
         <Button className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2">
           <Download className="w-4 h-4" /> Export Raw Data
@@ -22,46 +22,46 @@ export default function AdminReports() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
               <div className="p-2 bg-indigo-100 rounded-lg">
                 <FileText className="w-5 h-5 text-indigo-600" />
               </div>
             </div>
-            {isLoading ? <Skeleton className="h-9 w-20" /> : <p className="text-3xl font-bold text-slate-900">{analytics?.totalReportsGenerated}</p>}
+            {isLoading ? <Skeleton className="h-9 w-20" /> : <p className="text-3xl font-bold text-foreground">{analytics?.totalReportsGenerated}</p>}
             <p className="text-sm text-muted-foreground mt-1">Total Reports Generated (All Time)</p>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
               <div className="p-2 bg-emerald-100 rounded-lg">
                 <TrendingUp className="w-5 h-5 text-emerald-600" />
               </div>
             </div>
-            <p className="text-3xl font-bold text-slate-900">+24%</p>
+            <p className="text-3xl font-bold text-foreground">+24%</p>
             <p className="text-sm text-muted-foreground mt-1">Report Usage Growth (MoM)</p>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
               <div className="p-2 bg-sky-100 rounded-lg">
                 <Users className="w-5 h-5 text-sky-600" />
               </div>
             </div>
-            <p className="text-3xl font-bold text-slate-900">8,204</p>
+            <p className="text-3xl font-bold text-foreground">8,204</p>
             <p className="text-sm text-muted-foreground mt-1">Unique Farms Generating Data</p>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border shadow-sm">
         <CardHeader>
-          <CardTitle className="text-slate-800">Recent Global Report Generation</CardTitle>
+          <CardTitle className="text-foreground">Recent Global Report Generation</CardTitle>
           <CardDescription>Log of the most recent PDF/CSV exports executed by platform users.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -91,7 +91,7 @@ export default function AdminReports() {
                   <TableRow key={report.id}>
                     <TableCell className="font-mono text-sm text-muted-foreground">#{report.id}</TableCell>
                     <TableCell>
-                      <div className="font-medium text-slate-800 capitalize">{report.type.replace(/_/g, ' ')}</div>
+                      <div className="font-medium text-foreground capitalize">{report.type.replace(/_/g, ' ')}</div>
                     </TableCell>
                     <TableCell className="text-muted-foreground text-sm">
                       {format(new Date(report.createdAt!), "MMM d, yyyy h:mm a")}

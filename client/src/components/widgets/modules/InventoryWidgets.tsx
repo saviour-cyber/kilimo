@@ -23,12 +23,12 @@ export function InventoryKpiWidget({ farmId, className }: { farmId: number; clas
           <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-blue-100 shrink-0">
             <Package className="w-4 h-4 text-blue-700" />
           </div>
-          <span className="text-sm font-semibold text-slate-600 truncate">Low Stock</span>
+          <span className="text-sm font-semibold text-muted-foreground truncate">Low Stock</span>
         </div>
         <div className="flex items-end justify-between">
           <div>
-            <div className="text-2xl font-bold text-slate-900">{lowStock}</div>
-            <div className="text-xs text-slate-500 mt-1">Need restocking</div>
+            <div className="text-2xl font-bold text-foreground">{lowStock}</div>
+            <div className="text-xs text-muted-foreground mt-1">Need restocking</div>
           </div>
         </div>
       </CardContent>
@@ -55,23 +55,23 @@ export function InventorySummaryWidget({ farmId, className }: { farmId: number; 
           <div className="w-6 h-6 rounded flex items-center justify-center bg-blue-100">
             <Package className="w-3.5 h-3.5 text-blue-700" />
           </div>
-          <span className="font-bold text-[13px] text-slate-800">Inventory Overview</span>
+          <span className="font-bold text-[13px] text-foreground">Inventory Overview</span>
         </div>
         <Link href="/inventory">
-          <span className="text-[11px] font-bold text-slate-400 hover:text-blue-600 cursor-pointer">View All</span>
+          <span className="text-[11px] font-bold text-muted-foreground hover:text-blue-600 cursor-pointer">View All</span>
         </Link>
       </div>
       
       <CardContent className="p-4 flex flex-col gap-4">
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-slate-50 rounded-lg p-2.5 border border-slate-100">
-            <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Total Items</div>
-            <div className="text-lg font-bold text-slate-900 leading-none">{totalItems}</div>
+          <div className="bg-muted rounded-lg p-2.5 border border-border">
+            <div className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Total Items</div>
+            <div className="text-lg font-bold text-foreground leading-none">{totalItems}</div>
           </div>
-          <div className="bg-slate-50 rounded-lg p-2.5 border border-slate-100">
-            <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Low Stock</div>
-            <div className={`text-lg font-bold leading-none ${lowStock > 0 ? "text-red-600" : "text-slate-900"}`}>
+          <div className="bg-muted rounded-lg p-2.5 border border-border">
+            <div className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Low Stock</div>
+            <div className={`text-lg font-bold leading-none ${lowStock > 0 ? "text-red-600" : "text-foreground"}`}>
               {lowStock}
             </div>
           </div>

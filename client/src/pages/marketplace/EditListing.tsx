@@ -148,7 +148,7 @@ export default function EditListing() {
           <h1 className="text-3xl font-bold tracking-tight text-foreground">Edit Listing</h1>
           <div className="flex items-center gap-2 mt-1">
             <span className={`px-2 py-0.5 text-xs font-semibold rounded ${
-              data.listing.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-700'
+              data.listing.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-muted text-muted-foreground'
             }`}>
               {data.listing.status.toUpperCase()}
             </span>

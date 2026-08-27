@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -258,8 +258,8 @@ function AdminAppRoutes() {
       <Route>
         <AdminLayout>
           <div className="p-8">
-            <h2 className="text-2xl font-bold text-slate-800">Page not found</h2>
-            <p className="text-slate-500 mt-2">The requested administrative page does not exist or is under construction.</p>
+            <h2 className="text-2xl font-bold text-foreground">Page not found</h2>
+            <p className="text-muted-foreground mt-2">The requested administrative page does not exist or is under construction.</p>
           </div>
         </AdminLayout>
       </Route>

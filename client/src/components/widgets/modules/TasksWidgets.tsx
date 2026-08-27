@@ -22,12 +22,12 @@ export function TasksKpiWidget({ farmId, className }: { farmId: number; classNam
           <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-orange-100 shrink-0">
             <CheckSquare className="w-4 h-4 text-orange-700" />
           </div>
-          <span className="text-sm font-semibold text-slate-600 truncate">Pending Tasks</span>
+          <span className="text-sm font-semibold text-muted-foreground truncate">Pending Tasks</span>
         </div>
         <div className="flex items-end justify-between">
           <div>
-            <div className="text-2xl font-bold text-slate-900">{pendingCount}</div>
-            <div className="text-xs text-slate-500 mt-1">Awaiting action</div>
+            <div className="text-2xl font-bold text-foreground">{pendingCount}</div>
+            <div className="text-xs text-muted-foreground mt-1">Awaiting action</div>
           </div>
         </div>
       </CardContent>
@@ -54,23 +54,23 @@ export function TasksSummaryWidget({ farmId, className }: { farmId: number; clas
           <div className="w-6 h-6 rounded flex items-center justify-center bg-orange-100">
             <ListTodo className="w-3.5 h-3.5 text-orange-700" />
           </div>
-          <span className="font-bold text-[13px] text-slate-800">Tasks Overview</span>
+          <span className="font-bold text-[13px] text-foreground">Tasks Overview</span>
         </div>
         <Link href="/tasks">
-          <span className="text-[11px] font-bold text-slate-400 hover:text-orange-600 cursor-pointer">View All</span>
+          <span className="text-[11px] font-bold text-muted-foreground hover:text-orange-600 cursor-pointer">View All</span>
         </Link>
       </div>
       
       <CardContent className="p-4 flex flex-col gap-4">
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-slate-50 rounded-lg p-2.5 border border-slate-100">
-            <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">In Progress</div>
-            <div className="text-lg font-bold text-slate-900 leading-none">{inProgress}</div>
+          <div className="bg-muted rounded-lg p-2.5 border border-border">
+            <div className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">In Progress</div>
+            <div className="text-lg font-bold text-foreground leading-none">{inProgress}</div>
           </div>
-          <div className="bg-slate-50 rounded-lg p-2.5 border border-slate-100">
-            <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Pending</div>
-            <div className="text-lg font-bold text-slate-900 leading-none">{pending}</div>
+          <div className="bg-muted rounded-lg p-2.5 border border-border">
+            <div className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Pending</div>
+            <div className="text-lg font-bold text-foreground leading-none">{pending}</div>
           </div>
         </div>
 
@@ -114,22 +114,22 @@ export function TasksUpcomingSidebarWidget({ farmId, className }: { farmId: numb
           <div className="w-6 h-6 rounded flex items-center justify-center bg-purple-100">
             <CheckSquare className="w-3.5 h-3.5 text-purple-700" />
           </div>
-          <span className="font-bold text-[13px] text-slate-800">Upcoming Tasks</span>
+          <span className="font-bold text-[13px] text-foreground">Upcoming Tasks</span>
         </div>
         <Link href="/tasks">
-          <span className="text-[11px] font-bold text-slate-400 hover:text-purple-600 cursor-pointer">View All</span>
+          <span className="text-[11px] font-bold text-muted-foreground hover:text-purple-600 cursor-pointer">View All</span>
         </Link>
       </div>
       <CardContent className="p-0">
         <div className="flex flex-col">
           {upcoming.slice(0, 4).map((task) => (
-            <div key={task.id} className="flex items-center justify-between p-3 border-b border-slate-50 hover:bg-slate-50 cursor-pointer group">
+            <div key={task.id} className="flex items-center justify-between p-3 border-b border-slate-50 hover:bg-muted cursor-pointer group">
               <div className="flex items-center gap-3">
                 <div className="w-3.5 h-3.5 rounded border border-slate-300 bg-white group-hover:border-green-500 flex-shrink-0"></div>
-                <span className="text-[12px] font-medium text-slate-700">{task.title}</span>
+                <span className="text-[12px] font-medium text-muted-foreground">{task.title}</span>
               </div>
-              <div className="flex items-center gap-1 text-[10px] text-slate-400 whitespace-nowrap ml-2">
-                <span>{task.dueDate ?? "—"}</span>
+              <div className="flex items-center gap-1 text-[10px] text-muted-foreground whitespace-nowrap ml-2">
+                <span>{task.dueDate ?? "â€”"}</span>
               </div>
             </div>
           ))}

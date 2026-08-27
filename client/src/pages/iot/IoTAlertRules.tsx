@@ -35,7 +35,7 @@ export default function IoTAlertRules() {
       case "notify": return <Bell className="w-4 h-4 text-blue-500" />;
       case "task": return <Zap className="w-4 h-4 text-amber-500" />;
       case "recommendation": return <BrainCircuit className="w-4 h-4 text-purple-500" />;
-      default: return <Settings2 className="w-4 h-4 text-slate-500" />;
+      default: return <Settings2 className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -43,17 +43,17 @@ export default function IoTAlertRules() {
     <div className="max-w-6xl mx-auto p-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Alert Rules Engine</h1>
-          <p className="text-slate-500 mt-1">Configure automated workflows and AI recommendations based on live telemetry.</p>
+          <h1 className="text-2xl font-bold text-foreground">Alert Rules Engine</h1>
+          <p className="text-muted-foreground mt-1">Configure automated workflows and AI recommendations based on live telemetry.</p>
         </div>
         <Button onClick={() => setIsModalOpen(true)} className="gap-2">
           <Plus className="w-4 h-4" /> Create Rule
         </Button>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
         {rules.length === 0 ? (
-          <div className="p-12 text-center text-slate-500">
+          <div className="p-12 text-center text-muted-foreground">
             <Bot className="w-12 h-12 mx-auto mb-4 text-slate-300" />
             <p>No alert rules configured for this farm.</p>
             <Button variant="outline" onClick={() => setIsModalOpen(true)} className="mt-4">
@@ -63,7 +63,7 @@ export default function IoTAlertRules() {
         ) : (
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-100 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <tr className="bg-muted border-b border-border text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 <th className="px-6 py-4">Rule Name</th>
                 <th className="px-6 py-4">Condition</th>
                 <th className="px-6 py-4">Action</th>
@@ -74,19 +74,19 @@ export default function IoTAlertRules() {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {rules.map((rule) => (
-                <tr key={rule.id} className="hover:bg-slate-50/50 transition-colors">
+                <tr key={rule.id} className="hover:bg-muted/50 transition-colors">
                   <td className="px-6 py-4">
-                    <div className="font-medium text-slate-800">{rule.name}</div>
-                    <div className="text-xs text-slate-500">{rule.sensorType ? `All ${rule.sensorType} sensors` : "Specific sensor"}</div>
+                    <div className="font-medium text-foreground">{rule.name}</div>
+                    <div className="text-xs text-muted-foreground">{rule.sensorType ? `All ${rule.sensorType} sensors` : "Specific sensor"}</div>
                   </td>
                   <td className="px-6 py-4">
-                    <code className="bg-slate-100 text-slate-600 px-2 py-1 rounded text-xs font-mono">
+                    <code className="bg-muted text-muted-foreground px-2 py-1 rounded text-xs font-mono">
                       Value {rule.condition} {rule.threshold}
                     </code>
                   </td>
                   <td className="px-6 py-4 flex items-center gap-2">
                     {getActionIcon(rule.actionType)}
-                    <span className="text-sm font-medium text-slate-700 capitalize">{rule.actionType}</span>
+                    <span className="text-sm font-medium text-muted-foreground capitalize">{rule.actionType}</span>
                   </td>
                   <td className="px-6 py-4">
                     <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium capitalize

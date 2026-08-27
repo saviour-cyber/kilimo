@@ -4,6 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -44,9 +46,9 @@
 :root {
   --radius: 1rem;
 
-  /* SproutX — Premium SaaS Light Theme */
-  --background: #F8FAFC;
-  --foreground: #0F172A;
+  /* SproutX ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Premium SaaS Light Theme */
+  --background: #F7F5ED;
+  --foreground: #18181B;
 
   --card: #FFFFFF;
   --card-foreground: #0F172A;
@@ -55,8 +57,8 @@
   --popover-foreground: #0F172A;
 
   /* Primary Brand: Emerald */
-  --primary: #10B981;
-  --primary-foreground: #FFFFFF;
+  --primary: #EAB308;
+  --primary-foreground: #18181B;
 
   --secondary: #F1F5F9;
   --secondary-foreground: #64748B;
@@ -75,7 +77,7 @@
 
   --border: #E2E8F0;
   --input: #E2E8F0;
-  --ring: #10B981;
+  --ring: #EAB308;
 
   /* Charts */
   --chart-1: #10B981;
@@ -87,12 +89,12 @@
   /* Sidebar (Dark Slate) */
   --sidebar: #0F172A;
   --sidebar-foreground: #F8FAFC;
-  --sidebar-primary: #10B981;
-  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-primary: #EAB308;
+  --sidebar-primary-foreground: #18181B;
   --sidebar-accent: #1E293B;
   --sidebar-accent-foreground: #FFFFFF;
   --sidebar-border: #1E293B;
-  --sidebar-ring: #10B981;
+  --sidebar-ring: #EAB308;
 }
 
 .dark {
@@ -107,7 +109,7 @@
   --popover-foreground: #F9FAFB;
 
   --primary: #22C55E;
-  --primary-foreground: #FFFFFF;
+  --primary-foreground: #18181B;
 
   --secondary: #1F2937;
   --secondary-foreground: #94A3B8;
@@ -137,7 +139,7 @@
   --sidebar: #0B1220;
   --sidebar-foreground: #94A3B8;
   --sidebar-primary: #22C55E;
-  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-primary-foreground: #18181B;
   --sidebar-accent: #1F2937;
   --sidebar-accent-foreground: #F9FAFB;
   --sidebar-border: #2D3748;
@@ -145,6 +147,9 @@
 }
 
 @layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif text-foreground;
+  }
   * {
     @apply border-border outline-ring/50;
   }

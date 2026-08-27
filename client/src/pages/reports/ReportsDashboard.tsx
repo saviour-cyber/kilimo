@@ -39,33 +39,33 @@ export default function ReportsDashboard() {
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm flex items-center gap-4">
+        <div className="bg-white rounded-2xl border border-border p-5 shadow-sm flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
             <Archive className="w-6 h-6 text-blue-500" />
           </div>
           <div>
-            <p className="text-sm font-medium text-slate-500">Generated Reports</p>
-            <p className="text-2xl font-bold text-slate-800">{recentReports.length}</p>
+            <p className="text-sm font-medium text-muted-foreground">Generated Reports</p>
+            <p className="text-2xl font-bold text-foreground">{recentReports.length}</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm flex items-center gap-4">
+        <div className="bg-white rounded-2xl border border-border p-5 shadow-sm flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center shrink-0">
             <Calendar className="w-6 h-6 text-emerald-500" />
           </div>
           <div>
-            <p className="text-sm font-medium text-slate-500">Scheduled Reports</p>
-            <p className="text-2xl font-bold text-slate-800">{scheduledReports.length}</p>
+            <p className="text-sm font-medium text-muted-foreground">Scheduled Reports</p>
+            <p className="text-2xl font-bold text-foreground">{scheduledReports.length}</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm flex items-center gap-4">
+        <div className="bg-white rounded-2xl border border-border p-5 shadow-sm flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center shrink-0">
             <Activity className="w-6 h-6 text-indigo-500" />
           </div>
           <div>
-            <p className="text-sm font-medium text-slate-500">AI Executive Summaries</p>
-            <p className="text-2xl font-bold text-slate-800">1</p>
+            <p className="text-sm font-medium text-muted-foreground">AI Executive Summaries</p>
+            <p className="text-2xl font-bold text-foreground">1</p>
           </div>
         </div>
       </div>
@@ -74,9 +74,9 @@ export default function ReportsDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Recent Generated Reports */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
           <div className="px-5 py-4 border-b border-slate-50 flex items-center justify-between">
-            <h3 className="font-semibold text-slate-800 flex items-center gap-2">
+            <h3 className="font-semibold text-foreground flex items-center gap-2">
               <Archive className="w-4 h-4 text-indigo-500" />
               Recent Reports
             </h3>
@@ -87,23 +87,23 @@ export default function ReportsDashboard() {
           
           <div className="divide-y divide-slate-50">
             {loadingReports ? (
-              <div className="p-8 text-center text-slate-400">Loading reports...</div>
+              <div className="p-8 text-center text-muted-foreground">Loading reports...</div>
             ) : recentReports.length === 0 ? (
               <div className="p-8 text-center flex flex-col items-center">
                 <FileText className="w-8 h-8 text-slate-200 mb-2" />
-                <p className="text-sm text-slate-500">No reports generated yet.</p>
+                <p className="text-sm text-muted-foreground">No reports generated yet.</p>
                 <Link href="/reports/wizard" className="text-sm text-indigo-600 mt-2 hover:underline">
                   Generate your first report
                 </Link>
               </div>
             ) : (
               recentReports.map(report => (
-                <div key={report.id} className="p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors">
+                <div key={report.id} className="p-5 flex items-center justify-between hover:bg-muted/50 transition-colors">
                   <div>
-                    <h4 className="font-medium text-slate-800">{report.name}</h4>
-                    <div className="flex items-center gap-2 mt-1 text-xs text-slate-500">
+                    <h4 className="font-medium text-foreground">{report.name}</h4>
+                    <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
                       <span>{format(new Date(report.generatedAt), "MMM d, yyyy 'at' h:mm a")}</span>
-                      <span>•</span>
+                      <span>â€¢</span>
                       <span className="uppercase">{report.format}</span>
                     </div>
                   </div>
@@ -121,9 +121,9 @@ export default function ReportsDashboard() {
         </div>
 
         {/* Scheduled Reports */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
           <div className="px-5 py-4 border-b border-slate-50 flex items-center justify-between">
-            <h3 className="font-semibold text-slate-800 flex items-center gap-2">
+            <h3 className="font-semibold text-foreground flex items-center gap-2">
               <Calendar className="w-4 h-4 text-emerald-500" />
               Scheduled
             </h3>
@@ -134,19 +134,19 @@ export default function ReportsDashboard() {
           
           <div className="divide-y divide-slate-50">
             {loadingScheduled ? (
-              <div className="p-8 text-center text-slate-400">Loading...</div>
+              <div className="p-8 text-center text-muted-foreground">Loading...</div>
             ) : scheduledReports.length === 0 ? (
               <div className="p-8 text-center flex flex-col items-center">
                 <Calendar className="w-8 h-8 text-slate-200 mb-2" />
-                <p className="text-sm text-slate-500">No scheduled reports.</p>
+                <p className="text-sm text-muted-foreground">No scheduled reports.</p>
               </div>
             ) : (
               scheduledReports.map(schedule => (
-                <div key={schedule.id} className="p-5 hover:bg-slate-50/50 transition-colors">
-                  <h4 className="font-medium text-slate-800 text-sm truncate">{schedule.name}</h4>
+                <div key={schedule.id} className="p-5 hover:bg-muted/50 transition-colors">
+                  <h4 className="font-medium text-foreground text-sm truncate">{schedule.name}</h4>
                   <div className="flex items-center justify-between mt-2">
-                    <span className="text-xs text-slate-500 capitalize">{schedule.frequency}</span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${schedule.isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
+                    <span className="text-xs text-muted-foreground capitalize">{schedule.frequency}</span>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${schedule.isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-muted text-muted-foreground'}`}>
                       {schedule.isActive ? 'ACTIVE' : 'PAUSED'}
                     </span>
                   </div>

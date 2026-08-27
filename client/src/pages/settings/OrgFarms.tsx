@@ -39,10 +39,10 @@ export default function OrgFarms() {
   return (
     <div className="max-w-4xl space-y-8">
       {/* Header */}
-      <div className="pb-6 border-b border-slate-200 flex items-center justify-between">
+      <div className="pb-6 border-b border-border flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold text-slate-900 tracking-tight">Farms</h2>
-          <p className="text-sm text-slate-500 mt-1.5">
+          <h2 className="text-2xl font-semibold text-foreground tracking-tight">Farms</h2>
+          <p className="text-sm text-muted-foreground mt-1.5">
             Manage all farms under your organization. Each farm has its own modules, team, and settings.
           </p>
         </div>
@@ -64,23 +64,23 @@ export default function OrgFarms() {
               key={farm.id}
               className={cn(
                 "border rounded-2xl overflow-hidden transition-all",
-                isActive ? "border-slate-900 shadow-sm" : "border-slate-200 hover:border-slate-300"
+                isActive ? "border-slate-900 shadow-sm" : "border-border hover:border-slate-300"
               )}
             >
               {/* Card Header */}
-              <div className={cn("px-6 py-4 flex items-center justify-between", isActive ? "bg-slate-900" : "bg-slate-50")}>
+              <div className={cn("px-6 py-4 flex items-center justify-between", isActive ? "bg-slate-900" : "bg-muted")}>
                 <div className="flex items-center gap-3">
                   {isActive && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />}
                   <div>
                     <div className="flex items-center gap-2.5">
-                      <h3 className={cn("font-semibold text-base", isActive ? "text-white" : "text-slate-900")}>{farm.name}</h3>
+                      <h3 className={cn("font-semibold text-base", isActive ? "text-white" : "text-foreground")}>{farm.name}</h3>
                       {isActive && (
                         <span className="text-[10px] font-semibold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 border border-emerald-400/30 px-2 py-0.5 rounded-full">
                           Active
                         </span>
                       )}
                     </div>
-                    <p className={cn("text-sm mt-0.5", isActive ? "text-slate-300" : "text-slate-500")}>{farmTypeLabel}</p>
+                    <p className={cn("text-sm mt-0.5", isActive ? "text-slate-300" : "text-muted-foreground")}>{farmTypeLabel}</p>
                   </div>
                 </div>
 
@@ -108,7 +108,7 @@ export default function OrgFarms() {
                       <Archive className="w-3.5 h-3.5" /> Archive Farm
                     </DropdownMenuItem>
                     <DropdownMenuItem className="gap-2 text-sm cursor-pointer text-red-600"
-                      onClick={() => toast.error("Delete is disabled — archive the farm first.")}>
+                      onClick={() => toast.error("Delete is disabled â€” archive the farm first.")}>
                       <Trash2 className="w-3.5 h-3.5" /> Delete Farm
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -120,7 +120,7 @@ export default function OrgFarms() {
                 <div className="space-y-3 flex-1">
                   {/* Modules */}
                   <div>
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Enabled Modules</p>
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Enabled Modules</p>
                     <div className="flex flex-wrap gap-1.5">
                       {modules.length > 0
                         ? modules.map(key => (
@@ -128,7 +128,7 @@ export default function OrgFarms() {
                             {MODULE_LABELS[key] ?? key}
                           </Badge>
                         ))
-                        : <span className="text-xs text-slate-400">No modules enabled</span>
+                        : <span className="text-xs text-muted-foreground">No modules enabled</span>
                       }
                     </div>
                   </div>
@@ -136,13 +136,13 @@ export default function OrgFarms() {
 
                 <div className="shrink-0 text-right space-y-1.5">
                   {farm.location && (
-                    <div className="flex items-center gap-1.5 text-xs text-slate-500 justify-end">
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground justify-end">
                       <MapPin className="w-3.5 h-3.5" />
                       {farm.location}
                     </div>
                   )}
                   {farm.sizeHectares && (
-                    <p className="text-xs text-slate-500">{farm.sizeHectares} ha</p>
+                    <p className="text-xs text-muted-foreground">{farm.sizeHectares} ha</p>
                   )}
                   {!isActive && (
                     <Button variant="outline" size="sm" className="text-xs h-7 mt-2" onClick={() => switchFarm(farm.id)}>
@@ -156,10 +156,10 @@ export default function OrgFarms() {
         })}
 
         {farms.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-64 rounded-2xl border border-dashed border-slate-300 bg-slate-50/50">
+          <div className="flex flex-col items-center justify-center h-64 rounded-2xl border border-dashed border-slate-300 bg-muted/50">
             <MapPin className="w-10 h-10 text-slate-300 mb-4" />
-            <p className="text-sm font-medium text-slate-700">No farms yet</p>
-            <p className="text-xs text-slate-400 mt-1 mb-4">Create your first farm to get started.</p>
+            <p className="text-sm font-medium text-muted-foreground">No farms yet</p>
+            <p className="text-xs text-muted-foreground mt-1 mb-4">Create your first farm to get started.</p>
             <Button size="sm" className="gap-2"><Plus className="w-4 h-4" />Add First Farm</Button>
           </div>
         )}

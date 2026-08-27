@@ -1,14 +1,14 @@
 import { trpc } from "@/lib/trpc";
 import { AlertTriangle, Activity, CheckCircle, Clock, Stethoscope, ShieldAlert } from "lucide-react";
 
-// ─── Shared helpers ───────────────────────────────────────────────────────────
+// â”€â”€â”€ Shared helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function severityColor(severity: string | null) {
   switch (severity) {
     case "critical": return "text-red-600 bg-red-50 border-red-200";
     case "high":     return "text-orange-600 bg-orange-50 border-orange-200";
     case "medium":   return "text-yellow-600 bg-yellow-50 border-yellow-200";
     case "low":      return "text-green-600 bg-green-50 border-green-200";
-    default:         return "text-slate-500 bg-slate-50 border-slate-200";
+    default:         return "text-muted-foreground bg-muted border-border";
   }
 }
 
@@ -18,7 +18,7 @@ function severityBadge(severity: string | null) {
     case "high":     return "bg-orange-100 text-orange-700 border border-orange-200";
     case "medium":   return "bg-yellow-100 text-yellow-700 border border-yellow-200";
     case "low":      return "bg-green-100 text-green-700 border border-green-200";
-    default:         return "bg-slate-100 text-slate-600 border border-slate-200";
+    default:         return "bg-muted text-muted-foreground border border-border";
   }
 }
 
@@ -26,7 +26,7 @@ function statusIcon(status: string) {
   switch (status) {
     case "verified":       return <CheckCircle className="w-3.5 h-3.5 text-green-500" />;
     case "treated":        return <Activity className="w-3.5 h-3.5 text-blue-500" />;
-    case "false_positive": return <ShieldAlert className="w-3.5 h-3.5 text-slate-400" />;
+    case "false_positive": return <ShieldAlert className="w-3.5 h-3.5 text-muted-foreground" />;
     default:               return <Clock className="w-3.5 h-3.5 text-amber-500" />;
   }
 }
@@ -35,7 +35,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
-// ─── Disease KPI Widget ───────────────────────────────────────────────────────
+// â”€â”€â”€ Disease KPI Widget â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export function DiseaseKpiWidget({ farmId, className }: { farmId: number; className?: string }) {
   const { data, isLoading } = trpc.disease.getSummary.useQuery({ farmId });
 
@@ -52,12 +52,12 @@ export function DiseaseKpiWidget({ farmId, className }: { farmId: number; classN
           <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-violet-100 shrink-0">
             <Stethoscope className="w-4 h-4 text-violet-700" />
           </div>
-          <span className="text-sm font-semibold text-slate-600 truncate">Disease Scans</span>
+          <span className="text-sm font-semibold text-muted-foreground truncate">Disease Scans</span>
         </div>
         <div className="flex items-end justify-between">
           <div>
-            <div className="text-2xl font-bold text-slate-900">{total}</div>
-            <div className="text-xs text-slate-500 mt-1">{pending} pending review</div>
+            <div className="text-2xl font-bold text-foreground">{total}</div>
+            <div className="text-xs text-muted-foreground mt-1">{pending} pending review</div>
           </div>
           {critical > 0 && (
             <div className="text-right">
@@ -70,17 +70,17 @@ export function DiseaseKpiWidget({ farmId, className }: { farmId: number; classN
   );
 }
 
-// ─── Disease Summary Widget ───────────────────────────────────────────────────
+// â”€â”€â”€ Disease Summary Widget â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export function DiseaseSummaryWidget({ farmId, className }: { farmId: number; className?: string }) {
   const { data, isLoading } = trpc.disease.getSummary.useQuery({ farmId });
 
   if (isLoading) {
     return (
-      <div className={`bg-white rounded-2xl border border-slate-100 shadow-sm p-5 ${className ?? ""}`}>
-        <div className="h-5 w-40 bg-slate-100 rounded mb-4 animate-pulse" />
+      <div className={`bg-white rounded-2xl border border-border shadow-sm p-5 ${className ?? ""}`}>
+        <div className="h-5 w-40 bg-muted rounded mb-4 animate-pulse" />
         <div className="space-y-3">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-14 bg-slate-50 rounded-xl animate-pulse" />
+            <div key={i} className="h-14 bg-muted rounded-xl animate-pulse" />
           ))}
         </div>
       </div>
@@ -90,17 +90,17 @@ export function DiseaseSummaryWidget({ farmId, className }: { farmId: number; cl
   const recentScans = data?.recentScans ?? [];
 
   return (
-    <div className={`bg-white rounded-2xl border border-slate-100 shadow-sm ${className ?? ""}`}>
+    <div className={`bg-white rounded-2xl border border-border shadow-sm ${className ?? ""}`}>
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-slate-50">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-violet-50 flex items-center justify-center">
             <Stethoscope className="w-4 h-4 text-violet-600" />
           </div>
-          <span className="font-semibold text-slate-800 text-sm">Recent Disease Scans</span>
+          <span className="font-semibold text-foreground text-sm">Recent Disease Scans</span>
         </div>
         <a href="/disease/history" className="text-xs text-violet-600 hover:text-violet-800 font-medium transition-colors">
-          View All →
+          View All â†’
         </a>
       </div>
 
@@ -111,8 +111,8 @@ export function DiseaseSummaryWidget({ farmId, className }: { farmId: number; cl
             <div className="w-12 h-12 rounded-full bg-violet-50 flex items-center justify-center mb-1">
               <Stethoscope className="w-6 h-6 text-violet-400" />
             </div>
-            <p className="text-sm font-medium text-slate-700">No scans yet</p>
-            <p className="text-xs text-slate-500">Upload an image to run a disease detection scan.</p>
+            <p className="text-sm font-medium text-muted-foreground">No scans yet</p>
+            <p className="text-xs text-muted-foreground">Upload an image to run a disease detection scan.</p>
             <a
               href="/disease/scan"
               className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 text-white text-xs font-medium hover:bg-violet-700 transition-colors"
@@ -128,8 +128,8 @@ export function DiseaseSummaryWidget({ farmId, className }: { farmId: number; cl
             >
               <div className="mt-0.5">{statusIcon(scan.status)}</div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold truncate text-slate-800">{scan.detectedDisease ?? "Analyzing…"}</p>
-                <p className="text-xs text-slate-500 capitalize mt-0.5">{scan.scanType} • {new Date(scan.createdAt).toLocaleDateString()}</p>
+                <p className="text-sm font-semibold truncate text-foreground">{scan.detectedDisease ?? "Analyzingâ€¦"}</p>
+                <p className="text-xs text-muted-foreground capitalize mt-0.5">{scan.scanType} â€¢ {new Date(scan.createdAt).toLocaleDateString()}</p>
               </div>
               <span className={`text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full shrink-0 ${severityBadge(scan.severity)}`}>
                 {scan.severity}

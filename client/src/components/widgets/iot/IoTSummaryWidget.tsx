@@ -1,5 +1,5 @@
 /**
- * IoT Summary Widget — for the main farm Dashboard
+ * IoT Summary Widget â€” for the main farm Dashboard
  *
  * Shows key live readings (soil moisture, air temp, tank level) and device status.
  * Refreshes every 30 seconds via the iot.getFarmIoTSummary query.
@@ -33,10 +33,10 @@ export default function IoTSummaryWidget({ farmId }: Props) {
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 animate-pulse">
-        <div className="h-4 bg-slate-100 rounded w-1/3 mb-4" />
+      <div className="bg-white rounded-2xl border border-border shadow-sm p-5 animate-pulse">
+        <div className="h-4 bg-muted rounded w-1/3 mb-4" />
         <div className="grid grid-cols-3 gap-3">
-          {[1,2,3].map(i => <div key={i} className="h-16 bg-slate-50 rounded-xl" />)}
+          {[1,2,3].map(i => <div key={i} className="h-16 bg-muted rounded-xl" />)}
         </div>
       </div>
     );
@@ -45,12 +45,12 @@ export default function IoTSummaryWidget({ farmId }: Props) {
   if (!summary || summary.devices.length === 0) return null;
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
       {/* Header */}
       <div className="px-5 py-3.5 border-b border-slate-50 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Cpu className="w-4 h-4 text-cyan-500" />
-          <span className="font-semibold text-slate-800 text-sm">IoT Sensors</span>
+          <span className="font-semibold text-foreground text-sm">IoT Sensors</span>
         </div>
         <div className="flex items-center gap-3">
           {alerts.length > 0 && (
@@ -58,14 +58,14 @@ export default function IoTSummaryWidget({ farmId }: Props) {
               <AlertTriangle className="w-3 h-3" /> {alerts.length}
             </span>
           )}
-          <div className="flex items-center gap-1.5 text-xs text-slate-400">
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             {summary.onlineCount > 0
               ? <><Wifi className="w-3 h-3 text-emerald-500" /><span className="text-emerald-600 font-medium">{summary.onlineCount} online</span></>
               : <><WifiOff className="w-3 h-3" /><span>{summary.offlineCount} offline</span></>
             }
           </div>
           <Link href="/iot" className="text-xs text-cyan-600 hover:text-cyan-700 font-medium">
-            View all →
+            View all â†’
           </Link>
         </div>
       </div>
@@ -78,13 +78,13 @@ export default function IoTSummaryWidget({ farmId }: Props) {
           return (
             <div key={reading.type} className={`${reading.bg} rounded-xl p-3 text-center`}>
               <Icon className={`w-4 h-4 ${reading.color} mx-auto mb-1`} />
-              <p className="text-xs text-slate-500 mb-0.5">{reading.label}</p>
+              <p className="text-xs text-muted-foreground mb-0.5">{reading.label}</p>
               {data ? (
                 <p className={`text-base font-bold ${reading.color}`}>
                   {data.value.toFixed(1)}<span className="text-[10px] font-normal ml-0.5">{data.unit}</span>
                 </p>
               ) : (
-                <p className="text-base font-bold text-slate-200">—</p>
+                <p className="text-base font-bold text-slate-200">â€”</p>
               )}
             </div>
           );
@@ -97,13 +97,13 @@ export default function IoTSummaryWidget({ farmId }: Props) {
           <span
             key={device.id}
             className={`text-[10px] font-medium px-2 py-0.5 rounded-full
-              ${device.status === "online" ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-400"}`}
+              ${device.status === "online" ? "bg-emerald-100 text-emerald-700" : "bg-muted text-muted-foreground"}`}
           >
             {device.name.split(" ").slice(0, 2).join(" ")}
           </span>
         ))}
         {summary.devices.length > 5 && (
-          <span className="text-[10px] text-slate-400">+{summary.devices.length - 5} more</span>
+          <span className="text-[10px] text-muted-foreground">+{summary.devices.length - 5} more</span>
         )}
       </div>
     </div>

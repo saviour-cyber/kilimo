@@ -81,7 +81,7 @@ export default function MyListings() {
                 <div className="absolute top-2 right-2">
                   <span className={`px-2 py-1 text-xs font-semibold rounded-full bg-white/90 backdrop-blur-sm shadow-sm ${
                     listing.status === 'active' ? 'text-green-600' :
-                    listing.status === 'draft' ? 'text-slate-600' :
+                    listing.status === 'draft' ? 'text-muted-foreground' :
                     listing.status === 'sold' ? 'text-blue-600' :
                     'text-orange-600'
                   }`}>

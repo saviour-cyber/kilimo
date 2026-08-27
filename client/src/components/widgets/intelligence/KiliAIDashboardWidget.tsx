@@ -36,8 +36,8 @@ export function KiliAIDashboardWidget({ farmId, className }: { farmId: number; c
             <span className="absolute -top-1 -right-1 bg-green-600 text-white text-[8px] font-bold px-1 py-0.5 rounded-sm leading-none">AI</span>
           </div>
           <div>
-            <h3 className="font-bold text-[15px] text-slate-900">Kili AI Insights</h3>
-            <p className="text-xs text-slate-500 mt-0.5">{summary}</p>
+            <h3 className="font-bold text-[15px] text-foreground">Kili AI Insights</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">{summary}</p>
           </div>
         </div>
         <Link href="/kili-ai">
@@ -48,7 +48,7 @@ export function KiliAIDashboardWidget({ farmId, className }: { farmId: number; c
       </div>
       <CardContent className="p-3">
         {recommendations.length === 0 ? (
-          <div className="text-sm text-slate-500 text-center py-6 bg-slate-50/50 rounded-lg border border-dashed border-slate-200">
+          <div className="text-sm text-muted-foreground text-center py-6 bg-muted/50 rounded-lg border border-dashed border-border">
             No recommendations yet. Start adding data to see AI insights.
           </div>
         ) : (
@@ -57,12 +57,12 @@ export function KiliAIDashboardWidget({ farmId, className }: { farmId: number; c
               const Icon = ICONS[i % ICONS.length];
               const badge = BADGE_STYLES[i % BADGE_STYLES.length];
               return (
-                <div key={i} className="border border-slate-100 rounded-lg p-3 flex gap-3 items-start bg-slate-50/50 hover:bg-slate-50 cursor-pointer group">
-                  <div className="bg-white p-1.5 rounded-md border border-slate-100 shrink-0 group-hover:scale-105 transition-transform">
-                    <Icon className="w-4 h-4 text-slate-600" />
+                <div key={i} className="border border-border rounded-lg p-3 flex gap-3 items-start bg-muted/50 hover:bg-muted cursor-pointer group">
+                  <div className="bg-white p-1.5 rounded-md border border-border shrink-0 group-hover:scale-105 transition-transform">
+                    <Icon className="w-4 h-4 text-muted-foreground" />
                   </div>
                   <div className="flex flex-col gap-2 flex-1">
-                    <p className="text-xs font-semibold text-slate-700 leading-snug">{rec}</p>
+                    <p className="text-xs font-semibold text-muted-foreground leading-snug">{rec}</p>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded self-start ${badge}`}>
                       Insight
                     </span>

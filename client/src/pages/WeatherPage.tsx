@@ -15,7 +15,7 @@ export default function WeatherPage() {
   );
 
   return (
-    <div className="flex flex-col h-full bg-slate-50/50">
+    <div className="flex flex-col h-full bg-muted/50">
       <div className="max-w-[1600px] mx-auto w-full px-4 pt-4 sm:px-6 sm:pt-6">
         <PageHeader 
           title="Weather Engine" 
@@ -29,7 +29,7 @@ export default function WeatherPage() {
       <div className="flex-1 overflow-auto p-4 sm:p-6 max-w-[1600px] mx-auto w-full">
         {!currentFarm ? (
           <Card className="border shadow-sm bg-white">
-            <CardContent className="p-12 text-center text-slate-500">
+            <CardContent className="p-12 text-center text-muted-foreground">
               <p>Please select a farm to view weather data.</p>
             </CardContent>
           </Card>
@@ -55,7 +55,7 @@ export default function WeatherPage() {
                 <div className="flex items-center gap-6">
                   <CloudSun className="w-24 h-24 text-blue-100" />
                   <div>
-                    <h2 className="text-4xl font-bold mb-2">{weatherData.current.temperature}°C</h2>
+                    <h2 className="text-4xl font-bold mb-2">{weatherData.current.temperature}Â°C</h2>
                     <p className="text-xl text-blue-100 capitalize">{weatherData.current.description}</p>
                     <p className="text-sm text-blue-200 mt-1">Location: {currentFarm.farm.location || "Nairobi, Kenya"}</p>
                   </div>
@@ -98,11 +98,11 @@ export default function WeatherPage() {
                           alert.severity === "high" ? "text-orange-500" : "text-yellow-500"
                         )} />
                         <div>
-                          <h4 className="font-semibold text-slate-800">{alert.title || alert.type}</h4>
-                          <p className="text-slate-600 text-sm mt-1">{alert.message} {alert.description}</p>
+                          <h4 className="font-semibold text-foreground">{alert.title || alert.type}</h4>
+                          <p className="text-muted-foreground text-sm mt-1">{alert.message} {alert.description}</p>
                           {alert.recommendation && (
-                            <p className="text-slate-700 text-sm mt-2 font-medium bg-slate-50 p-2 rounded-md">
-                              💡 Recommendation: {alert.recommendation}
+                            <p className="text-muted-foreground text-sm mt-2 font-medium bg-muted p-2 rounded-md">
+                              ðŸ’¡ Recommendation: {alert.recommendation}
                             </p>
                           )}
                         </div>
@@ -117,11 +117,11 @@ export default function WeatherPage() {
             {weatherData.insights && (
               <Card className="col-span-1 shadow-sm">
                 <CardHeader>
-                  <CardTitle className="text-slate-800 text-lg">Agricultural Insights</CardTitle>
+                  <CardTitle className="text-foreground text-lg">Agricultural Insights</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex justify-between items-center py-2 border-b border-slate-100 last:border-0">
-                    <span className="text-slate-500">Spraying Conditions</span>
+                  <div className="flex justify-between items-center py-2 border-b border-border last:border-0">
+                    <span className="text-muted-foreground">Spraying Conditions</span>
                     <span className={cn("px-2 py-1 rounded-full text-xs font-medium capitalize", 
                       weatherData.insights.sprayingConditions === "optimal" ? "bg-green-100 text-green-700" :
                       weatherData.insights.sprayingConditions === "marginal" ? "bg-yellow-100 text-yellow-700" :
@@ -130,26 +130,26 @@ export default function WeatherPage() {
                       {weatherData.insights.sprayingConditions}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-slate-100 last:border-0">
-                    <span className="text-slate-500">Irrigation Need</span>
+                  <div className="flex justify-between items-center py-2 border-b border-border last:border-0">
+                    <span className="text-muted-foreground">Irrigation Need</span>
                     <span className={cn("px-2 py-1 rounded-full text-xs font-medium capitalize",
-                      weatherData.insights.irrigationNeed === "none" ? "bg-slate-100 text-slate-700" :
+                      weatherData.insights.irrigationNeed === "none" ? "bg-muted text-muted-foreground" :
                       weatherData.insights.irrigationNeed === "moderate" ? "bg-yellow-100 text-yellow-700" :
                       "bg-blue-100 text-blue-700"
                     )}>
                       {weatherData.insights.irrigationNeed}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-slate-100 last:border-0">
-                    <span className="text-slate-500">Frost Risk</span>
+                  <div className="flex justify-between items-center py-2 border-b border-border last:border-0">
+                    <span className="text-muted-foreground">Frost Risk</span>
                     <span className={cn("px-2 py-1 rounded-full text-xs font-medium",
                       weatherData.insights.frostRisk ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"
                     )}>
                       {weatherData.insights.frostRisk ? "High Risk" : "Low Risk"}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-slate-100 last:border-0">
-                    <span className="text-slate-500">Heat Stress Risk</span>
+                  <div className="flex justify-between items-center py-2 border-b border-border last:border-0">
+                    <span className="text-muted-foreground">Heat Stress Risk</span>
                     <span className={cn("px-2 py-1 rounded-full text-xs font-medium",
                       weatherData.insights.heatStressRisk ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"
                     )}>
@@ -163,24 +163,24 @@ export default function WeatherPage() {
             {/* Daily Forecast */}
             <Card className="col-span-1 md:col-span-2 shadow-sm">
               <CardHeader>
-                <CardTitle className="text-slate-800 text-lg">7-Day Forecast</CardTitle>
+                <CardTitle className="text-foreground text-lg">7-Day Forecast</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-4">
                   {weatherData.forecast.map((day, idx) => {
                     const date = new Date(day.date);
                     return (
-                      <div key={idx} className="flex flex-col items-center bg-slate-50 p-3 rounded-xl">
-                        <span className="text-sm font-medium text-slate-700">
+                      <div key={idx} className="flex flex-col items-center bg-muted p-3 rounded-xl">
+                        <span className="text-sm font-medium text-muted-foreground">
                           {date.toLocaleDateString('en-US', { weekday: 'short' })}
                         </span>
-                        <span className="text-xs text-slate-500 mb-2">
+                        <span className="text-xs text-muted-foreground mb-2">
                           {date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                         </span>
-                        <CloudSun className="w-8 h-8 text-slate-400 mb-2" />
+                        <CloudSun className="w-8 h-8 text-muted-foreground mb-2" />
                         <div className="flex items-center gap-2 text-sm font-semibold">
-                          <span className="text-slate-800">{Math.round(day.maxTemp)}°</span>
-                          <span className="text-slate-400">{Math.round(day.minTemp)}°</span>
+                          <span className="text-foreground">{Math.round(day.maxTemp)}Â°</span>
+                          <span className="text-muted-foreground">{Math.round(day.minTemp)}Â°</span>
                         </div>
                         {day.precipitationProbability > 0 && (
                           <span className="text-xs text-blue-500 mt-1 flex items-center gap-1">

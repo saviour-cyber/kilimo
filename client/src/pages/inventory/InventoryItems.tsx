@@ -24,7 +24,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   herbicide: "bg-orange-100 text-orange-700",
   feed: "bg-amber-100 text-amber-700",
   medicine: "bg-blue-100 text-blue-700",
-  fuel: "bg-slate-100 text-slate-600",
+  fuel: "bg-muted text-muted-foreground",
   other: "bg-muted text-muted-foreground",
 };
 

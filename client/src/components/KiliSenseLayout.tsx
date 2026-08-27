@@ -111,7 +111,7 @@ function NavItem({
     return (
       <Tooltip>
         <TooltipTrigger asChild>
-          <Link href={mod.basePath}>
+          <Link href={mod.subItems?.[0]?.path ?? mod.basePath}>
             <div
               className={cn(
                 "flex items-center justify-center w-9 h-9 rounded-lg mx-auto transition-all duration-150",
@@ -146,7 +146,7 @@ function NavItem({
           <ChevronRight className={cn("w-3.5 h-3.5 transition-transform duration-200", expanded && "rotate-90")} />
         </button>
       ) : (
-        <Link href={mod.basePath}>
+        <Link href={mod.subItems?.[0]?.path ?? mod.basePath}>
           <div
             className={cn(
               "flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-150",
@@ -389,7 +389,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
 
             return (
               <div key={section}>
-                {/* Section header — omitted for "overview" and when collapsed */}
+                {/* Section header â€” omitted for "overview" and when collapsed */}
                 {!collapsed && sectionLabel && (
                   <div className="mt-4 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
                     {sectionLabel}
@@ -475,7 +475,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Bar */}
         <header className="h-14 border-b border-border bg-background/95 backdrop-blur-sm flex items-center gap-3 px-4 shrink-0">
-          {/* Desktop sidebar collapse toggle — hidden on mobile */}
+          {/* Desktop sidebar collapse toggle â€” hidden on mobile */}
           <Button
             variant="ghost"
             size="icon"
@@ -545,7 +545,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
               const Icon = mod.icon;
               const isActive = location.startsWith(mod.basePath);
               return (
-                <Link key={mod.key} href={mod.basePath}>
+                <Link key={mod.key} href={mod.subItems?.[0]?.path ?? mod.basePath}>
                   <div className={cn("flex flex-col items-center justify-center flex-1 h-16 px-2 gap-1 transition-colors", isActive ? "text-primary" : "text-muted-foreground hover:text-foreground")}>
                     <Icon className="w-5 h-5" />
                     <span className="text-[10px] font-medium leading-none whitespace-nowrap">{mod.label}</span>
@@ -553,7 +553,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
                 </Link>
               );
             })}
-            {/* More — opens dedicated MobileMoreMenu, NOT the desktop sidebar */}
+            {/* More â€” opens dedicated MobileMoreMenu, NOT the desktop sidebar */}
             <button
               onClick={() => setMobileMoreOpen(true)}
               className="flex flex-col items-center justify-center flex-1 h-16 px-2 gap-1 text-muted-foreground hover:text-foreground transition-colors"
@@ -564,7 +564,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
           </nav>
         )}
 
-        {/* Mobile More Sheet — dedicated mobile-only nav, never the desktop sidebar */}
+        {/* Mobile More Sheet â€” dedicated mobile-only nav, never the desktop sidebar */}
         <MobileMoreMenu open={mobileMoreOpen} onClose={() => setMobileMoreOpen(false)} />
 
       </div>

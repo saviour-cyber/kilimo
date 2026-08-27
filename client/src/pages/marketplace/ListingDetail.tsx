@@ -86,7 +86,7 @@ export default function ListingDetail() {
               </span>
             )}
             <span className={`px-2.5 py-1 text-xs font-semibold rounded ${
-              listing.status === 'active' ? 'bg-green-50 text-green-700' : 'bg-slate-100 text-slate-700'
+              listing.status === 'active' ? 'bg-green-50 text-green-700' : 'bg-muted text-muted-foreground'
             }`}>
               {listing.status.toUpperCase()}
             </span>
@@ -100,7 +100,7 @@ export default function ListingDetail() {
 
           <div className="space-y-4 mb-8 text-sm">
             <div className="flex items-center gap-3 text-muted-foreground">
-              <Store className="w-5 h-5 text-slate-400" />
+              <Store className="w-5 h-5 text-muted-foreground" />
               <div>
                 <p className="font-medium text-foreground">{orgName}</p>
                 <p className="text-xs">Organization</p>
@@ -108,7 +108,7 @@ export default function ListingDetail() {
             </div>
             {farmName && (
               <div className="flex items-center gap-3 text-muted-foreground">
-                <MapPin className="w-5 h-5 text-slate-400" />
+                <MapPin className="w-5 h-5 text-muted-foreground" />
                 <div>
                   <p className="font-medium text-foreground">{farmName}</p>
                   <p className="text-xs">Farm Origin</p>
@@ -116,7 +116,7 @@ export default function ListingDetail() {
               </div>
             )}
             <div className="flex items-center gap-3 text-muted-foreground">
-              <User className="w-5 h-5 text-slate-400" />
+              <User className="w-5 h-5 text-muted-foreground" />
               <div>
                 <p className="font-medium text-foreground">{sellerName}</p>
                 <p className="text-xs">Listed By</p>
@@ -124,7 +124,7 @@ export default function ListingDetail() {
             </div>
             {listing.quantity && listing.unit && (
               <div className="flex items-center gap-3 text-muted-foreground">
-                <Tag className="w-5 h-5 text-slate-400" />
+                <Tag className="w-5 h-5 text-muted-foreground" />
                 <div>
                   <p className="font-medium text-foreground">{listing.quantity} {listing.unit}</p>
                   <p className="text-xs">Available Quantity</p>
@@ -133,7 +133,7 @@ export default function ListingDetail() {
             )}
             {listing.location && (
               <div className="flex items-center gap-3 text-muted-foreground">
-                <MapPin className="w-5 h-5 text-slate-400" />
+                <MapPin className="w-5 h-5 text-muted-foreground" />
                 <div>
                   <p className="font-medium text-foreground">{listing.location}</p>
                   <p className="text-xs">Location</p>
@@ -144,7 +144,7 @@ export default function ListingDetail() {
 
           <div className="mb-8">
             <h3 className="font-semibold text-lg mb-2">Description</h3>
-            <p className="text-slate-600 whitespace-pre-line leading-relaxed">
+            <p className="text-muted-foreground whitespace-pre-line leading-relaxed">
               {listing.description || "No description provided."}
             </p>
           </div>

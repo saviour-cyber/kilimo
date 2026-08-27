@@ -120,11 +120,11 @@ export function InstallCard() {
 
   if (hasNativePrompt) {
     return (
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-6">
+      <div className="bg-white border border-border rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-6">
         <img src="/icon-192.png" alt="KiliSense Logo" className="w-16 h-16 rounded-2xl shadow-sm" />
         <div className="flex-1 text-center sm:text-left">
-          <h3 className="text-lg font-medium text-slate-900">Install KiliSense</h3>
-          <p className="text-sm text-slate-500 mt-1">Add KiliSense to your home screen for a faster, full-screen experience and offline capabilities.</p>
+          <h3 className="text-lg font-medium text-foreground">Install KiliSense</h3>
+          <p className="text-sm text-muted-foreground mt-1">Add KiliSense to your home screen for a faster, full-screen experience and offline capabilities.</p>
         </div>
         <button 
           onClick={triggerPrompt}
@@ -139,27 +139,27 @@ export function InstallCard() {
 
   if (isIOS) {
     return (
-      <div className="bg-white border border-slate-200 rounded-2xl p-6">
+      <div className="bg-white border border-border rounded-2xl p-6">
         <div className="flex items-center gap-4 mb-6">
           <img src="/icon-192.png" alt="KiliSense Logo" className="w-12 h-12 rounded-xl shadow-sm" />
           <div>
-            <h3 className="text-lg font-medium text-slate-900">Add to Home Screen</h3>
-            <p className="text-sm text-slate-500">Install KiliSense on your iOS device</p>
+            <h3 className="text-lg font-medium text-foreground">Add to Home Screen</h3>
+            <p className="text-sm text-muted-foreground">Install KiliSense on your iOS device</p>
           </div>
         </div>
         
         <div className="space-y-4">
-          <div className="flex items-start gap-4 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100">
-            <span className="bg-white border border-slate-200 text-slate-700 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 shadow-sm">1</span>
-            <span className="leading-relaxed">Tap the <span className="inline-flex items-center gap-1 font-medium text-slate-700 bg-white px-1.5 py-0.5 rounded shadow-sm border border-slate-200"><Share className="w-3.5 h-3.5 text-blue-500" /> Share</span> button at the bottom of Safari</span>
+          <div className="flex items-start gap-4 text-sm text-muted-foreground bg-muted p-3 rounded-lg border border-border">
+            <span className="bg-white border border-border text-muted-foreground rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 shadow-sm">1</span>
+            <span className="leading-relaxed">Tap the <span className="inline-flex items-center gap-1 font-medium text-muted-foreground bg-white px-1.5 py-0.5 rounded shadow-sm border border-border"><Share className="w-3.5 h-3.5 text-blue-500" /> Share</span> button at the bottom of Safari</span>
           </div>
-          <div className="flex items-start gap-4 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100">
-            <span className="bg-white border border-slate-200 text-slate-700 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 shadow-sm">2</span>
-            <span className="leading-relaxed">Scroll down and tap <span className="inline-flex items-center gap-1 font-medium text-slate-700 bg-white px-1.5 py-0.5 rounded shadow-sm border border-slate-200"><Plus className="w-3.5 h-3.5" /> Add to Home Screen</span></span>
+          <div className="flex items-start gap-4 text-sm text-muted-foreground bg-muted p-3 rounded-lg border border-border">
+            <span className="bg-white border border-border text-muted-foreground rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 shadow-sm">2</span>
+            <span className="leading-relaxed">Scroll down and tap <span className="inline-flex items-center gap-1 font-medium text-muted-foreground bg-white px-1.5 py-0.5 rounded shadow-sm border border-border"><Plus className="w-3.5 h-3.5" /> Add to Home Screen</span></span>
           </div>
-          <div className="flex items-start gap-4 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100">
-            <span className="bg-white border border-slate-200 text-slate-700 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 shadow-sm">3</span>
-            <span className="leading-relaxed">Tap <span className="font-medium text-slate-700">Add</span> in the top right corner</span>
+          <div className="flex items-start gap-4 text-sm text-muted-foreground bg-muted p-3 rounded-lg border border-border">
+            <span className="bg-white border border-border text-muted-foreground rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 shadow-sm">3</span>
+            <span className="leading-relaxed">Tap <span className="font-medium text-muted-foreground">Add</span> in the top right corner</span>
           </div>
         </div>
       </div>
@@ -168,14 +168,14 @@ export function InstallCard() {
 
   // Fallback: unsupported or no prompt exposed
   return (
-    <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+    <div className="bg-muted border border-border rounded-2xl p-6">
       <div className="flex gap-4">
-        <div className="w-10 h-10 bg-white border border-slate-200 rounded-xl flex items-center justify-center shrink-0">
-          <MonitorPlay className="w-5 h-5 text-slate-500" />
+        <div className="w-10 h-10 bg-white border border-border rounded-xl flex items-center justify-center shrink-0">
+          <MonitorPlay className="w-5 h-5 text-muted-foreground" />
         </div>
         <div>
-          <h3 className="text-base font-medium text-slate-900">Browser Installation</h3>
-          <p className="text-sm text-slate-600 mt-1.5 leading-relaxed">
+          <h3 className="text-base font-medium text-foreground">Browser Installation</h3>
+          <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
             Your current browser or device does not support automatic installation prompts. 
             However, you can usually install the app manually by opening your browser's menu (often represented by 3 dots) and selecting <strong>"Install KiliSense"</strong> or <strong>"Add to Home Screen"</strong>.
           </p>

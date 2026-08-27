@@ -85,13 +85,13 @@ export default function Browse() {
                     className="w-full h-full object-cover transition-transform group-hover:scale-105" 
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-slate-100">
+                  <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-muted">
                     <Store className="w-8 h-8 opacity-20" />
                   </div>
                 )}
                 <div className="absolute top-2 left-2 flex gap-1">
                   {category && (
-                    <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider rounded bg-white shadow-sm text-slate-700">
+                    <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider rounded bg-white shadow-sm text-muted-foreground">
                       {category.name}
                     </span>
                   )}

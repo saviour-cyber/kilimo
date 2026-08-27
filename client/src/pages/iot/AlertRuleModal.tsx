@@ -150,7 +150,7 @@ export default function AlertRuleModal({ open, onOpenChange, farmId }: Props) {
                 <SelectItem value="webhook">Trigger Webhook</SelectItem>
               </SelectContent>
             </Select>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               {actionType === "recommendation" && "Kili AI will analyze the alert and generate a mitigation strategy automatically."}
               {actionType === "task" && "A task will be automatically created and assigned to you."}
               {actionType === "notify" && "A standard alert will be sent to your notifications."}

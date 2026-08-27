@@ -39,8 +39,8 @@ export default function AdminAiManagement() {
     <div className="space-y-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
-          <BrainCircuit className="w-6 h-6 text-slate-700" />
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">AI Management</h1>
+          <BrainCircuit className="w-6 h-6 text-muted-foreground" />
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">AI Management</h1>
         </div>
         <Button className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
           <Settings className="w-4 h-4" /> Global Settings
@@ -48,46 +48,46 @@ export default function AdminAiManagement() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
               <div className="p-2 bg-indigo-100 rounded-lg">
                 <Sparkles className="w-5 h-5 text-indigo-600" />
               </div>
             </div>
-            <p className="text-3xl font-bold text-slate-900">1.2M</p>
+            <p className="text-3xl font-bold text-foreground">1.2M</p>
             <p className="text-sm text-muted-foreground mt-1">Tokens Processed Today</p>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
               <div className="p-2 bg-emerald-100 rounded-lg">
                 <TrendingUp className="w-5 h-5 text-emerald-600" />
               </div>
             </div>
-            <p className="text-3xl font-bold text-slate-900">4,285</p>
+            <p className="text-3xl font-bold text-foreground">4,285</p>
             <p className="text-sm text-muted-foreground mt-1">AI Requests Today</p>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
               <div className="p-2 bg-amber-100 rounded-lg">
                 <AlertTriangle className="w-5 h-5 text-amber-600" />
               </div>
             </div>
-            <p className="text-3xl font-bold text-slate-900">0.05s</p>
+            <p className="text-3xl font-bold text-foreground">0.05s</p>
             <p className="text-sm text-muted-foreground mt-1">Avg Response Latency</p>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border shadow-sm">
         <CardHeader>
-          <CardTitle className="text-slate-800">Connected AI Models</CardTitle>
+          <CardTitle className="text-foreground">Connected AI Models</CardTitle>
           <CardDescription>Configure which foundation models power the platform features.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -104,14 +104,14 @@ export default function AdminAiManagement() {
               {models.map((model) => (
                 <TableRow key={model.id}>
                   <TableCell>
-                    <div className="font-semibold text-slate-800">{model.name}</div>
+                    <div className="font-semibold text-foreground">{model.name}</div>
                     <div className="text-xs text-muted-foreground mt-0.5">{model.description}</div>
                   </TableCell>
                   <TableCell>
                     {model.status === "Active" ? (
                       <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none">Active</Badge>
                     ) : (
-                      <Badge className="bg-slate-100 text-muted-foreground hover:bg-slate-100 border-none">Disabled</Badge>
+                      <Badge className="bg-muted text-muted-foreground hover:bg-muted border-none">Disabled</Badge>
                     )}
                   </TableCell>
                   <TableCell>

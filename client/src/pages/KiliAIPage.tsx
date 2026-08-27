@@ -41,7 +41,7 @@ export default function KiliAIPage() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-50/50">
+    <div className="flex flex-col h-full bg-muted/50">
       <div className="max-w-[1600px] mx-auto w-full px-4 pt-4 sm:px-6 sm:pt-6">
         <PageHeader 
           title="Kili AI Workspace" 
@@ -61,7 +61,7 @@ export default function KiliAIPage() {
               messages={messages}
               onSendMessage={handleSendMessage}
               isLoading={chatMutation.isPending}
-              className="h-full border-slate-200"
+              className="h-full border-border"
               height="100%"
               suggestedPrompts={[
                 "Analyze my recent crop harvests",
@@ -74,28 +74,28 @@ export default function KiliAIPage() {
           {/* Active Insights Panel */}
           <div className="lg:col-span-1 h-full overflow-y-auto">
             <Card className="border shadow-sm bg-white h-full">
-              <div className="p-4 border-b bg-slate-50/50 flex items-center gap-2">
-                <Brain className="w-4 h-4 text-slate-500" />
-                <h3 className="font-bold text-sm text-slate-800">Active Insights</h3>
+              <div className="p-4 border-b bg-muted/50 flex items-center gap-2">
+                <Brain className="w-4 h-4 text-muted-foreground" />
+                <h3 className="font-bold text-sm text-foreground">Active Insights</h3>
               </div>
               <CardContent className="p-4 space-y-4">
-                <p className="text-sm text-slate-600 mb-6">
+                <p className="text-sm text-muted-foreground mb-6">
                   {insights?.summary ?? "Kili AI is analyzing your farm data to generate insights."}
                 </p>
 
                 <div className="space-y-3">
                   {(insights?.recommendations ?? []).length === 0 ? (
-                    <div className="text-center p-6 bg-slate-50 rounded-lg border border-dashed text-sm text-slate-500">
+                    <div className="text-center p-6 bg-muted rounded-lg border border-dashed text-sm text-muted-foreground">
                       No specific recommendations available right now. Ask Kili AI for general advice!
                     </div>
                   ) : (
                     insights?.recommendations.map((rec, i) => (
-                      <div key={i} className="p-3 bg-slate-50/50 border rounded-lg hover:border-green-200 transition-colors cursor-pointer group">
+                      <div key={i} className="p-3 bg-muted/50 border rounded-lg hover:border-green-200 transition-colors cursor-pointer group">
                         <div className="flex items-start gap-3">
                           <div className="mt-0.5 bg-white p-1.5 rounded-md border shrink-0">
                             {i % 2 === 0 ? <CloudRain className="w-3.5 h-3.5 text-blue-500" /> : <ShieldAlert className="w-3.5 h-3.5 text-amber-500" />}
                           </div>
-                          <p className="text-[13px] font-medium text-slate-700 leading-snug group-hover:text-slate-900">
+                          <p className="text-[13px] font-medium text-muted-foreground leading-snug group-hover:text-foreground">
                             {rec}
                           </p>
                         </div>

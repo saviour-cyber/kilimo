@@ -12,7 +12,7 @@ export default function Settings() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Platform Settings</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Platform Settings</h1>
         <p className="text-muted-foreground mt-2">
           Configure global platform variables, branding, and core infrastructure.
         </p>
@@ -20,7 +20,7 @@ export default function Settings() {
       
       <Card>
         <CardHeader>
-          <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center mb-4">
+          <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center mb-4">
             <SettingsIcon className="w-5 h-5 text-muted-foreground" />
           </div>
           <CardTitle>Global Configuration</CardTitle>
@@ -29,7 +29,7 @@ export default function Settings() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="p-8 text-center bg-slate-50 border border-dashed rounded-lg text-muted-foreground">
+          <div className="p-8 text-center bg-muted border border-dashed rounded-lg text-muted-foreground">
             Settings interface coming soon.
           </div>
         </CardContent>

@@ -12,7 +12,7 @@ export default function Support() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Support Center</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Support Center</h1>
         <p className="text-muted-foreground mt-2">
           Handle tenant support tickets, inquiries, and platform feedback.
         </p>
@@ -29,7 +29,7 @@ export default function Support() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="p-8 text-center bg-slate-50 border border-dashed rounded-lg text-muted-foreground">
+          <div className="p-8 text-center bg-muted border border-dashed rounded-lg text-muted-foreground">
             Support Center interface coming soon.
           </div>
         </CardContent>

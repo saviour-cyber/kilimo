@@ -1,4 +1,4 @@
-﻿import { trpc } from "@/lib/trpc";
+import { trpc } from "@/lib/trpc";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -96,7 +96,7 @@ export default function AdminMarketplace() {
                       <span className={`px-2 py-1 text-xs font-semibold rounded ${
                         listing.status === 'active' ? 'bg-green-100 text-green-700' :
                         listing.status === 'archived' ? 'bg-red-100 text-red-700' :
-                        'bg-slate-100 text-slate-700'
+                        'bg-muted text-muted-foreground'
                       }`}>
                         {listing.status.toUpperCase()}
                       </span>

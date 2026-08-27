@@ -20,7 +20,7 @@ const STATUS_COLORS: Record<string, string> = {
   operational: "bg-green-100 text-green-700",
   maintenance: "bg-amber-100 text-amber-700",
   repair: "bg-red-100 text-red-700",
-  retired: "bg-slate-100 text-slate-600",
+  retired: "bg-muted text-muted-foreground",
 };
 
 function EquipmentForm({ farmId, item, onClose }: { farmId: number; item?: any; onClose: () => void }) {

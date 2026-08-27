@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import type React from "react";
 
-// ─── Quick Action ────────────────────────────────────────────────────────────
+// â”€â”€â”€ Quick Action â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export interface QuickAction {
   label: string;
   description: string;
@@ -25,7 +25,7 @@ export interface QuickAction {
   color: string;
 }
 
-// ─── Dashboard Widget ─────────────────────────────────────────────────────────
+// â”€â”€â”€ Dashboard Widget â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export type WidgetType = "kpi" | "summary" | "intelligence" | "system" | "sidebar" | "activity" | "analytics" | "quickAction" | "utility";
 
 export type WidgetPriorityLevel = "critical" | "high" | "normal" | "low";
@@ -43,7 +43,7 @@ export interface DashboardWidgetDefinition {
   component: React.FC<{ farmId: number; className?: string }>;
 }
 
-// ─── Reporting API ────────────────────────────────────────────────────────────
+// â”€â”€â”€ Reporting API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export interface ReportFilterDef {
   id: string;
   label: string;
@@ -65,10 +65,10 @@ export interface ReportDefinition {
   customComponent?: React.FC<{ data: any; filters: any; dateRange?: { from: Date; to: Date } }>;
 }
 
-// ─── Sidebar Sections ────────────────────────────────────────────────────────
+// â”€â”€â”€ Sidebar Sections â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /**
  * The sidebar section a module belongs to.
- * The sidebar auto-groups modules by this value — no hardcoded filters needed.
+ * The sidebar auto-groups modules by this value â€” no hardcoded filters needed.
  * Adding a new module only requires setting this field in the registry.
  */
 export type SidebarSection =
@@ -78,7 +78,7 @@ export type SidebarSection =
   | "commerce"        // Marketplace
   | "administration"; // Settings
 
-// ─── Module Definition ───────────────────────────────────────────────────────
+// â”€â”€â”€ Module Definition â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export interface ModuleDefinition {
   key: string;
   label: string;
@@ -88,7 +88,7 @@ export interface ModuleDefinition {
   description: string;
   /**
    * Which sidebar section this module belongs to.
-   * The sidebar uses this to auto-group modules — no hardcoded filter lists.
+   * The sidebar uses this to auto-group modules â€” no hardcoded filter lists.
    */
   sidebarSection: SidebarSection;
   alwaysVisible?: boolean;
@@ -101,7 +101,7 @@ export interface ModuleDefinition {
   reports?: ReportDefinition[];
 }
 
-// ─── Registry ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Registry â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // NOTE: Widget components are lazy-imported here to avoid circular deps.
 // We use React.lazy-compatible factories registered at module load time.
 
@@ -375,7 +375,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     label: "Settings",
     icon: Settings,
     basePath: "/settings",
-    color: "text-slate-600",
+    color: "text-muted-foreground",
     description: "Farm and user settings",
     sidebarSection: "administration",
     alwaysVisible: true,
@@ -383,7 +383,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
   },
 ];
 
-// ─── Sidebar Section Helpers ──────────────────────────────────────────────────
+// â”€â”€â”€ Sidebar Section Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /** Human-readable label for each sidebar section */
 export const SIDEBAR_SECTION_LABELS: Record<SidebarSection, string> = {
@@ -403,7 +403,7 @@ export const SIDEBAR_SECTION_ORDER: SidebarSection[] = [
   "administration",
 ];
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /**
  * Returns sidebar-visible modules based on enabled keys and user role.

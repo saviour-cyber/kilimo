@@ -35,7 +35,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] flex flex-col items-center justify-center relative px-4 font-sans text-slate-800">
+    <div className="min-h-screen bg-[#F9FAFB] flex flex-col items-center justify-center relative px-4 font-sans text-foreground">
       
       {/* Subtle Background Pattern */}
       <div
@@ -59,17 +59,17 @@ export default function AdminLogin() {
             style={{ height: '140px' }}
           />
           <div className="space-y-1.5">
-            <h1 className="text-[22px] font-semibold text-slate-900 tracking-tight">Platform Admin</h1>
+            <h1 className="text-[22px] font-semibold text-foreground tracking-tight">Platform Admin</h1>
             <p className="text-[14px] text-muted-foreground font-medium">Secure access to the KiliSense Platform.</p>
           </div>
         </div>
 
         {/* Login Card */}
-        <div className="w-full bg-white rounded-2xl border border-slate-200/60 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] p-[28px] md:p-[44px]">
+        <div className="w-full bg-white rounded-2xl border border-border/60 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] p-[28px] md:p-[44px]">
           <form onSubmit={handleSubmit} className="space-y-6">
             
             <div className="space-y-2">
-              <label className="text-[13px] text-slate-700 font-medium block">
+              <label className="text-[13px] text-muted-foreground font-medium block">
                 Username or Email
               </label>
               <div className="relative flex items-center group">
@@ -83,13 +83,13 @@ export default function AdminLogin() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@KiliSensehub.com"
                   required
-                  className="w-full h-[52px] pl-11 pr-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-slate-900 text-[14px] placeholder:text-muted-foreground"
+                  className="w-full h-[52px] pl-11 pr-4 rounded-xl border border-border bg-muted/50 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-foreground text-[14px] placeholder:text-muted-foreground"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-[13px] text-slate-700 font-medium block">
+              <label className="text-[13px] text-muted-foreground font-medium block">
                 Password
               </label>
               <div className="relative flex items-center group">
@@ -101,9 +101,9 @@ export default function AdminLogin() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                   required
-                  className="w-full h-[52px] pl-11 pr-12 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-slate-900 text-[14px] placeholder:text-muted-foreground"
+                  className="w-full h-[52px] pl-11 pr-12 rounded-xl border border-border bg-muted/50 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-foreground text-[14px] placeholder:text-muted-foreground"
                 />
                 <button
                   type="button"
@@ -154,8 +154,8 @@ export default function AdminLogin() {
 
         {/* Footer */}
         <div className="mt-8 flex flex-col items-center gap-1 text-[12px] text-muted-foreground font-medium tracking-wide">
-          <p>© {currentYear} KiliSense.</p>
-          <p>{appVersion} • {env}</p>
+          <p>Â© {currentYear} KiliSense.</p>
+          <p>{appVersion} â€¢ {env}</p>
         </div>
 
       </div>

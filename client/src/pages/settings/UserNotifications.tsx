@@ -52,9 +52,9 @@ export default function UserNotifications() {
   return (
     <div className="max-w-3xl space-y-8">
       {/* Header */}
-      <div className="pb-6 border-b border-slate-200">
-        <h2 className="text-2xl font-semibold text-slate-900 tracking-tight">Notifications</h2>
-        <p className="text-sm text-slate-500 mt-1.5">
+      <div className="pb-6 border-b border-border">
+        <h2 className="text-2xl font-semibold text-foreground tracking-tight">Notifications</h2>
+        <p className="text-sm text-muted-foreground mt-1.5">
           Control how and when you receive alerts. SMS and WhatsApp channels will be available in a future update.
         </p>
       </div>
@@ -64,27 +64,27 @@ export default function UserNotifications() {
         {CHANNELS.map(ch => (
           <div key={ch.key} className={cn(
             "flex items-center gap-2.5 p-3 rounded-xl border",
-            ch.available ? "border-slate-200 bg-white" : "border-slate-100 bg-slate-50 opacity-60"
+            ch.available ? "border-border bg-white" : "border-border bg-muted opacity-60"
           )}>
             <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center",
-              ch.available ? "bg-slate-100" : "bg-slate-50")}>
-              <ch.icon className="w-4 h-4 text-slate-500" />
+              ch.available ? "bg-muted" : "bg-muted")}>
+              <ch.icon className="w-4 h-4 text-muted-foreground" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-slate-800">{ch.label}</p>
-              {!ch.available && <p className="text-[10px] text-slate-400">Coming soon</p>}
+              <p className="text-xs font-semibold text-foreground">{ch.label}</p>
+              {!ch.available && <p className="text-[10px] text-muted-foreground">Coming soon</p>}
             </div>
           </div>
         ))}
       </div>
 
       {/* Preferences Table */}
-      <div className="border border-slate-200 rounded-xl overflow-hidden">
+      <div className="border border-border rounded-xl overflow-hidden">
         {/* Table Header */}
-        <div className="grid bg-slate-50 border-b border-slate-200" style={{ gridTemplateColumns: "1fr 100px 100px 100px 100px" }}>
-          <div className="px-5 py-3.5 text-xs font-semibold text-slate-600 uppercase tracking-wide">Notification Category</div>
+        <div className="grid bg-muted border-b border-border" style={{ gridTemplateColumns: "1fr 100px 100px 100px 100px" }}>
+          <div className="px-5 py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Notification Category</div>
           {CHANNELS.map(ch => (
-            <div key={ch.key} className="py-3.5 text-xs font-semibold text-slate-600 uppercase tracking-wide text-center flex items-center justify-center gap-1.5">
+            <div key={ch.key} className="py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide text-center flex items-center justify-center gap-1.5">
               <ch.icon className="w-3.5 h-3.5" />
               {ch.label}
             </div>
@@ -96,12 +96,12 @@ export default function UserNotifications() {
           {CATEGORIES.map(cat => (
             <div
               key={cat.id}
-              className="grid hover:bg-slate-50/50 transition-colors items-center"
+              className="grid hover:bg-muted/50 transition-colors items-center"
               style={{ gridTemplateColumns: "1fr 100px 100px 100px 100px" }}
             >
               <div className="px-5 py-4">
-                <p className="text-sm font-medium text-slate-900">{cat.title}</p>
-                <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{cat.desc}</p>
+                <p className="text-sm font-medium text-foreground">{cat.title}</p>
+                <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{cat.desc}</p>
               </div>
               {CHANNELS.map(ch => (
                 <div key={ch.key} className="flex items-center justify-center py-4">

@@ -88,8 +88,8 @@ export default function EmailCenter() {
     <div className="space-y-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
-          <Mail className="w-6 h-6 text-slate-700" />
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Email Center</h1>
+          <Mail className="w-6 h-6 text-muted-foreground" />
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">Email Center</h1>
         </div>
       </div>
 
@@ -101,7 +101,7 @@ export default function EmailCenter() {
 
         {/* Compose Tab */}
         <TabsContent value="compose">
-          <Card className="border-slate-200 shadow-sm">
+          <Card className="border-border shadow-sm">
             <CardHeader>
               <CardTitle>Send Mass Email</CardTitle>
               <CardDescription>Dispatch announcements, reminders, or security alerts to your users.</CardDescription>
@@ -109,7 +109,7 @@ export default function EmailCenter() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Target Audience</label>
+                  <label className="text-sm font-medium text-muted-foreground">Target Audience</label>
                   <Select value={formData.recipientGroup} onValueChange={(val) => setFormData({...formData, recipientGroup: val})}>
                     <SelectTrigger><SelectValue placeholder="Select audience..." /></SelectTrigger>
                     <SelectContent>
@@ -119,7 +119,7 @@ export default function EmailCenter() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Template</label>
+                  <label className="text-sm font-medium text-muted-foreground">Template</label>
                   <Select value={formData.templateKey} onValueChange={(val: any) => setFormData({...formData, templateKey: val})}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
@@ -132,12 +132,12 @@ export default function EmailCenter() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Subject</label>
+                <label className="text-sm font-medium text-muted-foreground">Subject</label>
                 <Input value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})} placeholder="Email Subject" />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Message Body</label>
+                <label className="text-sm font-medium text-muted-foreground">Message Body</label>
                 <Textarea 
                   value={formData.message} 
                   onChange={e => setFormData({...formData, message: e.target.value})} 
@@ -149,11 +149,11 @@ export default function EmailCenter() {
               {formData.templateKey === 'platform_announcement' && (
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700">Call to Action Label (Optional)</label>
+                    <label className="text-sm font-medium text-muted-foreground">Call to Action Label (Optional)</label>
                     <Input value={formData.callToActionLabel} onChange={e => setFormData({...formData, callToActionLabel: e.target.value})} placeholder="e.g. View Dashboard" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700">Call to Action URL (Optional)</label>
+                    <label className="text-sm font-medium text-muted-foreground">Call to Action URL (Optional)</label>
                     <Input value={formData.callToActionUrl} onChange={e => setFormData({...formData, callToActionUrl: e.target.value})} placeholder="https://..." />
                   </div>
                 </div>
@@ -174,7 +174,7 @@ export default function EmailCenter() {
 
         {/* History Tab */}
         <TabsContent value="history">
-          <Card className="border-slate-200 shadow-sm">
+          <Card className="border-border shadow-sm">
             <CardHeader>
               <CardTitle>Email Delivery Logs</CardTitle>
               <CardDescription>Track the status of all sent emails.</CardDescription>
@@ -205,7 +205,7 @@ export default function EmailCenter() {
                         <TableCell className="font-medium">{log.recipient}</TableCell>
                         <TableCell className="text-muted-foreground line-clamp-1 max-w-[250px]">{log.subject}</TableCell>
                         <TableCell>
-                          <Badge variant="outline" className="text-xs bg-slate-50 text-muted-foreground font-normal capitalize">
+                          <Badge variant="outline" className="text-xs bg-muted text-muted-foreground font-normal capitalize">
                             {log.templateKey.replace('_', ' ')}
                           </Badge>
                         </TableCell>
@@ -235,10 +235,10 @@ export default function EmailCenter() {
             </DialogDescription>
           </DialogHeader>
           <div className="py-4 space-y-4">
-            <div className="bg-slate-50 p-4 rounded-md border border-slate-100 text-sm space-y-2">
-              <div className="flex"><strong className="w-24 text-slate-700">Audience:</strong> <span>{formData.recipientGroup.replace('_', ' ').toUpperCase()}</span></div>
-              <div className="flex"><strong className="w-24 text-slate-700">Subject:</strong> <span>{formData.subject}</span></div>
-              <div className="flex"><strong className="w-24 text-slate-700">Template:</strong> <span>{formData.templateKey.replace('_', ' ')}</span></div>
+            <div className="bg-muted p-4 rounded-md border border-border text-sm space-y-2">
+              <div className="flex"><strong className="w-24 text-muted-foreground">Audience:</strong> <span>{formData.recipientGroup.replace('_', ' ').toUpperCase()}</span></div>
+              <div className="flex"><strong className="w-24 text-muted-foreground">Subject:</strong> <span>{formData.subject}</span></div>
+              <div className="flex"><strong className="w-24 text-muted-foreground">Template:</strong> <span>{formData.templateKey.replace('_', ' ')}</span></div>
             </div>
           </div>
           <DialogFooter>

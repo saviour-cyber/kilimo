@@ -23,7 +23,7 @@ const LOG_TYPE_COLORS: Record<string, string> = {
   checkup: "bg-green-100 text-green-700",
   surgery: "bg-red-100 text-red-700",
   weight: "bg-purple-100 text-purple-700",
-  other: "bg-slate-100 text-slate-600",
+  other: "bg-muted text-muted-foreground",
 };
 
 function HealthLogForm({ farmId, onClose }: { farmId: number; onClose: () => void }) {
@@ -159,8 +159,8 @@ export default function HealthLogs() {
                     </div>
                     <p className="text-xs text-muted-foreground mt-0.5">
                       {String(log.performedDate).slice(0, 10)}
-                      {log.performedBy ? ` · ${log.performedBy}` : ""}
-                      {log.nextDueDate ? ` · Next: ${String(log.nextDueDate).slice(0, 10)}` : ""}
+                      {log.performedBy ? ` Â· ${log.performedBy}` : ""}
+                      {log.nextDueDate ? ` Â· Next: ${String(log.nextDueDate).slice(0, 10)}` : ""}
                     </p>
                   </div>
                   {log.cost && <span className="text-sm font-semibold text-foreground">{log.cost}</span>}

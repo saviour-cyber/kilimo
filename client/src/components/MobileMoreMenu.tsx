@@ -70,7 +70,7 @@ export function MobileMoreMenu({ open, onClose }: MobileMoreMenuProps) {
         {/* Scrollable body */}
         <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 space-y-5">
 
-          {/* Dynamic module + service sections (skip "overview" — Dashboard lives in bottom bar) */}
+          {/* Dynamic module + service sections (skip "overview" â€” Dashboard lives in bottom bar) */}
           {SIDEBAR_SECTION_ORDER.filter((s) => s !== "overview").map((section) => {
             const sectionModules = visibleModules.filter((m) => m.sidebarSection === section);
             const sectionServices = section === "intelligence" ? platformServices : [];
@@ -88,7 +88,7 @@ export function MobileMoreMenu({ open, onClose }: MobileMoreMenuProps) {
                     const Icon = mod.icon;
                     const isActive = location.startsWith(mod.basePath);
                     return (
-                      <Link key={mod.key} href={mod.basePath}>
+                      <Link key={mod.key} href={mod.subItems?.[0]?.path ?? mod.basePath}>
                         <div className={cn(
                           "flex items-center gap-3 px-3 py-3 rounded-xl transition-colors cursor-pointer min-h-[48px]",
                           isActive ? "bg-primary text-primary-foreground" : "hover:bg-accent text-foreground"
@@ -120,7 +120,7 @@ export function MobileMoreMenu({ open, onClose }: MobileMoreMenuProps) {
             );
           })}
 
-          {/* Account — always shown */}
+          {/* Account â€” always shown */}
           <div>
             <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground px-1 mb-2">
               Account

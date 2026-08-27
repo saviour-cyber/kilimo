@@ -1,4 +1,4 @@
-﻿import { useFarm } from "@/contexts/FarmContext";
+import { useFarm } from "@/contexts/FarmContext";
 import { trpc } from "@/lib/trpc";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,14 +27,14 @@ export default function OrgBilling() {
     return (
       <div className="max-w-4xl space-y-6">
         <div>
-          <h3 className="text-2xl font-medium text-slate-900 tracking-tight">Subscription & Billing</h3>
-          <p className="text-slate-500 mt-1">Manage your organization's subscription plan and billing details.</p>
+          <h3 className="text-2xl font-medium text-foreground tracking-tight">Subscription & Billing</h3>
+          <p className="text-muted-foreground mt-1">Manage your organization's subscription plan and billing details.</p>
         </div>
         <Card>
           <CardContent className="p-8 text-center">
             <CreditCard className="w-12 h-12 text-slate-300 mx-auto mb-4" />
             <h4 className="text-lg font-medium">No Active Subscription</h4>
-            <p className="text-slate-500 max-w-sm mx-auto mt-2">
+            <p className="text-muted-foreground max-w-sm mx-auto mt-2">
               Your organization currently does not have an active subscription plan.
               Please contact the platform administrator to set up a plan.
             </p>
@@ -54,14 +54,14 @@ export default function OrgBilling() {
     <div className="max-w-4xl space-y-6">
       <div className="flex justify-between items-start">
         <div>
-          <h3 className="text-2xl font-medium text-slate-900 tracking-tight">Subscription & Billing</h3>
-          <p className="text-slate-500 mt-1">Manage your organization's subscription plan and billing details.</p>
+          <h3 className="text-2xl font-medium text-foreground tracking-tight">Subscription & Billing</h3>
+          <p className="text-muted-foreground mt-1">Manage your organization's subscription plan and billing details.</p>
         </div>
         <ChangePlanDialog organizationId={organizationId} currentPlanId={plan?.id} />
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        <Card className={isPastDue ? "border-red-200" : "border-slate-200"}>
+        <Card className={isPastDue ? "border-red-200" : "border-border"}>
           <CardHeader>
             <CardTitle>Current Plan</CardTitle>
             <CardDescription>Your organization's active tier</CardDescription>
@@ -70,7 +70,7 @@ export default function OrgBilling() {
             <div className="flex justify-between items-start">
               <div>
                 <h4 className="text-2xl font-semibold">{plan?.name || "Unknown Plan"}</h4>
-                <div className="mt-2 text-sm text-slate-500">
+                <div className="mt-2 text-sm text-muted-foreground">
                   <Badge variant={
                     subscription.status === 'active' ? 'default' : 
                     subscription.status === 'trialing' ? 'secondary' : 'destructive'
@@ -83,14 +83,14 @@ export default function OrgBilling() {
                 <div className="text-2xl font-bold">
                   {plan?.currency} {subscription.billingInterval === 'yearly' ? plan?.yearlyPrice : plan?.monthlyPrice}
                 </div>
-                <div className="text-sm text-slate-500 capitalize">
+                <div className="text-sm text-muted-foreground capitalize">
                   / {subscription.billingInterval}
                 </div>
               </div>
             </div>
 
             {subscription.currentPeriodEnd && (
-              <div className="flex items-center text-sm text-slate-600 bg-slate-50 p-3 rounded-lg">
+              <div className="flex items-center text-sm text-muted-foreground bg-muted p-3 rounded-lg">
                 <Calendar className="w-4 h-4 mr-2" />
                 <span>
                   {isCancelled ? "Access ends on: " : "Next billing date: "}
@@ -108,15 +108,15 @@ export default function OrgBilling() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex justify-between py-2 border-b">
-              <span className="text-sm text-slate-500">Max Farms</span>
+              <span className="text-sm text-muted-foreground">Max Farms</span>
               <span className="font-medium">{plan?.maxFarms === null ? "Unlimited" : plan?.maxFarms}</span>
             </div>
             <div className="flex justify-between py-2 border-b">
-              <span className="text-sm text-slate-500">Max Users</span>
+              <span className="text-sm text-muted-foreground">Max Users</span>
               <span className="font-medium">{plan?.maxUsers === null ? "Unlimited" : plan?.maxUsers}</span>
             </div>
             <div className="flex justify-between py-2 border-b">
-              <span className="text-sm text-slate-500">Storage Limit</span>
+              <span className="text-sm text-muted-foreground">Storage Limit</span>
               <span className="font-medium">{plan?.maxStorageMb === null ? "Unlimited" : `${plan?.maxStorageMb} MB`}</span>
             </div>
           </CardContent>
@@ -140,7 +140,7 @@ export default function OrgBilling() {
               );
             })}
             {(!features || features.length === 0) && (
-              <div className="text-sm text-slate-500">No specific features enabled.</div>
+              <div className="text-sm text-muted-foreground">No specific features enabled.</div>
             )}
           </div>
         </CardContent>
@@ -180,28 +180,28 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
       <DialogContent className="w-[calc(100vw-32px)] sm:max-w-[1100px] max-w-[1100px] max-h-[90vh] overflow-hidden flex flex-col p-0">
 
         {/* ── Sticky header ── */}
-        <div className="px-6 pt-6 pb-4 border-b border-slate-100 shrink-0">
+        <div className="px-6 pt-6 pb-4 border-b border-border shrink-0">
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
             <div>
-              <DialogTitle className="text-xl font-semibold text-slate-900">
+              <DialogTitle className="text-xl font-semibold text-foreground">
                 Upgrade Your Plan
               </DialogTitle>
-              <DialogDescription className="mt-1 text-sm text-slate-500">
+              <DialogDescription className="mt-1 text-sm text-muted-foreground">
                 Choose the plan that fits your operation.
               </DialogDescription>
             </div>
           
             <div className="flex flex-wrap items-center gap-4">
               {/* Billing interval toggle */}
-              <div className="bg-slate-100 p-1 rounded-lg inline-flex">
+              <div className="bg-muted p-1 rounded-lg inline-flex">
                 <button
-                  className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${billingInterval === "monthly" ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-700"}`}
+                  className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${billingInterval === "monthly" ? "bg-white shadow-sm text-foreground" : "text-muted-foreground hover:text-muted-foreground"}`}
                   onClick={() => setBillingInterval("monthly")}
                 >
                   Monthly
                 </button>
                 <button
-                  className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${billingInterval === "yearly" ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-700"}`}
+                  className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${billingInterval === "yearly" ? "bg-white shadow-sm text-foreground" : "text-muted-foreground hover:text-muted-foreground"}`}
                   onClick={() => setBillingInterval("yearly")}
                 >
                   Yearly
@@ -213,15 +213,15 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
 
               {/* Payment method switcher */}
               <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-500 font-medium hidden sm:inline-block">Pay via:</span>
+                <span className="text-xs text-muted-foreground font-medium hidden sm:inline-block">Pay via:</span>
                 <button
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${paymentProvider === "stripe" ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"}`}
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${paymentProvider === "stripe" ? "bg-slate-900 text-white border-slate-900" : "bg-white text-muted-foreground border-border hover:border-slate-400"}`}
                   onClick={() => setPaymentProvider("stripe")}
                 >
                   Credit Card
                 </button>
                 <button
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${paymentProvider === "mpesa" ? "bg-green-700 text-white border-green-700" : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"}`}
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${paymentProvider === "mpesa" ? "bg-green-700 text-white border-green-700" : "bg-white text-muted-foreground border-border hover:border-slate-400"}`}
                   onClick={() => setPaymentProvider("mpesa")}
                 >
                   M-PESA
@@ -256,7 +256,7 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
                       relative flex flex-col rounded-2xl border p-5 transition-shadow min-w-0 h-full
                       ${isCurrent
                         ? "border-primary ring-2 ring-primary/20 bg-primary/5"
-                        : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm"
+                        : "border-border bg-white hover:border-slate-300 hover:shadow-sm"
                       }
                     `}
                   >
@@ -269,10 +269,10 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
 
                     {/* Plan name + description */}
                     <div className="mb-4 mt-2">
-                      <h3 className="text-base font-semibold text-slate-900 uppercase tracking-wide break-words">
+                      <h3 className="text-base font-semibold text-foreground uppercase tracking-wide break-words">
                         {p.name}
                       </h3>
-                      <p className="text-xs text-slate-500 mt-1 leading-relaxed line-clamp-2">
+                      <p className="text-xs text-muted-foreground mt-1 leading-relaxed line-clamp-2">
                         {p.description || (isEnt ? "Full platform access for large operations." : "")}
                       </p>
                     </div>
@@ -281,18 +281,18 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
                     <div className="mb-4">
                       {isEnt && Number(price) === 0 ? (
                         <>
-                          <div className="text-sm font-medium text-slate-500 uppercase tracking-wider opacity-0">Custom</div>
-                          <div className="text-3xl font-bold text-slate-900 mt-1">Custom</div>
-                          <p className="text-xs text-slate-500 mt-1">pricing</p>
+                          <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider opacity-0">Custom</div>
+                          <div className="text-3xl font-bold text-foreground mt-1">Custom</div>
+                          <p className="text-xs text-muted-foreground mt-1">pricing</p>
                         </>
                       ) : (
                         <>
-                          <div className="text-sm font-medium text-slate-500 uppercase tracking-wider">{p.currency}</div>
+                          <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{p.currency}</div>
                           <div className="flex items-baseline gap-1 mt-1">
-                            <span className="text-3xl font-bold text-slate-900">
+                            <span className="text-3xl font-bold text-foreground">
                               {Number(price).toLocaleString()}
                             </span>
-                            <span className="text-xs text-slate-500 font-medium">
+                            <span className="text-xs text-muted-foreground font-medium">
                               /{billingInterval === "yearly" ? "yr" : "mo"}
                             </span>
                           </div>
@@ -300,10 +300,10 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
                       )}
                     </div>
 
-                    <div className="w-full h-px bg-slate-100 my-4"></div>
+                    <div className="w-full h-px bg-muted my-4"></div>
 
                     {/* Usage limits - strictly vertical */}
-                    <div className="flex flex-col gap-2.5 text-xs text-slate-700 font-medium mb-4">
+                    <div className="flex flex-col gap-2.5 text-xs text-muted-foreground font-medium mb-4">
                       <div className="flex items-start gap-2">
                         <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
                         <span>{p.maxFarms ? `${p.maxFarms} farms` : "Unlimited farms"}</span>
@@ -314,12 +314,12 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
                       </div>
                     </div>
 
-                    <div className="text-xs font-semibold text-slate-900 mb-2 uppercase tracking-wide">Features</div>
+                    <div className="text-xs font-semibold text-foreground mb-2 uppercase tracking-wide">Features</div>
 
                     {/* Key features — always visible */}
                     <div className="space-y-2 mb-4 flex-1">
                       {visibleFeatures.map((f) => (
-                        <div key={f.featureKey} className="flex items-start gap-2 text-xs text-slate-600">
+                        <div key={f.featureKey} className="flex items-start gap-2 text-xs text-muted-foreground">
                           <CheckCircle2 className="w-3.5 h-3.5 text-green-500 mt-0.5 shrink-0" />
                           <span className="capitalize leading-tight">{f.featureKey.replace(/_/g, " ")}</span>
                         </div>
@@ -329,7 +329,7 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
                       {hiddenFeatures.length > 0 && (
                         <>
                           {isExpanded && hiddenFeatures.map((f) => (
-                            <div key={f.featureKey} className="flex items-start gap-2 text-xs text-slate-600">
+                            <div key={f.featureKey} className="flex items-start gap-2 text-xs text-muted-foreground">
                               <CheckCircle2 className="w-3.5 h-3.5 text-green-500 mt-0.5 shrink-0" />
                               <span className="capitalize leading-tight">{f.featureKey.replace(/_/g, " ")}</span>
                             </div>
@@ -349,7 +349,7 @@ function ChangePlanDialog({ organizationId, currentPlanId }: { organizationId: n
                       {isEnt ? (
                         <Button
                           variant="outline"
-                          className="w-full border-slate-300 text-slate-700 hover:bg-slate-50 h-10"
+                          className="w-full border-slate-300 text-muted-foreground hover:bg-muted h-10"
                           onClick={() => window.open("mailto:sales@KiliSense.app", "_blank")}
                         >
                           Contact Sales
@@ -402,14 +402,14 @@ function PaymentHistory({ organizationId }: { organizationId: number }) {
       </CardHeader>
       <CardContent>
         {(!payments || payments.length === 0) ? (
-          <div className="py-8 text-center text-sm text-slate-500 border border-dashed rounded-lg bg-slate-50">
+          <div className="py-8 text-center text-sm text-muted-foreground border border-dashed rounded-lg bg-muted">
             No payments found.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-slate-50 border-b border-slate-100">
-                <tr className="text-left text-slate-500">
+              <thead className="bg-muted border-b border-border">
+                <tr className="text-left text-muted-foreground">
                   <th className="font-medium p-3">Date</th>
                   <th className="font-medium p-3">Amount</th>
                   <th className="font-medium p-3">Status</th>
@@ -439,7 +439,7 @@ function PaymentHistory({ organizationId }: { organizationId: number }) {
                           variant="ghost" 
                           size="sm"
                           asChild
-                          className="h-8 text-slate-500 hover:text-slate-900"
+                          className="h-8 text-muted-foreground hover:text-foreground"
                         >
                           <a href={`/api/invoices/${p.id}/download`} target="_blank" rel="noreferrer">
                             <Download className="w-4 h-4 mr-2" />

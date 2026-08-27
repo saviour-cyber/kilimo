@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { useFarm } from "@/contexts/FarmContext";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 const ROLE_META: Record<string, { label: string; color: string }> = {
   owner:              { label: "Owner",              color: "bg-violet-50 text-violet-700 border-violet-200" },
   admin:              { label: "Administrator",       color: "bg-blue-50 text-blue-700 border-blue-200" },
-  member:             { label: "Member",              color: "bg-slate-50 text-slate-600 border-slate-200" },
+  member:             { label: "Member",              color: "bg-muted text-muted-foreground border-border" },
 };
 
 const FARM_ROLE_META: Record<string, { label: string }> = {
@@ -35,7 +35,7 @@ function MemberAvatar({ name, email }: { name?: string | null; email?: string | 
     : (email?.[0] ?? "?").toUpperCase();
   return (
     <div className="w-9 h-9 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center shrink-0">
-      <span className="text-sm font-semibold text-slate-700">{initials}</span>
+      <span className="text-sm font-semibold text-muted-foreground">{initials}</span>
     </div>
   );
 }
@@ -81,10 +81,10 @@ export default function OrgTeam() {
   return (
     <div className="max-w-4xl space-y-8">
       {/* Header */}
-      <div className="pb-6 border-b border-slate-200 flex items-start justify-between">
+      <div className="pb-6 border-b border-border flex items-start justify-between">
         <div>
-          <h2 className="text-2xl font-semibold text-slate-900 tracking-tight">Team & Permissions</h2>
-          <p className="text-sm text-slate-500 mt-1.5 max-w-xl">
+          <h2 className="text-2xl font-semibold text-foreground tracking-tight">Team & Permissions</h2>
+          <p className="text-sm text-muted-foreground mt-1.5 max-w-xl">
             Manage your organization's member directory. Users belong to the organization once and are assigned to farms with specific roles.
           </p>
         </div>
@@ -106,9 +106,9 @@ export default function OrgTeam() {
       </div>
 
       {/* Member Table */}
-      <div className="border border-slate-200 rounded-xl overflow-hidden">
-        <div className="bg-slate-50 border-b border-slate-200 px-5 py-3 flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-600 uppercase tracking-wide">
+      <div className="border border-border rounded-xl overflow-hidden">
+        <div className="bg-muted border-b border-border px-5 py-3 flex items-center justify-between">
+          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
             {members.length} {members.length === 1 ? "Member" : "Members"}
           </span>
         </div>
@@ -116,8 +116,8 @@ export default function OrgTeam() {
         {members.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 gap-3">
             <Users className="w-10 h-10 text-slate-300" />
-            <p className="text-sm font-medium text-slate-700">No team members yet</p>
-            <p className="text-xs text-slate-400">Invite colleagues to join your organization.</p>
+            <p className="text-sm font-medium text-muted-foreground">No team members yet</p>
+            <p className="text-xs text-muted-foreground">Invite colleagues to join your organization.</p>
             <Button size="sm" className="gap-2 mt-2" onClick={() => setInviteOpen(true)}>
               <UserPlus className="w-4 h-4" /> Invite Member
             </Button>
@@ -127,12 +127,12 @@ export default function OrgTeam() {
             {(members as any[]).map((member: any) => {
               const roleMeta = ROLE_META[member.role] ?? ROLE_META.member;
               return (
-                <div key={member.id} className={cn("px-5 py-4 hover:bg-slate-50/50 transition-colors", !member.isActive && "opacity-50")}>
+                <div key={member.id} className={cn("px-5 py-4 hover:bg-muted/50 transition-colors", !member.isActive && "opacity-50")}>
                   <div className="flex items-start gap-4">
                     <MemberAvatar name={member.name} email={member.email} />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2.5 flex-wrap">
-                        <p className="text-sm font-semibold text-slate-900 truncate">{member.name || "Unnamed User"}</p>
+                        <p className="text-sm font-semibold text-foreground truncate">{member.name || "Unnamed User"}</p>
                         <span className={cn("text-[11px] font-semibold border px-2 py-0.5 rounded-full", roleMeta.color)}>
                           {roleMeta.label}
                         </span>
@@ -140,17 +140,17 @@ export default function OrgTeam() {
                           <span className="text-[11px] font-semibold border px-2 py-0.5 rounded-full bg-red-50 text-red-600 border-red-200">Suspended</span>
                         )}
                       </div>
-                      <p className="text-xs text-slate-500 mt-0.5">{member.email}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{member.email}</p>
 
                       {/* Farm assignments */}
                       {member.farmAssignments?.length > 0 && (
                         <div className="mt-2.5 flex flex-wrap gap-2">
                           {member.farmAssignments.map((a: any) => (
-                            <div key={a.farmId} className="flex items-center gap-1.5 text-xs text-slate-600 bg-slate-100 border border-slate-200 rounded-lg px-2.5 py-1">
-                              <MapPin className="w-3 h-3 text-slate-400" />
+                            <div key={a.farmId} className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted border border-border rounded-lg px-2.5 py-1">
+                              <MapPin className="w-3 h-3 text-muted-foreground" />
                               <span className="font-medium">{a.farmName}</span>
-                              <span className="text-slate-400">·</span>
-                              <span className="text-slate-500">{FARM_ROLE_META[a.farmRole]?.label ?? a.farmRole}</span>
+                              <span className="text-muted-foreground">·</span>
+                              <span className="text-muted-foreground">{FARM_ROLE_META[a.farmRole]?.label ?? a.farmRole}</span>
                             </div>
                           ))}
                         </div>
@@ -163,7 +163,7 @@ export default function OrgTeam() {
                     {/* Actions */}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm" className="w-8 h-8 p-0 text-slate-400 hover:text-slate-600">
+                        <Button variant="ghost" size="sm" className="w-8 h-8 p-0 text-muted-foreground hover:text-muted-foreground">
                           <MoreHorizontal className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
@@ -227,7 +227,7 @@ export default function OrgTeam() {
                   <SelectItem value="admin">Administrator</SelectItem>
                 </SelectContent>
               </Select>
-              <p className="text-xs text-slate-500">Farm-specific roles are assigned separately after the member joins.</p>
+              <p className="text-xs text-muted-foreground">Farm-specific roles are assigned separately after the member joins.</p>
             </div>
           </div>
           <DialogFooter>

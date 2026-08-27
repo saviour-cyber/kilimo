@@ -62,9 +62,9 @@ export default function UserProfile() {
   return (
     <div className="max-w-2xl space-y-8">
       {/* Page Header */}
-      <div className="pb-6 border-b border-slate-200">
-        <h2 className="text-2xl font-semibold text-slate-900 tracking-tight">My Profile</h2>
-        <p className="text-sm text-slate-500 mt-1.5">
+      <div className="pb-6 border-b border-border">
+        <h2 className="text-2xl font-semibold text-foreground tracking-tight">My Profile</h2>
+        <p className="text-sm text-muted-foreground mt-1.5">
           Manage your personal information and preferences. These settings apply everywhere, across all organizations and farms.
         </p>
       </div>
@@ -72,15 +72,15 @@ export default function UserProfile() {
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Avatar Section */}
         <section>
-          <h3 className="text-sm font-medium text-slate-700 mb-4">Profile Photo</h3>
+          <h3 className="text-sm font-medium text-muted-foreground mb-4">Profile Photo</h3>
           <div className="flex items-center gap-5">
             <div className="relative group cursor-pointer shrink-0">
-              <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border-2 border-slate-200">
+              <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center overflow-hidden border-2 border-border">
                 {user?.avatarUrl ? (
                   <img src={user.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
-                  <span className="text-2xl font-bold text-slate-400">
-                    {user?.name?.[0]?.toUpperCase() || <User className="w-8 h-8 text-slate-400" />}
+                  <span className="text-2xl font-bold text-muted-foreground">
+                    {user?.name?.[0]?.toUpperCase() || <User className="w-8 h-8 text-muted-foreground" />}
                   </span>
                 )}
               </div>
@@ -89,9 +89,9 @@ export default function UserProfile() {
               </div>
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-900">{user?.name || "Set your name"}</p>
-              <p className="text-sm text-slate-500">{user?.email}</p>
-              <p className="text-xs text-slate-400 mt-0.5">Member since {new Date(user?.createdAt || Date.now()).getFullYear()}</p>
+              <p className="text-sm font-medium text-foreground">{user?.name || "Set your name"}</p>
+              <p className="text-sm text-muted-foreground">{user?.email}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Member since {new Date(user?.createdAt || Date.now()).getFullYear()}</p>
               <button type="button" className="text-xs text-blue-600 hover:text-blue-700 mt-2 font-medium">Upload photo</button>
             </div>
           </div>
@@ -99,11 +99,11 @@ export default function UserProfile() {
 
         {/* Personal Information */}
         <section className="space-y-5">
-          <h3 className="text-sm font-medium text-slate-700 border-b border-slate-100 pb-3">Personal Information</h3>
+          <h3 className="text-sm font-medium text-muted-foreground border-b border-border pb-3">Personal Information</h3>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label className="text-sm font-medium text-slate-700">Full Name</Label>
+              <Label className="text-sm font-medium text-muted-foreground">Full Name</Label>
               <Input
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -112,14 +112,14 @@ export default function UserProfile() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-sm font-medium text-slate-700">Email Address</Label>
-              <Input value={user?.email ?? ""} disabled className="bg-slate-50 text-slate-500" />
-              <p className="text-xs text-slate-400">Email cannot be changed here.</p>
+              <Label className="text-sm font-medium text-muted-foreground">Email Address</Label>
+              <Input value={user?.email ?? ""} disabled className="bg-muted text-muted-foreground" />
+              <p className="text-xs text-muted-foreground">Email cannot be changed here.</p>
             </div>
           </div>
 
           <div className="space-y-1.5 max-w-xs">
-            <Label className="text-sm font-medium text-slate-700">Phone Number</Label>
+            <Label className="text-sm font-medium text-muted-foreground">Phone Number</Label>
             <Input
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
@@ -130,11 +130,11 @@ export default function UserProfile() {
 
         {/* Preferences */}
         <section className="space-y-5">
-          <h3 className="text-sm font-medium text-slate-700 border-b border-slate-100 pb-3">Preferences</h3>
+          <h3 className="text-sm font-medium text-muted-foreground border-b border-border pb-3">Preferences</h3>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label className="text-sm font-medium text-slate-700">Preferred Language</Label>
+              <Label className="text-sm font-medium text-muted-foreground">Preferred Language</Label>
               <Select value={form.preferredLanguage} onValueChange={(v) => setForm({ ...form, preferredLanguage: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -146,7 +146,7 @@ export default function UserProfile() {
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label className="text-sm font-medium text-slate-700">Theme</Label>
+              <Label className="text-sm font-medium text-muted-foreground">Theme</Label>
               <Select value={form.theme} onValueChange={(v) => setForm({ ...form, theme: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -159,7 +159,7 @@ export default function UserProfile() {
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-sm font-medium text-slate-700">Time Zone</Label>
+            <Label className="text-sm font-medium text-muted-foreground">Time Zone</Label>
             <Select value={form.timezone} onValueChange={(v) => setForm({ ...form, timezone: v })}>
               <SelectTrigger className="max-w-xs"><SelectValue /></SelectTrigger>
               <SelectContent>
@@ -168,13 +168,13 @@ export default function UserProfile() {
                 ))}
               </SelectContent>
             </Select>
-            <p className="text-xs text-slate-400">Used to display dates and times across the platform.</p>
+            <p className="text-xs text-muted-foreground">Used to display dates and times across the platform.</p>
           </div>
         </section>
 
         {/* Save */}
-        <div className="pt-2 border-t border-slate-200 flex items-center justify-between">
-          <p className="text-xs text-slate-400">Changes apply across all your organizations and farms.</p>
+        <div className="pt-2 border-t border-border flex items-center justify-between">
+          <p className="text-xs text-muted-foreground">Changes apply across all your organizations and farms.</p>
           <Button type="submit" disabled={update.isPending} className="min-w-[120px]">
             {update.isPending ? "Saving..." : "Save Changes"}
           </Button>

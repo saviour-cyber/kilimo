@@ -20,7 +20,7 @@ import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 const STATUS_COLORS: Record<string, string> = {
   active: "bg-emerald-100 text-emerald-700",
   sold: "bg-blue-100 text-blue-700",
-  deceased: "bg-slate-100 text-slate-600",
+  deceased: "bg-muted text-muted-foreground",
   transferred: "bg-purple-100 text-purple-700",
 };
 
@@ -150,7 +150,7 @@ export default function Animals() {
     <LivestockLayout>
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-sm text-muted-foreground">{activeCount} active · {animals.length} total</span>
+          <span className="text-sm text-muted-foreground">{activeCount} active Â· {animals.length} total</span>
           <Select value={speciesFilter} onValueChange={setSpeciesFilter}>
             <SelectTrigger className="w-36 h-8 text-xs">
               <SelectValue placeholder="All species" />
@@ -195,8 +195,8 @@ export default function Animals() {
                     </div>
                     <h3 className="font-semibold text-foreground text-sm leading-none">{animal.name ?? animal.species}</h3>
                     <div className="text-xs text-muted-foreground pt-1 space-y-0.5">
-                      <p>{animal.species}{animal.breed ? ` · ${animal.breed}` : ""}</p>
-                      <p className="capitalize">{animal.gender}{animal.weight ? ` · ${animal.weight} ${animal.weightUnit}` : ""}</p>
+                      <p>{animal.species}{animal.breed ? ` Â· ${animal.breed}` : ""}</p>
+                      <p className="capitalize">{animal.gender}{animal.weight ? ` Â· ${animal.weight} ${animal.weightUnit}` : ""}</p>
                       {animal.dateOfBirth && <p>Born: {String(animal.dateOfBirth).slice(0, 10)}</p>}
                     </div>
                   </div>

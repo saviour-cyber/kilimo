@@ -66,8 +66,8 @@ export default function FarmProfile() {
   return (
     <div className="max-w-2xl">
       <div className="mb-6 pb-6 border-b">
-        <h2 className="text-2xl font-bold text-slate-900">Farm Profile</h2>
-        <p className="text-sm text-slate-500 mt-1">
+        <h2 className="text-2xl font-bold text-foreground">Farm Profile</h2>
+        <p className="text-sm text-muted-foreground mt-1">
           Manage details specific to the currently selected farm.
         </p>
       </div>

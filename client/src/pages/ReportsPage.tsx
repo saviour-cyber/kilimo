@@ -11,7 +11,7 @@ export default function ReportsPage() {
   // We'll map sub-routes internally
 
   return (
-    <div className="flex flex-col h-full bg-slate-50 overflow-hidden">
+    <div className="flex flex-col h-full bg-muted overflow-hidden">
       <div className="flex-1 overflow-y-auto">
         <Switch>
           <Route path="/reports" component={ReportsDashboard} />

@@ -20,7 +20,7 @@ const OUTCOME_COLORS: Record<string, string> = {
   pending: "bg-amber-100 text-amber-700",
   successful: "bg-emerald-100 text-emerald-700",
   failed: "bg-red-100 text-red-700",
-  aborted: "bg-slate-100 text-slate-600",
+  aborted: "bg-muted text-muted-foreground",
 };
 
 function BreedingForm({ farmId, onClose }: { farmId: number; onClose: () => void }) {
@@ -140,7 +140,7 @@ export default function Breeding() {
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-semibold text-foreground">Dam #{r.damId}</span>
-                      {r.sireId && <span className="text-xs text-muted-foreground">× Sire #{r.sireId}</span>}
+                      {r.sireId && <span className="text-xs text-muted-foreground">Ã— Sire #{r.sireId}</span>}
                       <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium", OUTCOME_COLORS[r.outcome])}>{r.outcome}</span>
                     </div>
                     <p className="text-xs text-muted-foreground mt-0.5">Bred: {String(r.breedingDate).slice(0, 10)}</p>

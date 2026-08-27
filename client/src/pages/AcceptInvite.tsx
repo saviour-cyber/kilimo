@@ -1,4 +1,4 @@
-﻿import { useAuth } from "@/_core/hooks/useAuth";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -90,7 +90,7 @@ export default function AcceptInvite() {
             <p className="text-sm text-muted-foreground">You've been invited to join a farm on KiliSense</p>
           </div>
 
-          <div className="bg-slate-50 rounded-lg p-4 space-y-3">
+          <div className="bg-muted rounded-lg p-4 space-y-3">
             <div>
               <p className="text-xs text-muted-foreground uppercase tracking-wider">Invitation Email</p>
               <p className="font-medium text-foreground mt-1">{invite.email}</p>

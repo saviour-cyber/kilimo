@@ -22,12 +22,12 @@ export function FinanceRevenueKpiWidget({ farmId, className }: { farmId: number;
           <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-blue-100 shrink-0">
             <Wallet className="w-4 h-4 text-blue-700" />
           </div>
-          <span className="text-sm text-slate-600 truncate">
+          <span className="text-sm text-muted-foreground truncate">
             <span className="font-semibold">Revenue</span>{" "}
           </span>
         </div>
         <div className="flex items-end justify-between">
-          <div className="text-2xl font-bold text-slate-900">KES {revenue.toLocaleString()}</div>
+          <div className="text-2xl font-bold text-foreground">KES {revenue.toLocaleString()}</div>
         </div>
       </CardContent>
     </Card>
@@ -51,12 +51,12 @@ export function FinanceExpenseKpiWidget({ farmId, className }: { farmId: number;
           <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-purple-100 shrink-0">
             <DollarSign className="w-4 h-4 text-purple-700" />
           </div>
-          <span className="text-sm text-slate-600 truncate">
+          <span className="text-sm text-muted-foreground truncate">
             <span className="font-semibold">Expenses</span>{" "}
           </span>
         </div>
         <div className="flex items-end justify-between">
-          <div className="text-2xl font-bold text-slate-900">KES {expenses.toLocaleString()}</div>
+          <div className="text-2xl font-bold text-foreground">KES {expenses.toLocaleString()}</div>
         </div>
       </CardContent>
     </Card>
@@ -83,31 +83,31 @@ export function FinanceSummaryWidget({ farmId, className }: { farmId: number; cl
           <div className="w-6 h-6 rounded flex items-center justify-center bg-violet-100">
             <DollarSign className="w-3.5 h-3.5 text-violet-700" />
           </div>
-          <span className="font-bold text-[13px] text-slate-800">Finance Overview</span>
+          <span className="font-bold text-[13px] text-foreground">Finance Overview</span>
         </div>
         <Link href="/finance">
-          <span className="text-[11px] font-bold text-slate-400 hover:text-violet-600 cursor-pointer">View All</span>
+          <span className="text-[11px] font-bold text-muted-foreground hover:text-violet-600 cursor-pointer">View All</span>
         </Link>
       </div>
       
       <CardContent className="p-4 flex flex-col gap-4">
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-slate-50 rounded-lg p-2.5 border border-slate-100">
-            <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Net Profit</div>
+          <div className="bg-muted rounded-lg p-2.5 border border-border">
+            <div className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Net Profit</div>
             <div className={`text-lg font-bold leading-none ${profit >= 0 ? "text-green-600" : "text-red-500"}`}>
               KES {profit.toLocaleString()}
             </div>
           </div>
-          <div className="bg-slate-50 rounded-lg p-2.5 border border-slate-100">
-            <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Profit Margin</div>
-            <div className="text-lg font-bold text-slate-900 leading-none">{margin}%</div>
+          <div className="bg-muted rounded-lg p-2.5 border border-border">
+            <div className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Profit Margin</div>
+            <div className="text-lg font-bold text-foreground leading-none">{margin}%</div>
           </div>
         </div>
 
         {/* Embedded Chart */}
-        <div className="border border-slate-100 rounded-lg p-3 bg-slate-50/50">
-          <div className="flex justify-between text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2">
+        <div className="border border-border rounded-lg p-3 bg-muted/50">
+          <div className="flex justify-between text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
             <span>Income</span>
             <span>Expenses</span>
           </div>

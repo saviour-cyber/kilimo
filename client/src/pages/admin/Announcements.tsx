@@ -61,7 +61,7 @@ export default function AdminAnnouncements() {
       case 'info': return 'bg-sky-100 text-sky-700 hover:bg-sky-100';
       case 'warning': return 'bg-amber-100 text-amber-700 hover:bg-amber-100';
       case 'critical': return 'bg-rose-100 text-rose-700 hover:bg-rose-100';
-      default: return 'bg-slate-100 text-slate-700';
+      default: return 'bg-muted text-muted-foreground';
     }
   };
 
@@ -69,8 +69,8 @@ export default function AdminAnnouncements() {
     <div className="space-y-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
-          <Bell className="w-6 h-6 text-slate-700" />
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Platform Announcements</h1>
+          <Bell className="w-6 h-6 text-muted-foreground" />
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">Platform Announcements</h1>
         </div>
         
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -85,11 +85,11 @@ export default function AdminAnnouncements() {
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Title</label>
+                <label className="text-sm font-medium text-muted-foreground">Title</label>
                 <Input value={newAnn.title} onChange={e => setNewAnn({...newAnn, title: e.target.value})} placeholder="e.g. Scheduled Maintenance" />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Type</label>
+                <label className="text-sm font-medium text-muted-foreground">Type</label>
                 <Select value={newAnn.type} onValueChange={(val: any) => setNewAnn({...newAnn, type: val})}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -100,7 +100,7 @@ export default function AdminAnnouncements() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Content</label>
+                <label className="text-sm font-medium text-muted-foreground">Content</label>
                 <Textarea value={newAnn.content} onChange={e => setNewAnn({...newAnn, content: e.target.value})} placeholder="Message content to display to all users..." className="h-24" />
               </div>
             </div>
@@ -115,9 +115,9 @@ export default function AdminAnnouncements() {
         </Dialog>
       </div>
 
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border shadow-sm">
         <CardHeader>
-          <CardTitle className="text-slate-800">Broadcast History</CardTitle>
+          <CardTitle className="text-foreground">Broadcast History</CardTitle>
           <CardDescription>Manage active banners displayed across the user platform.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -144,7 +144,7 @@ export default function AdminAnnouncements() {
                 announcements?.map((ann) => (
                   <TableRow key={ann.id}>
                     <TableCell>
-                      <div className="font-semibold text-slate-800">{ann.title}</div>
+                      <div className="font-semibold text-foreground">{ann.title}</div>
                       <div className="text-xs text-muted-foreground mt-1 line-clamp-1">{ann.content}</div>
                     </TableCell>
                     <TableCell>

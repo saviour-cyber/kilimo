@@ -26,12 +26,12 @@ export default function AdminMonitoring() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2 mb-6">
-        <Activity className="w-6 h-6 text-slate-700" />
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900">System Monitoring</h1>
+        <Activity className="w-6 h-6 text-muted-foreground" />
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">System Monitoring</h1>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="border-slate-200">
+        <Card className="border-border">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-4">
               <div className="p-2 bg-blue-100 rounded-lg">
@@ -41,36 +41,36 @@ export default function AdminMonitoring() {
                 Healthy
               </span>
             </div>
-            <p className="text-3xl font-bold text-slate-900">{metrics.current.cpu}%</p>
+            <p className="text-3xl font-bold text-foreground">{metrics.current.cpu}%</p>
             <p className="text-sm text-muted-foreground mt-1">CPU Usage (Avg)</p>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200">
+        <Card className="border-border">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-4">
               <div className="p-2 bg-purple-100 rounded-lg">
                 <HardDrive className="w-5 h-5 text-purple-600" />
               </div>
             </div>
-            <p className="text-3xl font-bold text-slate-900">{metrics.current.memory}%</p>
+            <p className="text-3xl font-bold text-foreground">{metrics.current.memory}%</p>
             <p className="text-sm text-muted-foreground mt-1">Memory Usage</p>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200">
+        <Card className="border-border">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-4">
               <div className="p-2 bg-emerald-100 rounded-lg">
                 <Network className="w-5 h-5 text-emerald-600" />
               </div>
             </div>
-            <p className="text-3xl font-bold text-slate-900">{metrics.current.activeConnections}</p>
+            <p className="text-3xl font-bold text-foreground">{metrics.current.activeConnections}</p>
             <p className="text-sm text-muted-foreground mt-1">Active DB Connections</p>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 bg-background">
+        <Card className="border-border bg-background">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-4">
               <div className="p-2 bg-accent rounded-lg">
@@ -91,9 +91,9 @@ export default function AdminMonitoring() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardHeader>
-            <CardTitle className="text-slate-800">CPU & Memory Load (24h)</CardTitle>
+            <CardTitle className="text-foreground">CPU & Memory Load (24h)</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[300px] w-full">
@@ -113,9 +113,9 @@ export default function AdminMonitoring() {
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardHeader>
-            <CardTitle className="text-slate-800">Platform API Traffic</CardTitle>
+            <CardTitle className="text-foreground">Platform API Traffic</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[300px] w-full">

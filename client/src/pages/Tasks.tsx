@@ -17,7 +17,7 @@ import { EmptyState } from "@/components/shared/EmptyState";
 import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 
 const PRIORITY_STYLES: Record<string, string> = {
-  low: "bg-slate-100 text-slate-600",
+  low: "bg-muted text-muted-foreground",
   medium: "bg-amber-100 text-amber-700",
   high: "bg-red-100 text-red-700",
   critical: "bg-red-600 text-white",
@@ -27,7 +27,7 @@ const STATUS_ICONS: Record<string, React.ReactNode> = {
   pending: <Circle className="w-4 h-4 text-muted-foreground" />,
   in_progress: <Clock className="w-4 h-4 text-amber-500" />,
   completed: <CheckCircle2 className="w-4 h-4 text-green-500" />,
-  cancelled: <AlertCircle className="w-4 h-4 text-slate-400" />,
+  cancelled: <AlertCircle className="w-4 h-4 text-muted-foreground" />,
 };
 
 function TaskForm({ farmId, task, onClose }: { farmId: number; task?: any; onClose: () => void }) {
@@ -161,7 +161,7 @@ export default function Tasks() {
                 onClick={() => setStatusFilter(s)}
                 className={cn(
                   "px-3 py-1.5 rounded-full text-xs font-medium transition-colors border",
-                  statusFilter === s ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-600 hover:bg-slate-50 border-slate-200"
+                  statusFilter === s ? "bg-slate-900 text-white border-slate-900" : "bg-white text-muted-foreground hover:bg-muted border-border"
                 )}
               >
                 {s.replace("_", " ")}
@@ -206,7 +206,7 @@ export default function Tasks() {
                         </div>
                         <p className="text-xs text-muted-foreground">
                           <span className="capitalize">{task.category}</span>
-                          {task.dueDate ? ` · Due: ${String(task.dueDate).slice(0, 10)}` : ""}
+                          {task.dueDate ? ` Â· Due: ${String(task.dueDate).slice(0, 10)}` : ""}
                         </p>
                         {task.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-1 border-t border-border pt-1">{task.description}</p>}
                       </div>
