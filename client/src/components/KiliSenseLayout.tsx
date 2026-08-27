@@ -389,7 +389,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
 
             return (
               <div key={section}>
-                {/* Section header â€” omitted for "overview" and when collapsed */}
+                {/* Section header Ã¢â‚¬â€ omitted for "overview" and when collapsed */}
                 {!collapsed && sectionLabel && (
                   <div className="mt-4 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
                     {sectionLabel}
@@ -475,7 +475,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Bar */}
         <header className="h-14 border-b border-border bg-background/95 backdrop-blur-sm flex items-center gap-3 px-4 shrink-0">
-          {/* Desktop sidebar collapse toggle â€” hidden on mobile */}
+          {/* Desktop sidebar collapse toggle Ã¢â‚¬â€ hidden on mobile */}
           <Button
             variant="ghost"
             size="icon"
@@ -487,31 +487,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
 
           <div className="flex-1" />
 
-          {/* Notification Bell */}
-          {currentFarm && (
-            <Link href="/notifications">
-              <Button variant="ghost" size="icon" className="relative">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-                {(notifCount?.count ?? 0) > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-destructive text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                    {notifCount!.count > 9 ? "9+" : notifCount!.count}
-                  </span>
-                )}
-              </Button>
-            </Link>
-          )}
-
-          {/* Farm name in header */}
-          {currentFarm && (
-            <div className="hidden sm:flex items-center gap-1.5 text-sm text-muted-foreground">
-              <Leaf className="w-3.5 h-3.5 text-primary" />
-              <span className="font-medium text-foreground">{currentFarm.farm.name}</span>
-              <Badge variant="outline" className="text-[10px] capitalize px-1.5 py-0">{role}</Badge>
-            </div>
-          )}
-        </header>
+          </header>
 
         <GlobalAnnouncementBanner />
 
@@ -553,7 +529,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
                 </Link>
               );
             })}
-            {/* More â€” opens dedicated MobileMoreMenu, NOT the desktop sidebar */}
+            {/* More Ã¢â‚¬â€ opens dedicated MobileMoreMenu, NOT the desktop sidebar */}
             <button
               onClick={() => setMobileMoreOpen(true)}
               className="flex flex-col items-center justify-center flex-1 h-16 px-2 gap-1 text-muted-foreground hover:text-foreground transition-colors"
@@ -564,7 +540,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
           </nav>
         )}
 
-        {/* Mobile More Sheet â€” dedicated mobile-only nav, never the desktop sidebar */}
+        {/* Mobile More Sheet Ã¢â‚¬â€ dedicated mobile-only nav, never the desktop sidebar */}
         <MobileMoreMenu open={mobileMoreOpen} onClose={() => setMobileMoreOpen(false)} />
 
       </div>
