@@ -292,7 +292,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
 
   if (loading || farmLoading) {
     return (
-      <div className="flex h-screen bg-background">
+      <div className="flex h-[100dvh] bg-background">
         <div className="w-64 bg-sidebar border-r border-sidebar-border p-4 space-y-3">
           {Array.from({ length: 8 }).map((_, i) => (
             <Skeleton key={i} className="h-8 w-full bg-sidebar-accent" />
@@ -310,7 +310,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-[100dvh] flex items-center justify-center bg-background">
         <div className="text-center space-y-6 max-w-sm mx-auto p-8">
           <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
             <Leaf className="w-8 h-8 text-primary" />
@@ -389,7 +389,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
 
             return (
               <div key={section}>
-                {/* Section header Ã¢â‚¬â€ omitted for "overview" and when collapsed */}
+                {/* Section header ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â omitted for "overview" and when collapsed */}
                 {!collapsed && sectionLabel && (
                   <div className="mt-4 mb-1.5 px-3 text-[11px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider">
                     {sectionLabel}
@@ -460,11 +460,11 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
   );
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
+    <div className="flex h-[100dvh] bg-background overflow-hidden">
       {/* Desktop Sidebar */}
       <aside
         className={cn(
-          "hidden lg:flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300 ease-out shrink-0 z-10",
+          "hidden md:flex flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300 ease-out shrink-0 z-10",
           sidebarCollapsed ? "w-[72px]" : "w-[280px]"
         )}
       >
@@ -475,11 +475,11 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Bar */}
         <header className="h-14 border-b border-border bg-background/95 backdrop-blur-sm flex items-center gap-3 px-4 shrink-0">
-          {/* Desktop sidebar collapse toggle Ã¢â‚¬â€ hidden on mobile */}
+          {/* Desktop sidebar collapse toggle ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â hidden on mobile */}
           <Button
             variant="ghost"
             size="icon"
-            className="hidden lg:flex"
+            className="hidden md:flex"
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
           >
             <Menu className="w-5 h-5" />
@@ -516,7 +516,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
 
         {/* Mobile Bottom Navigation */}
         {currentFarm && (
-          <nav className="lg:hidden flex items-center justify-around border-t border-border bg-background/95 backdrop-blur-sm pb-safe shrink-0 h-16">
+          <nav className="md:hidden flex items-center justify-around border-t border-border bg-background/95 backdrop-blur-sm pb-safe shrink-0 min-h-16">
             {getMobileNavSplit(visibleModules, platformServices).bottomNavModules.map((mod) => {
               const Icon = mod.icon;
               const isActive = location.startsWith(mod.basePath);
@@ -529,7 +529,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
                 </Link>
               );
             })}
-            {/* More Ã¢â‚¬â€ opens dedicated MobileMoreMenu, NOT the desktop sidebar */}
+            {/* More ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â opens dedicated MobileMoreMenu, NOT the desktop sidebar */}
             <button
               onClick={() => setMobileMoreOpen(true)}
               className="flex flex-col items-center justify-center flex-1 h-16 px-2 gap-1 text-muted-foreground hover:text-foreground transition-colors"
@@ -540,7 +540,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
           </nav>
         )}
 
-        {/* Mobile More Sheet Ã¢â‚¬â€ dedicated mobile-only nav, never the desktop sidebar */}
+        {/* Mobile More Sheet ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â dedicated mobile-only nav, never the desktop sidebar */}
         <MobileMoreMenu open={mobileMoreOpen} onClose={() => setMobileMoreOpen(false)} />
 
       </div>
