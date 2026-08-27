@@ -1,5 +1,5 @@
 /**
- * IoT Summary Widget â€” for the main farm Dashboard
+ * IoT Summary Widget Ã¢â‚¬â€ for the main farm Dashboard
  *
  * Shows key live readings (soil moisture, air temp, tank level) and device status.
  * Refreshes every 30 seconds via the iot.getFarmIoTSummary query.
@@ -50,7 +50,7 @@ export default function IoTSummaryWidget({ farmId }: Props) {
       <div className="px-5 py-3.5 border-b border-slate-50 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Cpu className="w-4 h-4 text-cyan-500" />
-          <span className="font-semibold text-foreground text-sm">IoT Sensors</span>
+          <h3 className="font-bold text-[15px] font-serif text-foreground">IoT Sensors</h3>
         </div>
         <div className="flex items-center gap-3">
           {alerts.length > 0 && (
@@ -65,7 +65,7 @@ export default function IoTSummaryWidget({ farmId }: Props) {
             }
           </div>
           <Link href="/iot" className="text-xs text-cyan-600 hover:text-cyan-700 font-medium">
-            View all â†’
+            View all Ã¢â€ â€™
           </Link>
         </div>
       </div>
@@ -84,7 +84,7 @@ export default function IoTSummaryWidget({ farmId }: Props) {
                   {data.value.toFixed(1)}<span className="text-[10px] font-normal ml-0.5">{data.unit}</span>
                 </p>
               ) : (
-                <p className="text-base font-bold text-slate-200">â€”</p>
+                <p className="text-base font-bold text-slate-200">Ã¢â‚¬â€</p>
               )}
             </div>
           );

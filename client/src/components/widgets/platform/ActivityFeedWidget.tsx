@@ -30,7 +30,7 @@ export function ActivityFeedWidget({ farmId, className }: { farmId: number; clas
           <div className="w-6 h-6 rounded flex items-center justify-center bg-muted">
             <Clock className="w-3.5 h-3.5 text-muted-foreground" />
           </div>
-          <span className="font-bold text-[13px] text-foreground">Recent Activity</span>
+          <h3 className="font-bold text-[15px] font-serif text-foreground">Local Farm Activity</h3>
         </div>
         <Link href="/notifications">
           <span className="text-[11px] font-bold text-muted-foreground hover:text-muted-foreground cursor-pointer">View All</span>

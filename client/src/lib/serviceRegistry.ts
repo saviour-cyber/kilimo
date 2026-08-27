@@ -1,9 +1,10 @@
 import type React from "react";
 import { type WidgetType, type DashboardWidgetDefinition } from "./moduleRegistry";
 
-// ─── Platform Service Widgets ─────────────────────────────────────────────────
+// â”€â”€â”€ Platform Service Widgets â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import { WeatherWidget, WeatherAlertsWidget } from "@/components/widgets/WeatherWidget";
 import { KiliAIDashboardWidget } from "@/components/widgets/intelligence/KiliAIDashboardWidget";
+import { ActivityFeedWidget } from "@/components/widgets/platform/ActivityFeedWidget";
 import { NotificationsSidebarWidget } from "@/components/widgets/platform/NotificationsSidebarWidget";
 import IoTSummaryWidget from "@/components/widgets/iot/IoTSummaryWidget";
 
@@ -13,7 +14,7 @@ import Notifications from "@/pages/Notifications";
 import WeatherPage from "@/pages/WeatherPage";
 import ReportsPage from "@/pages/ReportsPage";
 
-// ─── Platform Service Registry ────────────────────────────────────────────────
+// â”€â”€â”€ Platform Service Registry â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 //
 // Platform Services are NOT farm modules. They are platform-wide capabilities
 // (Weather, AI, Notifications, Activity Feed) that are always available
@@ -102,6 +103,17 @@ export const SERVICE_REGISTRY: PlatformServiceDefinition[] = [
   },
 
   {
+    key: "activity",
+    name: "Activity",
+    description: "Recent activity across the farm.",
+    showInSidebar: false,
+    basePath: "/activity",
+    widgets: [
+      { id: "recent-activity", type: "activity", size: "medium", priority: { level: "low", order: 0 }, component: ActivityFeedWidget as React.FC<{ farmId: number }> },
+    ],
+  },
+
+  {
     key: "iot",
     name: "IoT",
     description: "Smart device management, live telemetry, and sensor data for the entire farm.",
@@ -116,7 +128,7 @@ export const SERVICE_REGISTRY: PlatformServiceDefinition[] = [
   },
 ];
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function getServiceWidgets(type: WidgetType): DashboardWidgetDefinition[] {
   return SERVICE_REGISTRY.flatMap((s) => s.widgets ?? []).filter((w) => w.type === type);
