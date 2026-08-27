@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Plus, Settings2, Bell, Zap, Bot, BrainCircuit, Trash2 } from "lucide-react";
+import { Link } from "wouter";
+import { Plus, Settings2, Bell, Zap, Bot, BrainCircuit, Trash2, ArrowLeft } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
@@ -42,11 +43,16 @@ export default function IoTAlertRules() {
   return (
     <div className="max-w-6xl mx-auto p-8">
       <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Alert Rules Engine</h1>
-          <p className="text-muted-foreground mt-1">Configure automated workflows and AI recommendations based on live telemetry.</p>
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" asChild>
+            <Link href="/iot"><ArrowLeft className="w-5 h-5" /></Link>
+          </Button>
+          <div>
+            <h1 className="text-2xl font-bold font-serif text-foreground">Alert Rules Engine</h1>
+            <p className="text-muted-foreground text-sm mt-0.5">Configure automated workflows and AI recommendations based on live telemetry.</p>
+          </div>
         </div>
-        <Button onClick={() => setIsModalOpen(true)} className="gap-2">
+        <Button onClick={() => setIsModalOpen(true)} className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full">
           <Plus className="w-4 h-4" /> Create Rule
         </Button>
       </div>

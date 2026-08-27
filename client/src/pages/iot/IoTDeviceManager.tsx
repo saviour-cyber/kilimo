@@ -13,13 +13,13 @@ import { formatDistanceToNow } from "date-fns";
 import RegisterDeviceModal from "./RegisterDeviceModal";
 
 const DEVICE_TYPE_LABELS: Record<string, string> = {
-  weather_station:  "ðŸŒ¦ï¸ Weather Station",
-  soil_probe:       "ðŸŒ± Soil Probe",
-  water_sensor:     "ðŸ’§ Water Sensor",
-  livestock_collar: "ðŸ„ Livestock Collar",
-  equipment_sensor: "ðŸšœ Equipment Sensor",
-  gateway:          "ðŸ”— Gateway",
-  other:            "ðŸ“¡ Other",
+  weather_station:  "Weather Station",
+  soil_probe:       "Soil Probe",
+  water_sensor:     "Water Sensor",
+  livestock_collar: "Livestock Collar",
+  equipment_sensor: "Equipment Sensor",
+  gateway:          "Gateway",
+  other:            "Other",
 };
 
 export default function IoTDeviceManager() {
@@ -64,12 +64,12 @@ export default function IoTDeviceManager() {
           </h1>
           <p className="text-sm text-muted-foreground">Register and monitor all connected IoT devices</p>
         </div>
-        <Button onClick={() => refetch()} variant="outline" size="icon" className="shrink-0">
+        <Button onClick={() => refetch()} variant="outline" size="icon" className="shrink-0 opacity-40 cursor-not-allowed pointer-events-none" disabled title="Sync unavailable">
           <RefreshCw className="w-4 h-4" />
         </Button>
         <Button
           onClick={() => setShowRegister(true)}
-          className="bg-cyan-600 hover:bg-cyan-700 text-white gap-2 shrink-0"
+          className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 shrink-0 rounded-full"
         >
           <PlusCircle className="w-4 h-4" /> Register Device
         </Button>
@@ -88,7 +88,7 @@ export default function IoTDeviceManager() {
               <p className="font-medium text-muted-foreground">No devices registered yet</p>
               <p className="text-sm text-muted-foreground mt-1">Register your first simulated device to start generating telemetry</p>
             </div>
-            <Button onClick={() => setShowRegister(true)} className="bg-cyan-600 hover:bg-cyan-700 text-white gap-2">
+            <Button onClick={() => setShowRegister(true)} className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 rounded-full">
               <PlusCircle className="w-4 h-4" /> Register Device
             </Button>
           </div>
