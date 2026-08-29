@@ -212,6 +212,9 @@ export default function WorkersList() {
   const [editWorker, setEditWorker] = useState<any>(null);
   const [deleteWorker, setDeleteWorker] = useState<any>(null);
 
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [teamFilter, setTeamFilter] = useState<string>("all");
+
   const utils = trpc.useUtils();
 
   const { data: workers = [], isLoading } = trpc.workers.listWorkers.useQuery(
@@ -232,23 +235,56 @@ export default function WorkersList() {
     onError: (err) => toast.error(err.message),
   });
 
-  const filtered = workers.filter(
-    (w: any) =>
+  const filtered = workers.filter((w: any) => {
+    const matchesSearch =
       (w.firstName + " " + w.lastName).toLowerCase().includes(searchTerm.toLowerCase()) ||
-      w.position?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      w.position?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === "all" || w.status === statusFilter;
+    const matchesTeam =
+      teamFilter === "all" ||
+      (teamFilter === "none" ? !w.teamId : w.teamId?.toString() === teamFilter);
+    return matchesSearch && matchesStatus && matchesTeam;
+  });
 
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center">
-        <div className="relative w-full sm:max-w-xs">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search workers..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-9"
-          />
+        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+          <div className="relative w-full sm:w-64">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search workers..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+          
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-full sm:w-[140px]">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Statuses</SelectItem>
+              <SelectItem value="active">Active</SelectItem>
+              <SelectItem value="on_leave">On Leave</SelectItem>
+              <SelectItem value="inactive">Inactive</SelectItem>
+              <SelectItem value="terminated">Terminated</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={teamFilter} onValueChange={setTeamFilter}>
+            <SelectTrigger className="w-full sm:w-[140px]">
+              <SelectValue placeholder="Team" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Teams</SelectItem>
+              <SelectItem value="none">No Team</SelectItem>
+              {teams.map((t: any) => (
+                <SelectItem key={t.id} value={t.id.toString()}>{t.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {can("write") && (
