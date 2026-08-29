@@ -164,6 +164,20 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     dashboardWidgets: [
       { id: "crop-kpi",      type: "kpi",      size: "small", priority: { level: "high", order: 1 }, component: CropKpiWidget },
     ],
+    reports: [
+      {
+        id: "crop-yield-analysis",
+        name: "Yield Analysis",
+        description: "Compare harvest yields across different fields and seasons.",
+        supportedFormats: ["pdf", "excel", "csv"],
+      },
+      {
+        id: "crop-incident-history",
+        name: "Incident History",
+        description: "Log of all crop incidents, pests, and diseases.",
+        supportedFormats: ["pdf", "excel"],
+      }
+    ]
   },
 
   {
@@ -201,6 +215,20 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     dashboardWidgets: [
       { id: "livestock-kpi",     type: "kpi",     size: "small", priority: { level: "high", order: 2 }, component: LivestockKpiWidget },
     ],
+    reports: [
+      {
+        id: "livestock-health-records",
+        name: "Health Records",
+        description: "Export all animal health checks and vaccination histories.",
+        supportedFormats: ["pdf", "excel"],
+      },
+      {
+        id: "livestock-production-summary",
+        name: "Production Summary",
+        description: "Review milk, meat, or egg production over time.",
+        supportedFormats: ["pdf", "excel", "csv"],
+      }
+    ]
   },
 
   {
@@ -270,6 +298,20 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
         path: "/workers/attendance",
         color: "bg-teal-100 text-teal-700",
       },
+    ],
+    reports: [
+      {
+        id: "workers-attendance-summary",
+        name: "Attendance Summary",
+        description: "Detailed breakdown of worker attendance over a selected period.",
+        supportedFormats: ["pdf", "excel", "csv"],
+      },
+      {
+        id: "workers-payroll-export",
+        name: "Payroll Export",
+        description: "Export worker hours and payment records for accounting.",
+        supportedFormats: ["excel", "csv"],
+      }
     ]
   },
 
