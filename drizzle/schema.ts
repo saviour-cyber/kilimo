@@ -1214,3 +1214,34 @@ export type Worker = typeof workers.$inferSelect;
 export type InsertWorker = typeof workers.$inferInsert;
 export type WorkerAttendance = typeof workerAttendance.$inferSelect;
 export type InsertWorkerAttendance = typeof workerAttendance.$inferInsert;
+// Worker Payroll
+export const workerPayroll = mysqlTable("workerPayroll", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  workerId: int("workerId").notNull(),
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  currency: varchar("currency", { length: 8 }).default("KES").notNull(),
+  periodStart: date("periodStart").notNull(),
+  periodEnd: date("periodEnd").notNull(),
+  status: mysqlEnum("status", ["pending", "paid", "cancelled"]).default("pending").notNull(),
+  paymentDate: date("paymentDate"),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+// Worker Documents
+export const workerDocuments = mysqlTable("workerDocuments", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  workerId: int("workerId").notNull(),
+  title: varchar("title", { length: 128 }).notNull(),
+  documentType: mysqlEnum("documentType", ["contract", "id", "certificate", "other"]).default("other").notNull(),
+  fileUrl: text("fileUrl").notNull(),
+  uploadedAt: timestamp("uploadedAt").defaultNow().notNull(),
+});
+
+export type WorkerPayroll = typeof workerPayroll.$inferSelect;
+export type InsertWorkerPayroll = typeof workerPayroll.$inferInsert;
+export type WorkerDocument = typeof workerDocuments.$inferSelect;
+export type InsertWorkerDocument = typeof workerDocuments.$inferInsert;

@@ -67,6 +67,7 @@ import WorkersList from "./pages/workers/WorkersList";
 import WorkersTeams from "./pages/workers/WorkersTeams";
 import WorkersAttendance from "./pages/workers/WorkersAttendance";
 import WorkersAssignments from "./pages/workers/WorkersAssignments";
+import WorkerProfile from "./pages/workers/WorkerProfile";
 
 // Livestock
 import Animals from "./pages/livestock/Animals";
@@ -170,6 +171,7 @@ function TenantAppRoutes() {
         <Route path="/workers/teams"><KiliSenseLayout><SubscriptionGate featureKey="workers" featureName="Workers"><WorkersLayout><WorkersTeams /></WorkersLayout></SubscriptionGate></KiliSenseLayout></Route>
         <Route path="/workers/attendance"><KiliSenseLayout><SubscriptionGate featureKey="workers" featureName="Workers"><WorkersLayout><WorkersAttendance /></WorkersLayout></SubscriptionGate></KiliSenseLayout></Route>
         <Route path="/workers/assignments"><KiliSenseLayout><SubscriptionGate featureKey="workers" featureName="Workers"><WorkersLayout><WorkersAssignments /></WorkersLayout></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/workers/:workerId"><KiliSenseLayout><SubscriptionGate featureKey="workers" featureName="Workers"><WorkersLayout><WorkerProfile /></WorkersLayout></SubscriptionGate></KiliSenseLayout></Route>
         <Route path="/workers"><KiliSenseLayout><SubscriptionGate featureKey="workers" featureName="Workers"><WorkersLayout><WorkersOverview /></WorkersLayout></SubscriptionGate></KiliSenseLayout></Route>
 
         {/* Livestock */}
