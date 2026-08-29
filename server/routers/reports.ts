@@ -1,11 +1,12 @@
-﻿import { z } from "zod";
-import { eq, and, desc } from "drizzle-orm";
+import { z } from "zod";
+import { eq, desc } from "drizzle-orm";
 import { protectedProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
-import { scheduledReports, generatedReports, farmModules } from "../../drizzle/schema";
+import { scheduledReports, generatedReports } from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
 import { ExportService } from "../services/exportService";
 import { ReportEngine } from "../services/reporting/ReportEngine";
+import { storagePut } from "../storage";
 
 export const reportsRouter = router({
   // ── List Generated Reports ───────────────────────────────────────────────────
@@ -68,17 +69,17 @@ export const reportsRouter = router({
       };
 
       const engine = new ReportEngine();
-      let fileUrl = "";
+      let fileUrl: string | null = null;
 
       // Only generate file if it's not a direct print
       if (input.format !== "print") {
         const result = await engine.generate(config);
         
         if (result) {
-          // In a real app, upload result.buffer to S3/GCS here.
-          // For local dev, we mock a URL.
-          const fileName = `${input.name.replace(/\s+/g, '_')}_${Date.now()}.${result.ext}`;
-          fileUrl = `https://kilisense-mock.storage/exports/${fileName}`;
+          const safeBase = input.name.replace(/[^a-zA-Z0-9_\-]/g, "_").slice(0, 60);
+          const fileName = `reports/${safeBase}_${Date.now()}.${result.ext}`;
+          const saved = await storagePut(fileName, Buffer.from(result.buffer as any), result.mime);
+          fileUrl = saved.url;
         }
       }
 
@@ -89,14 +90,14 @@ export const reportsRouter = router({
         moduleKeys: input.moduleKeys,
         filters: input.filters || null,
         format: input.format,
-        fileUrl: fileUrl || null,
+        fileUrl: fileUrl,
         generatedByUserId: ctx.user.id,
       });
 
       return {
         success: true,
         reportId: insertResult.insertId,
-        fileUrl,
+        fileUrl: fileUrl ?? "",
       };
     })
 });

@@ -58,11 +58,11 @@ export interface ReportDefinition {
   name: string;
   description: string;
   supportedFormats: ("pdf" | "excel" | "csv" | "print")[];
-  filters: ReportFilterDef[];
+  filters?: ReportFilterDef[];
   /** Standard visual layout type for the Reports Hub */
-  visualType: "tabular" | "kpi" | "chart" | "mixed";
+  visualType?: "tabular" | "kpi" | "chart" | "mixed";
   /** The backend data source (tRPC route key, e.g. "crop.getReportData") */
-  dataSourceQuery: string;
+  dataSourceQuery?: string;
   /** Optional custom visualization component for specialized reports */
   customComponent?: React.FC<{ data: any; filters: any; dateRange?: { from: Date; to: Date } }>;
 }
