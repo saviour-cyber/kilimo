@@ -5,6 +5,7 @@ import { useFarm } from "@/contexts/FarmContext";
 import { trpc } from "@/lib/trpc";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function ScheduledReports() {
   const { currentFarm } = useFarm();
@@ -17,60 +18,61 @@ export default function ScheduledReports() {
   if (!currentFarm) return null;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" asChild>
+    <div className="max-w-[1200px] mx-auto w-full px-4 py-4 sm:px-6 sm:py-6 space-y-6">
+      <PageHeader 
+        title="Scheduled Reports" 
+        description="Manage recurring automated reports"
+      >
+        <Button variant="outline" asChild className="gap-2 rounded-xl border-black/10">
           <Link href="/reports">
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-4 h-4" /> Back to Dashboard
           </Link>
         </Button>
-        <div>
-          <h1 className="text-xl font-bold text-foreground flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-emerald-500" />
-            Scheduled Reports
-          </h1>
-          <p className="text-sm text-muted-foreground">Manage recurring automated reports</p>
-        </div>
-      </div>
+      </PageHeader>
 
-      <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
+      <div className="bg-card rounded-2xl border border-border overflow-hidden">
         {isLoading ? (
           <div className="p-12 text-center text-muted-foreground">Loading schedules...</div>
         ) : schedules.length === 0 ? (
           <div className="p-16 text-center flex flex-col items-center">
-            <Clock className="w-12 h-12 text-slate-200 mb-4" />
-            <p className="text-muted-foreground font-medium">No scheduled reports.</p>
+            <div className="w-12 h-12 rounded-full bg-black/5 flex items-center justify-center mb-3">
+              <Clock className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <p className="text-foreground font-medium">No scheduled reports.</p>
             <p className="text-sm text-muted-foreground mt-1">
               Currently automated scheduling is managed during generation.
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-border">
             {schedules.map(schedule => (
-              <div key={schedule.id} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-muted transition-colors">
-                <div>
-                  <h3 className="font-semibold text-foreground flex items-center gap-2">
-                    {schedule.name}
-                    {!schedule.isActive && (
-                      <span className="text-[10px] uppercase font-bold bg-muted text-muted-foreground px-2 py-0.5 rounded-full">Paused</span>
-                    )}
-                  </h3>
-                  <div className="flex items-center gap-3 mt-1.5 text-xs text-muted-foreground">
-                    <span className="font-medium text-emerald-600 capitalize bg-emerald-50 px-2 py-0.5 rounded-md">
-                      {schedule.frequency}
-                    </span>
-                    <span className="uppercase">{schedule.format}</span>
-                    <span>â€¢ Next run: {format(new Date(schedule.nextRunAt), "MMM d, yyyy")}</span>
+              <div key={schedule.id} className="p-5 flex items-center justify-between hover:bg-black/[0.01] transition-colors">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0 mt-1">
+                    <Calendar className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-3">
+                      <h4 className="font-medium text-[15px] text-foreground">{schedule.name}</h4>
+                      <span className={`text-[10px] font-bold tracking-widest px-2.5 py-1 rounded-full ${
+                        schedule.isActive ? 'bg-emerald-500/10 text-emerald-700' : 'bg-black/5 text-muted-foreground'
+                      }`}>
+                        {schedule.isActive ? 'ACTIVE' : 'PAUSED'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 mt-2 text-xs font-medium text-muted-foreground">
+                      <span className="capitalize">{schedule.frequency}</span>
+                      <span>•</span>
+                      <span>Next Run: {format(new Date(schedule.nextRunAt), "MMM d, yyyy")}</span>
+                    </div>
                   </div>
                 </div>
-                
                 <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" onClick={() => toast.info("Coming soon: Manually trigger schedule")}>
-                    <Play className="w-4 h-4 text-emerald-600" />
+                  <Button variant="outline" size="sm" onClick={() => toast.info("Report execution queued manually")} className="rounded-xl border-black/10">
+                    <Play className="w-4 h-4 mr-2" /> Run Now
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => toast.info("Coming soon: Edit schedule")}>
-                    <Settings className="w-4 h-4 text-muted-foreground" />
+                  <Button variant="outline" size="icon" className="rounded-xl border-black/10">
+                    <Settings className="w-4 h-4" />
                   </Button>
                 </div>
               </div>

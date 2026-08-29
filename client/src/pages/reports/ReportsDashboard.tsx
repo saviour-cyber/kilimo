@@ -1,10 +1,11 @@
 import { Link } from "wouter";
-import { FileText, PlusCircle, Calendar, Archive, Activity, Download } from "lucide-react";
+import { FileText, PlusCircle, Calendar, Archive, Activity, Download, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useFarm } from "@/contexts/FarmContext";
 import { trpc } from "@/lib/trpc";
 import { format } from "date-fns";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ReportsDashboard() {
   const { currentFarm } = useFarm();
@@ -24,13 +25,10 @@ export default function ReportsDashboard() {
   return (
     <div className="max-w-[1600px] mx-auto w-full px-4 py-4 sm:px-6 sm:py-6 space-y-6">
       <PageHeader 
-        title="Reports Hub" 
-        description="Centralized workspace for platform-wide analytics and exports"
-        icon={FileText}
-        iconColor="text-indigo-600"
-        iconBg="bg-indigo-100"
+        title="Reports" 
+        description="Centralized workspace for analytics and data exports."
       >
-        <Button asChild className="gap-2">
+        <Button asChild className="gap-2 rounded-xl">
           <Link href="/reports/wizard">
             <PlusCircle className="w-4 h-4" /> Generate Report
           </Link>
@@ -38,34 +36,34 @@ export default function ReportsDashboard() {
       </PageHeader>
 
       {/* KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="bg-white rounded-2xl border border-border p-5 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-            <Archive className="w-6 h-6 text-blue-500" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-card rounded-2xl border border-border p-5 flex items-center gap-4 hover:border-black/10 transition-colors">
+          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+            <Archive className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Generated Reports</p>
-            <p className="text-2xl font-bold text-foreground">{recentReports.length}</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Generated</p>
+            <p className="text-2xl font-bold text-foreground font-serif tracking-tight">{recentReports.length}</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-border p-5 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center shrink-0">
-            <Calendar className="w-6 h-6 text-emerald-500" />
+        <div className="bg-card rounded-2xl border border-border p-5 flex items-center gap-4 hover:border-black/10 transition-colors">
+          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0">
+            <Calendar className="w-5 h-5 text-emerald-600" />
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Scheduled Reports</p>
-            <p className="text-2xl font-bold text-foreground">{scheduledReports.length}</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Scheduled</p>
+            <p className="text-2xl font-bold text-foreground font-serif tracking-tight">{scheduledReports.length}</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-border p-5 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center shrink-0">
-            <Activity className="w-6 h-6 text-indigo-500" />
+        <div className="bg-card rounded-2xl border border-border p-5 flex items-center gap-4 hover:border-black/10 transition-colors">
+          <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
+            <Activity className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <p className="text-sm font-medium text-muted-foreground">AI Executive Summaries</p>
-            <p className="text-2xl font-bold text-foreground">1</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Summaries</p>
+            <p className="text-2xl font-bold text-foreground font-serif tracking-tight">1</p>
           </div>
         </div>
       </div>
@@ -74,43 +72,49 @@ export default function ReportsDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Recent Generated Reports */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
-          <div className="px-5 py-4 border-b border-slate-50 flex items-center justify-between">
-            <h3 className="font-semibold text-foreground flex items-center gap-2">
-              <Archive className="w-4 h-4 text-indigo-500" />
-              Recent Reports
-            </h3>
-            <Link href="/reports/archive" className="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
-              View all
+        <div className="lg:col-span-2 bg-card rounded-2xl border border-border overflow-hidden">
+          <div className="px-5 py-4 border-b border-border flex items-center justify-between bg-black/[0.02]">
+            <h3 className="font-semibold text-foreground">Recent Reports</h3>
+            <Link href="/reports/archive" className="text-sm text-primary hover:text-primary/80 font-medium flex items-center gap-1">
+              View archive <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
           
-          <div className="divide-y divide-slate-50">
+          <div className="divide-y divide-border">
             {loadingReports ? (
-              <div className="p-8 text-center text-muted-foreground">Loading reports...</div>
+              <div className="p-6 space-y-4">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="flex justify-between items-center">
+                     <div className="space-y-2"><Skeleton className="h-4 w-32"/><Skeleton className="h-3 w-24"/></div>
+                     <Skeleton className="h-8 w-24 rounded-lg"/>
+                  </div>
+                ))}
+              </div>
             ) : recentReports.length === 0 ? (
-              <div className="p-8 text-center flex flex-col items-center">
-                <FileText className="w-8 h-8 text-slate-200 mb-2" />
-                <p className="text-sm text-muted-foreground">No reports generated yet.</p>
-                <Link href="/reports/wizard" className="text-sm text-indigo-600 mt-2 hover:underline">
+              <div className="p-12 text-center flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-black/5 flex items-center justify-center mb-3">
+                  <FileText className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <p className="text-sm font-medium text-foreground">No reports generated yet</p>
+                <Link href="/reports/wizard" className="text-sm text-primary mt-1 hover:underline">
                   Generate your first report
                 </Link>
               </div>
             ) : (
               recentReports.map(report => (
-                <div key={report.id} className="p-5 flex items-center justify-between hover:bg-muted/50 transition-colors">
+                <div key={report.id} className="p-5 flex items-center justify-between hover:bg-black/[0.01] transition-colors">
                   <div>
-                    <h4 className="font-medium text-foreground">{report.name}</h4>
-                    <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
+                    <h4 className="font-medium text-[15px] text-foreground">{report.name}</h4>
+                    <div className="flex items-center gap-2 mt-1.5 text-xs text-muted-foreground font-medium">
                       <span>{format(new Date(report.generatedAt), "MMM d, yyyy 'at' h:mm a")}</span>
-                      <span>â€¢</span>
-                      <span className="uppercase">{report.format}</span>
+                      <span>•</span>
+                      <span className="uppercase tracking-wider">{report.format}</span>
                     </div>
                   </div>
                   {report.fileUrl && (
-                    <Button variant="ghost" size="sm" asChild className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50">
+                    <Button variant="outline" size="sm" asChild className="rounded-xl border-black/10 hover:bg-black/5">
                       <a href={report.fileUrl} target="_blank" rel="noreferrer">
-                        <Download className="w-4 h-4 mr-2" /> Download
+                        <Download className="w-4 h-4 mr-2 text-muted-foreground" /> Download
                       </a>
                     </Button>
                   )}
@@ -121,32 +125,39 @@ export default function ReportsDashboard() {
         </div>
 
         {/* Scheduled Reports */}
-        <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
-          <div className="px-5 py-4 border-b border-slate-50 flex items-center justify-between">
-            <h3 className="font-semibold text-foreground flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-emerald-500" />
-              Scheduled
-            </h3>
-            <Link href="/reports/scheduled" className="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
-              Manage
+        <div className="bg-card rounded-2xl border border-border overflow-hidden">
+          <div className="px-5 py-4 border-b border-border flex items-center justify-between bg-black/[0.02]">
+            <h3 className="font-semibold text-foreground">Scheduled</h3>
+            <Link href="/reports/scheduled" className="text-sm text-primary hover:text-primary/80 font-medium flex items-center gap-1">
+              Manage <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
           
-          <div className="divide-y divide-slate-50">
+          <div className="divide-y divide-border">
             {loadingScheduled ? (
-              <div className="p-8 text-center text-muted-foreground">Loading...</div>
+              <div className="p-6 space-y-4">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="flex justify-between items-center">
+                     <div className="space-y-2"><Skeleton className="h-4 w-32"/><Skeleton className="h-3 w-20"/></div>
+                  </div>
+                ))}
+              </div>
             ) : scheduledReports.length === 0 ? (
-              <div className="p-8 text-center flex flex-col items-center">
-                <Calendar className="w-8 h-8 text-slate-200 mb-2" />
-                <p className="text-sm text-muted-foreground">No scheduled reports.</p>
+              <div className="p-12 text-center flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-black/5 flex items-center justify-center mb-3">
+                  <Calendar className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <p className="text-sm font-medium text-foreground">No scheduled reports</p>
               </div>
             ) : (
               scheduledReports.map(schedule => (
-                <div key={schedule.id} className="p-5 hover:bg-muted/50 transition-colors">
-                  <h4 className="font-medium text-foreground text-sm truncate">{schedule.name}</h4>
-                  <div className="flex items-center justify-between mt-2">
-                    <span className="text-xs text-muted-foreground capitalize">{schedule.frequency}</span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${schedule.isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-muted text-muted-foreground'}`}>
+                <div key={schedule.id} className="p-5 hover:bg-black/[0.01] transition-colors">
+                  <h4 className="font-medium text-[15px] text-foreground truncate">{schedule.name}</h4>
+                  <div className="flex items-center justify-between mt-2.5">
+                    <span className="text-xs font-medium text-muted-foreground capitalize">{schedule.frequency}</span>
+                    <span className={`text-[10px] font-bold tracking-widest px-2.5 py-1 rounded-full ${
+                      schedule.isActive ? 'bg-emerald-500/10 text-emerald-700' : 'bg-black/5 text-muted-foreground'
+                    }`}>
                       {schedule.isActive ? 'ACTIVE' : 'PAUSED'}
                     </span>
                   </div>
