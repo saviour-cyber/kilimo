@@ -13,6 +13,7 @@ export const tasksRouter = router({
       status: z.string().optional(),
       category: z.string().optional(),
       assignedToMe: z.boolean().optional(),
+      workerId: z.number().optional(),
     }))
     .query(async ({ ctx, input }) => {
       const db = await getDb();
@@ -22,6 +23,7 @@ export const tasksRouter = router({
       if (input.status) conditions.push(eq(tasks.status, input.status as any));
       if (input.category) conditions.push(eq(tasks.category, input.category as any));
       if (input.assignedToMe) conditions.push(eq(tasks.assignedToUserId, ctx.user.id));
+      if (input.workerId) conditions.push(eq(tasks.assignedToWorkerId, input.workerId));
       return db.select().from(tasks).where(and(...conditions)).orderBy(desc(tasks.createdAt));
     }),
 
@@ -34,6 +36,7 @@ export const tasksRouter = router({
       priority: z.enum(["low", "medium", "high", "urgent"]).optional(),
       dueDate: z.string().optional(),
       assignedToUserId: z.number().optional(),
+      assignedToWorkerId: z.number().optional(),
       relatedEntityType: z.string().optional(),
       relatedEntityId: z.number().optional(),
     }))
@@ -58,6 +61,7 @@ export const tasksRouter = router({
       priority: z.enum(["low", "medium", "high", "urgent"]).optional(),
       dueDate: z.string().optional(),
       assignedToUserId: z.number().optional(),
+      assignedToWorkerId: z.number().optional(),
     }))
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
@@ -83,7 +87,7 @@ export const tasksRouter = router({
       return { success: true };
     }),
 
-  // ── Dashboard Summary ─────────────────────────────────────────────────────────
+  // Ã¢â€â‚¬Ã¢â€â‚¬ Dashboard Summary Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
   dashboardSummary: protectedProcedure
     .input(z.object({ farmId: z.number() }))
     .query(async ({ ctx, input }) => {
