@@ -115,7 +115,7 @@ import { InventoryKpiWidget } from "@/components/widgets/modules/InventoryWidget
 import { EquipmentKpiWidget } from "@/components/widgets/modules/EquipmentWidgets";
 import { FinanceRevenueKpiWidget, FinanceExpenseKpiWidget } from "@/components/widgets/modules/FinanceWidgets";
 import { TasksKpiWidget, TasksSummaryWidget } from "@/components/widgets/modules/TasksWidgets";
-import { DiseaseKpiWidget } from "@/components/widgets/modules/DiseaseWidgets";
+import { DiseaseKpiWidget } from "@/components/widgets/modules/DiseaseWidgets"; import { DiseaseCommunityFeedWidget } from "@/components/widgets/modules/DiseaseCommunityFeedWidget"; import { AiInsightWidget } from "@/components/widgets/platform/AiInsightWidget";
 
 export const MODULE_REGISTRY: ModuleDefinition[] = [
   {
@@ -415,7 +415,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
       },
     ],
     dashboardWidgets: [
-      { id: "disease-kpi", type: "kpi", size: "small", priority: { level: "critical", order: 0 }, component: DiseaseKpiWidget },
+      { id: "disease-kpi", type: "kpi", size: "small", priority: { level: "critical", order: 0 }, component: DiseaseKpiWidget }, { id: "disease-community", type: "activity", size: "large", priority: { level: "high", order: 1 }, component: DiseaseCommunityFeedWidget }, { id: "ai-insight", type: "intelligence", size: "large", priority: { level: "critical", order: 0 }, component: AiInsightWidget },
     ],
   },
 

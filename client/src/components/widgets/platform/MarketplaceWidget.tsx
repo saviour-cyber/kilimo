@@ -1,71 +1,58 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { ShoppingBag, MapPin, Tag } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
 
-export function MarketplaceWidget({ farmId, className }: { farmId: number; className?: string }) {
+export function MarketplaceWidget({ farmId }: { farmId: number }) {
   // Try to fetch recent market listings
   const { data: listings, isLoading } = trpc.marketplace.list.useQuery(
     { limit: 4 },
     { enabled: !!farmId }
   );
 
-  if (isLoading) return <Skeleton className={cn("h-[250px] rounded-xl w-full", className)} />;
+  if (isLoading) return <Skeleton className="h-[200px] w-full rounded-2xl" />;
 
   const items = listings || [];
 
   return (
-    <Card className={cn("border shadow-sm bg-card flex flex-col", className)}>
-      <div className="p-3 border-b flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded flex items-center justify-center bg-teal-100">
-            <ShoppingBag className="w-3.5 h-3.5 text-teal-700" />
-          </div>
-          <h3 className="font-bold text-[15px] font-serif text-foreground">Market Opportunities</h3>
-        </div>
+    <div>
+      <div className="flex justify-between items-end mb-4">
+        <h2 className="text-[17px] font-bold text-slate-900">What's Selling Near You</h2>
         <Link href="/marketplace/browse">
-          <span className="text-[11px] font-bold text-muted-foreground hover:text-teal-600 cursor-pointer">View Market</span>
+          <span className="text-[13px] font-bold text-slate-500 hover:text-slate-800 cursor-pointer">View All ›</span>
         </Link>
       </div>
-      <CardContent className="p-0 flex flex-col flex-1">
-        {items.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-6 text-center flex-1">
-            <span className="text-sm text-muted-foreground mb-2">No market opportunities available yet.</span>
-            <Link href="/marketplace/create">
-              <span className="text-xs font-semibold text-teal-600 hover:underline cursor-pointer">
-                List My Product →
-              </span>
-            </Link>
-          </div>
-        ) : (
-          <div className="flex flex-col divide-y divide-border">
-            {items.map((item) => (
+
+      <ScrollArea className="w-full whitespace-nowrap pb-4 -mx-5 px-5">
+        <div className="flex w-max space-x-4">
+          {items.length === 0 ? (
+            <div className="w-[300px] h-[160px] bg-white rounded-2xl border border-slate-100 flex items-center justify-center text-sm text-slate-500">
+              No items available
+            </div>
+          ) : (
+            items.map((item) => (
               <Link key={item.listing.id} href={`/marketplace/listing/${item.listing.id}`}>
-                <div className="flex items-start justify-between px-4 py-3 hover:bg-muted cursor-pointer transition-colors">
-                  <div className="flex flex-col gap-1 min-w-0">
-                    <span className="text-[13px] font-semibold text-foreground truncate">{item.listing.title}</span>
-                    {item.listing.location && (
-                      <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
-                        <MapPin className="w-3 h-3" /> {item.listing.location}
-                      </span>
-                    )}
+                <div className="w-[140px] flex flex-col cursor-pointer group">
+                  <div className="w-[140px] h-[100px] rounded-2xl overflow-hidden mb-2 shadow-sm border border-slate-100 bg-slate-100 flex items-center justify-center">
+                    <img 
+                      src={"https://images.unsplash.com/photo-1518843875459-f738682238a6?auto=format&fit=crop&q=80&w=300"} 
+                      alt={item.listing.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
                   </div>
-                  <div className="flex flex-col items-end shrink-0 ml-3">
-                    <span className="text-[13px] font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100">
-                      KES {Number(item.listing.price).toLocaleString()}
-                    </span>
-                    <span className="text-[10px] text-muted-foreground mt-1 uppercase tracking-wider">
-                      {item.listing.unit}
-                    </span>
-                  </div>
+                  <h3 className="text-[13px] font-bold text-slate-900 truncate">{item.listing.title}</h3>
+                  <p className="text-[12px] font-medium text-slate-500">KES {Number(item.listing.price).toLocaleString()} <span className="text-slate-400">/ {item.listing.unit}</span></p>
+                  {item.listing.location && (
+                    <p className="text-[11px] text-slate-400 mt-0.5 truncate">{item.listing.location}</p>
+                  )}
                 </div>
               </Link>
-            ))}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+            ))
+          )}
+        </div>
+        <ScrollBar orientation="horizontal" className="invisible" />
+      </ScrollArea>
+    </div>
   );
 }

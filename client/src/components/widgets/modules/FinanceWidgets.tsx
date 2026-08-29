@@ -1,65 +1,35 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { DollarSign, Wallet, TrendingUp } from "lucide-react";
+import { DollarSign, Wallet, TrendingUp, TrendingDown } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "wouter";
 import { cn } from "@/lib/utils";
 
-export function FinanceRevenueKpiWidget({ farmId, className }: { farmId: number; className?: string }) {
-  const { data, isLoading } = trpc.finance.dashboardSummary.useQuery(
-    { farmId },
-    { enabled: !!farmId }
-  );
-
-  if (isLoading) return <Skeleton className={cn("h-[90px] rounded-xl", className)} />;
-  
+export function FinanceRevenueKpiWidget({ farmId }: { farmId: number }) {
+  const { data, isLoading } = trpc.finance.dashboardSummary.useQuery({ farmId }, { enabled: !!farmId });
+  if (isLoading) return <Skeleton className="h-[100px] rounded-2xl" />;
   const revenue = data?.totalIncome ?? 0;
 
   return (
-    <Card className={cn("border shadow-sm bg-white", className)}>
-      <CardContent className="p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-blue-100 shrink-0">
-            <Wallet className="w-4 h-4 text-blue-700" />
-          </div>
-          <span className="text-sm text-muted-foreground truncate">
-            <span className="font-semibold">Revenue</span>{" "}
-          </span>
-        </div>
-        <div className="flex items-end justify-between">
-          <div className="text-2xl font-bold text-foreground">KES {revenue.toLocaleString()}</div>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="bg-white rounded-2xl p-3.5 border border-slate-100 shadow-sm flex flex-col h-[100px]">
+      <span className="text-[11px] font-semibold text-green-600 truncate mb-1">Sales (This Month)</span>
+      <span className="text-[15px] font-bold text-slate-900 truncate flex-1">KES {revenue.toLocaleString()}</span>
+      <TrendingUp className="w-4 h-4 text-green-600" />
+    </div>
   );
 }
 
-export function FinanceExpenseKpiWidget({ farmId, className }: { farmId: number; className?: string }) {
-  const { data, isLoading } = trpc.finance.dashboardSummary.useQuery(
-    { farmId },
-    { enabled: !!farmId }
-  );
-
-  if (isLoading) return <Skeleton className={cn("h-[90px] rounded-xl", className)} />;
-  
+export function FinanceExpenseKpiWidget({ farmId }: { farmId: number }) {
+  const { data, isLoading } = trpc.finance.dashboardSummary.useQuery({ farmId }, { enabled: !!farmId });
+  if (isLoading) return <Skeleton className="h-[100px] rounded-2xl" />;
   const expenses = data?.totalExpense ?? 0;
 
   return (
-    <Card className={cn("border shadow-sm bg-white", className)}>
-      <CardContent className="p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-purple-100 shrink-0">
-            <DollarSign className="w-4 h-4 text-purple-700" />
-          </div>
-          <span className="text-sm text-muted-foreground truncate">
-            <span className="font-semibold">Expenses</span>{" "}
-          </span>
-        </div>
-        <div className="flex items-end justify-between">
-          <div className="text-2xl font-bold text-foreground">KES {expenses.toLocaleString()}</div>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="bg-white rounded-2xl p-3.5 border border-slate-100 shadow-sm flex flex-col h-[100px]">
+      <span className="text-[11px] font-semibold text-blue-600 truncate mb-1">Expenses (This Month)</span>
+      <span className="text-[15px] font-bold text-slate-900 truncate flex-1">KES {expenses.toLocaleString()}</span>
+      <Wallet className="w-4 h-4 text-blue-600" />
+    </div>
   );
 }
 

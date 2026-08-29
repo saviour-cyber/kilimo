@@ -1,38 +1,21 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Package, Tractor } from "lucide-react";
+import { Package, Tractor, AlertTriangle } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "wouter";
 import { cn } from "@/lib/utils";
 
-export function InventoryKpiWidget({ farmId, className }: { farmId: number; className?: string }) {
-  const { data, isLoading } = trpc.inventory.dashboardSummary.useQuery(
-    { farmId },
-    { enabled: !!farmId }
-  );
-
-  if (isLoading) return <Skeleton className={cn("h-[90px] rounded-xl", className)} />;
-  
+export function InventoryKpiWidget({ farmId }: { farmId: number }) {
+  const { data, isLoading } = trpc.inventory.dashboardSummary.useQuery({ farmId }, { enabled: !!farmId });
+  if (isLoading) return <Skeleton className="h-[100px] rounded-2xl" />;
   const lowStock = data?.lowStockCount ?? 0;
-  const totalItems = data?.totalItems ?? 0;
 
   return (
-    <Card className={cn("border shadow-sm bg-white", className)}>
-      <CardContent className="p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-blue-100 shrink-0">
-            <Package className="w-4 h-4 text-blue-700" />
-          </div>
-          <span className="text-sm font-semibold text-muted-foreground truncate">Low Stock</span>
-        </div>
-        <div className="flex items-end justify-between">
-          <div>
-            <div className="text-2xl font-bold text-foreground">{lowStock}</div>
-            <div className="text-xs text-muted-foreground mt-1">Need restocking</div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="bg-white rounded-2xl p-3.5 border border-red-100 shadow-sm flex flex-col h-[100px]">
+      <span className="text-[11px] font-semibold text-red-600 truncate mb-1">Stock Alerts</span>
+      <span className="text-[15px] font-bold text-slate-900 truncate flex-1">{lowStock}</span>
+      <AlertTriangle className="w-4 h-4 text-red-500" />
+    </div>
   );
 }
 

@@ -5,39 +5,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "wouter";
 import { cn } from "@/lib/utils";
 
-export function CropKpiWidget({ farmId, className }: { farmId: number; className?: string }) {
-  const { data, isLoading } = trpc.crops.dashboardSummary.useQuery(
-    { farmId },
-    { enabled: !!farmId }
-  );
-
-  if (isLoading) return <Skeleton className={cn("h-[90px] rounded-xl", className)} />;
-
+export function CropKpiWidget({ farmId }: { farmId: number }) {
+  const { data, isLoading } = trpc.crops.dashboardSummary.useQuery({ farmId }, { enabled: !!farmId });
+  if (isLoading) return <Skeleton className="h-[100px] rounded-2xl" />;
   const activeCrops = data?.activeCrops ?? 0;
-  const fields = data?.totalFields ?? 0;
 
   return (
-    <Card className={cn("border shadow-sm bg-white", className)}>
-      <CardContent className="p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-green-100 shrink-0">
-            <Sprout className="w-4 h-4 text-green-700" />
-          </div>
-          <span className="text-sm font-semibold text-muted-foreground truncate">Active Crops</span>
-        </div>
-        <div className="flex items-end justify-between">
-          <div>
-            <div className="text-2xl font-bold text-foreground">{activeCrops}</div>
-            <div className="text-xs text-muted-foreground mt-1">Across {fields} fields</div>
-          </div>
-          {activeCrops > 0 && (
-            <div className="text-right">
-              <div className="text-xs font-bold text-green-600">â†‘ Active</div>
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+    <div className="bg-white rounded-2xl p-3.5 border border-slate-100 shadow-sm flex flex-col h-[100px]">
+      <span className="text-[11px] font-semibold text-green-600 truncate mb-1">Active Crops</span>
+      <span className="text-[15px] font-bold text-slate-900 truncate flex-1">{activeCrops}</span>
+      <Sprout className="w-4 h-4 text-green-500" />
+    </div>
   );
 }
 

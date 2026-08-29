@@ -5,33 +5,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "wouter";
 import { cn } from "@/lib/utils";
 
-export function TasksKpiWidget({ farmId, className }: { farmId: number; className?: string }) {
-  const { data, isLoading } = trpc.tasks.dashboardSummary.useQuery(
-    { farmId },
-    { enabled: !!farmId }
-  );
-
-  if (isLoading) return <Skeleton className={cn("h-[90px] rounded-xl", className)} />;
-  
+export function TasksKpiWidget({ farmId }: { farmId: number }) {
+  const { data, isLoading } = trpc.tasks.dashboardSummary.useQuery({ farmId }, { enabled: !!farmId });
+  if (isLoading) return <Skeleton className="h-[100px] rounded-2xl" />;
   const pendingCount = data?.pendingCount ?? 0;
 
   return (
-    <Card className={cn("border shadow-sm bg-white", className)}>
-      <CardContent className="p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-orange-100 shrink-0">
-            <CheckSquare className="w-4 h-4 text-orange-700" />
-          </div>
-          <span className="text-sm font-semibold text-muted-foreground truncate">Pending Tasks</span>
-        </div>
-        <div className="flex items-end justify-between">
-          <div>
-            <div className="text-2xl font-bold text-foreground">{pendingCount}</div>
-            <div className="text-xs text-muted-foreground mt-1">Awaiting action</div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="bg-white rounded-2xl p-3.5 border border-slate-100 shadow-sm flex flex-col h-[100px]">
+      <span className="text-[11px] font-semibold text-orange-600 truncate mb-1">Tasks Pending</span>
+      <span className="text-[15px] font-bold text-slate-900 truncate flex-1">{pendingCount}</span>
+      <CheckSquare className="w-4 h-4 text-orange-500" />
+    </div>
   );
 }
 
