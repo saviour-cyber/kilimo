@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useFarm } from "@/contexts/FarmContext";
 import { useGrantedModules } from "@/hooks/useEntitlement";
 import {
+  MODULE_REGISTRY,
   getVisibleModules,
   getMobileNavSplit,
   SIDEBAR_SECTION_LABELS,
@@ -56,8 +57,7 @@ export function MobileMoreMenu({ open, onClose }: MobileMoreMenuProps) {
   const { modules: grantedModules = [] } = useGrantedModules();
   
   // The registry exports all modules. We filter by entitlement, then by RBAC/Farm scope
-  const { modules: allModules } = require("@/lib/moduleRegistry");
-  const enabledModules = Object.keys(allModules); // Simplified for this context as they are all registered
+  const enabledModules = MODULE_REGISTRY.map((m) => m.key);
   const effectiveModules = enabledModules.filter((m) => grantedModules.includes(m));
   const visibleModules = getVisibleModules(effectiveModules, role ?? null);
   const platformServices = getSidebarServices().filter((s) => grantedModules.includes(s.key));
