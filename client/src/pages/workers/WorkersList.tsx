@@ -54,7 +54,7 @@ function WorkerForm({
     worker?.employmentType ?? "full_time"
   );
   const [status, setStatus] = useState(worker?.status ?? "active");
-  const [teamId, setTeamId] = useState(worker?.teamId?.toString() ?? "");
+  const [teamId, setTeamId] = useState(worker?.teamId?.toString() ?? "none");
   const [startDate, setStartDate] = useState(
     worker?.startDate ? new Date(worker.startDate).toISOString().split("T")[0] : ""
   );
@@ -92,7 +92,7 @@ function WorkerForm({
       phone,
       email,
       employmentType: employmentType as any,
-      teamId: teamId ? parseInt(teamId) : undefined,
+      teamId: teamId && teamId !== "none" ? parseInt(teamId) : undefined,
       startDate: startDate || undefined,
       skills,
       notes,
@@ -165,7 +165,7 @@ function WorkerForm({
           <Select value={teamId} onValueChange={setTeamId}>
             <SelectTrigger><SelectValue placeholder="No team" /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="">No team</SelectItem>
+              <SelectItem value="none">No team</SelectItem>
               {teams.map((t: any) => (
                 <SelectItem key={t.id} value={t.id.toString()}>{t.name}</SelectItem>
               ))}
