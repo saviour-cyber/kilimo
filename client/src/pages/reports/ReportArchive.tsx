@@ -22,7 +22,7 @@ export default function ReportArchive() {
         title="Report Archive" 
         description="History of all generated reports"
       >
-        <Button variant="outline" asChild className="gap-2 rounded-xl border-black/10">
+        <Button variant="outline" asChild className="gap-2 rounded-full border-2 border-[#1E3F2D] bg-transparent text-[#1E3F2D] hover:bg-[#1E3F2D]/5 font-bold shadow-none hover:text-[#1E3F2D]">
           <Link href="/reports">
             <ArrowLeft className="w-4 h-4" /> Back to Dashboard
           </Link>
@@ -61,9 +61,9 @@ export default function ReportArchive() {
                   </div>
                 </div>
                 {report.fileUrl && (
-                  <Button variant="outline" asChild className="rounded-xl border-black/10 hover:bg-black/5">
+                  <Button variant="outline" asChild className="rounded-full border-2 border-[#1E3F2D] bg-transparent text-[#1E3F2D] hover:bg-[#1E3F2D]/5 font-bold shadow-none hover:text-[#1E3F2D]">
                     <a href={report.fileUrl} target="_blank" rel="noreferrer">
-                      <Download className="w-4 h-4 mr-2 text-muted-foreground" /> Download
+                      <Download className="w-4 h-4 mr-2" /> Download
                     </a>
                   </Button>
                 )}

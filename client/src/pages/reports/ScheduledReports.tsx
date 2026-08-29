@@ -23,7 +23,7 @@ export default function ScheduledReports() {
         title="Scheduled Reports" 
         description="Manage recurring automated reports"
       >
-        <Button variant="outline" asChild className="gap-2 rounded-xl border-black/10">
+        <Button variant="outline" asChild className="gap-2 rounded-full border-2 border-[#1E3F2D] bg-transparent text-[#1E3F2D] hover:bg-[#1E3F2D]/5 font-bold shadow-none hover:text-[#1E3F2D]">
           <Link href="/reports">
             <ArrowLeft className="w-4 h-4" /> Back to Dashboard
           </Link>
@@ -68,10 +68,10 @@ export default function ScheduledReports() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" onClick={() => toast.info("Report execution queued manually")} className="rounded-xl border-black/10">
+                  <Button variant="outline" size="sm" onClick={() => toast.info("Report execution queued manually")} className="rounded-full border-2 border-[#1E3F2D] bg-transparent text-[#1E3F2D] hover:bg-[#1E3F2D]/5 font-bold shadow-none hover:text-[#1E3F2D]">
                     <Play className="w-4 h-4 mr-2" /> Run Now
                   </Button>
-                  <Button variant="outline" size="icon" className="rounded-xl border-black/10">
+                  <Button variant="outline" size="icon" className="rounded-full border-2 border-[#1E3F2D] bg-transparent text-[#1E3F2D] hover:bg-[#1E3F2D]/5 font-bold shadow-none hover:text-[#1E3F2D]">
                     <Settings className="w-4 h-4" />
                   </Button>
                 </div>

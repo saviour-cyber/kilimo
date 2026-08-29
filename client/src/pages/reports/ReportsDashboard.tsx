@@ -28,7 +28,7 @@ export default function ReportsDashboard() {
         title="Reports" 
         description="Centralized workspace for analytics and data exports."
       >
-        <Button asChild className="gap-2 rounded-xl">
+        <Button asChild className="gap-2 rounded-full border-2 border-[#1E3F2D] bg-transparent text-[#1E3F2D] hover:bg-[#1E3F2D]/5 font-bold shadow-none hover:text-[#1E3F2D]">
           <Link href="/reports/wizard">
             <PlusCircle className="w-4 h-4" /> Generate Report
           </Link>
@@ -112,9 +112,9 @@ export default function ReportsDashboard() {
                     </div>
                   </div>
                   {report.fileUrl && (
-                    <Button variant="outline" size="sm" asChild className="rounded-xl border-black/10 hover:bg-black/5">
+                    <Button variant="outline" size="sm" asChild className="rounded-full border-2 border-[#1E3F2D] bg-transparent text-[#1E3F2D] hover:bg-[#1E3F2D]/5 font-bold shadow-none hover:text-[#1E3F2D]">
                       <a href={report.fileUrl} target="_blank" rel="noreferrer">
-                        <Download className="w-4 h-4 mr-2 text-muted-foreground" /> Download
+                        <Download className="w-4 h-4 mr-2" /> Download
                       </a>
                     </Button>
                   )}

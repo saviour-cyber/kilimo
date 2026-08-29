@@ -59,7 +59,7 @@ export default function ReportWizard() {
         title="Generate Report" 
         description={`Step ${step} of 3 - Configure and export`}
       >
-        <Button variant="outline" asChild className="gap-2 rounded-xl border-black/10">
+        <Button variant="outline" asChild className="gap-2 rounded-full border-2 border-[#1E3F2D] bg-transparent text-[#1E3F2D] hover:bg-[#1E3F2D]/5 font-bold shadow-none hover:text-[#1E3F2D]">
           <Link href="/reports">
             <ArrowLeft className="w-4 h-4" /> Cancel
           </Link>
@@ -106,7 +106,7 @@ export default function ReportWizard() {
               <Button 
                 onClick={() => setStep(2)} 
                 disabled={!selectedModule}
-                className="rounded-xl px-8"
+                className="rounded-full px-8 bg-[#E5A93D] text-slate-900 hover:bg-[#D4982C] font-bold shadow-none"
               >
                 Next Step
               </Button>
@@ -146,11 +146,11 @@ export default function ReportWizard() {
             </div>
 
             <div className="flex justify-between pt-6 border-t border-border mt-8">
-              <Button variant="outline" onClick={() => setStep(1)} className="rounded-xl border-black/10">Back</Button>
+              <Button variant="outline" onClick={() => setStep(1)} className="rounded-full border-2 border-[#1E3F2D] bg-transparent text-[#1E3F2D] hover:bg-[#1E3F2D]/5 font-bold shadow-none hover:text-[#1E3F2D]">Back</Button>
               <Button 
                 onClick={() => setStep(3)} 
                 disabled={!selectedReport}
-                className="rounded-xl px-8"
+                className="rounded-full px-8 bg-[#E5A93D] text-slate-900 hover:bg-[#D4982C] font-bold shadow-none"
               >
                 Next Step
               </Button>
@@ -172,8 +172,8 @@ export default function ReportWizard() {
                   <button
                     key={fmt}
                     onClick={() => setFormat(fmt)}
-                    className={`px-5 py-3 rounded-xl border text-sm font-semibold transition-all uppercase tracking-wider ${
-                      format === fmt ? 'border-primary bg-primary text-primary-foreground' : 'border-border text-foreground hover:bg-black/[0.02]'
+                    className={`px-5 py-3 rounded-full border-2 text-sm font-bold transition-all uppercase tracking-wider ${
+                      format === fmt ? 'border-transparent bg-[#E5A93D] text-slate-900 shadow-none' : 'border-[#1E3F2D] bg-transparent text-[#1E3F2D] hover:bg-[#1E3F2D]/5 shadow-none'
                     }`}
                   >
                     {fmt}
@@ -183,11 +183,11 @@ export default function ReportWizard() {
             </div>
 
             <div className="flex justify-between pt-6 border-t border-border mt-8">
-              <Button variant="outline" onClick={() => setStep(2)} className="rounded-xl border-black/10">Back</Button>
+              <Button variant="outline" onClick={() => setStep(2)} className="rounded-full border-2 border-[#1E3F2D] bg-transparent text-[#1E3F2D] hover:bg-[#1E3F2D]/5 font-bold shadow-none hover:text-[#1E3F2D]">Back</Button>
               <Button 
                 onClick={handleGenerate} 
                 disabled={generateMutation.isPending}
-                className="gap-2 rounded-xl px-8"
+                className="gap-2 rounded-full px-8 bg-[#E5A93D] text-slate-900 hover:bg-[#D4982C] font-bold shadow-none"
               >
                 {generateMutation.isPending ? "Generating..." : (
                   <>
