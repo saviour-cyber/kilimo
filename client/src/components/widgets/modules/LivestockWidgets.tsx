@@ -1,41 +1,26 @@
-import { Card, CardContent } from "@/components/ui/card";
 import { Beef, PlusCircle } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "wouter";
 import { cn } from "@/lib/utils";
+import { Card, CardContent } from "@/components/ui/card";
 
-export function LivestockKpiWidget({ farmId, className }: { farmId: number; className?: string }) {
+export function LivestockKpiWidget({ farmId }: { farmId: number }) {
   const { data, isLoading } = trpc.livestock.dashboardSummary.useQuery(
     { farmId },
     { enabled: !!farmId }
   );
 
-  if (isLoading) return <Skeleton className={cn("h-[90px] rounded-xl", className)} />;
+  if (isLoading) return <Skeleton className="h-[100px] rounded-2xl" />;
 
   const activeAnimals = data?.activeAnimals ?? 0;
-  const sickAnimals = data?.recentMortality ?? 0;
 
   return (
-    <Card className={cn("border shadow-sm bg-white", className)}>
-      <CardContent className="p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-amber-100 shrink-0">
-            <Beef className="w-4 h-4 text-amber-700" />
-          </div>
-          <span className="text-sm font-semibold text-muted-foreground truncate">Animals</span>
-        </div>
-        <div className="flex items-end justify-between">
-          <div>
-            <div className="text-2xl font-bold text-foreground">{activeAnimals}</div>
-            <div className="text-xs text-muted-foreground mt-1">{sickAnimals} need attention</div>
-          </div>
-          <div className="text-right">
-            <div className="text-xs font-bold text-amber-600">â†‘ Active</div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="bg-white rounded-2xl p-3.5 border border-slate-100 shadow-sm flex flex-col h-[100px]">
+      <span className="text-[11px] font-semibold text-amber-600 truncate mb-1">Animals</span>
+      <span className="text-[15px] font-bold text-slate-900 truncate flex-1">{activeAnimals}</span>
+      <Beef className="w-4 h-4 text-amber-500" />
+    </div>
   );
 }
 

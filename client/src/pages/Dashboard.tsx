@@ -111,7 +111,8 @@ export default function Dashboard() {
               <h2 className="text-[17px] font-bold text-slate-900">Your Summary</h2>
               <Link href="/reports"><span className="text-[13px] font-bold text-slate-500 hover:text-slate-800 cursor-pointer">View All ›</span></Link>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {/* auto-fill: min 140px per card, max 1fr — fills row cleanly */}
+            <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))" }}>
               {kpiWidgets.map(widget => (
                 <React.Fragment key={widget.id}>
                   <widget.component farmId={currentFarm.farm.id} />
