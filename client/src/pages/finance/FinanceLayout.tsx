@@ -1,4 +1,4 @@
-import { DollarSign } from "lucide-react";
+import { Banknote } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -19,7 +19,7 @@ export default function FinanceLayout({ children }: { children: React.ReactNode 
       <PageHeader 
         title="Finance" 
         description="Income, expenses, and financial reports" 
-        icon={DollarSign} 
+        icon={Banknote} 
       />
 
       <div className="flex gap-1 border-b border-border overflow-x-auto pb-0">

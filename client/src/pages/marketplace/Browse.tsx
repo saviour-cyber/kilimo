@@ -26,8 +26,8 @@ export default function Browse() {
         title="Marketplace" 
         description="Browse farm produce, livestock, and inputs across KiliSense"
         icon={Store}
-        iconColor="text-teal-600"
-        iconBg="bg-teal-100"
+        iconColor="text-primary"
+        iconBg="bg-primary/10"
       />
 
       <div className="flex flex-col md:flex-row gap-4">
@@ -101,7 +101,7 @@ export default function Browse() {
                 <div className="flex justify-between items-start gap-2 mb-1">
                   <h3 className="font-semibold line-clamp-2 text-sm">{listing.title}</h3>
                 </div>
-                <p className="font-bold text-lg text-teal-700 mb-2">
+                <p className="font-bold text-lg text-primary mb-2">
                   {listing.currency} {parseFloat(listing.price.toString()).toLocaleString()}
                 </p>
                 

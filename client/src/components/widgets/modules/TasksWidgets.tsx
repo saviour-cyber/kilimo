@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
+﻿import { Card, CardContent } from "@/components/ui/card";
 import { CheckSquare, ListTodo } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -36,7 +36,7 @@ export function TasksSummaryWidget({ farmId, className }: { farmId: number; clas
           <div className="w-6 h-6 rounded flex items-center justify-center bg-purple-100">
             <CheckSquare className="w-3.5 h-3.5 text-purple-700" />
           </div>
-          <h3 className="font-bold text-[15px] font-serif text-foreground">Upcoming Tasks</h3>
+          <h3 className="font-semibold text-sm text-foreground">Upcoming Tasks</h3>
         </div>
         <Link href="/tasks">
           <span className="text-[11px] font-bold text-muted-foreground hover:text-purple-600 cursor-pointer">View All</span>
@@ -51,7 +51,7 @@ export function TasksSummaryWidget({ farmId, className }: { farmId: number; clas
                 <span className="text-[12px] font-medium text-muted-foreground">{task.title}</span>
               </div>
               <div className="flex items-center gap-1 text-[10px] text-muted-foreground whitespace-nowrap ml-2">
-                <span>{task.dueDate ?? "ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â"}</span>
+                <span>{task.dueDate ?? "—"}</span>
               </div>
             </div>
           ))}

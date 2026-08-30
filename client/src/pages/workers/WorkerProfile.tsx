@@ -11,7 +11,7 @@ import {
   Calendar,
   FileText,
   CheckSquare,
-  DollarSign,
+  Banknote,
   Upload,
   Plus,
   Trash2,

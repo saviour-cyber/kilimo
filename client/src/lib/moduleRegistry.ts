@@ -2,7 +2,7 @@ import {
   BarChart3,
   Beef,
   CheckSquare,
-  DollarSign,
+  Banknote,
   LayoutDashboard,
   Package,
   PlusCircle,
@@ -318,7 +318,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
   {
     key: "finance",
     label: "Finance",
-    icon: DollarSign,
+    icon: Banknote,
     basePath: "/finance",
     color: "text-violet-600",
     description: "Income, expenses, and reports",
@@ -332,7 +332,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
       {
         label: "Record Transaction",
         description: "Add income or an expense entry.",
-        icon: DollarSign,
+        icon: Banknote,
         path: "/finance/transactions",
         color: "bg-violet-100 text-violet-700",
       },

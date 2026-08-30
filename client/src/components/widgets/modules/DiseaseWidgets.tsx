@@ -1,4 +1,4 @@
-import { trpc } from "@/lib/trpc";
+﻿import { trpc } from "@/lib/trpc";
 import { AlertTriangle, Activity, CheckCircle, Clock, Stethoscope, ShieldAlert } from "lucide-react";
 
 // â”€â”€â”€ Shared helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -35,7 +35,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
-// ─── Disease KPI Widget ───────────────────────────────────────────────────────
 export function DiseaseKpiWidget({ farmId }: { farmId: number }) {
   const { data, isLoading } = trpc.disease.getSummary.useQuery({ farmId });
 
@@ -58,7 +57,6 @@ export function DiseaseKpiWidget({ farmId }: { farmId: number }) {
   );
 }
 
-// ──────────────────────────────────────────────────────────────────────────────────────────────────
 export function DiseaseSummaryWidget({ farmId, className }: { farmId: number; className?: string }) {
   const { data, isLoading } = trpc.disease.getSummary.useQuery({ farmId });
 
@@ -88,7 +86,7 @@ export function DiseaseSummaryWidget({ farmId, className }: { farmId: number; cl
           <span className="font-semibold text-foreground text-sm">Recent Disease Scans</span>
         </div>
         <a href="/disease/history" className="text-xs text-violet-600 hover:text-violet-800 font-medium transition-colors">
-          View All â†’
+        <a href="/disease/history" className="text-xs text-muted-foreground hover:text-foreground font-medium transition-colors">View All</a>
         </a>
       </div>
 
@@ -116,8 +114,8 @@ export function DiseaseSummaryWidget({ farmId, className }: { farmId: number; cl
             >
               <div className="mt-0.5">{statusIcon(scan.status)}</div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold truncate text-foreground">{scan.detectedDisease ?? "Analyzingâ€¦"}</p>
-                <p className="text-xs text-muted-foreground capitalize mt-0.5">{scan.scanType} â€¢ {new Date(scan.createdAt).toLocaleDateString()}</p>
+                <p className="text-sm font-semibold truncate text-foreground">{scan.detectedDisease ?? "Analyzing..."}</p>
+                <p className="text-xs text-muted-foreground capitalize mt-0.5">{scan.scanType} &middot; {new Date(scan.createdAt).toLocaleDateString()}</p>
               </div>
               <span className={`text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full shrink-0 ${severityBadge(scan.severity)}`}>
                 {scan.severity}
@@ -129,3 +127,4 @@ export function DiseaseSummaryWidget({ farmId, className }: { farmId: number; cl
     </div>
   );
 }
+

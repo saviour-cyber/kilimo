@@ -1,4 +1,4 @@
-import { useFarm } from "@/contexts/FarmContext";
+﻿import { useFarm } from "@/contexts/FarmContext";
 import { useGrantedModules } from "@/hooks/useEntitlement";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { MODULE_REGISTRY, getAllWidgets } from "@/lib/moduleRegistry";
@@ -76,7 +76,7 @@ export default function Dashboard() {
         <div className="mb-8">
           <div className="px-5 flex justify-between items-end mb-4">
             <h2 className="text-base font-semibold text-foreground">Quick Actions</h2>
-            <Link href="/modules"><span className="text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer transition-colors">View All ›</span></Link>
+            <Link href="/modules"><span className="text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer transition-colors">View All</span></Link>
           </div>
           <ScrollArea className="w-full whitespace-nowrap pb-4">
             <div className="flex w-max space-x-3 px-5">
@@ -109,7 +109,7 @@ export default function Dashboard() {
           <div className="pt-2">
             <div className="flex justify-between items-end mb-4">
               <h2 className="text-base font-semibold text-foreground">Your Summary</h2>
-              <Link href="/reports"><span className="text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer transition-colors">View All ›</span></Link>
+              <Link href="/reports"><span className="text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer transition-colors">View All</span></Link>
             </div>
             {/* auto-fill: min 140px per card, max 1fr — fills row cleanly */}
             <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))" }}>

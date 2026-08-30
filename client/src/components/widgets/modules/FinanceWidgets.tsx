@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { DollarSign, Wallet, TrendingUp, TrendingDown } from "lucide-react";
+import { Banknote, Wallet, TrendingUp, TrendingDown } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "wouter";
@@ -51,7 +51,7 @@ export function FinanceSummaryWidget({ farmId, className }: { farmId: number; cl
       <div className="p-3 border-b flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded flex items-center justify-center bg-violet-100">
-            <DollarSign className="w-3.5 h-3.5 text-violet-700" />
+            <Banknote className="w-3.5 h-3.5 text-violet-700" />
           </div>
           <span className="font-bold text-[13px] text-foreground">Finance Overview</span>
         </div>
@@ -92,7 +92,7 @@ export function FinanceSummaryWidget({ farmId, className }: { farmId: number; cl
         <div className="grid grid-cols-2 gap-2 mt-1">
           <Link href="/finance/transactions">
             <button className="w-full flex items-center justify-center gap-1.5 py-1.5 bg-violet-50 text-violet-700 text-[11px] font-bold rounded-md hover:bg-violet-100 transition-colors">
-              <DollarSign className="w-3 h-3" /> Record Entry
+              <Banknote className="w-3 h-3" /> Record Entry
             </button>
           </Link>
           <Link href="/finance/report">
