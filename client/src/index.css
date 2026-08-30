@@ -44,10 +44,10 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 0.625rem;
 
-  /* SproutX ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Premium SaaS Light Theme */
-  --background: #F7F5ED;
+  /* KiliSense Human-Designed Theme */
+  --background: #FAFAF8;
   --foreground: #18181B;
 
   --card: #FFFFFF;
@@ -57,8 +57,8 @@
   --popover-foreground: #0F172A;
 
   /* Primary Brand: Emerald */
-  --primary: #EAB308;
-  --primary-foreground: #18181B;
+  --primary: #16A34A;
+  --primary-foreground: #FFFFFF;
 
   --secondary: #F1F5F9;
   --secondary-foreground: #64748B;
@@ -77,10 +77,10 @@
 
   --border: #E2E8F0;
   --input: #E2E8F0;
-  --ring: #EAB308;
+  --ring: #16A34A;
 
   /* Charts */
-  --chart-1: #10B981;
+  --chart-1: #16A34A;
   --chart-2: #8B5CF6;
   --chart-3: #0EA5E9;
   --chart-4: #F97316;
@@ -89,12 +89,12 @@
   /* Sidebar (Dark Slate) */
   --sidebar: #0F172A;
   --sidebar-foreground: #F8FAFC;
-  --sidebar-primary: #EAB308;
-  --sidebar-primary-foreground: #18181B;
+  --sidebar-primary: #16A34A;
+  --sidebar-primary-foreground: #FFFFFF;
   --sidebar-accent: #1E293B;
   --sidebar-accent-foreground: #FFFFFF;
   --sidebar-border: #1E293B;
-  --sidebar-ring: #EAB308;
+  --sidebar-ring: #16A34A;
 }
 
 .dark {
@@ -148,7 +148,7 @@
 
 @layer base {
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif text-foreground;
+    @apply font-sans font-semibold tracking-tight text-foreground;
   }
   * {
     @apply border-border outline-ring/50;

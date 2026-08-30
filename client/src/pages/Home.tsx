@@ -368,8 +368,7 @@ export default function Home() {
       <section className="bg-[#F8FAFC] py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-[1400px] mx-auto">
           <div
-            className="rounded-3xl overflow-hidden relative flex flex-col md:flex-row items-center justify-between shadow-xl"
-            style={{ background: "linear-gradient(135deg, #059669 0%, #10B981 60%, #34D399 100%)" }}
+            className="rounded-2xl overflow-hidden relative flex flex-col md:flex-row items-center justify-between shadow-lg bg-primary"
           >
             {/* Subtle decorative circle */}
             <div className="absolute right-24 top-1/2 -translate-y-1/2 w-72 h-72 rounded-full opacity-10 bg-white pointer-events-none" />

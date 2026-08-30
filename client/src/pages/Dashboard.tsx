@@ -53,19 +53,19 @@ export default function Dashboard() {
   ].filter(Boolean).join(" · ");
 
   return (
-    <div className="flex-1 pb-28 w-full bg-[#FDFCF5] min-h-screen font-sans">
+    <div className="flex-1 pb-20 w-full bg-background min-h-screen">
       
       {/* HEADER */}
-      <div className="px-5 pt-12 pb-6">
+      <div className="px-5 pt-8 pb-4">
         <div className="flex justify-between items-start mb-1">
           <div>
-            <h1 className="text-3xl font-serif font-black tracking-tight text-slate-900">
-              {greeting}{firstName ? `, ${firstName}` : ""} 👋
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              {greeting}{firstName ? `, ${firstName}` : ""}
             </h1>
-            <p className="text-[13px] text-slate-500 mt-1 font-medium">{subtitle}</p>
+            <p className="text-[13px] text-muted-foreground mt-1">{subtitle}</p>
           </div>
-          <button className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center relative shadow-sm">
-            <Bell className="w-5 h-5 text-slate-700" />
+          <button className="w-10 h-10 rounded-full bg-card border flex items-center justify-center relative shadow-sm hover:bg-accent transition-colors">
+            <Bell className="w-4 h-4 text-muted-foreground" />
             <span className="absolute top-2 right-2 w-2 h-2 bg-amber-500 rounded-full border-2 border-white"></span>
           </button>
         </div>
@@ -75,18 +75,18 @@ export default function Dashboard() {
       {quickActions.length > 0 && (
         <div className="mb-8">
           <div className="px-5 flex justify-between items-end mb-4">
-            <h2 className="text-[17px] font-bold text-slate-900">Quick Actions</h2>
-            <Link href="/modules"><span className="text-[13px] font-bold text-slate-500 hover:text-slate-800 cursor-pointer">View All ›</span></Link>
+            <h2 className="text-base font-semibold text-foreground">Quick Actions</h2>
+            <Link href="/modules"><span className="text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer transition-colors">View All ›</span></Link>
           </div>
           <ScrollArea className="w-full whitespace-nowrap pb-4">
             <div className="flex w-max space-x-3 px-5">
               {quickActions.map((action, idx) => (
                 <Link key={idx} href={action.path}>
                   <div className="flex flex-col items-center justify-center w-[72px] cursor-pointer group">
-                    <div className="w-[72px] h-[72px] rounded-[20px] bg-white border border-slate-100 shadow-sm flex items-center justify-center mb-2 group-hover:scale-95 transition-transform">
-                      <action.icon className={`w-7 h-7 ${action.color.replace('bg-', 'text-').split(' ')[1] || 'text-slate-700'}`} />
+                    <div className="w-16 h-16 rounded-xl bg-card border shadow-sm flex items-center justify-center mb-2 group-hover:-translate-y-0.5 transition-transform">
+                      <action.icon className={`w-6 h-6 ${action.color.replace('bg-', 'text-').split(' ')[1] || 'text-muted-foreground'}`} />
                     </div>
-                    <span className="text-[11px] font-semibold text-slate-700 truncate w-full text-center">{action.label}</span>
+                    <span className="text-[11px] font-medium text-muted-foreground group-hover:text-foreground truncate w-full text-center transition-colors">{action.label}</span>
                   </div>
                 </Link>
               ))}
@@ -108,8 +108,8 @@ export default function Dashboard() {
         {kpiWidgets.length > 0 && (
           <div className="pt-2">
             <div className="flex justify-between items-end mb-4">
-              <h2 className="text-[17px] font-bold text-slate-900">Your Summary</h2>
-              <Link href="/reports"><span className="text-[13px] font-bold text-slate-500 hover:text-slate-800 cursor-pointer">View All ›</span></Link>
+              <h2 className="text-base font-semibold text-foreground">Your Summary</h2>
+              <Link href="/reports"><span className="text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer transition-colors">View All ›</span></Link>
             </div>
             {/* auto-fill: min 140px per card, max 1fr — fills row cleanly */}
             <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))" }}>
