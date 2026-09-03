@@ -44,8 +44,8 @@ export default function KiliAIPage() {
     <div className="flex flex-col h-full bg-background">
       <div className="max-w-[1600px] mx-auto w-full px-4 pt-4 sm:px-6 sm:pt-6">
         <PageHeader 
-          title="Kili AI Workspace" 
-          description="Platform Intelligence Engine"
+          title="Kili AI" 
+          description="Your intelligent agricultural assistant"
           icon={Brain}
           iconColor="text-primary"
           iconBg="bg-primary/10"
