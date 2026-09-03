@@ -19,7 +19,6 @@ export function AuthCard({ title, description, children, footer, className }: Au
           <Link href="/">
             <div className="flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity">
               <img src="/logo.png" alt="KiliSense Logo" className="h-12 w-auto object-contain" />
-              <span className="text-xl font-bold tracking-tight mt-2 text-foreground">KiliSense</span>
             </div>
           </Link>
         </div>
