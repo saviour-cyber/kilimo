@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import { Link } from "wouter";
-import { Leaf } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
@@ -16,16 +15,13 @@ export function AuthCard({ title, description, children, footer, className }: Au
   return (
     <div className="min-h-screen bg-muted/30 flex items-center justify-center p-4 selection:bg-primary selection:text-primary-foreground">
       <div className="w-full max-w-md space-y-6">
-        <div className="flex flex-col items-center text-center space-y-2">
+        <div className="flex flex-col items-center text-center space-y-4">
           <Link href="/">
-            <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 cursor-pointer hover:scale-105 transition-transform">
-              <Leaf className="w-6 h-6 text-primary-foreground" />
+            <div className="flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity">
+              <img src="/logo.png" alt="KiliSense Logo" className="h-12 w-auto object-contain" />
+              <span className="text-xl font-bold tracking-tight mt-2 text-foreground">KiliSense</span>
             </div>
           </Link>
-          <div className="space-y-1">
-            <h1 className="text-xl font-bold tracking-tight text-foreground">KilimoHub</h1>
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-widest">Enterprise Platform</p>
-          </div>
         </div>
 
         <Card className={cn("border-border shadow-md", className)}>
