@@ -26,6 +26,7 @@ export default function CreateListing() {
     unit: "",
     county: "",
     location: currentFarm?.farm.location || "",
+    contactPhone: "",
   });
 
   const createListing = trpc.marketplace.create.useMutation({
@@ -53,6 +54,7 @@ export default function CreateListing() {
       unit: form.unit,
       county: form.county,
       location: form.location,
+      contactPhone: form.contactPhone || undefined,
     });
   };
 
@@ -164,6 +166,17 @@ export default function CreateListing() {
                   onChange={e => setForm({...form, location: e.target.value})}
                 />
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="contactPhone">Contact Phone Number</Label>
+              <Input 
+                id="contactPhone"
+                type="tel"
+                placeholder="e.g. +254 700 000 000"
+                value={form.contactPhone}
+                onChange={e => setForm({...form, contactPhone: e.target.value})}
+              />
             </div>
 
             <div className="space-y-2">

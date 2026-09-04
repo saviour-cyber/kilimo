@@ -1137,6 +1137,7 @@ export const marketListings = mysqlTable("marketListings", {
   unit:          varchar("unit", { length: 32 }),                        // "bags", "kg", "litres", "heads"
   county:        varchar("county", { length: 64 }),
   location:      varchar("location", { length: 256 }),
+  contactPhone:  varchar("contactPhone", { length: 32 }),
   status:        mysqlEnum("status", [
     "draft",
     "active",

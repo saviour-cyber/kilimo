@@ -37,6 +37,7 @@ export default function ReportWizard() {
         name: `${activeModuleDef.label} - ${activeReportDef.name}`,
         moduleKeys: [activeModuleDef.key],
         format,
+        filters: { reportId: activeReportDef.id },
       });
 
       utils.reports.getGeneratedReports.invalidate({ farmId: currentFarm.farm.id });

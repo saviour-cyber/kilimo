@@ -237,6 +237,7 @@ export const marketplaceRouter = router({
       unit:        z.string().max(32).optional(),
       county:      z.string().max(64).optional(),
       location:    z.string().max(256).optional(),
+      contactPhone:z.string().max(32).optional(),
     }))
     .mutation(async ({ input, ctx }) => {
       const db = await getDb();
@@ -266,6 +267,7 @@ export const marketplaceRouter = router({
         unit:           input.unit,
         county:         input.county,
         location:       input.location,
+        contactPhone:   input.contactPhone,
         status:         "draft",
       });
 
@@ -285,6 +287,7 @@ export const marketplaceRouter = router({
       unit:        z.string().max(32).optional(),
       county:      z.string().max(64).optional(),
       location:    z.string().max(256).optional(),
+      contactPhone:z.string().max(32).optional(),
     }))
     .mutation(async ({ input, ctx }) => {
       const db = await getDb();

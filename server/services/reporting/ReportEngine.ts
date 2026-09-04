@@ -1,5 +1,11 @@
 import { ReportConfiguration, ExportDataPayload, IReportProvider } from "./types";
 import { DiseaseReportProvider } from "./providers/DiseaseReportProvider";
+import { CropsReportProvider } from "./providers/CropsReportProvider";
+import { LivestockReportProvider } from "./providers/LivestockReportProvider";
+import { InventoryReportProvider } from "./providers/InventoryReportProvider";
+import { FinanceReportProvider } from "./providers/FinanceReportProvider";
+import { WorkersReportProvider } from "./providers/WorkersReportProvider";
+import { TasksReportProvider } from "./providers/TasksReportProvider";
 import { ExportService } from "../exportService";
 
 export class ReportEngine {
@@ -8,7 +14,12 @@ export class ReportEngine {
   constructor() {
     this.providers = new Map();
     this.registerProvider(new DiseaseReportProvider());
-    // Future providers (Crops, Livestock, Weather, Finance, etc.) can be registered here.
+    this.registerProvider(new CropsReportProvider());
+    this.registerProvider(new LivestockReportProvider());
+    this.registerProvider(new InventoryReportProvider());
+    this.registerProvider(new FinanceReportProvider());
+    this.registerProvider(new WorkersReportProvider());
+    this.registerProvider(new TasksReportProvider());
   }
 
   registerProvider(provider: IReportProvider) {
@@ -29,34 +40,21 @@ export class ReportEngine {
       }
     }
 
-    // 2. Assemble the ExportDataPayload
-    const exportData: ExportDataPayload = {
-      title: config.name,
-      subtitle: config.description,
-      blocks,
-    };
-
-    // 3. Delegate to ExportService (Refactored to handle multiple blocks)
-    // Wait, the existing ExportService might only handle one block of exportData with a single 'columns' and 'rows'.
-    // Let's assume ExportService gets updated to handle the new format, OR we merge all blocks into a single grid for CSV/Excel, 
-    // or we just pass the new ExportDataPayload. 
-    // For now, let's adapt it to use ExportService's existing API if needed, 
-    // but the instruction says the Backend merges them into a standardized dataset and passes to ExportService.
-    
-    // Let's implement a quick adaptation for ExportService backward compatibility if we haven't rewritten ExportService yet.
-    // If the ExportService expects single columns/rows array, we can flatten it.
-    
-    // Flatten blocks for legacy ExportService:
-    let mergedColumns: any[] = [];
-    let mergedRows: any[] = [];
-    if (blocks.length > 0) {
-      // Just taking the first block for now, or merging them
-      mergedColumns = blocks[0].columns;
-      mergedRows = blocks[0].rows;
+    if (blocks.length === 0) {
+      // No data found — return an empty-but-valid report
+      blocks.push({
+        title: "No Data Found",
+        columns: [{ header: "Message", key: "msg", width: 60 }],
+        rows: [{ msg: "No records were found for the selected module and date range." }],
+      });
     }
 
+    // 2. Flatten blocks into legacy ExportService format
+    const mergedColumns = blocks[0].columns;
+    const mergedRows = blocks[0].rows;
+
     const legacyExportData = {
-      title: exportData.title,
+      title: config.name,
       columns: mergedColumns,
       rows: mergedRows,
     };
