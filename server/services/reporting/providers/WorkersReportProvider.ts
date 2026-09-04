@@ -32,13 +32,18 @@ export class WorkersReportProvider implements IReportProvider {
 
       if (payrolls.length === 0) return null;
 
-      const rows = payrolls.map((p) => ({
-        period: `${p.periodStart} → ${p.periodEnd}`,
-        amount: `${p.currency} ${parseFloat(p.amount as string).toLocaleString("en-KE", { minimumFractionDigits: 2 })}`,
-        status: p.status,
-        paid: p.paymentDate ? String(p.paymentDate) : "—",
-        notes: p.notes || "—",
-      }));
+      const rows = payrolls.map((p) => {
+        const formatDate = (d: any) => {
+          try { return d ? format(new Date(d), "dd MMM yyyy") : "—"; } catch { return String(d) || "—"; }
+        };
+        return {
+          period: `${formatDate(p.periodStart)} → ${formatDate(p.periodEnd)}`,
+          amount: `${p.currency} ${parseFloat(p.amount as string).toLocaleString("en-KE", { minimumFractionDigits: 2 })}`,
+          status: p.status,
+          paid: formatDate(p.paymentDate),
+          notes: p.notes || "—",
+        };
+      });
 
       return {
         title: "Worker Payroll Export",
@@ -70,12 +75,21 @@ export class WorkersReportProvider implements IReportProvider {
 
     if (attendance.length === 0) return null;
 
-    const rows = attendance.map((a) => ({
-      date: a.date,
-      workerId: a.workerId.toString(),
-      status: a.status,
-      notes: a.notes || "—",
-    }));
+    const rows = attendance.map((a) => {
+      let dateStr = "—";
+      try {
+        if (a.date) {
+          const d = new Date(a.date as any);
+          if (!isNaN(d.getTime())) dateStr = format(d, "dd MMM yyyy");
+        }
+      } catch {}
+      return {
+        date: dateStr,
+        workerId: a.workerId.toString(),
+        status: a.status,
+        notes: a.notes || "—",
+      };
+    });
 
     return {
       title: "Worker Attendance Summary",

@@ -21,58 +21,112 @@ export class ExportService {
   static async generatePdf(data: ReportExportData): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       try {
-        const doc = new PDFDocument({ margin: 50, size: 'A4' });
+        const doc = new PDFDocument({ margin: 40, size: 'A4' });
         const buffers: Buffer[] = [];
-        
+
         doc.on('data', buffers.push.bind(buffers));
-        doc.on('end', () => {
-          const pdfData = Buffer.concat(buffers);
-          resolve(pdfData);
-        });
+        doc.on('end', () => resolve(Buffer.concat(buffers)));
 
-        // Title
-        doc.fontSize(20).text(data.title, { align: 'center' });
-        doc.moveDown(2);
+        const pageWidth = doc.page.width;
+        const marginLeft = 40;
+        const marginRight = 40;
+        const usableWidth = pageWidth - marginLeft - marginRight; // ~515pt
+        const rowHeight = 18;
+        const fontSize = 8;
+        const headerFontSize = 9;
 
-        // Header Row
-        doc.fontSize(12).font('Helvetica-Bold');
-        let currentX = 50;
-        const startY = doc.y;
-        
-        // Simple equal width columns if not specified
-        const colWidth = (doc.page.width - 100) / (data.columns.length || 1);
+        // --- Title ---
+        doc.fontSize(16).font('Helvetica-Bold').text(data.title, { align: 'center' });
+        doc.moveDown(0.3);
+        doc.fontSize(9).font('Helvetica').fillColor('#888888').text(
+          `Generated: ${new Date().toLocaleDateString('en-KE', { day: '2-digit', month: 'short', year: 'numeric' })}`,
+          { align: 'center' }
+        );
+        doc.fillColor('#000000').moveDown(1);
 
-        data.columns.forEach((col) => {
-          const w = col.width || colWidth;
-          doc.text(col.header, currentX, startY, { width: w, align: 'left' });
-          currentX += w;
-        });
+        if (data.columns.length === 0) { doc.end(); return; }
 
-        doc.moveDown(0.5);
-        
-        // Draw line
-        doc.moveTo(50, doc.y).lineTo(doc.page.width - 50, doc.y).stroke();
-        doc.moveDown(0.5);
+        // --- Compute proportional column widths ---
+        const totalWeight = data.columns.reduce((sum, col) => sum + (col.width || 20), 0);
+        const colWidths = data.columns.map(col => Math.floor(((col.width || 20) / totalWeight) * usableWidth));
+        // Fix rounding drift
+        const widthSum = colWidths.reduce((a, b) => a + b, 0);
+        if (colWidths.length > 0) colWidths[colWidths.length - 1] += usableWidth - widthSum;
 
-        // Data Rows
-        doc.font('Helvetica');
-        data.rows.forEach((row) => {
-          currentX = 50;
-          const y = doc.y;
-          
-          // Check for page break
-          if (y > doc.page.height - 100) {
+        const drawRow = (y: number, values: string[], isHeader: boolean) => {
+          // Check page break
+          if (y > doc.page.height - 60) {
             doc.addPage();
+            y = 40;
           }
 
-          data.columns.forEach((col) => {
-            const w = col.width || colWidth;
-            const val = row[col.key] !== undefined && row[col.key] !== null ? String(row[col.key]) : "";
-            doc.text(val, currentX, doc.y, { width: w, align: 'left' });
-            currentX += w;
+          const bgColor = isHeader ? '#1E3F2D' : null;
+          const textColor = isHeader ? '#FFFFFF' : '#1a1a1a';
+          const font = isHeader ? 'Helvetica-Bold' : 'Helvetica';
+
+          // Background rect for header
+          if (bgColor) {
+            doc.rect(marginLeft, y, usableWidth, rowHeight).fill(bgColor);
+          }
+
+          doc.font(font).fontSize(isHeader ? headerFontSize : fontSize).fillColor(textColor);
+          let x = marginLeft;
+          values.forEach((val, i) => {
+            const w = colWidths[i] ?? 60;
+            const safeVal = val != null ? String(val) : "";
+            // clip text to column width
+            doc.text(safeVal, x + 2, y + (rowHeight - (isHeader ? headerFontSize : fontSize)) / 2, {
+              width: w - 4,
+              height: rowHeight,
+              lineBreak: false,
+              ellipsis: true,
+            });
+            x += w;
           });
-          doc.moveDown(0.5);
+
+          // Row separator line
+          if (!isHeader) {
+            doc.moveTo(marginLeft, y + rowHeight)
+               .lineTo(marginLeft + usableWidth, y + rowHeight)
+               .strokeColor('#e5e7eb')
+               .lineWidth(0.5)
+               .stroke();
+          }
+
+          doc.fillColor('#000000');
+          return y + rowHeight;
+        };
+
+        // --- Header Row ---
+        let currentY = doc.y;
+        currentY = drawRow(currentY, data.columns.map(c => c.header), true);
+
+        // --- Data Rows ---
+        data.rows.forEach((row, idx) => {
+          if (currentY > doc.page.height - 60) {
+            doc.addPage();
+            currentY = 40;
+            // Re-draw header on new page
+            currentY = drawRow(currentY, data.columns.map(c => c.header), true);
+          }
+          // Alternating row background
+          if (idx % 2 === 1) {
+            doc.rect(marginLeft, currentY, usableWidth, rowHeight).fill('#f9fafb');
+          }
+          const vals = data.columns.map(col => {
+            const v = row[col.key];
+            return v != null ? String(v) : "";
+          });
+          currentY = drawRow(currentY, vals, false);
         });
+
+        // Footer
+        doc.fontSize(7).fillColor('#aaaaaa').text(
+          `KiliSense Platform — Confidential`,
+          marginLeft,
+          doc.page.height - 30,
+          { align: 'center', width: usableWidth }
+        );
 
         doc.end();
       } catch (err) {
