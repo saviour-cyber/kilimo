@@ -1,4 +1,4 @@
-CREATE TABLE `workerDocuments` (
+CREATE TABLE IF NOT EXISTS `workerDocuments` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`farmId` int NOT NULL,
 	`workerId` int NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE `workerDocuments` (
 	CONSTRAINT `workerDocuments_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
-CREATE TABLE `workerPayroll` (
+CREATE TABLE IF NOT EXISTS `workerPayroll` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`farmId` int NOT NULL,
 	`workerId` int NOT NULL,
