@@ -4,6 +4,10 @@ import { PageHeader } from "@/components/shared/PageHeader";
 
 const LIVESTOCK_TABS = [
   { label: "Animals", path: "/livestock/animals" },
+  { label: "Herds & Groups", path: "/livestock/herds" },
+  { label: "Heat & Gestation", path: "/livestock/heat-gestation" },
+  { label: "Movements", path: "/livestock/movements" },
+  { label: "Commercial", path: "/livestock/commercial" },
   { label: "Health Logs", path: "/livestock/health" },
   { label: "Feed Records", path: "/livestock/feed" },
   { label: "Production", path: "/livestock/production" },
@@ -18,8 +22,8 @@ export default function LivestockLayout({ children }: { children: React.ReactNod
   return (
     <div className="px-4 sm:px-6 pt-4 pb-8 space-y-5 max-w-7xl mx-auto">
       <PageHeader 
-        title="Livestock" 
-        description="Animals, health, feeding, and production" 
+        title="Livestock & Animal Core" 
+        description="Unified animal domain, herds, reproduction, pasture movement, and health intelligence" 
         icon={PawPrint} 
       />
 

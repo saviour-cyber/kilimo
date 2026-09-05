@@ -6,6 +6,7 @@ import { InventoryReportProvider } from "./providers/InventoryReportProvider";
 import { FinanceReportProvider } from "./providers/FinanceReportProvider";
 import { WorkersReportProvider } from "./providers/WorkersReportProvider";
 import { TasksReportProvider } from "./providers/TasksReportProvider";
+import { AnimalAiReportProvider } from "./providers/AnimalAiReportProvider";
 import { ExportService } from "../exportService";
 
 export class ReportEngine {
@@ -16,6 +17,7 @@ export class ReportEngine {
     this.registerProvider(new DiseaseReportProvider());
     this.registerProvider(new CropsReportProvider());
     this.registerProvider(new LivestockReportProvider());
+    this.registerProvider(new AnimalAiReportProvider());
     this.registerProvider(new InventoryReportProvider());
     this.registerProvider(new FinanceReportProvider());
     this.registerProvider(new WorkersReportProvider());

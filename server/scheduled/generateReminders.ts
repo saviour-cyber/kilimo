@@ -1,8 +1,9 @@
 import { and, eq, lt, gte, lte } from "drizzle-orm";
 import { getDb } from "../db";
-import { tasks, notifications, cropPlantings, healthLogs, inventoryItems } from "../../drizzle/schema";
+import { tasks, notifications, cropPlantings, healthLogs, inventoryItems, farms } from "../../drizzle/schema";
 import { Request, Response } from "express";
 import { sdk } from "../_core/sdk";
+import { animalIntelligenceService } from "../services/ai/animalIntelligenceService";
 
 /**
  * Scheduled heartbeat handler for generating reminders.
@@ -221,6 +222,21 @@ export async function generateRemindersHandler(req: Request, res: Response) {
         });
         remindersCreated++;
       }
+    }
+
+    // ── 6. KiliSense AI Animal Alerts ──────────────────────────────────────────
+    try {
+      const allFarms = await db.select({ id: farms.id }).from(farms);
+      for (const farm of allFarms) {
+        try {
+          const animalAlerts = await animalIntelligenceService.evaluateAndDispatchAiAlerts(farm.id);
+          remindersCreated += animalAlerts;
+        } catch (err) {
+          console.error(`[AnimalAI] Error dispatching alerts for farm ${farm.id}:`, err);
+        }
+      }
+    } catch (err) {
+      console.error("[AnimalAI] Error evaluating animal alerts:", err);
     }
 
     res.json({

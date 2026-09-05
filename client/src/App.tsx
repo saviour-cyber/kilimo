@@ -71,6 +71,10 @@ import WorkerProfile from "./pages/workers/WorkerProfile";
 
 // Livestock
 import Animals from "./pages/livestock/Animals";
+import Herds from "./pages/livestock/Herds";
+import HeatGestation from "./pages/livestock/HeatGestation";
+import Movements from "./pages/livestock/Movements";
+import Commercial from "./pages/livestock/Commercial";
 import Breeding from "./pages/livestock/Breeding";
 import HealthLogs from "./pages/livestock/HealthLogs";
 import FeedRecords from "./pages/livestock/FeedRecords";
@@ -205,11 +209,16 @@ function TenantAppRoutes() {
 
         {/* Livestock */}
         <Route path="/livestock/animals"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Animals /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/livestock/herds"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Herds /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/livestock/heat-gestation"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><HeatGestation /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/livestock/movements"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Movements /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/livestock/commercial"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Commercial /></SubscriptionGate></KiliSenseLayout></Route>
         <Route path="/livestock/breeding"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Breeding /></SubscriptionGate></KiliSenseLayout></Route>
         <Route path="/livestock/health"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><HealthLogs /></SubscriptionGate></KiliSenseLayout></Route>
         <Route path="/livestock/feed"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><FeedRecords /></SubscriptionGate></KiliSenseLayout></Route>
         <Route path="/livestock/production"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Production /></SubscriptionGate></KiliSenseLayout></Route>
         <Route path="/livestock/mortality"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Mortality /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/livestock"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Animals /></SubscriptionGate></KiliSenseLayout></Route>
 
         {/* Poultry */}
         <Route path="/poultry/flocks"><KiliSenseLayout><SubscriptionGate featureKey="poultry" featureName="Poultry"><Flocks /></SubscriptionGate></KiliSenseLayout></Route>

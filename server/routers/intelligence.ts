@@ -1,10 +1,12 @@
-﻿import { z } from "zod";
+import { z } from "zod";
 import { router, protectedProcedure } from "../_core/trpc";
 import { getAIProvider } from "../services/ai";
 import { getDb } from "../db";
 import { farms, farmModules, tasks, iotSensorState, marketListings } from "../../drizzle/schema";
 import { eq, desc, and } from "drizzle-orm";
 import { weatherEngine } from "../services/weather";
+import { animalIntelligenceService } from "../services/ai/animalIntelligenceService";
+import { assertFarmMember, assertMinRole } from "./farms";
 
 export const intelligenceRouter = router({
   analyzeDisease: protectedProcedure
@@ -138,6 +140,23 @@ Guidelines:
         ? `Active Marketplace Listings: ${activeListings.map(l => `${l.title} (${l.price} ${l.currency})`).join(", ")}`
         : "No active marketplace listings.";
 
+      let animalContext = "";
+      if (activeModules.includes("livestock") || activeModules.includes("dairy")) {
+        try {
+          const animalSummary = await animalIntelligenceService.getAnimalIntelligenceSummary(input.farmId);
+          animalContext = `
+Livestock & Dairy Intelligence:
+- Total Animals: ${animalSummary.metrics.totalAnimals}
+- Dairy Cows: ${animalSummary.metrics.activeDairyCows} (${animalSummary.metrics.lactatingCount} lactating, ${animalSummary.metrics.dryCount} dry)
+- Confirmed Pregnancies: ${animalSummary.metrics.pregnantCount}
+- Active Heat Windows: ${animalSummary.metrics.activeHeatCount}
+- Active Drug Withdrawals: ${animalSummary.metrics.activeWithdrawalsCount}
+- Milk Output Today: ${animalSummary.metrics.todayMilkVolume}L (7-day avg: ${animalSummary.metrics.sevenDayAvgMilkVolume}L, ${animalSummary.metrics.milkTrendPercentage}%)
+- Critical Animal Alerts: ${animalSummary.alerts.map((a) => `${a.title}: ${a.message}`).join("; ") || "None"}
+`;
+        } catch {}
+      }
+
       const context = `You are Kili AI, an expert agricultural assistant.
 Based on the following data for a farm, generate 3-5 concise, actionable recommendations for the farmer today.
 Data:
@@ -149,9 +168,26 @@ Data:
 - ${marketplaceContext}
 - Pending Tasks: ${recentTasks.filter(t => t.status === "pending").map(t => t.title).join(", ") || "None"}
 - Overdue Tasks: ${recentTasks.filter(t => t.status === "pending" && t.dueDate && new Date(String(t.dueDate)) < new Date()).map(t => t.title).join(", ") || "None"}
-
+${animalContext}
 ${weatherContext}`;
 
       return provider.getDashboardRecommendations(context);
+    }),
+
+  // ── Animal Core & Dairy Intelligence ─────────────────────────────────────────
+  getAnimalInsights: protectedProcedure
+    .input(z.object({ farmId: z.number() }))
+    .query(async ({ input, ctx }) => {
+      await assertFarmMember(input.farmId, ctx.user.id);
+      return animalIntelligenceService.getAnimalIntelligenceSummary(input.farmId);
+    }),
+
+  evaluateAnimalAlerts: protectedProcedure
+    .input(z.object({ farmId: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      const member = await assertFarmMember(input.farmId, ctx.user.id);
+      assertMinRole(member, "worker");
+      const dispatchedCount = await animalIntelligenceService.evaluateAndDispatchAiAlerts(input.farmId);
+      return { success: true, dispatchedCount };
     }),
 });

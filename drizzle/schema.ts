@@ -254,14 +254,41 @@ export const cropIncidents = mysqlTable("cropIncidents", {
 export type CropIncident = typeof cropIncidents.$inferSelect;
 export type InsertCropIncident = typeof cropIncidents.$inferInsert;
 
-// â”€â”€â”€ Animals â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Animal Core Domain: Herds ──────────────────────────────────────────────
+
+export const animalHerds = mysqlTable("animalHerds", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  name: varchar("name", { length: 128 }).notNull(),
+  code: varchar("code", { length: 64 }),
+  purpose: mysqlEnum("purpose", [
+    "general",
+    "milking",
+    "dry",
+    "calves",
+    "heifers",
+    "fattening",
+    "quarantine",
+    "pasture_group"
+  ]).default("general").notNull(),
+  location: varchar("location", { length: 255 }),
+  targetHeadCount: int("targetHeadCount"),
+  description: text("description"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type AnimalHerd = typeof animalHerds.$inferSelect;
+export type InsertAnimalHerd = typeof animalHerds.$inferInsert;
+
+// ─── Animals (Canonical Animal Core Entity) ──────────────────────────────────
 
 export const animals = mysqlTable("animals", {
   id: int("id").autoincrement().primaryKey(),
   farmId: int("farmId").notNull(),
   tagNumber: varchar("tagNumber", { length: 64 }),
   name: varchar("name", { length: 128 }),
-  species: varchar("species", { length: 64 }).notNull(), // cattle, goat, sheep, pig, poultry, etc.
+  species: varchar("species", { length: 64 }).notNull(), // cattle, goat, sheep, pig, etc.
   breed: varchar("breed", { length: 128 }),
   gender: mysqlEnum("gender", ["male", "female", "unknown"]).default("unknown").notNull(),
   dateOfBirth: date("dateOfBirth"),
@@ -273,6 +300,28 @@ export const animals = mysqlTable("animals", {
   notes: text("notes"),
   parentMaleId: int("parentMaleId"),
   parentFemaleId: int("parentFemaleId"),
+  
+  // Extension & Intelligence attributes
+  isDairy: boolean("isDairy").default(false).notNull(),
+  herdId: int("herdId"),
+  bodyConditionScore: decimal("bodyConditionScore", { precision: 3, scale: 1 }), // 1.0 - 5.0
+  currentLocation: varchar("currentLocation", { length: 128 }),
+  lactationStage: mysqlEnum("lactationStage", ["non_lactating", "early", "mid", "late", "dry"]).default("non_lactating").notNull(),
+  
+  // Quarantine status
+  isQuarantined: boolean("isQuarantined").default(false).notNull(),
+  quarantineReason: varchar("quarantineReason", { length: 255 }),
+  quarantineUntil: date("quarantineUntil"),
+
+  // Commercial / Purchase & Sales valuation
+  purchasePrice: decimal("purchasePrice", { precision: 10, scale: 2 }),
+  purchaseDate: date("purchaseDate"),
+  sellerInfo: varchar("sellerInfo", { length: 255 }),
+  salePrice: decimal("salePrice", { precision: 10, scale: 2 }),
+  saleDate: date("saleDate"),
+  buyerInfo: varchar("buyerInfo", { length: 255 }),
+  saleWeight: decimal("saleWeight", { precision: 8, scale: 2 }),
+
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -280,7 +329,28 @@ export const animals = mysqlTable("animals", {
 export type Animal = typeof animals.$inferSelect;
 export type InsertAnimal = typeof animals.$inferInsert;
 
-// â”€â”€â”€ Breeding Records â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Heat Detection & Estrus Tracking ────────────────────────────────────────
+
+export const animalHeatLogs = mysqlTable("animalHeatLogs", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  animalId: int("animalId").notNull(),
+  observedDate: date("observedDate").notNull(),
+  observedTime: varchar("observedTime", { length: 16 }),
+  heatSigns: text("heatSigns").notNull(), // standing heat, clear mucus, mounting, restlessness
+  intensity: mysqlEnum("intensity", ["weak", "moderate", "strong"]).default("moderate").notNull(),
+  breedingWindowStart: timestamp("breedingWindowStart"),
+  breedingWindowEnd: timestamp("breedingWindowEnd"),
+  status: mysqlEnum("status", ["observed", "inseminated", "expired", "missed"]).default("observed").notNull(),
+  notes: text("notes"),
+  recordedByUserId: int("recordedByUserId"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type AnimalHeatLog = typeof animalHeatLogs.$inferSelect;
+export type InsertAnimalHeatLog = typeof animalHeatLogs.$inferInsert;
+
+// ─── Breeding & Gestation Tracking ───────────────────────────────────────────
 
 export const breedingRecords = mysqlTable("breedingRecords", {
   id: int("id").autoincrement().primaryKey(),
@@ -289,7 +359,12 @@ export const breedingRecords = mysqlTable("breedingRecords", {
   sireId: int("sireId"), // father (may be external)
   sireDescription: varchar("sireDescription", { length: 128 }),
   breedingDate: date("breedingDate").notNull(),
+  breedingMethod: mysqlEnum("breedingMethod", ["natural", "artificial_insemination", "embryo_transfer"]).default("natural").notNull(),
+  gestationDays: int("gestationDays").default(283).notNull(),
+  pregnancyStatus: mysqlEnum("pregnancyStatus", ["pending", "confirmed", "open", "delivered", "failed"]).default("pending").notNull(),
+  confirmedDate: date("confirmedDate"),
   expectedDeliveryDate: date("expectedDeliveryDate"),
+  dryOffDate: date("dryOffDate"), // Recommended dry-off date (e.g., 60 days before delivery)
   actualDeliveryDate: date("actualDeliveryDate"),
   offspringCount: int("offspringCount"),
   outcome: mysqlEnum("outcome", ["pending", "successful", "failed", "aborted"]).default("pending").notNull(),
@@ -301,7 +376,36 @@ export const breedingRecords = mysqlTable("breedingRecords", {
 export type BreedingRecord = typeof breedingRecords.$inferSelect;
 export type InsertBreedingRecord = typeof breedingRecords.$inferInsert;
 
-// â”€â”€â”€ Vaccination / Health Logs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Animal Movements / Pasture & Pen Transfers ──────────────────────────────
+
+export const animalMovements = mysqlTable("animalMovements", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  animalId: int("animalId").notNull(),
+  fromLocation: varchar("fromLocation", { length: 128 }),
+  toLocation: varchar("toLocation", { length: 128 }).notNull(),
+  fromHerdId: int("fromHerdId"),
+  toHerdId: int("toHerdId"),
+  movementDate: date("movementDate").notNull(),
+  reason: mysqlEnum("reason", [
+    "pasture_rotation",
+    "quarantine",
+    "weaning",
+    "maternity",
+    "treatment",
+    "housing_change",
+    "sale",
+    "other"
+  ]).default("pasture_rotation").notNull(),
+  notes: text("notes"),
+  recordedByUserId: int("recordedByUserId"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type AnimalMovement = typeof animalMovements.$inferSelect;
+export type InsertAnimalMovement = typeof animalMovements.$inferInsert;
+
+// ─── Vaccination / Health Logs with Drug Withdrawal ──────────────────────────
 
 export const healthLogs = mysqlTable("healthLogs", {
   id: int("id").autoincrement().primaryKey(),
@@ -315,6 +419,15 @@ export const healthLogs = mysqlTable("healthLogs", {
   performedBy: varchar("performedBy", { length: 128 }),
   cost: decimal("cost", { precision: 10, scale: 2 }),
   notes: text("notes"),
+  
+  // Advanced Health Intelligence
+  bcsScore: decimal("bcsScore", { precision: 3, scale: 1 }), // Body Condition Score
+  meatWithdrawalDays: int("meatWithdrawalDays").default(0),
+  meatWithdrawalEndDate: date("meatWithdrawalEndDate"),
+  milkWithdrawalDays: int("milkWithdrawalDays").default(0),
+  milkWithdrawalEndDate: date("milkWithdrawalEndDate"),
+  isQuarantineRecommended: boolean("isQuarantineRecommended").default(false).notNull(),
+
   recordedByUserId: int("recordedByUserId"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),

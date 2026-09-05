@@ -124,6 +124,7 @@ import { EquipmentKpiWidget } from "@/components/widgets/modules/EquipmentWidget
 import { FinanceRevenueKpiWidget, FinanceExpenseKpiWidget } from "@/components/widgets/modules/FinanceWidgets";
 import { TasksKpiWidget, TasksSummaryWidget } from "@/components/widgets/modules/TasksWidgets";
 import { DiseaseKpiWidget } from "@/components/widgets/modules/DiseaseWidgets"; import { DiseaseCommunityFeedWidget } from "@/components/widgets/modules/DiseaseCommunityFeedWidget"; import { AiInsightWidget } from "@/components/widgets/platform/AiInsightWidget";
+import { AnimalAiInsightsWidget } from "@/components/widgets/modules/AnimalAiWidgets";
 
 export const MODULE_REGISTRY: ModuleDefinition[] = [
   {
@@ -198,10 +199,14 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     sidebarSection: "farm-operations",
     subItems: [
       { label: "Animals", path: "/livestock/animals" },
-      { label: "Breeding", path: "/livestock/breeding" },
+      { label: "Herds & Groups", path: "/livestock/herds" },
+      { label: "Heat & Gestation", path: "/livestock/heat-gestation" },
+      { label: "Movements", path: "/livestock/movements" },
+      { label: "Commercial", path: "/livestock/commercial" },
       { label: "Health Logs", path: "/livestock/health" },
       { label: "Feed Records", path: "/livestock/feed" },
       { label: "Production", path: "/livestock/production" },
+      { label: "Breeding", path: "/livestock/breeding" },
       { label: "Mortality", path: "/livestock/mortality" },
     ],
     quickActions: [
@@ -219,11 +224,31 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
         path: "/livestock/health",
         color: "bg-orange-100 text-orange-700",
       },
+      {
+        label: "Log Heat / Estrus",
+        description: "Record standing heat and breeding window.",
+        icon: PlusCircle,
+        path: "/livestock/heat-gestation",
+        color: "bg-rose-100 text-rose-700",
+      },
     ],
     dashboardWidgets: [
-      { id: "livestock-kpi",     type: "kpi",     size: "small", priority: { level: "high", order: 2 }, component: LivestockKpiWidget },
+      { id: "livestock-kpi", type: "kpi", size: "small", priority: { level: "high", order: 2 }, component: LivestockKpiWidget },
+      { id: "animal-ai-insights", type: "summary", size: "large", priority: { level: "high", order: 3 }, component: AnimalAiInsightsWidget },
     ],
     reports: [
+      {
+        id: "animal-ai-insights",
+        name: "AI Health & Safety Intelligence",
+        description: "Food safety drug withdrawal schedules and estrus/calving forecasts.",
+        supportedFormats: ["pdf", "excel", "csv"],
+      },
+      {
+        id: "gestation-schedule",
+        name: "Gestation & Dry-Off Schedule",
+        description: "Active pregnancies, expected delivery dates, and dry-off timelines.",
+        supportedFormats: ["pdf", "excel", "csv"],
+      },
       {
         id: "livestock-health-records",
         name: "Health Records",
@@ -320,6 +345,7 @@ export const MODULE_REGISTRY: ModuleDefinition[] = [
     ],
     dashboardWidgets: [
       { id: "dairy-kpi", type: "kpi", size: "small", priority: { level: "medium" as any, order: 8 }, component: DairyKpiWidget },
+      { id: "dairy-ai-insights", type: "summary", size: "large", priority: { level: "high", order: 4 }, component: AnimalAiInsightsWidget },
     ],
     reports: [
       {
