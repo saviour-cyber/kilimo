@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { formatDate } from "@/lib/utils";
 
 export default function WaterQuality() {
   const { currentFarm } = useFarm();
@@ -57,7 +58,7 @@ export default function WaterQuality() {
             <tbody>
               {records.map((r: any) => (
                 <tr key={r.id} className="border-b border-border last:border-0 hover:bg-muted/20">
-                  <td className="px-4 py-3">{new Date(r.measurementDate).toLocaleString()}</td>
+                  <td className="px-4 py-3">{formatDate(r.measurementDate)}</td>
                   <td className="px-4 py-3">{unitName(r.unitId)}</td>
                   <td className="px-4 py-3">{r.pH || "—"}</td>
                   <td className="px-4 py-3">{r.dissolvedOxygen || "—"}</td>

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { formatDate } from "@/lib/utils";
 
 export default function Health() {
   const { currentFarm } = useFarm();
@@ -53,7 +54,7 @@ export default function Health() {
             <tbody>
               {logs.map((l: any) => (
                 <tr key={l.id} className="border-b border-border last:border-0 hover:bg-muted/20">
-                  <td className="px-4 py-3">{l.date}</td>
+                  <td className="px-4 py-3">{formatDate(l.date)}</td>
                   <td className="px-4 py-3">{l.condition || "—"}</td>
                   <td className="px-4 py-3">{l.affectedQuantity ?? "—"}</td>
                   <td className="px-4 py-3 max-w-xs truncate">{l.treatment || "—"}</td>

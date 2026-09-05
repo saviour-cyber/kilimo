@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { formatDate } from "@/lib/utils";
 
 export default function AquacultureHarvests() {
   const { currentFarm } = useFarm();
@@ -56,7 +57,7 @@ export default function AquacultureHarvests() {
             <tbody>
               {harvests.map((h: any) => (
                 <tr key={h.id} className="border-b border-border last:border-0 hover:bg-muted/20">
-                  <td className="px-4 py-3">{h.harvestDate}</td>
+                  <td className="px-4 py-3">{formatDate(h.harvestDate)}</td>
                   <td className="px-4 py-3">{unitName(h.unitId)}</td>
                   <td className="px-4 py-3">{h.species || "—"}</td>
                   <td className="px-4 py-3 font-medium">{h.totalWeightKg || "—"}</td>

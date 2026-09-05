@@ -1,9 +1,9 @@
-﻿import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { CheckSquare, ListTodo } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "wouter";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 
 export function TasksKpiWidget({ farmId }: { farmId: number }) {
   const { data, isLoading } = trpc.tasks.dashboardSummary.useQuery({ farmId }, { enabled: !!farmId });
@@ -51,7 +51,7 @@ export function TasksSummaryWidget({ farmId, className }: { farmId: number; clas
                 <span className="text-[12px] font-medium text-muted-foreground">{task.title}</span>
               </div>
               <div className="flex items-center gap-1 text-[10px] text-muted-foreground whitespace-nowrap ml-2">
-                <span>{task.dueDate ?? "—"}</span>
+                <span>{formatDate(task.dueDate)}</span>
               </div>
             </div>
           ))}

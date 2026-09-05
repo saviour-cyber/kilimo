@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { formatDate } from "@/lib/utils";
 
 export default function Calving() {
   const { currentFarm } = useFarm();
@@ -56,8 +57,8 @@ export default function Calving() {
               {records.map((r: any) => (
                 <tr key={r.id} className="border-b border-border last:border-0 hover:bg-muted/20">
                   <td className="px-4 py-3">{animalName(r.animalId)}</td>
-                  <td className="px-4 py-3">{r.expectedDate || "—"}</td>
-                  <td className="px-4 py-3">{r.actualDate || "—"}</td>
+                  <td className="px-4 py-3">{formatDate(r.expectedDate)}</td>
+                  <td className="px-4 py-3">{formatDate(r.actualDate)}</td>
                   <td className="px-4 py-3">{r.calfCount}</td>
                 </tr>
               ))}

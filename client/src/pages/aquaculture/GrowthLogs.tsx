@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { formatDate } from "@/lib/utils";
 
 export default function GrowthLogs() {
   const { currentFarm } = useFarm();
@@ -55,7 +56,7 @@ export default function GrowthLogs() {
             <tbody>
               {logs.map((l: any) => (
                 <tr key={l.id} className="border-b border-border last:border-0 hover:bg-muted/20">
-                  <td className="px-4 py-3">{l.logDate}</td>
+                  <td className="px-4 py-3">{formatDate(l.logDate)}</td>
                   <td className="px-4 py-3">{unitName(l.unitId)}</td>
                   <td className="px-4 py-3">{l.sampleSize || "—"}</td>
                   <td className="px-4 py-3 font-medium">{l.averageWeightG || "—"}</td>

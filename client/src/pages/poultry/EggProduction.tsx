@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { formatDate } from "@/lib/utils";
 
 export default function EggProduction() {
   const { currentFarm } = useFarm();
@@ -56,7 +57,7 @@ export default function EggProduction() {
             <tbody>
               {records.map((r: any) => (
                 <tr key={r.id} className="border-b border-border last:border-0 hover:bg-muted/20">
-                  <td className="px-4 py-3">{r.date}</td>
+                  <td className="px-4 py-3">{formatDate(r.date)}</td>
                   <td className="px-4 py-3">{flockName(r.flockId)}</td>
                   <td className="px-4 py-3">{r.eggsCollected}</td>
                   <td className="px-4 py-3 text-red-600">{r.damagedEggs}</td>
