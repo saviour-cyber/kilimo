@@ -77,6 +77,35 @@ import FeedRecords from "./pages/livestock/FeedRecords";
 import Production from "./pages/livestock/Production";
 import Mortality from "./pages/livestock/Mortality";
 
+// Poultry
+import PoultryOverview from "./pages/poultry/index";
+import Flocks from "./pages/poultry/Flocks";
+import EggProduction from "./pages/poultry/EggProduction";
+import PoultryHealth from "./pages/poultry/Health";
+import PoultryMortality from "./pages/poultry/Mortality";
+
+// Dairy
+import DairyOverview from "./pages/dairy/index";
+import DairyAnimals from "./pages/dairy/Animals";
+import MilkProduction from "./pages/dairy/MilkProduction";
+import DairyBreeding from "./pages/dairy/Breeding";
+import Calving from "./pages/dairy/Calving";
+
+// Beekeeping
+import BeekeepingOverview from "./pages/beekeeping/index";
+import Apiaries from "./pages/beekeeping/Apiaries";
+import Hives from "./pages/beekeeping/Hives";
+import Inspections from "./pages/beekeeping/Inspections";
+import BeekeepingHarvests from "./pages/beekeeping/Harvests";
+
+// Aquaculture
+import AquacultureOverview from "./pages/aquaculture/index";
+import ProductionUnits from "./pages/aquaculture/ProductionUnits";
+import Stocking from "./pages/aquaculture/Stocking";
+import WaterQuality from "./pages/aquaculture/WaterQuality";
+import AquacultureHarvests from "./pages/aquaculture/Harvests";
+import GrowthLogs from "./pages/aquaculture/GrowthLogs";
+
 // Inventory
 import InventoryItems from "./pages/inventory/InventoryItems";
 import StockTransactions from "./pages/inventory/StockTransactions";
@@ -181,6 +210,35 @@ function TenantAppRoutes() {
         <Route path="/livestock/feed"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><FeedRecords /></SubscriptionGate></KiliSenseLayout></Route>
         <Route path="/livestock/production"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Production /></SubscriptionGate></KiliSenseLayout></Route>
         <Route path="/livestock/mortality"><KiliSenseLayout><SubscriptionGate featureKey="livestock" featureName="Livestock"><Mortality /></SubscriptionGate></KiliSenseLayout></Route>
+
+        {/* Poultry */}
+        <Route path="/poultry/flocks"><KiliSenseLayout><SubscriptionGate featureKey="poultry" featureName="Poultry"><Flocks /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/poultry/eggs"><KiliSenseLayout><SubscriptionGate featureKey="poultry" featureName="Poultry"><EggProduction /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/poultry/health"><KiliSenseLayout><SubscriptionGate featureKey="poultry" featureName="Poultry"><PoultryHealth /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/poultry/mortality"><KiliSenseLayout><SubscriptionGate featureKey="poultry" featureName="Poultry"><PoultryMortality /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/poultry"><KiliSenseLayout><SubscriptionGate featureKey="poultry" featureName="Poultry"><PoultryOverview /></SubscriptionGate></KiliSenseLayout></Route>
+
+        {/* Dairy */}
+        <Route path="/dairy/animals"><KiliSenseLayout><SubscriptionGate featureKey="dairy" featureName="Dairy"><DairyAnimals /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/dairy/milk"><KiliSenseLayout><SubscriptionGate featureKey="dairy" featureName="Dairy"><MilkProduction /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/dairy/breeding"><KiliSenseLayout><SubscriptionGate featureKey="dairy" featureName="Dairy"><DairyBreeding /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/dairy/calving"><KiliSenseLayout><SubscriptionGate featureKey="dairy" featureName="Dairy"><Calving /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/dairy"><KiliSenseLayout><SubscriptionGate featureKey="dairy" featureName="Dairy"><DairyOverview /></SubscriptionGate></KiliSenseLayout></Route>
+
+        {/* Beekeeping */}
+        <Route path="/beekeeping/apiaries"><KiliSenseLayout><SubscriptionGate featureKey="beekeeping" featureName="Beekeeping"><Apiaries /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/beekeeping/hives"><KiliSenseLayout><SubscriptionGate featureKey="beekeeping" featureName="Beekeeping"><Hives /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/beekeeping/inspections"><KiliSenseLayout><SubscriptionGate featureKey="beekeeping" featureName="Beekeeping"><Inspections /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/beekeeping/harvests"><KiliSenseLayout><SubscriptionGate featureKey="beekeeping" featureName="Beekeeping"><BeekeepingHarvests /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/beekeeping"><KiliSenseLayout><SubscriptionGate featureKey="beekeeping" featureName="Beekeeping"><BeekeepingOverview /></SubscriptionGate></KiliSenseLayout></Route>
+
+        {/* Aquaculture */}
+        <Route path="/aquaculture/units"><KiliSenseLayout><SubscriptionGate featureKey="aquaculture" featureName="Aquaculture"><ProductionUnits /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/aquaculture/stocking"><KiliSenseLayout><SubscriptionGate featureKey="aquaculture" featureName="Aquaculture"><Stocking /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/aquaculture/water-quality"><KiliSenseLayout><SubscriptionGate featureKey="aquaculture" featureName="Aquaculture"><WaterQuality /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/aquaculture/harvests"><KiliSenseLayout><SubscriptionGate featureKey="aquaculture" featureName="Aquaculture"><AquacultureHarvests /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/aquaculture/growth"><KiliSenseLayout><SubscriptionGate featureKey="aquaculture" featureName="Aquaculture"><GrowthLogs /></SubscriptionGate></KiliSenseLayout></Route>
+        <Route path="/aquaculture"><KiliSenseLayout><SubscriptionGate featureKey="aquaculture" featureName="Aquaculture"><AquacultureOverview /></SubscriptionGate></KiliSenseLayout></Route>
 
         {/* Inventory */}
         <Route path="/inventory/items"><KiliSenseLayout><SubscriptionGate featureKey="inventory" featureName="Inventory"><InventoryItems /></SubscriptionGate></KiliSenseLayout></Route>

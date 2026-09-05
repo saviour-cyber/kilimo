@@ -9,6 +9,10 @@ import { onboardingRouter } from "./routers/onboarding";
 import { farmsRouter } from "./routers/farms";
 import { cropsRouter } from "./routers/crops";
 import { livestockRouter } from "./routers/livestock";
+import { poultryRouter } from "./routers/poultry";
+import { dairyRouter } from "./routers/dairy";
+import { beekeepingRouter } from "./routers/beekeeping";
+import { aquacultureRouter } from "./routers/aquaculture";
 import { inventoryRouter } from "./routers/inventory";
 import { financeRouter } from "./routers/finance";
 import { tasksRouter } from "./routers/tasks";
@@ -38,6 +42,10 @@ export const appRouter = router({
   dashboard: dashboardRouter,
   crops: cropsRouter,
   livestock: livestockRouter,
+  poultry: poultryRouter,
+  dairy: dairyRouter,
+  beekeeping: beekeepingRouter,
+  aquaculture: aquacultureRouter,
   finance: financeRouter,
   inventory: inventoryRouter,
   disease: diseaseRouter,

@@ -1246,3 +1246,255 @@ export type WorkerPayroll = typeof workerPayroll.$inferSelect;
 export type InsertWorkerPayroll = typeof workerPayroll.$inferInsert;
 export type WorkerDocument = typeof workerDocuments.$inferSelect;
 export type InsertWorkerDocument = typeof workerDocuments.$inferInsert;
+
+// ─── Poultry Module ────────────────────────────────────────────────────────────
+
+export const poultryFlocks = mysqlTable("poultryFlocks", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  name: varchar("name", { length: 128 }).notNull(),
+  breed: varchar("breed", { length: 128 }),
+  birdType: varchar("birdType", { length: 64 }).notNull().default("layer"),
+  quantity: int("quantity").default(0).notNull(),
+  housing: varchar("housing", { length: 255 }),
+  acquisitionDate: date("acquisitionDate"),
+  source: varchar("source", { length: 255 }),
+  status: mysqlEnum("status", ["active", "sold", "culled", "transferred"]).default("active").notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const poultryEggProduction = mysqlTable("poultryEggProduction", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  flockId: int("flockId").notNull(),
+  date: date("date").notNull(),
+  eggsCollected: int("eggsCollected").default(0).notNull(),
+  damagedEggs: int("damagedEggs").default(0).notNull(),
+  saleableEggs: int("saleableEggs").default(0).notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const poultryMortality = mysqlTable("poultryMortality", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  flockId: int("flockId").notNull(),
+  date: date("date").notNull(),
+  quantity: int("quantity").notNull(),
+  suspectedCause: varchar("suspectedCause", { length: 255 }),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const poultryHealthLogs = mysqlTable("poultryHealthLogs", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  flockId: int("flockId").notNull(),
+  date: date("date").notNull(),
+  condition: varchar("condition", { length: 255 }),
+  affectedQuantity: int("affectedQuantity"),
+  treatment: text("treatment"),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+// ─── Dairy Module ──────────────────────────────────────────────────────────────
+
+export const dairyAnimals = mysqlTable("dairyAnimals", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  name: varchar("name", { length: 128 }),
+  tagNumber: varchar("tagNumber", { length: 64 }),
+  breed: varchar("breed", { length: 128 }),
+  gender: mysqlEnum("gender", ["male", "female"]).default("female").notNull(),
+  birthDate: date("birthDate"),
+  acquisitionDate: date("acquisitionDate"),
+  acquisitionType: mysqlEnum("acquisitionType", ["born", "purchased", "donated", "other"]).default("born"),
+  status: mysqlEnum("status", ["active", "sold", "deceased", "transferred"]).default("active").notNull(),
+  parentMaleId: int("parentMaleId"),
+  parentFemaleId: int("parentFemaleId"),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const dairyMilkProduction = mysqlTable("dairyMilkProduction", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  animalId: int("animalId").notNull(),
+  date: date("date").notNull(),
+  morningVolume: decimal("morningVolume", { precision: 8, scale: 2 }).default("0.00"),
+  eveningVolume: decimal("eveningVolume", { precision: 8, scale: 2 }).default("0.00"),
+  totalVolume: decimal("totalVolume", { precision: 8, scale: 2 }).default("0.00"),
+  qualityNotes: text("qualityNotes"),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const dairyBreeding = mysqlTable("dairyBreeding", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  animalId: int("animalId").notNull(),
+  eventDate: date("eventDate").notNull(),
+  method: varchar("method", { length: 128 }),
+  sireInfo: varchar("sireInfo", { length: 255 }),
+  pregnancyStatus: mysqlEnum("pregnancyStatus", ["pending", "confirmed", "failed"]).default("pending"),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const dairyCalving = mysqlTable("dairyCalving", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  animalId: int("animalId").notNull(),
+  expectedDate: date("expectedDate"),
+  actualDate: date("actualDate"),
+  calfCount: int("calfCount").default(1),
+  complications: text("complications"),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+// ─── Beekeeping Module ────────────────────────────────────────────────────────
+
+export const beeApiaries = mysqlTable("beeApiaries", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  name: varchar("name", { length: 128 }).notNull(),
+  location: varchar("location", { length: 255 }),
+  status: mysqlEnum("status", ["active", "inactive"]).default("active").notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const beeHives = mysqlTable("beeHives", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  apiaryId: int("apiaryId").notNull(),
+  identifier: varchar("identifier", { length: 64 }).notNull(),
+  hiveType: varchar("hiveType", { length: 64 }),
+  colonyStatus: mysqlEnum("colonyStatus", ["strong", "moderate", "weak", "empty", "dead"]).default("moderate").notNull(),
+  installationDate: date("installationDate"),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const beeQueens = mysqlTable("beeQueens", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  hiveId: int("hiveId").notNull(),
+  introductionDate: date("introductionDate"),
+  origin: varchar("origin", { length: 255 }),
+  status: mysqlEnum("status", ["present", "missing", "replaced", "dead"]).default("present").notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const beeInspections = mysqlTable("beeInspections", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  hiveId: int("hiveId").notNull(),
+  date: date("date").notNull(),
+  colonyStrength: mysqlEnum("colonyStrength", ["strong", "moderate", "weak"]),
+  queenObserved: boolean("queenObserved").default(false),
+  honeyStores: varchar("honeyStores", { length: 128 }),
+  pestsDiseases: text("pestsDiseases"),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const beeHarvests = mysqlTable("beeHarvests", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  apiaryId: int("apiaryId").notNull(),
+  hiveId: int("hiveId"),
+  harvestDate: date("harvestDate").notNull(),
+  quantityKg: decimal("quantityKg", { precision: 8, scale: 2 }).default("0.00"),
+  qualityGrade: varchar("qualityGrade", { length: 64 }),
+  storageDestination: varchar("storageDestination", { length: 255 }),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+// ─── Aquaculture Module ───────────────────────────────────────────────────────
+
+export const aquaProductionUnits = mysqlTable("aquaProductionUnits", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  identifier: varchar("identifier", { length: 64 }).notNull(),
+  unitType: mysqlEnum("unitType", ["pond", "tank", "cage", "raceway"]).notNull(),
+  capacityLiters: decimal("capacityLiters", { precision: 10, scale: 2 }),
+  location: varchar("location", { length: 255 }),
+  status: mysqlEnum("status", ["active", "inactive", "maintenance"]).default("active").notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const aquaStocking = mysqlTable("aquaStocking", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  unitId: int("unitId").notNull(),
+  species: varchar("species", { length: 128 }).notNull(),
+  quantity: int("quantity").notNull(),
+  stockingDate: date("stockingDate").notNull(),
+  source: varchar("source", { length: 255 }),
+  initialWeightG: decimal("initialWeightG", { precision: 8, scale: 2 }),
+  costPerUnit: decimal("costPerUnit", { precision: 8, scale: 2 }),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const aquaWaterQuality = mysqlTable("aquaWaterQuality", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  unitId: int("unitId").notNull(),
+  measurementDate: date("measurementDate").notNull(),
+  temperature: decimal("temperature", { precision: 5, scale: 2 }),
+  pH: decimal("pH", { precision: 4, scale: 2 }),
+  dissolvedOxygen: decimal("dissolvedOxygen", { precision: 5, scale: 2 }),
+  ammonia: decimal("ammonia", { precision: 5, scale: 2 }),
+  nitrite: decimal("nitrite", { precision: 5, scale: 2 }),
+  salinity: decimal("salinity", { precision: 5, scale: 2 }),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const aquaHarvests = mysqlTable("aquaHarvests", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  unitId: int("unitId").notNull(),
+  species: varchar("species", { length: 128 }),
+  harvestDate: date("harvestDate").notNull(),
+  quantity: int("quantity"),
+  totalWeightKg: decimal("totalWeightKg", { precision: 8, scale: 2 }),
+  averageWeightG: decimal("averageWeightG", { precision: 8, scale: 2 }),
+  grade: varchar("grade", { length: 64 }),
+  destination: varchar("destination", { length: 255 }),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const aquaGrowthLogs = mysqlTable("aquaGrowthLogs", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  unitId: int("unitId").notNull(),
+  species: varchar("species", { length: 128 }),
+  logDate: date("logDate").notNull(),
+  sampleSize: int("sampleSize"),
+  averageWeightG: decimal("averageWeightG", { precision: 8, scale: 2 }),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const aquaMortality = mysqlTable("aquaMortality", {
+  id: int("id").autoincrement().primaryKey(),
+  farmId: int("farmId").notNull(),
+  unitId: int("unitId").notNull(),
+  species: varchar("species", { length: 128 }),
+  date: date("date").notNull(),
+  quantity: int("quantity").notNull(),
+  suspectedCause: varchar("suspectedCause", { length: 255 }),
+  notes: text("notes"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
