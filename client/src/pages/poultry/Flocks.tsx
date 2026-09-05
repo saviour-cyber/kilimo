@@ -13,12 +13,12 @@ export default function Flocks() {
   const qc = useQueryClient();
   const farmId = currentFarm?.farm.id ?? 0;
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", breed: "", birdType: "layer", quantity: 0, housing: "", notes: "" });
+  const [form, setForm] = useState({ name: "", breed: "", birdType: "layer", quantity: "", housing: "", notes: "" });
 
   const { data: flocks = [], isLoading } = trpc.poultry.listFlocks.useQuery({ farmId }, { enabled: !!farmId });
 
   const createFlock = trpc.poultry.createFlock.useMutation({
-    onSuccess: () => { toast.success("Flock created"); setOpen(false); setForm({ name: "", breed: "", birdType: "layer", quantity: 0, housing: "", notes: "" }); qc.invalidateQueries(); },
+    onSuccess: () => { toast.success("Flock created"); setOpen(false); setForm({ name: "", breed: "", birdType: "layer", quantity: "", housing: "", notes: "" }); qc.invalidateQueries(); },
     onError: (e) => toast.error(e.message),
   });
 
@@ -74,7 +74,7 @@ export default function Flocks() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>New Flock</DialogTitle></DialogHeader>
-          <form onSubmit={(e) => { e.preventDefault(); createFlock.mutate({ farmId, ...form }); }} className="space-y-4">
+          <form onSubmit={(e) => { e.preventDefault(); createFlock.mutate({ farmId, ...form, quantity: parseInt(form.quantity) || 0 }); }} className="space-y-4">
             <div className="space-y-1.5">
               <Label>Flock Name *</Label>
               <Input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required />
@@ -92,7 +92,7 @@ export default function Flocks() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label>Quantity</Label>
-                <Input type="number" min={0} value={form.quantity} onChange={e => setForm({ ...form, quantity: parseInt(e.target.value) || 0 })} />
+                <Input type="number" min={0} value={form.quantity} onChange={e => setForm({ ...form, quantity: e.target.value })} />
               </div>
               <div className="space-y-1.5">
                 <Label>Housing</Label>

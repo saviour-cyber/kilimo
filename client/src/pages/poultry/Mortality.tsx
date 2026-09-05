@@ -13,7 +13,7 @@ export default function Mortality() {
   const qc = useQueryClient();
   const farmId = currentFarm?.farm.id ?? 0;
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ flockId: 0, date: new Date().toISOString().slice(0, 10), quantity: 1, suspectedCause: "", notes: "" });
+  const [form, setForm] = useState({ flockId: 0, date: new Date().toISOString().slice(0, 10), quantity: "", suspectedCause: "", notes: "" });
 
   const { data: records = [], isLoading } = trpc.poultry.listMortality.useQuery({ farmId }, { enabled: !!farmId });
   const { data: flocks = [] } = trpc.poultry.listFlocks.useQuery({ farmId }, { enabled: !!farmId });
@@ -65,7 +65,7 @@ export default function Mortality() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>Record Mortality</DialogTitle></DialogHeader>
-          <form onSubmit={(e) => { e.preventDefault(); createRecord.mutate({ farmId, ...form }); }} className="space-y-4">
+          <form onSubmit={(e) => { e.preventDefault(); createRecord.mutate({ farmId, ...form, quantity: parseInt(form.quantity) || 1 }); }} className="space-y-4">
             <div className="space-y-1.5">
               <Label>Flock</Label>
               <select className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm" value={form.flockId} onChange={e => setForm({ ...form, flockId: parseInt(e.target.value) })}>
@@ -80,7 +80,7 @@ export default function Mortality() {
               </div>
               <div className="space-y-1.5">
                 <Label>Quantity *</Label>
-                <Input type="number" min={1} value={form.quantity} onChange={e => setForm({ ...form, quantity: parseInt(e.target.value) || 1 })} required />
+                <Input type="number" min={1} value={form.quantity} onChange={e => setForm({ ...form, quantity: e.target.value })} required />
               </div>
             </div>
             <div className="space-y-1.5">

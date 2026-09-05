@@ -13,7 +13,7 @@ export default function Calving() {
   const qc = useQueryClient();
   const farmId = currentFarm?.farm.id ?? 0;
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ animalId: 0, expectedDate: "", actualDate: "", calfCount: 1, complications: "", notes: "" });
+  const [form, setForm] = useState({ animalId: 0, expectedDate: "", actualDate: "", calfCount: "", complications: "", notes: "" });
 
   const { data: records = [], isLoading } = trpc.dairy.listCalving.useQuery({ farmId }, { enabled: !!farmId });
   const { data: animals = [] } = trpc.dairy.listAnimals.useQuery({ farmId }, { enabled: !!farmId });
@@ -69,7 +69,7 @@ export default function Calving() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>Add Calving Record</DialogTitle></DialogHeader>
-          <form onSubmit={(e) => { e.preventDefault(); createRecord.mutate({ farmId, ...form }); }} className="space-y-4">
+          <form onSubmit={(e) => { e.preventDefault(); createRecord.mutate({ farmId, ...form, calfCount: parseInt(form.calfCount) || 1 }); }} className="space-y-4">
             <div className="space-y-1.5">
               <Label>Animal *</Label>
               <select className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm" value={form.animalId} onChange={e => setForm({ ...form, animalId: parseInt(e.target.value) })} required>
@@ -89,7 +89,7 @@ export default function Calving() {
             </div>
             <div className="space-y-1.5">
               <Label>Number of Calves</Label>
-              <Input type="number" min={1} value={form.calfCount} onChange={e => setForm({ ...form, calfCount: parseInt(e.target.value) || 1 })} />
+              <Input type="number" min={1} value={form.calfCount} onChange={e => setForm({ ...form, calfCount: e.target.value })} />
             </div>
             <div className="space-y-1.5">
               <Label>Complications</Label>

@@ -13,13 +13,13 @@ export default function EggProduction() {
   const qc = useQueryClient();
   const farmId = currentFarm?.farm.id ?? 0;
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ flockId: 0, date: new Date().toISOString().slice(0, 10), eggsCollected: 0, damagedEggs: 0, saleableEggs: 0, notes: "" });
+  const [form, setForm] = useState({ flockId: 0, date: new Date().toISOString().slice(0, 10), eggsCollected: "", damagedEggs: "", saleableEggs: "", notes: "" });
 
   const { data: records = [], isLoading } = trpc.poultry.listEggProduction.useQuery({ farmId }, { enabled: !!farmId });
   const { data: flocks = [] } = trpc.poultry.listFlocks.useQuery({ farmId }, { enabled: !!farmId });
 
   const createRecord = trpc.poultry.createEggProduction.useMutation({
-    onSuccess: () => { toast.success("Record saved"); setOpen(false); qc.invalidateQueries(); },
+    onSuccess: () => { toast.success("Record saved"); setOpen(false); setForm({ flockId: 0, date: new Date().toISOString().slice(0, 10), eggsCollected: "", damagedEggs: "", saleableEggs: "", notes: "" }); qc.invalidateQueries(); },
     onError: (e) => toast.error(e.message),
   });
 
@@ -71,7 +71,7 @@ export default function EggProduction() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>Record Egg Production</DialogTitle></DialogHeader>
-          <form onSubmit={(e) => { e.preventDefault(); createRecord.mutate({ farmId, ...form }); }} className="space-y-4">
+           <form onSubmit={(e) => { e.preventDefault(); createRecord.mutate({ farmId, ...form, eggsCollected: parseInt(form.eggsCollected) || 0, damagedEggs: parseInt(form.damagedEggs) || 0, saleableEggs: parseInt(form.saleableEggs) || 0 }); }} className="space-y-4">
             <div className="space-y-1.5">
               <Label>Flock *</Label>
               <select className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm" value={form.flockId} onChange={e => setForm({ ...form, flockId: parseInt(e.target.value) })} required>
@@ -86,15 +86,15 @@ export default function EggProduction() {
             <div className="grid grid-cols-3 gap-3">
               <div className="space-y-1.5">
                 <Label>Collected</Label>
-                <Input type="number" min={0} value={form.eggsCollected} onChange={e => setForm({ ...form, eggsCollected: parseInt(e.target.value) || 0 })} />
+                <Input type="number" min={0} value={form.eggsCollected} onChange={e => setForm({ ...form, eggsCollected: e.target.value })} />
               </div>
               <div className="space-y-1.5">
                 <Label>Damaged</Label>
-                <Input type="number" min={0} value={form.damagedEggs} onChange={e => setForm({ ...form, damagedEggs: parseInt(e.target.value) || 0 })} />
+                <Input type="number" min={0} value={form.damagedEggs} onChange={e => setForm({ ...form, damagedEggs: e.target.value })} />
               </div>
               <div className="space-y-1.5">
                 <Label>Saleable</Label>
-                <Input type="number" min={0} value={form.saleableEggs} onChange={e => setForm({ ...form, saleableEggs: parseInt(e.target.value) || 0 })} />
+                <Input type="number" min={0} value={form.saleableEggs} onChange={e => setForm({ ...form, saleableEggs: e.target.value })} />
               </div>
             </div>
             <div className="space-y-1.5">

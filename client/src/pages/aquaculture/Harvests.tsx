@@ -13,7 +13,7 @@ export default function AquacultureHarvests() {
   const qc = useQueryClient();
   const farmId = currentFarm?.farm.id ?? 0;
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ unitId: 0, harvestDate: new Date().toISOString().slice(0, 10), species: "", totalWeightKg: "", quantity: 0, averageWeightG: "", notes: "" });
+  const [form, setForm] = useState({ unitId: 0, harvestDate: new Date().toISOString().slice(0, 10), species: "", totalWeightKg: "", quantity: "", averageWeightG: "", notes: "" });
 
   const { data: harvests = [], isLoading } = trpc.aquaculture.listHarvests.useQuery({ farmId }, { enabled: !!farmId });
   const { data: units = [] } = trpc.aquaculture.listUnits.useQuery({ farmId }, { enabled: !!farmId });
@@ -71,7 +71,7 @@ export default function AquacultureHarvests() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>Record Harvest</DialogTitle></DialogHeader>
-          <form onSubmit={(e) => { e.preventDefault(); createHarvest.mutate({ farmId, ...form }); }} className="space-y-4">
+          <form onSubmit={(e) => { e.preventDefault(); createHarvest.mutate({ farmId, ...form, quantity: parseInt(form.quantity) || 0 }); }} className="space-y-4">
             <div className="space-y-1.5">
               <Label>Production Unit *</Label>
               <select className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm" value={form.unitId} onChange={e => setForm({ ...form, unitId: parseInt(e.target.value) })} required>
@@ -96,7 +96,7 @@ export default function AquacultureHarvests() {
               </div>
               <div className="space-y-1.5">
                 <Label>Count</Label>
-                <Input type="number" min={0} value={form.quantity} onChange={e => setForm({ ...form, quantity: parseInt(e.target.value) || 0 })} />
+                <Input type="number" min={0} value={form.quantity} onChange={e => setForm({ ...form, quantity: e.target.value })} />
               </div>
               <div className="space-y-1.5">
                 <Label>Avg. Wt (g)</Label>

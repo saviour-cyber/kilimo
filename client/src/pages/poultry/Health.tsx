@@ -13,7 +13,7 @@ export default function Health() {
   const qc = useQueryClient();
   const farmId = currentFarm?.farm.id ?? 0;
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ flockId: 0, date: new Date().toISOString().slice(0, 10), condition: "", affectedQuantity: 0, treatment: "", notes: "" });
+  const [form, setForm] = useState({ flockId: 0, date: new Date().toISOString().slice(0, 10), condition: "", affectedQuantity: "", treatment: "", notes: "" });
 
   const { data: logs = [], isLoading } = trpc.poultry.listHealthLogs.useQuery({ farmId }, { enabled: !!farmId });
   const { data: flocks = [] } = trpc.poultry.listFlocks.useQuery({ farmId }, { enabled: !!farmId });
@@ -67,7 +67,7 @@ export default function Health() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader><DialogTitle>Log Health Event</DialogTitle></DialogHeader>
-          <form onSubmit={(e) => { e.preventDefault(); createLog.mutate({ farmId, ...form }); }} className="space-y-4">
+          <form onSubmit={(e) => { e.preventDefault(); createLog.mutate({ farmId, ...form, affectedQuantity: parseInt(form.affectedQuantity) || undefined }); }} className="space-y-4">
             <div className="space-y-1.5">
               <Label>Flock</Label>
               <select className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm" value={form.flockId} onChange={e => setForm({ ...form, flockId: parseInt(e.target.value) })}>
@@ -82,7 +82,7 @@ export default function Health() {
               </div>
               <div className="space-y-1.5">
                 <Label>Affected Quantity</Label>
-                <Input type="number" min={0} value={form.affectedQuantity} onChange={e => setForm({ ...form, affectedQuantity: parseInt(e.target.value) || 0 })} />
+                <Input type="number" min={0} value={form.affectedQuantity} onChange={e => setForm({ ...form, affectedQuantity: e.target.value })} />
               </div>
             </div>
             <div className="space-y-1.5">
