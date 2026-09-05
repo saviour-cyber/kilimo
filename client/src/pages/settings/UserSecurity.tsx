@@ -3,7 +3,7 @@ import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Shield, Key, Smartphone, Monitor, History, Code2, Eye, EyeOff } from "lucide-react";
+import { Shield, Smartphone, Monitor, History, Code2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -43,9 +43,6 @@ const UserSecurity = () => {
       {/* Password */}
       <section className="space-y-4">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
-            <Key className="w-4 h-4 text-muted-foreground" />
-          </div>
           <h3 className="text-base font-semibold text-foreground">Change Password</h3>
         </div>
         <form onSubmit={handleChangePassword} className="border border-border rounded-xl p-5 space-y-4 bg-muted/30">

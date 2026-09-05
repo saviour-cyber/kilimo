@@ -1,4 +1,4 @@
-import { MonitorPlay, ShieldCheck, Cpu } from "lucide-react";
+
 import { InstallCard } from "@/components/PWAInstallPrompt";
 
 export default function PlatformAbout() {
@@ -13,28 +13,6 @@ export default function PlatformAbout() {
       <section className="space-y-4">
         <h4 className="text-lg font-medium text-foreground">App Installation</h4>
         <InstallCard />
-      </section>
-
-      {/* System Information */}
-      <section className="space-y-4 pt-4">
-        <h4 className="text-lg font-medium text-foreground">System Information</h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-muted border border-border p-4 rounded-xl flex items-start gap-3">
-            <ShieldCheck className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-medium text-foreground text-sm">Secure Connection</p>
-              <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">Your data is encrypted end-to-end and stored securely in our enterprise-grade infrastructure.</p>
-            </div>
-          </div>
-          
-          <div className="bg-muted border border-border p-4 rounded-xl flex items-start gap-3">
-            <Cpu className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-medium text-foreground text-sm">IoT Engine Active</p>
-              <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">Real-time telemetry and automation services are currently online and processing events.</p>
-            </div>
-          </div>
-        </div>
       </section>
       
       {/* Legal & Support */}

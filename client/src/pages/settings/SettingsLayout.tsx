@@ -97,8 +97,7 @@ export default function SettingsLayout() {
             <Settings className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-foreground tracking-tight">Platform Settings</h1>
-            <p className="text-xs text-muted-foreground mt-0.5">Manage your profile, organization, and active farm</p>
+            <h1 className="text-xl font-bold text-foreground tracking-tight">Settings</h1>
           </div>
         </div>
       </div>

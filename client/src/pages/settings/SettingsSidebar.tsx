@@ -33,7 +33,6 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { label: "Organization Profile", href: "/settings/organization/profile", icon: Building },
       { label: "Farms", href: "/settings/organization/farms", icon: MapPin },
-      { label: "Team & Permissions", href: "/settings/organization/team", icon: Users },
       { label: "Subscription & Billing", href: "/settings/organization/billing", icon: CreditCard },
     ]
   },
