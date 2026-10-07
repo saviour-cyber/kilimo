@@ -133,7 +133,7 @@ export default function HealthLogs() {
         <p className="text-sm text-muted-foreground">{logs.length} health records</p>
         {can("write") && (
           <Button size="sm" onClick={() => setDialogOpen(true)}>
-            <Plus className="w-4 h-4 mr-1.5" />Add Log
+            Add Log
           </Button>
         )}
       </div>
@@ -142,7 +142,7 @@ export default function HealthLogs() {
         <LoadingSkeleton variant="list" />
       ) : logs.length === 0 ? (
         <EmptyState 
-          icon={Activity} 
+          icon={() => null} 
           title="No health records" 
           description="Log health treatments and checkups" 
         />
@@ -159,11 +159,15 @@ export default function HealthLogs() {
                     </div>
                     <p className="text-xs text-muted-foreground mt-0.5">
                       {String(log.performedDate).slice(0, 10)}
-                      {log.performedBy ? ` Â· ${log.performedBy}` : ""}
-                      {log.nextDueDate ? ` Â· Next: ${String(log.nextDueDate).slice(0, 10)}` : ""}
+                      {log.performedBy ? ` · ${log.performedBy}` : ""}
+                      {log.nextDueDate ? ` · Next: ${String(log.nextDueDate).slice(0, 10)}` : ""}
                     </p>
                   </div>
-                  {log.cost && <span className="text-sm font-semibold text-foreground">{log.cost}</span>}
+                  {log.cost && (
+                    <span className="text-sm font-semibold text-foreground">
+                      KSh {parseFloat(String(log.cost)).toLocaleString()}
+                    </span>
+                  )}
                 </div>
               </CardContent>
             </Card>

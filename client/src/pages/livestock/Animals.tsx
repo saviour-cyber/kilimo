@@ -334,7 +334,6 @@ export default function Animals() {
         </div>
         {can("write") && (
           <Button size="sm" onClick={() => setDialogOpen(true)}>
-            <Plus className="w-4 h-4 mr-1.5" />
             Add Animal
           </Button>
         )}
@@ -344,7 +343,7 @@ export default function Animals() {
         <LoadingSkeleton variant="cards" />
       ) : animals.length === 0 ? (
         <EmptyState
-          icon={Beef}
+          icon={() => null}
           title="No animals registered"
           description="Add your first animal to start tracking"
         />
@@ -359,8 +358,7 @@ export default function Animals() {
                     <div className="space-y-1 flex-1 min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap mb-1">
                         {animal.tagNumber && (
-                          <span className="flex items-center gap-1 text-xs font-mono bg-muted px-1.5 py-0.5 rounded">
-                            <Tag className="w-3 h-3" />
+                          <span className="text-xs font-mono bg-muted px-1.5 py-0.5 rounded">
                             {animal.tagNumber}
                           </span>
                         )}
@@ -374,12 +372,12 @@ export default function Animals() {
                         </span>
                         {animal.isDairy && (
                           <Badge variant="outline" className="text-[10px] bg-blue-50 text-blue-700 border-blue-200">
-                            <Milk className="w-3 h-3 mr-0.5" /> Dairy
+                            Dairy
                           </Badge>
                         )}
                         {animal.isQuarantined && (
                           <Badge variant="destructive" className="text-[10px]">
-                            <ShieldAlert className="w-3 h-3 mr-0.5" /> Quarantine
+                            Quarantine
                           </Badge>
                         )}
                       </div>
@@ -398,13 +396,13 @@ export default function Animals() {
                           {animal.weight ? ` · ${animal.weight} ${animal.weightUnit}` : ""}
                         </p>
                         {herd && (
-                          <p className="flex items-center gap-1 text-primary">
-                            <Users className="w-3 h-3" /> Herd: {herd.name}
+                          <p className="text-primary font-medium">
+                            Herd: {herd.name}
                           </p>
                         )}
                         {animal.currentLocation && (
-                          <p className="flex items-center gap-1">
-                            <MapPin className="w-3 h-3" /> {animal.currentLocation}
+                          <p>
+                            Location: {animal.currentLocation}
                           </p>
                         )}
                         {animal.bodyConditionScore && (

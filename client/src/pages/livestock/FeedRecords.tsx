@@ -110,10 +110,10 @@ export default function FeedRecords() {
   return (
     <LivestockLayout>
       <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">{records.length} records · Total cost: <span className="font-semibold text-foreground">{totalCost.toFixed(2)}</span></p>
+        <p className="text-sm text-muted-foreground">{records.length} records · Total cost: <span className="font-semibold text-foreground">KSh {totalCost.toLocaleString()}</span></p>
         {can("write") && (
           <Button size="sm" onClick={() => setDialogOpen(true)}>
-            <Plus className="w-4 h-4 mr-1.5" />Add Record
+            Add Record
           </Button>
         )}
       </div>
@@ -122,7 +122,7 @@ export default function FeedRecords() {
         <LoadingSkeleton variant="list" />
       ) : records.length === 0 ? (
         <EmptyState 
-          icon={Package} 
+          icon={() => null} 
           title="No feed records" 
           description="Log daily feed consumption and costs" 
         />
@@ -136,7 +136,11 @@ export default function FeedRecords() {
                     <p className="font-semibold text-foreground">{r.feedType}</p>
                     <p className="text-xs text-muted-foreground">{String(r.feedDate).slice(0, 10)} · {r.quantity} {r.unit}</p>
                   </div>
-                  {r.cost && <span className="text-sm font-semibold text-foreground">{r.cost}</span>}
+                  {r.cost && (
+                    <span className="text-sm font-semibold text-foreground">
+                      KSh {parseFloat(String(r.cost)).toLocaleString()}
+                    </span>
+                  )}
                 </div>
               </CardContent>
             </Card>

@@ -1,4 +1,4 @@
-﻿import bcrypt from "bcryptjs";
+import bcrypt from "bcryptjs";
 import mysql from "mysql2/promise";
 import { config } from "dotenv";
 
@@ -12,8 +12,8 @@ async function seedAdmin() {
   });
 
   try {
-    const email = "admin@KiliSensehub.com";
-    const rawPassword = "admin@123456";
+    const email = "admin@kilisense.com";
+    const rawPassword = "eldavis45";
 
     // Hash the password with bcrypt (10 rounds)
     const hashedPassword = await bcrypt.hash(rawPassword, 10);

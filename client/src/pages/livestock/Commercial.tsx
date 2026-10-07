@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { DollarSign, ShoppingCart, TrendingUp, Plus, Edit2, Tag } from "lucide-react";
 import { toast } from "sonner";
 import LivestockLayout from "./LivestockLayout";
 import { EmptyState } from "@/components/shared/EmptyState";
@@ -98,7 +97,7 @@ export default function Commercial() {
     });
   };
 
-  // Financial aggregates
+  // Financial aggregates in KSh
   const totalPurchaseValuation = animals.reduce(
     (acc, a) => acc + (parseFloat(String(a.purchasePrice || 0)) || 0),
     0
@@ -119,8 +118,8 @@ export default function Commercial() {
               Manage livestock acquisition costs, sales revenues, buyer/seller tracking, and asset valuations
             </p>
           </div>
-          <Button onClick={() => handleOpenCommercialDialog()} className="flex items-center gap-2">
-            <Plus className="h-4 w-4" /> Log Valuation / Sale
+          <Button onClick={() => handleOpenCommercialDialog()}>
+            Log Valuation / Sale
           </Button>
         </div>
 
@@ -128,25 +127,25 @@ export default function Commercial() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Card className="border border-border shadow-sm">
             <CardHeader className="pb-2">
-              <CardTitle className="text-xs font-medium text-muted-foreground flex items-center gap-2">
-                <ShoppingCart className="h-4 w-4 text-primary" /> Total Acquisitions Cost
+              <CardTitle className="text-xs font-medium text-muted-foreground">
+                Total Acquisitions Cost
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${totalPurchaseValuation.toLocaleString()}</div>
+              <div className="text-2xl font-bold">KSh {totalPurchaseValuation.toLocaleString()}</div>
               <p className="text-xs text-muted-foreground mt-1">Capital invested in purchased livestock</p>
             </CardContent>
           </Card>
 
           <Card className="border border-border shadow-sm">
             <CardHeader className="pb-2">
-              <CardTitle className="text-xs font-medium text-muted-foreground flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-emerald-600" /> Total Sales Revenue
+              <CardTitle className="text-xs font-medium text-muted-foreground">
+                Total Sales Revenue
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-emerald-600">
-                ${totalSalesValuation.toLocaleString()}
+                KSh {totalSalesValuation.toLocaleString()}
               </div>
               <p className="text-xs text-muted-foreground mt-1">{soldAnimalsCount} animals sold to date</p>
             </CardContent>
@@ -154,8 +153,8 @@ export default function Commercial() {
 
           <Card className="border border-border shadow-sm">
             <CardHeader className="pb-2">
-              <CardTitle className="text-xs font-medium text-muted-foreground flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-blue-600" /> Net Livestock Realization
+              <CardTitle className="text-xs font-medium text-muted-foreground">
+                Net Livestock Realization
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -164,7 +163,7 @@ export default function Commercial() {
                   totalSalesValuation - totalPurchaseValuation >= 0 ? "text-blue-600" : "text-amber-600"
                 }`}
               >
-                ${(totalSalesValuation - totalPurchaseValuation).toLocaleString()}
+                KSh {(totalSalesValuation - totalPurchaseValuation).toLocaleString()}
               </div>
               <p className="text-xs text-muted-foreground mt-1">Gross commercial margin on livestock trades</p>
             </CardContent>
@@ -176,7 +175,7 @@ export default function Commercial() {
           <LoadingSkeleton />
         ) : animals.length === 0 ? (
           <EmptyState
-            icon={Tag}
+            icon={() => null}
             title="No animals found"
             description="Register animals first to attach purchase costs or record sales."
           />
@@ -221,7 +220,9 @@ export default function Commercial() {
                       <td className="px-4 py-3">
                         {a.purchasePrice ? (
                           <div>
-                            <span className="font-semibold text-foreground">${parseFloat(a.purchasePrice).toLocaleString()}</span>
+                            <span className="font-semibold text-foreground">
+                              KSh {parseFloat(a.purchasePrice).toLocaleString()}
+                            </span>
                             {a.sellerInfo && (
                               <span className="text-xs text-muted-foreground block">Seller: {a.sellerInfo}</span>
                             )}
@@ -236,7 +237,9 @@ export default function Commercial() {
                       <td className="px-4 py-3">
                         {a.salePrice ? (
                           <div>
-                            <span className="font-semibold text-emerald-700">${parseFloat(a.salePrice).toLocaleString()}</span>
+                            <span className="font-semibold text-emerald-700">
+                              KSh {parseFloat(a.salePrice).toLocaleString()}
+                            </span>
                             {a.buyerInfo && (
                               <span className="text-xs text-muted-foreground block">Buyer: {a.buyerInfo}</span>
                             )}
@@ -261,10 +264,10 @@ export default function Commercial() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-8 text-xs flex items-center gap-1 ml-auto"
+                          className="h-8 text-xs ml-auto"
                           onClick={() => handleOpenCommercialDialog(a)}
                         >
-                          <Edit2 className="h-3.5 w-3.5" /> Edit
+                          Edit
                         </Button>
                       </td>
                     </tr>
@@ -313,12 +316,12 @@ export default function Commercial() {
                 </span>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <Label className="text-xs">Purchase Price ($)</Label>
+                    <Label className="text-xs">Purchase Price (KSh)</Label>
                     <Input
                       type="number"
                       value={form.purchasePrice}
                       onChange={(e) => setForm({ ...form, purchasePrice: e.target.value })}
-                      placeholder="e.g., 1200"
+                      placeholder="e.g., 50000"
                     />
                   </div>
                   <div className="space-y-1">
@@ -335,7 +338,7 @@ export default function Commercial() {
                   <Input
                     value={form.sellerInfo}
                     onChange={(e) => setForm({ ...form, sellerInfo: e.target.value })}
-                    placeholder="e.g., Green Pastures Livestock Ltd"
+                    placeholder="e.g., Local Breeder or Market"
                   />
                 </div>
               </div>
@@ -346,12 +349,12 @@ export default function Commercial() {
                 </span>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <Label className="text-xs">Sale Price ($)</Label>
+                    <Label className="text-xs">Sale Price (KSh)</Label>
                     <Input
                       type="number"
                       value={form.salePrice}
                       onChange={(e) => setForm({ ...form, salePrice: e.target.value })}
-                      placeholder="e.g., 1850"
+                      placeholder="e.g., 75000"
                     />
                   </div>
                   <div className="space-y-1">
@@ -369,7 +372,7 @@ export default function Commercial() {
                     <Input
                       value={form.buyerInfo}
                       onChange={(e) => setForm({ ...form, buyerInfo: e.target.value })}
-                      placeholder="e.g., Local Abattoir or Farmer Name"
+                      placeholder="e.g., Buyer name"
                     />
                   </div>
                   <div className="space-y-1">

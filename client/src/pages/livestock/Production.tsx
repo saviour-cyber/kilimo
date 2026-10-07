@@ -132,7 +132,7 @@ export default function Production() {
         <p className="text-sm text-muted-foreground">{records.length} records · Total: <span className="font-semibold text-foreground">{totalProduction.toFixed(1)}</span></p>
         {can("write") && (
           <Button size="sm" onClick={() => setDialogOpen(true)}>
-            <Plus className="w-4 h-4 mr-1.5" />Record Production
+            Record Production
           </Button>
         )}
       </div>
@@ -158,7 +158,7 @@ export default function Production() {
         <LoadingSkeleton variant="list" />
       ) : records.length === 0 ? (
         <EmptyState 
-          icon={Droplets} 
+          icon={() => null} 
           title="No production records" 
           description="Record milk, eggs, wool, and other yields" 
         />

@@ -137,16 +137,13 @@ export default function HeatGestation() {
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div>
-              <div className="flex items-center gap-2">
-                <Flame className="h-5 w-5 text-orange-500" />
-                <h2 className="text-lg font-semibold">Estrus & Heat Detection</h2>
-              </div>
+              <h2 className="text-lg font-semibold">Estrus & Heat Detection</h2>
               <p className="text-xs text-muted-foreground">
                 Record estrus signs and track optimal artificial insemination (AI) windows (AM/PM rule)
               </p>
             </div>
-            <Button onClick={() => setHeatDialogOpen(true)} size="sm" className="flex items-center gap-2">
-              <Plus className="h-4 w-4" /> Log Heat Observation
+            <Button onClick={() => setHeatDialogOpen(true)} size="sm">
+              Log Heat Observation
             </Button>
           </div>
 
@@ -201,10 +198,7 @@ export default function HeatGestation() {
                           </td>
                           <td className="px-4 py-3 text-xs">
                             {log.breedingWindowStart ? (
-                              <div className="flex items-center gap-1 text-primary">
-                                <Clock className="h-3 w-3" />
-                                <span>{formatDate(log.breedingWindowStart)}</span>
-                              </div>
+                              <span className="text-primary font-medium">{formatDate(log.breedingWindowStart)}</span>
                             ) : (
                               "—"
                             )}
@@ -253,14 +247,11 @@ export default function HeatGestation() {
 
         {/* Section 2: Active Gestation & Dry-Off Tracker */}
         <div className="space-y-4 pt-4 border-t border-border">
-          <div className="flex items-center gap-2">
-            <Heart className="h-5 w-5 text-rose-500" />
-            <div>
-              <h2 className="text-lg font-semibold">Active Gestation & Calving Schedule</h2>
-              <p className="text-xs text-muted-foreground">
-                Track pregnancy confirmation, days to delivery, and mandatory dry-off timelines
-              </p>
-            </div>
+          <div>
+            <h2 className="text-lg font-semibold">Active Gestation & Calving Schedule</h2>
+            <p className="text-xs text-muted-foreground">
+              Track pregnancy confirmation, days to delivery, and mandatory dry-off timelines
+            </p>
           </div>
 
           {loadingPregnancies ? (
@@ -315,10 +306,7 @@ export default function HeatGestation() {
                     </CardHeader>
                     <CardContent className="space-y-3 pt-0 text-sm">
                       <div className="flex items-center justify-between p-2.5 rounded-lg bg-muted/40 border border-border/50">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 text-primary" />
-                          <span className="text-xs font-medium">Expected Calving:</span>
-                        </div>
+                        <span className="text-xs font-medium">Expected Calving:</span>
                         <div className="text-right">
                           <span className="font-semibold block text-xs">
                             {formatDate(p.expectedDeliveryDate)}

@@ -6,9 +6,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import { Textarea } from "@/components/ui/textarea";
-import { Skull, Plus } from "lucide-react";
+
 import { useState } from "react";
 import { toast } from "sonner";
 import LivestockLayout from "./LivestockLayout";
@@ -113,7 +113,7 @@ export default function Mortality() {
         <p className="text-sm text-muted-foreground">{records.length} mortality records</p>
         {can("write") && (
           <Button size="sm" variant="destructive" onClick={() => setDialogOpen(true)}>
-            <Plus className="w-4 h-4 mr-1.5" />Record Mortality
+            Record Mortality
           </Button>
         )}
       </div>
@@ -122,7 +122,7 @@ export default function Mortality() {
         <LoadingSkeleton variant="list" />
       ) : records.length === 0 ? (
         <EmptyState 
-          icon={Skull} 
+          icon={() => null} 
           title="No mortality records" 
           description="Record animal deaths and causes" 
         />

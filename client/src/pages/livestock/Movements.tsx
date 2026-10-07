@@ -133,8 +133,8 @@ export default function Movements() {
               Track pasture rotations, pen transfers, quarantine admissions, and herd reassignments
             </p>
           </div>
-          <Button onClick={() => setOpen(true)} className="flex items-center gap-2">
-            <Plus className="h-4 w-4" /> Log Movement
+          <Button onClick={() => setOpen(true)}>
+            Log Movement
           </Button>
         </div>
 
@@ -142,7 +142,7 @@ export default function Movements() {
           <LoadingSkeleton />
         ) : movements.length === 0 ? (
           <EmptyState
-            icon={MapPin}
+            icon={() => null}
             title="No movements recorded"
             description="Log animal movements across paddocks, barns, isolation pens, or between herds."
             action={
@@ -185,7 +185,7 @@ export default function Movements() {
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2 text-xs">
                             <span className="text-muted-foreground">{m.fromLocation || "Unassigned"}</span>
-                            <ArrowRight className="h-3 w-3 text-primary flex-shrink-0" />
+                            <span className="text-primary font-bold">→</span>
                             <span className="font-semibold text-foreground">{m.toLocation}</span>
                           </div>
                         </td>
@@ -267,13 +267,13 @@ export default function Movements() {
                   <Label>Transfer to Herd (Optional)</Label>
                   <Select
                     value={form.toHerdId}
-                    onValueChange={(val) => setForm({ ...form, toHerdId: val })}
+                    onValueChange={(val) => setForm({ ...form, toHerdId: val === "none" ? "" : val })}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Keep current herd" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">None / Detach</SelectItem>
+                      <SelectItem value="none">None / Detach</SelectItem>
                       {herds.map((h) => (
                         <SelectItem key={h.id} value={String(h.id)}>
                           {h.name}

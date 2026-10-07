@@ -154,9 +154,8 @@ export default function Herds() {
               resetForm();
               setOpen(true);
             }}
-            className="flex items-center gap-2"
           >
-            <Plus className="h-4 w-4" /> Add Herd / Group
+            Add Herd / Group
           </Button>
         </div>
 
@@ -164,7 +163,7 @@ export default function Herds() {
           <LoadingSkeleton />
         ) : herds.length === 0 ? (
           <EmptyState
-            icon={Users}
+            icon={() => null}
             title="No herds registered"
             description="Create your first herd or group to manage pasturing, milking cohorts, or calf pens."
             action={
@@ -220,10 +219,7 @@ export default function Herds() {
                     <p className="text-muted-foreground text-xs line-clamp-2">{herd.description}</p>
                   )}
                   <div className="flex items-center justify-between pt-2 border-t border-border">
-                    <div className="flex items-center gap-1.5 text-muted-foreground">
-                      <Users className="h-4 w-4" />
-                      <span>Current Animals:</span>
-                    </div>
+                    <span className="text-muted-foreground text-xs">Current Animals:</span>
                     <span className="font-semibold text-foreground text-base">
                       {herd.currentHeadCount}
                       {herd.targetHeadCount ? (
@@ -233,9 +229,8 @@ export default function Herds() {
                   </div>
 
                   {herd.location && (
-                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <MapPin className="h-3.5 w-3.5" />
-                      <span>{herd.location}</span>
+                    <div className="text-xs text-muted-foreground">
+                      <span>Location: {herd.location}</span>
                     </div>
                   )}
                 </CardContent>

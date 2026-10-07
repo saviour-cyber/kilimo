@@ -118,7 +118,7 @@ export default function Breeding() {
         <p className="text-sm text-muted-foreground">{records.length} breeding records</p>
         {can("write") && (
           <Button size="sm" onClick={() => setDialogOpen(true)}>
-            <Plus className="w-4 h-4 mr-1.5" />Add Record
+            Add Record
           </Button>
         )}
       </div>
@@ -127,7 +127,7 @@ export default function Breeding() {
         <LoadingSkeleton variant="list" />
       ) : records.length === 0 ? (
         <EmptyState 
-          icon={Heart} 
+          icon={() => null} 
           title="No breeding records" 
           description="Track matings and expected deliveries" 
         />

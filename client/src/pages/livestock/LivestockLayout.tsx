@@ -1,10 +1,9 @@
-import { PawPrint } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { PageHeader } from "@/components/shared/PageHeader";
 
 const LIVESTOCK_TABS = [
   { label: "Animals", path: "/livestock/animals" },
-  { label: "Herds & Groups", path: "/livestock/herds" },
+  { label: "Herds", path: "/livestock/herds" },
   { label: "Heat & Gestation", path: "/livestock/heat-gestation" },
   { label: "Movements", path: "/livestock/movements" },
   { label: "Commercial", path: "/livestock/commercial" },
@@ -21,11 +20,7 @@ export default function LivestockLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="px-4 sm:px-6 pt-4 pb-8 space-y-5 max-w-7xl mx-auto">
-      <PageHeader 
-        title="Livestock & Animal Core" 
-        description="Unified animal domain, herds, reproduction, pasture movement, and health intelligence" 
-        icon={PawPrint} 
-      />
+      <PageHeader title="Livestock" />
 
       <div className="flex gap-1 border-b border-border overflow-x-auto pb-0">
         {LIVESTOCK_TABS.map((tab) => (
