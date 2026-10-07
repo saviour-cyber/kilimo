@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 export default function AdminLogin() {
   const [, navigate] = useLocation();
+  const utils = trpc.useUtils();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,19 +20,24 @@ export default function AdminLogin() {
   const env = import.meta.env.MODE === "production" ? "Production" : "Development";
   const appVersion = "v1.0.0"; // In a real app this might come from package.json or env
 
-  const loginMutation = trpc.auth.adminLogin.useMutation({
-    onSuccess: async () => {
-      navigate("/admin");
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
+  const loginMutation = trpc.auth.adminLogin.useMutation();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) return;
-    loginMutation.mutate({ email, password });
+    const cleanEmail = email.trim();
+    if (!cleanEmail || !password) return;
+
+    try {
+      await loginMutation.mutateAsync({ email: cleanEmail, password });
+      await utils.auth.me.invalidate();
+      await utils.auth.me.fetch();
+      toast.success("Successfully logged in");
+      setTimeout(() => {
+        window.location.href = "/admin";
+      }, 200);
+    } catch (err: any) {
+      toast.error(err.message || "Invalid credentials");
+    }
   };
 
   return (

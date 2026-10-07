@@ -21,6 +21,7 @@ import { iotEventService } from "../services/iot/IotEventService"; // ensure sin
 
 async function startServer() {
   const app = express();
+  app.set("trust proxy", 1);
   const server = createServer(app);
 
   // Webhooks must be mounted BEFORE express.json() so they can access the raw body
