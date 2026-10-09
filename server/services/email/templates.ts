@@ -1,4 +1,4 @@
-﻿// ─── Reusable HTML Email Templates ───────────────────────────────────────────
+// ─── Reusable HTML Email Templates ───────────────────────────────────────────
 // All templates use plain HTML with inline CSS for maximum email client support.
 // No external CSS frameworks — email clients strip them.
 
@@ -63,7 +63,7 @@ function shell(content: string, previewText = ""): string {
                 <a href="${base}" style="color:${BRAND.primary};text-decoration:none;">KiliSense</a>.
               </p>
               <p style="margin:0;font-size:12px;color:${BRAND.textMuted};">
-                © ${new Date().getFullYear()} KiliSense Technologies Ltd · Nairobi, Kenya
+                © ${new Date().getFullYear()} KiliSense Technologies Ltd · Nyeri, Kenya
               </p>
             </td>
           </tr>

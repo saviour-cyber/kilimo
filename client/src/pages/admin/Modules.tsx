@@ -24,7 +24,7 @@ export default function AdminModules() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-foreground">Business Modules</h1>
-          <p className="text-sm text-muted-foreground mt-1">Enable or disable core farming modules across the entire platform.</p>
+          <p className="text-sm text-muted-foreground mt-1">Enable or disable core farming modules.</p>
         </div>
       </div>
 

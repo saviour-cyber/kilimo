@@ -25,7 +25,7 @@ export class WeatherEngine implements IWeatherEngine {
     let lon = farm.longitude ? Number(farm.longitude) : null;
 
     if (lat === null || lon === null) {
-      const locationStr = farm.location || farm.county || "Nairobi, Kenya";
+      const locationStr = farm.location || farm.county || "Nyeri, Kenya";
       const coords = await this.provider.getCoordinates(locationStr);
       if (coords) {
         lat = coords.lat;
@@ -33,9 +33,9 @@ export class WeatherEngine implements IWeatherEngine {
         // Save the resolved coordinates back to the farm
         await db.update(farms).set({ latitude: lat.toString(), longitude: lon.toString() }).where(eq(farms.id, farmId));
       } else {
-        // Fallback to Nairobi if completely unresolvable
-        lat = -1.2833;
-        lon = 36.8167;
+        // Fallback to Nyeri if completely unresolvable
+        lat = -0.4201;
+        lon = 36.9476;
       }
     }
 
@@ -76,10 +76,10 @@ export class WeatherEngine implements IWeatherEngine {
         lon = farm.longitude ? Number(farm.longitude) : undefined;
 
         if (lat === undefined || lon === undefined) {
-          const locationStr = farm.location || farm.county || "Nairobi, Kenya";
+          const locationStr = farm.location || farm.county || "Nyeri, Kenya";
           const resCoords = await this.provider.getCoordinates(locationStr);
-          lat = resCoords?.lat ?? -1.2833;
-          lon = resCoords?.lon ?? 36.8167;
+          lat = resCoords?.lat ?? -0.4201;
+          lon = resCoords?.lon ?? 36.9476;
           await db.update(farms).set({ latitude: lat.toString(), longitude: lon.toString() }).where(eq(farms.id, farmId));
         }
       }

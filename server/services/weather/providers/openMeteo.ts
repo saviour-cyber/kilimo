@@ -71,7 +71,7 @@ export class OpenMeteoProvider implements WeatherProvider {
   private async resolveLocation(location: string | { lat: number; lon: number }): Promise<{ lat: number; lon: number }> {
     if (typeof location === "string") {
       const coords = await this.getCoordinates(location);
-      return { lat: coords?.lat ?? -1.2833, lon: coords?.lon ?? 36.8167 }; // Default to Nairobi
+      return { lat: coords?.lat ?? -0.4201, lon: coords?.lon ?? 36.9476 }; // Default to Nyeri, Kenya
     }
     return location;
   }

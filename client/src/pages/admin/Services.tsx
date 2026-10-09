@@ -24,8 +24,8 @@ export default function AdminServices() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">Platform Services</h1>
-          <p className="text-sm text-muted-foreground mt-1">Configure global platform infrastructure services and APIs.</p>
+          <h1 className="text-2xl font-semibold text-foreground">System Services</h1>
+          <p className="text-sm text-muted-foreground mt-1">Configure global infrastructure services and APIs.</p>
         </div>
       </div>
 

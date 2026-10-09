@@ -34,8 +34,8 @@ export default function AdminUsers() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">Platform Users</h1>
-          <p className="text-sm text-muted-foreground mt-1">Manage all registered users across the entire platform.</p>
+          <h1 className="text-2xl font-semibold text-foreground">Users</h1>
+          <p className="text-sm text-muted-foreground mt-1">Manage all registered users across the system.</p>
         </div>
         <Badge variant="outline" className="text-muted-foreground w-fit bg-secondary/30">
           {users?.length ?? 0} total users

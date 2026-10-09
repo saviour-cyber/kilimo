@@ -14,7 +14,7 @@ export default function AdminReports() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <BarChart2 className="w-6 h-6 text-muted-foreground" />
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">Platform Analytics</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">Analytics & Reports</h1>
         </div>
         <Button className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2">
           <Download className="w-4 h-4" /> Export Raw Data
@@ -62,7 +62,7 @@ export default function AdminReports() {
       <Card className="border-border shadow-sm">
         <CardHeader>
           <CardTitle className="text-foreground">Recent Global Report Generation</CardTitle>
-          <CardDescription>Log of the most recent PDF/CSV exports executed by platform users.</CardDescription>
+          <CardDescription>Log of the most recent PDF/CSV exports executed by users.</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>

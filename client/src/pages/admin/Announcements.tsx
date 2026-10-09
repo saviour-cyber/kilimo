@@ -70,7 +70,7 @@ export default function AdminAnnouncements() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <Bell className="w-6 h-6 text-muted-foreground" />
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">Platform Announcements</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">Announcements</h1>
         </div>
         
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -118,7 +118,7 @@ export default function AdminAnnouncements() {
       <Card className="border-border shadow-sm">
         <CardHeader>
           <CardTitle className="text-foreground">Broadcast History</CardTitle>
-          <CardDescription>Manage active banners displayed across the user platform.</CardDescription>
+          <CardDescription>Manage active banners displayed across the application.</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>

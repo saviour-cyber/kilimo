@@ -65,8 +65,8 @@ export default function AdminLogin() {
             style={{ height: '140px' }}
           />
           <div className="space-y-1.5">
-            <h1 className="text-[22px] font-semibold text-foreground tracking-tight">Platform Admin</h1>
-            <p className="text-[14px] text-muted-foreground font-medium">Secure access to the KiliSense Platform.</p>
+            <h1 className="text-[22px] font-semibold text-foreground tracking-tight">Admin</h1>
+            <p className="text-[14px] text-muted-foreground font-medium">Secure access to KiliSense.</p>
           </div>
         </div>
 
@@ -87,7 +87,7 @@ export default function AdminLogin() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@KiliSensehub.com"
+                  placeholder="admin@kilisense.com"
                   required
                   className="w-full h-[52px] pl-11 pr-4 rounded-xl border border-border bg-muted/50 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-foreground text-[14px] placeholder:text-muted-foreground"
                 />

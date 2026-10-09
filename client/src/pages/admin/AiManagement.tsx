@@ -88,7 +88,7 @@ export default function AdminAiManagement() {
       <Card className="border-border shadow-sm">
         <CardHeader>
           <CardTitle className="text-foreground">Connected AI Models</CardTitle>
-          <CardDescription>Configure which foundation models power the platform features.</CardDescription>
+          <CardDescription>Configure which foundation models power the features.</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>

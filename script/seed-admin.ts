@@ -1,4 +1,4 @@
-﻿/**
+/**
  * seed-admin.ts
  * Creates (or resets) the platform superadmin account.
  *
@@ -14,9 +14,9 @@ import "dotenv/config";
 import bcrypt from "bcryptjs";
 import mysql from "mysql2/promise";
 
-const ADMIN_EMAIL    = process.env.ADMIN_EMAIL    ?? "admin@KiliSensehub.com";
+const ADMIN_EMAIL    = process.env.ADMIN_EMAIL    ?? "admin@kilisense.com";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "Admin@123456";
-const ADMIN_NAME     = "Platform Superadmin";
+const ADMIN_NAME     = "Admin";
 
 async function main() {
   console.log("🔑 Seeding platform admin account…");

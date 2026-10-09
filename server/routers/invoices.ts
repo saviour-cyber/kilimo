@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import PDFDocument from "pdfkit";
 import { getDb } from "../db";
 import { subscriptionPayments, organizations, subscriptions, subscriptionPlans } from "../../drizzle/schema";
@@ -55,8 +55,8 @@ invoicesRouter.get("/:paymentId/download", async (req, res) => {
       .text("KiliSense", { align: "right" })
       .fontSize(10)
       .font("Helvetica")
-      .text("123 Farming Avenue, Nairobi, Kenya", { align: "right" })
-      .text("contact@KiliSense.com", { align: "right" })
+      .text("123 Farming Avenue, Nyeri, Kenya", { align: "right" })
+      .text("contact@kilisense.com", { align: "right" })
       .moveDown(2);
 
     // Invoice Info

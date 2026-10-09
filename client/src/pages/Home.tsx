@@ -459,8 +459,8 @@ export default function Home() {
               <div>
                 <h4 className="text-xs font-bold tracking-widest text-white uppercase mb-6">Contact</h4>
                 <ul className="space-y-4 text-sm text-[#64748B]">
-                  <li className="flex gap-3"><MapPin className="w-4 h-4 text-[#10B981] shrink-0 mt-0.5" /><span>Nairobi, Kenya</span></li>
-                  <li className="flex gap-3"><Mail className="w-4 h-4 text-[#10B981] shrink-0 mt-0.5" /><span>support@KiliSensehub.co.ke</span></li>
+                  <li className="flex gap-3"><MapPin className="w-4 h-4 text-[#10B981] shrink-0 mt-0.5" /><span>Nyeri, Kenya</span></li>
+                  <li className="flex gap-3"><Mail className="w-4 h-4 text-[#10B981] shrink-0 mt-0.5" /><span>support@kilisense.com</span></li>
                   <li className="flex gap-3"><Clock className="w-4 h-4 text-[#10B981] shrink-0 mt-0.5" /><span>Mon – Sat · 8:00am – 6:00pm EAT</span></li>
                 </ul>
               </div>

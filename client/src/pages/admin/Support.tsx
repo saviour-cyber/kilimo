@@ -14,7 +14,7 @@ export default function Support() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Support Center</h1>
         <p className="text-muted-foreground mt-2">
-          Handle tenant support tickets, inquiries, and platform feedback.
+          Handle tenant support tickets, inquiries, and feedback.
         </p>
       </div>
       

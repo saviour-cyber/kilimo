@@ -1,4 +1,4 @@
-﻿import { z } from "zod";
+import { z } from "zod";
 import { publicProcedure, router } from "../_core/trpc";
 import { users, emailVerificationTokens, passwordResetTokens } from "../../drizzle/schema";
 import { eq, and, gt } from "drizzle-orm";
@@ -107,7 +107,7 @@ export const authRouter = router({
 
       // Check user exists and is an admin
       if (!user || user.role !== "admin") {
-        throw new TRPCError({ code: "UNAUTHORIZED", message: "Access denied. This portal is restricted to platform administrators." });
+        throw new TRPCError({ code: "UNAUTHORIZED", message: "Access denied. This portal is restricted to administrators." });
       }
 
       if (!user.password) {

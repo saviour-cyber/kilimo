@@ -327,9 +327,9 @@ export default function AdminDashboard() {
 
       {/* Ã¢â€â‚¬Ã¢â€â‚¬ Page title Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <div>
-        <h1 className="text-lg font-bold text-white md:text-xl">Platform Overview</h1>
+        <h1 className="text-lg font-bold text-white md:text-xl">Overview</h1>
         <p className="mt-0.5 text-xs text-muted-foreground">
-          Real-time platform health and business metrics
+          Real-time system health and business metrics
         </p>
       </div>
 
@@ -489,7 +489,7 @@ export default function AdminDashboard() {
       <AdminCard>
         <AdminCardHeader
           title="Recent Activity"
-          subtitle="Latest platform events"
+          subtitle="Latest system events"
           action={
             <button
               onClick={() => setActivityExpanded((e) => !e)}

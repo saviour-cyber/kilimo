@@ -14,7 +14,7 @@ export default function Billing() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Billing & Invoices</h1>
         <p className="text-muted-foreground mt-2">
-          Manage platform revenue, tenant invoices, and payment gateways.
+          Manage revenue, tenant invoices, and payment gateways.
         </p>
       </div>
       

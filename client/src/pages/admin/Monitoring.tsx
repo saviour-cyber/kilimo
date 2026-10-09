@@ -115,7 +115,7 @@ export default function AdminMonitoring() {
 
         <Card className="border-border shadow-sm">
           <CardHeader>
-            <CardTitle className="text-foreground">Platform API Traffic</CardTitle>
+            <CardTitle className="text-foreground">API Traffic</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[300px] w-full">

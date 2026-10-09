@@ -12,9 +12,9 @@ export default function Settings() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Platform Settings</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">System Settings</h1>
         <p className="text-muted-foreground mt-2">
-          Configure global platform variables, branding, and core infrastructure.
+          Configure global system variables, branding, and core infrastructure.
         </p>
       </div>
       

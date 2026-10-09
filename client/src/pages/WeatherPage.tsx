@@ -57,7 +57,7 @@ export default function WeatherPage() {
                   <div>
                     <h2 className="text-4xl font-bold mb-2">{weatherData.current.temperature}Â°C</h2>
                     <p className="text-xl text-blue-100 capitalize">{weatherData.current.description}</p>
-                    <p className="text-sm text-blue-200 mt-1">Location: {currentFarm.farm.location || "Nairobi, Kenya"}</p>
+                    <p className="text-sm text-blue-200 mt-1">Location: {currentFarm.farm.location || "Nyeri, Kenya"}</p>
                   </div>
                 </div>
                 

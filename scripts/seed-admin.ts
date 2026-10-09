@@ -19,7 +19,7 @@ async function seedAdmin() {
     const hashedPassword = await bcrypt.hash(rawPassword, 10);
 
     const openId = email;
-    const name = "Platform Admin";
+    const name = "Admin";
     const role = "admin";
     const isEmailVerified = true;
 

@@ -123,12 +123,12 @@ export default function OrgProfile() {
             </div>
             <div className="space-y-1.5">
               <Label className="text-sm font-medium text-muted-foreground">County / State</Label>
-              <Input value={form.county} onChange={(e) => setForm({ ...form, county: e.target.value })} placeholder="Nairobi" />
+              <Input value={form.county} onChange={(e) => setForm({ ...form, county: e.target.value })} placeholder="Nyeri" />
             </div>
           </div>
           <div className="space-y-1.5">
             <Label className="text-sm font-medium text-muted-foreground">Physical Address</Label>
-            <Input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="123 Farm Road, Nairobi" />
+            <Input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="123 Farm Road, Nyeri" />
           </div>
         </section>
 

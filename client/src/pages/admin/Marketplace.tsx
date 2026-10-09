@@ -32,7 +32,7 @@ export default function AdminMarketplace() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Marketplace Moderation</h1>
           <p className="text-muted-foreground mt-1">
-            Monitor and moderate all listings across the KiliSense platform.
+            Monitor and moderate all listings.
           </p>
         </div>
       </div>
@@ -40,7 +40,7 @@ export default function AdminMarketplace() {
       <Card>
         <CardHeader className="py-4 border-b">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            <CardTitle>Platform Listings</CardTitle>
+            <CardTitle>Marketplace Listings</CardTitle>
             <div className="flex gap-2">
               <Select value={status} onValueChange={(v: any) => setStatus(v)}>
                 <SelectTrigger className="w-32">

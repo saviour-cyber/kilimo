@@ -123,7 +123,7 @@ export default function EmailCenter() {
                   <Select value={formData.templateKey} onValueChange={(val: any) => setFormData({...formData, templateKey: val})}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="platform_announcement">Platform Announcement</SelectItem>
+                      <SelectItem value="platform_announcement">Announcement</SelectItem>
                       <SelectItem value="security_alert">Security Alert</SelectItem>
                       <SelectItem value="custom">Custom HTML</SelectItem>
                     </SelectContent>

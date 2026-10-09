@@ -50,7 +50,7 @@ interface NavGroup {
 
 const ADMIN_MENU: NavGroup[] = [
   {
-    group: "Platform",
+    group: "Overview",
     items: [
       { label: "Dashboard",      href: "/admin",               icon: LayoutDashboard, exact: true },
       { label: "Organizations",  href: "/admin/organizations",  icon: Building2 },
@@ -62,7 +62,7 @@ const ADMIN_MENU: NavGroup[] = [
     group: "Registry",
     items: [
       { label: "Business Modules",  href: "/admin/modules",   icon: Box },
-      { label: "Platform Services", href: "/admin/services",  icon: Zap },
+      { label: "Services",          href: "/admin/services",  icon: Zap },
       { label: "Marketplace",       href: "/admin/marketplace", icon: ShoppingBag },
     ],
   },
@@ -314,7 +314,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
               !collapsed ? "lg:block" : "lg:hidden",
             )}
           >
-            Platform Admin
+            Admin
           </span>
 
           {/* Mobile close */}
@@ -400,7 +400,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           </button>
 
           {/* Mobile brand */}
-          <span className="text-sm font-semibold text-foreground md:hidden">Platform Admin</span>
+          <span className="text-sm font-semibold text-foreground md:hidden">Admin</span>
 
           <div className="flex-1" />
 

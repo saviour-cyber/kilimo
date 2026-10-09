@@ -25,7 +25,7 @@ export default function AdminAuditLogs() {
             <ShieldAlert className="w-6 h-6 text-primary" />
             Audit Logs
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">Immutable record of all administrative actions across the platform.</p>
+          <p className="text-sm text-muted-foreground mt-1">Immutable record of all administrative actions.</p>
         </div>
       </div>
 

@@ -120,7 +120,7 @@ export default function CreateFarm() {
                 <Label htmlFor="location">Location</Label>
                 <Input
                   id="location"
-                  placeholder="e.g. Nairobi, Kenya"
+                  placeholder="e.g. Nyeri, Kenya"
                   value={form.location}
                   onChange={(e) => setForm({ ...form, location: e.target.value })}
                 />
