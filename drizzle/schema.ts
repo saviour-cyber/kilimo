@@ -25,6 +25,7 @@ export const users = mysqlTable("users", {
   country: varchar("country", { length: 64 }).default("Kenya"),
   loginMethod: varchar("loginMethod", { length: 64 }),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  isSuspended: boolean("isSuspended").default(false).notNull(),
   avatarUrl: text("avatarUrl"),
   preferredLanguage: varchar("preferredLanguage", { length: 16 }).default("en"),
   theme: mysqlEnum("theme", ["light", "dark", "system"]).default("system"),

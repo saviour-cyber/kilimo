@@ -85,6 +85,13 @@ export const authRouter = router({
         throw new TRPCError({ code: "UNAUTHORIZED", message: "Please verify your email address to log in." });
       }
 
+      if (user.isSuspended) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Your account has been suspended. Please contact platform administration.",
+        });
+      }
+
       const updateFields: Record<string, unknown> = { lastSignedIn: new Date() };
 
       await ctx.db
@@ -129,6 +136,10 @@ export const authRouter = router({
 
       if (!user.password) {
         throw new TRPCError({ code: "UNAUTHORIZED", message: "Invalid credentials." });
+      }
+
+      if (user.isSuspended) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Your administrator account has been suspended." });
       }
 
       const isValid = await bcrypt.compare(input.password, user.password);

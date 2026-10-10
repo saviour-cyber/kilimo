@@ -118,12 +118,40 @@ export const adminRouter = router({
         email: users.email,
         phone: users.phone,
         role: users.role,
+        isSuspended: users.isSuspended,
         lastSignedIn: users.lastSignedIn,
         createdAt: users.createdAt,
       })
       .from(users)
       .orderBy(users.createdAt);
   }),
+
+  toggleUserSuspension: adminProcedure
+    .input(z.object({
+      userId: z.number(),
+      isSuspended: z.boolean(),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      if (input.userId === ctx.user.id && input.isSuspended) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "You cannot suspend your own admin account." });
+      }
+
+      await db.update(users).set({ isSuspended: input.isSuspended }).where(eq(users.id, input.userId));
+
+      await db.insert(auditLogs).values({
+        farmId: 0,
+        userId: ctx.user.id,
+        action: input.isSuspended ? "USER_SUSPENDED" : "USER_REACTIVATED",
+        entityType: "user",
+        description: `${input.isSuspended ? "Suspended" : "Reactivated"} user ${input.userId}`,
+        metadata: { isSuspended: input.isSuspended },
+      });
+
+      return { success: true };
+    }),
 
   updateUserRole: adminProcedure
     .input(z.object({
@@ -257,6 +285,99 @@ export const adminRouter = router({
       await provisionTrialSubscription(db, result.insertId);
 
       return { success: true, id: result.insertId };
+    }),
+
+  updateOrganization: adminProcedure
+    .input(z.object({
+      organizationId: z.number(),
+      name: z.string().min(2),
+      businessType: z.string().min(1),
+      country: z.string().default("Kenya"),
+      contactEmail: z.string().email().optional().or(z.literal("")),
+      contactPhone: z.string().optional(),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      await db
+        .update(organizations)
+        .set({
+          name: input.name,
+          businessType: input.businessType,
+          country: input.country,
+          contactEmail: input.contactEmail || null,
+          contactPhone: input.contactPhone || null,
+        })
+        .where(eq(organizations.id, input.organizationId));
+
+      await db.insert(auditLogs).values({
+        farmId: 0,
+        userId: ctx.user.id,
+        action: "ORGANIZATION_UPDATED",
+        entityType: "organization",
+        description: `Updated organization ${input.name} (${input.organizationId})`,
+        metadata: { name: input.name, businessType: input.businessType },
+      });
+
+      return { success: true };
+    }),
+
+  getOrganizationDetails: adminProcedure
+    .input(z.object({ organizationId: z.number() }))
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+      const [org] = await db
+        .select()
+        .from(organizations)
+        .where(eq(organizations.id, input.organizationId))
+        .limit(1);
+
+      if (!org) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Organization not found" });
+      }
+
+      // Fetch owner
+      const [owner] = await db
+        .select({ id: users.id, name: users.name, email: users.email })
+        .from(users)
+        .where(eq(users.id, org.ownerId))
+        .limit(1);
+
+      // Fetch farms
+      const orgFarms = await db
+        .select({
+          id: farms.id,
+          name: farms.name,
+          farmType: farms.farmType,
+          county: farms.county,
+        })
+        .from(farms)
+        .where(eq(farms.organizationId, org.id));
+
+      // Fetch members
+      const { organizationMembers } = await import("../../drizzle/schema");
+      const members = await db
+        .select({
+          id: organizationMembers.id,
+          role: organizationMembers.role,
+          joinedAt: organizationMembers.joinedAt,
+          userId: users.id,
+          userName: users.name,
+          userEmail: users.email,
+        })
+        .from(organizationMembers)
+        .innerJoin(users, eq(organizationMembers.userId, users.id))
+        .where(eq(organizationMembers.organizationId, org.id));
+
+      return {
+        ...org,
+        owner,
+        farms: orgFarms,
+        members,
+      };
     }),
 
   deleteOrganization: adminProcedure

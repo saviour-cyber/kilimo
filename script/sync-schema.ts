@@ -236,6 +236,17 @@ async function run() {
     for (const [tableName, target] of Object.entries(TARGET_TABLES)) {
       await syncTable(conn, tableName, target);
     }
+
+    // Ensure users.isSuspended exists
+    const [userCols] = await conn.query<mysql.RowDataPacket[]>(
+      `SELECT COLUMN_NAME FROM information_schema.columns
+       WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'isSuspended'`
+    );
+    if (userCols.length === 0) {
+      console.log("  ➕  Adding isSuspended column to users table...");
+      await conn.query("ALTER TABLE `users` ADD COLUMN `isSuspended` tinyint(1) NOT NULL DEFAULT 0");
+    }
+
     console.log("\n✅  Schema sync complete!");
   } catch (err: any) {
     console.error("\n❌  Schema sync failed:", err.message);

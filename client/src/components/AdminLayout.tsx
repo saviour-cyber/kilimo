@@ -19,13 +19,23 @@ import {
   ShieldAlert,
   Sparkles,
   Users,
-  X,
   Zap,
-  Mail,
   ShoppingBag,
+  Search,
+  Mail,
+  X,
 } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "wouter";
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
 
 // Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ Types Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
@@ -209,7 +219,20 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const [, navigate] = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const previousLocation = useRef(location);
+
+  // Keyboard shortcut for Cmd+K / Ctrl+K
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if ((e.key === "k" || e.key === "K") && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setSearchOpen((open) => !open);
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
 
   // Auth guard
   useEffect(() => {
@@ -405,13 +428,14 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           <div className="flex-1" />
 
           {/* Search bar Ã¢â‚¬â€ tablet+ */}
-          <div className="hidden md:flex items-center gap-2 rounded-md border border-border bg-background px-3 py-1.5 text-muted-foreground w-52 lg:w-64">
-            <svg className="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <span className="text-xs flex-1">Quick searchÃ¢â‚¬Â¦</span>
-            <kbd className="rounded bg-secondary px-1 py-0.5 font-mono text-[10px] text-muted-foreground">Ã¢Å’ËœK</kbd>
-          </div>
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="hidden md:flex items-center gap-2 rounded-md border border-border bg-background px-3 py-1.5 text-muted-foreground hover:border-primary/50 hover:text-foreground transition-all w-52 lg:w-64 text-left cursor-pointer"
+          >
+            <Search className="h-3.5 w-3.5 shrink-0" />
+            <span className="text-xs flex-1">Quick search…</span>
+            <kbd className="rounded bg-secondary px-1 py-0.5 font-mono text-[10px] text-muted-foreground border border-border">⌘K</kbd>
+          </button>
 
           {/* Notifications */}
           <button className="relative flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors">
@@ -434,6 +458,38 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           </div>
         </main>
       </div>
+      {/* Global Admin Command Palette (⌘K) */}
+      <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
+        <CommandInput placeholder="Search admin pages, modules, or actions..." />
+        <CommandList>
+          <CommandEmpty>No matching results found.</CommandEmpty>
+          {ADMIN_MENU.map((group) => (
+            <React.Fragment key={group.group}>
+              <CommandGroup heading={group.group}>
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <CommandItem
+                      key={item.href}
+                      value={`${group.group} ${item.label}`}
+                      onSelect={() => {
+                        setSearchOpen(false);
+                        navigate(item.href);
+                      }}
+                      className="cursor-pointer flex items-center gap-2.5 py-2 px-3"
+                    >
+                      <Icon className={cn("h-4 w-4 text-muted-foreground", item.accent)} />
+                      <span className="font-medium text-foreground">{item.label}</span>
+                      <span className="ml-auto text-[11px] text-muted-foreground">{item.href}</span>
+                    </CommandItem>
+                  );
+                })}
+              </CommandGroup>
+              <CommandSeparator />
+            </React.Fragment>
+          ))}
+        </CommandList>
+      </CommandDialog>
     </div>
   );
 }

@@ -19,6 +19,13 @@ const requireUser = t.middleware(async opts => {
     throw new TRPCError({ code: "UNAUTHORIZED", message: UNAUTHED_ERR_MSG });
   }
 
+  if (ctx.user.isSuspended) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Your account has been suspended. Please contact platform administration.",
+    });
+  }
+
   if (ctx.user.role !== "admin") {
     const isMaintenance = await isMaintenanceModeActive(ctx.db);
     if (isMaintenance) {

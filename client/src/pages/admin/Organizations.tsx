@@ -36,6 +36,16 @@ export default function AdminOrganizations() {
     onError: (e) => toast.error(e.message),
   });
 
+  const updateMutation = trpc.admin.updateOrganization.useMutation({
+    onSuccess: () => {
+      toast.success("Organization updated successfully.");
+      utils.admin.listOrganizations.invalidate();
+      setIsEditOpen(false);
+      setEditOrg(null);
+    },
+    onError: (e) => toast.error(e.message),
+  });
+
   const deleteMutation = trpc.admin.deleteOrganization.useMutation({
     onSuccess: () => {
       toast.success("Organization deleted.");
@@ -50,6 +60,24 @@ export default function AdminOrganizations() {
     contactEmail: "", contactPhone: "", ownerId: ""
   });
 
+  // Edit dialog state
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [editOrg, setEditOrg] = useState<{
+    id: number;
+    name: string;
+    businessType: string;
+    country: string;
+    contactEmail: string;
+    contactPhone: string;
+  } | null>(null);
+
+  // View details dialog state
+  const [detailsOrgId, setDetailsOrgId] = useState<number | null>(null);
+  const { data: orgDetails, isLoading: detailsLoading } = trpc.admin.getOrganizationDetails.useQuery(
+    { organizationId: detailsOrgId! },
+    { enabled: !!detailsOrgId }
+  );
+
   const handleCreate = () => {
     if (!form.name || !form.businessType || !form.ownerId) {
       toast.error("Name, business type and owner are required.");
@@ -62,6 +90,21 @@ export default function AdminOrganizations() {
       contactEmail: form.contactEmail || undefined,
       contactPhone: form.contactPhone || undefined,
       ownerId: parseInt(form.ownerId),
+    });
+  };
+
+  const handleUpdate = () => {
+    if (!editOrg || !editOrg.name || !editOrg.businessType) {
+      toast.error("Name and business type are required.");
+      return;
+    }
+    updateMutation.mutate({
+      organizationId: editOrg.id,
+      name: editOrg.name,
+      businessType: editOrg.businessType,
+      country: editOrg.country,
+      contactEmail: editOrg.contactEmail || undefined,
+      contactPhone: editOrg.contactPhone || undefined,
     });
   };
 
@@ -248,8 +291,28 @@ export default function AdminOrganizations() {
                         <DropdownMenuContent align="end" className="border-border">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuSeparator className="bg-border" />
-                          <DropdownMenuItem className="cursor-pointer">View Details</DropdownMenuItem>
-                          <DropdownMenuItem className="cursor-pointer">Edit Organization</DropdownMenuItem>
+                          <DropdownMenuItem 
+                            className="cursor-pointer"
+                            onClick={() => setDetailsOrgId(org.id)}
+                          >
+                            View Details
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            className="cursor-pointer"
+                            onClick={() => {
+                              setEditOrg({
+                                id: org.id,
+                                name: org.name,
+                                businessType: org.businessType,
+                                country: org.country,
+                                contactEmail: org.contactEmail || "",
+                                contactPhone: org.contactPhone || "",
+                              });
+                              setIsEditOpen(true);
+                            }}
+                          >
+                            Edit Organization
+                          </DropdownMenuItem>
                           <DropdownMenuSeparator className="bg-border" />
                           <DropdownMenuItem 
                             className="text-destructive cursor-pointer focus:text-destructive"
@@ -306,8 +369,28 @@ export default function AdminOrganizations() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="border-border">
-                      <DropdownMenuItem className="cursor-pointer">View Details</DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer">Edit</DropdownMenuItem>
+                      <DropdownMenuItem 
+                        className="cursor-pointer"
+                        onClick={() => setDetailsOrgId(org.id)}
+                      >
+                        View Details
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        className="cursor-pointer"
+                        onClick={() => {
+                          setEditOrg({
+                            id: org.id,
+                            name: org.name,
+                            businessType: org.businessType,
+                            country: org.country,
+                            contactEmail: org.contactEmail || "",
+                            contactPhone: org.contactPhone || "",
+                          });
+                          setIsEditOpen(true);
+                        }}
+                      >
+                        Edit
+                      </DropdownMenuItem>
                       <DropdownMenuItem 
                         className="text-destructive cursor-pointer focus:text-destructive"
                         onClick={() => {
@@ -345,6 +428,205 @@ export default function AdminOrganizations() {
           )}
         </div>
       </Card>
+
+      {/* Edit Organization Dialog */}
+      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+        <DialogContent className="max-w-lg rounded-xl border border-border bg-card">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-foreground">
+              <Building2 className="w-5 h-5 text-primary" />
+              Edit Organization
+            </DialogTitle>
+          </DialogHeader>
+          {editOrg && (
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>Organization Name *</Label>
+                <Input
+                  value={editOrg.name}
+                  onChange={(e) => setEditOrg({ ...editOrg, name: e.target.value })}
+                  className="bg-background border-border"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Business Type *</Label>
+                  <Select
+                    value={editOrg.businessType}
+                    onValueChange={(v) => setEditOrg({ ...editOrg, businessType: v })}
+                  >
+                    <SelectTrigger className="bg-background border-border">
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {BUSINESS_TYPES.map((t) => (
+                        <SelectItem key={t} value={t}>
+                          {t}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Country</Label>
+                  <Select
+                    value={editOrg.country}
+                    onValueChange={(v) => setEditOrg({ ...editOrg, country: v })}
+                  >
+                    <SelectTrigger className="bg-background border-border">
+                      <SelectValue placeholder="Select country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {COUNTRIES.map((c) => (
+                        <SelectItem key={c} value={c}>
+                          {c}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Contact Email</Label>
+                  <Input
+                    type="email"
+                    value={editOrg.contactEmail}
+                    onChange={(e) => setEditOrg({ ...editOrg, contactEmail: e.target.value })}
+                    className="bg-background border-border"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Contact Phone</Label>
+                  <Input
+                    value={editOrg.contactPhone}
+                    onChange={(e) => setEditOrg({ ...editOrg, contactPhone: e.target.value })}
+                    className="bg-background border-border"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditOpen(false)} className="border-border hover:bg-secondary">
+              Cancel
+            </Button>
+            <Button onClick={handleUpdate} disabled={updateMutation.isPending} className="bg-primary text-primary-foreground">
+              {updateMutation.isPending ? "Saving..." : "Save Changes"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Organization Details Dialog */}
+      <Dialog open={!!detailsOrgId} onOpenChange={(open) => !open && setDetailsOrgId(null)}>
+        <DialogContent className="max-w-xl rounded-xl border border-border bg-card max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-foreground">
+              <Building2 className="w-5 h-5 text-primary" />
+              Organization Details
+            </DialogTitle>
+          </DialogHeader>
+
+          {detailsLoading ? (
+            <div className="space-y-4 py-4">
+              <Skeleton className="h-6 w-48" />
+              <Skeleton className="h-4 w-72" />
+              <Skeleton className="h-24 w-full" />
+            </div>
+          ) : orgDetails ? (
+            <div className="space-y-6 py-2">
+              <div className="flex items-start justify-between border-b border-border pb-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground">{orgDetails.name}</h3>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+                    <span>{orgDetails.businessType}</span>
+                    <span>•</span>
+                    <span>{orgDetails.country}</span>
+                    <span>•</span>
+                    <span>Currency: {orgDetails.currency}</span>
+                  </div>
+                </div>
+                <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+                  Active
+                </Badge>
+              </div>
+
+              {/* Owner details */}
+              <div className="rounded-lg bg-secondary/40 p-3.5 border border-border">
+                <p className="text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-1">
+                  Tenant Owner
+                </p>
+                {orgDetails.owner ? (
+                  <div className="flex items-center gap-2 mt-1">
+                    <User className="w-4 h-4 text-primary" />
+                    <span className="text-sm font-medium text-foreground">{orgDetails.owner.name}</span>
+                    <span className="text-xs text-muted-foreground">({orgDetails.owner.email})</span>
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">No owner assigned</p>
+                )}
+              </div>
+
+              {/* Contact details */}
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div className="rounded-lg border border-border p-3">
+                  <p className="text-muted-foreground font-semibold uppercase text-[10px] mb-1">Email</p>
+                  <p className="font-medium text-foreground">{orgDetails.contactEmail || "N/A"}</p>
+                </div>
+                <div className="rounded-lg border border-border p-3">
+                  <p className="text-muted-foreground font-semibold uppercase text-[10px] mb-1">Phone</p>
+                  <p className="font-medium text-foreground">{orgDetails.contactPhone || "N/A"}</p>
+                </div>
+              </div>
+
+              {/* Connected Farms */}
+              <div>
+                <h4 className="text-sm font-semibold text-foreground mb-2 flex items-center justify-between">
+                  <span>Connected Farms ({orgDetails.farms.length})</span>
+                </h4>
+                {orgDetails.farms.length === 0 ? (
+                  <p className="text-xs text-muted-foreground italic">No farms registered yet.</p>
+                ) : (
+                  <div className="space-y-2">
+                    {orgDetails.farms.map((f: any) => (
+                      <div key={f.id} className="flex items-center justify-between p-2.5 rounded-lg bg-background border border-border text-xs">
+                        <span className="font-medium text-foreground">{f.name}</span>
+                        <span className="text-muted-foreground capitalize">{f.farmType} • {f.county || "Kenya"}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Organization Members */}
+              <div>
+                <h4 className="text-sm font-semibold text-foreground mb-2 flex items-center justify-between">
+                  <span>Organization Members ({orgDetails.members.length})</span>
+                </h4>
+                {orgDetails.members.length === 0 ? (
+                  <p className="text-xs text-muted-foreground italic">No members assigned.</p>
+                ) : (
+                  <div className="space-y-2">
+                    {orgDetails.members.map((m: any) => (
+                      <div key={m.id} className="flex items-center justify-between p-2.5 rounded-lg bg-background border border-border text-xs">
+                        <div>
+                          <p className="font-medium text-foreground">{m.userName}</p>
+                          <p className="text-[11px] text-muted-foreground">{m.userEmail}</p>
+                        </div>
+                        <Badge variant="outline" className="capitalize text-[10px]">
+                          {m.role}
+                        </Badge>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : null}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

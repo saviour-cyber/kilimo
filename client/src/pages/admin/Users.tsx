@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, ShieldCheck, ShieldOff, Trash2, Users, Mail, Clock } from "lucide-react";
+import { MoreHorizontal, ShieldCheck, ShieldOff, Trash2, Users, Mail, Clock, Ban, CheckCircle } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
@@ -13,6 +13,14 @@ import { toast } from "sonner";
 export default function AdminUsers() {
   const utils = trpc.useContext();
   const { data: users, isLoading } = trpc.admin.listUsers.useQuery();
+
+  const toggleSuspensionMutation = trpc.admin.toggleUserSuspension.useMutation({
+    onSuccess: (_, vars) => {
+      toast.success(vars.isSuspended ? "User account has been suspended." : "User account has been reactivated.");
+      utils.admin.listUsers.invalidate();
+    },
+    onError: (e) => toast.error(e.message),
+  });
 
   const updateRoleMutation = trpc.admin.updateUserRole.useMutation({
     onSuccess: (_, vars) => {
@@ -35,7 +43,7 @@ export default function AdminUsers() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-foreground">Users</h1>
-          <p className="text-sm text-muted-foreground mt-1">Manage all registered users across the system.</p>
+          <p className="text-sm text-muted-foreground mt-1">Manage all registered users, roles, and account access across the system.</p>
         </div>
         <Badge variant="outline" className="text-muted-foreground w-fit bg-secondary/30">
           {users?.length ?? 0} total users
@@ -50,6 +58,7 @@ export default function AdminUsers() {
               <TableRow className="border-border hover:bg-transparent">
                 <TableHead className="font-semibold text-muted-foreground">User</TableHead>
                 <TableHead className="font-semibold text-muted-foreground">Role</TableHead>
+                <TableHead className="font-semibold text-muted-foreground">Status</TableHead>
                 <TableHead className="font-semibold text-muted-foreground">Joined</TableHead>
                 <TableHead className="font-semibold text-muted-foreground">Last Active</TableHead>
                 <TableHead className="text-right font-semibold text-muted-foreground">Actions</TableHead>
@@ -61,6 +70,7 @@ export default function AdminUsers() {
                   <TableRow key={i} className="border-border">
                     <TableCell><div className="flex gap-3 items-center"><Skeleton className="h-8 w-8 rounded-full" /><Skeleton className="h-4 w-32" /></div></TableCell>
                     <TableCell><Skeleton className="h-5 w-16 rounded-full" /></TableCell>
+                    <TableCell><Skeleton className="h-5 w-16 rounded-full" /></TableCell>
                     <TableCell><Skeleton className="h-4 w-24" /></TableCell>
                     <TableCell><Skeleton className="h-4 w-24" /></TableCell>
                     <TableCell><Skeleton className="h-8 w-8 ml-auto" /></TableCell>
@@ -68,7 +78,7 @@ export default function AdminUsers() {
                 ))
               ) : users?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                     No users found.
                   </TableCell>
                 </TableRow>
@@ -83,7 +93,14 @@ export default function AdminUsers() {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <div className="font-medium text-foreground leading-tight">{user.name}</div>
+                          <div className="font-medium text-foreground leading-tight flex items-center gap-2">
+                            {user.name}
+                            {user.isSuspended && (
+                              <span className="text-[10px] font-semibold text-destructive bg-destructive-bg px-1.5 py-0.5 rounded">
+                                Suspended
+                              </span>
+                            )}
+                          </div>
                           <div className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
                             <Mail className="w-3 h-3" /> {user.email}
                           </div>
@@ -100,6 +117,18 @@ export default function AdminUsers() {
                         }
                       >
                         {user.role}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant="outline"
+                        className={
+                          user.isSuspended
+                            ? "border-destructive/30 text-destructive bg-destructive-bg"
+                            : "border-success/30 text-success bg-success-bg"
+                        }
+                      >
+                        {user.isSuspended ? "Suspended" : "Active"}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">{format(new Date(user.createdAt), "MMM d, yyyy")}</TableCell>
@@ -131,6 +160,30 @@ export default function AdminUsers() {
                               }}
                             >
                               <ShieldOff className="mr-2 h-4 w-4" /> Demote to User
+                            </DropdownMenuItem>
+                          )}
+                          <DropdownMenuSeparator className="bg-border" />
+                          {user.isSuspended ? (
+                            <DropdownMenuItem
+                              className="text-success cursor-pointer focus:text-success"
+                              onClick={() => {
+                                if (confirm(`Reactivate login access for ${user.name || user.email}?`)) {
+                                  toggleSuspensionMutation.mutate({ userId: user.id, isSuspended: false });
+                                }
+                              }}
+                            >
+                              <CheckCircle className="mr-2 h-4 w-4" /> Reactivate Account
+                            </DropdownMenuItem>
+                          ) : (
+                            <DropdownMenuItem
+                              className="text-warning cursor-pointer focus:text-warning"
+                              onClick={() => {
+                                if (confirm(`Suspend account and prevent login for ${user.name || user.email}?`)) {
+                                  toggleSuspensionMutation.mutate({ userId: user.id, isSuspended: true });
+                                }
+                              }}
+                            >
+                              <Ban className="mr-2 h-4 w-4" /> Suspend Account
                             </DropdownMenuItem>
                           )}
                           <DropdownMenuSeparator className="bg-border" />
@@ -195,6 +248,30 @@ export default function AdminUsers() {
                         </DropdownMenuItem>
                       )}
                       <DropdownMenuSeparator className="bg-border" />
+                      {user.isSuspended ? (
+                        <DropdownMenuItem
+                          className="text-success cursor-pointer focus:text-success"
+                          onClick={() => {
+                            if (confirm(`Reactivate login access for ${user.name || user.email}?`)) {
+                              toggleSuspensionMutation.mutate({ userId: user.id, isSuspended: false });
+                            }
+                          }}
+                        >
+                          <CheckCircle className="mr-2 h-4 w-4" /> Reactivate Account
+                        </DropdownMenuItem>
+                      ) : (
+                        <DropdownMenuItem
+                          className="text-warning cursor-pointer focus:text-warning"
+                          onClick={() => {
+                            if (confirm(`Suspend account and prevent login for ${user.name || user.email}?`)) {
+                              toggleSuspensionMutation.mutate({ userId: user.id, isSuspended: true });
+                            }
+                          }}
+                        >
+                          <Ban className="mr-2 h-4 w-4" /> Suspend Account
+                        </DropdownMenuItem>
+                      )}
+                      <DropdownMenuSeparator className="bg-border" />
                       <DropdownMenuItem className="text-destructive cursor-pointer focus:text-destructive" onClick={() => deleteUserMutation.mutate({ userId: user.id })}>
                         <Trash2 className="mr-2 h-4 w-4" /> Delete
                       </DropdownMenuItem>
@@ -202,11 +279,17 @@ export default function AdminUsers() {
                   </DropdownMenu>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-2 mt-2">
+                <div className="grid grid-cols-3 gap-2 mt-2">
                   <div className="bg-secondary/50 rounded-lg p-2.5">
                     <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold mb-1">Role</p>
                     <Badge variant="outline" className={user.role === "admin" ? "bg-primary/10 text-primary border-primary/20 text-[10px] px-1.5 py-0" : "border-border text-foreground text-[10px] px-1.5 py-0"}>
                       {user.role}
+                    </Badge>
+                  </div>
+                  <div className="bg-secondary/50 rounded-lg p-2.5">
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold mb-1">Status</p>
+                    <Badge variant="outline" className={user.isSuspended ? "border-destructive/30 text-destructive bg-destructive-bg text-[10px] px-1.5 py-0" : "border-success/30 text-success bg-success-bg text-[10px] px-1.5 py-0"}>
+                      {user.isSuspended ? "Suspended" : "Active"}
                     </Badge>
                   </div>
                   <div className="bg-secondary/50 rounded-lg p-2.5">
