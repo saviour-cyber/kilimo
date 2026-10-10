@@ -93,6 +93,7 @@ export default function Settings() {
   const setMaintenanceMutation = trpc.admin.setMaintenanceMode.useMutation({
     onSuccess: (_, variables) => {
       utils.admin.getMaintenanceMode.invalidate();
+      utils.system.getMaintenanceStatus.invalidate();
       if (variables.isEnabled) {
         toast.warning(
           variables.scope === "full_site"
@@ -117,9 +118,9 @@ export default function Settings() {
         isEnabled: maintenanceMode,
         scope: maintenanceScope,
         message: maintenanceMessage || undefined,
-        estimatedRestorationAt: estimatedRestorationAt || null,
-        scheduledStartAt: scheduledStartAt || null,
-        scheduledEndAt: scheduledEndAt || null,
+        estimatedRestorationAt: maintenanceMode ? (estimatedRestorationAt || null) : null,
+        scheduledStartAt: maintenanceMode ? (scheduledStartAt || null) : null,
+        scheduledEndAt: maintenanceMode ? (scheduledEndAt || null) : null,
       });
       toast.success("System settings updated successfully.");
     } catch (err: any) {
@@ -449,13 +450,18 @@ export default function Settings() {
                       disabled={setMaintenanceMutation.isPending}
                       onCheckedChange={(val) => {
                         setMaintenanceMode(val);
+                        if (!val) {
+                          setScheduledStartAt("");
+                          setScheduledEndAt("");
+                          setEstimatedRestorationAt("");
+                        }
                         setMaintenanceMutation.mutate({
                           isEnabled: val,
                           scope: maintenanceScope,
                           message: maintenanceMessage || undefined,
-                          estimatedRestorationAt: estimatedRestorationAt || null,
-                          scheduledStartAt: scheduledStartAt || null,
-                          scheduledEndAt: scheduledEndAt || null,
+                          estimatedRestorationAt: val ? (estimatedRestorationAt || null) : null,
+                          scheduledStartAt: val ? (scheduledStartAt || null) : null,
+                          scheduledEndAt: val ? (scheduledEndAt || null) : null,
                         });
                       }}
                     />

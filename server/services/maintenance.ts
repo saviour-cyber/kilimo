@@ -32,26 +32,29 @@ function computeIsActive(details: {
   scheduledStartAt?: string | null;
   scheduledEndAt?: string | null;
 }): boolean {
-  if (details.isEnabled) return true;
+  // If explicitly disabled by admin, maintenance mode is OFF
+  if (!details.isEnabled) return false;
 
-  // Check scheduled window if enabled is false but window is provided
-  if (details.scheduledStartAt) {
-    const now = Date.now();
-    const start = new Date(details.scheduledStartAt).getTime();
-    if (!isNaN(start) && now >= start) {
-      if (details.scheduledEndAt) {
-        const end = new Date(details.scheduledEndAt).getTime();
-        if (!isNaN(end) && now <= end) {
-          return true;
-        }
-      } else {
-        // Started without end date specified
-        return true;
-      }
+  // If enabled without schedule, it's active immediately
+  if (!details.scheduledStartAt) return true;
+
+  // If enabled with schedule, check if current time is within or past start window
+  const now = Date.now();
+  const start = new Date(details.scheduledStartAt).getTime();
+  if (!isNaN(start) && now < start) {
+    // Scheduled for future, not yet active
+    return false;
+  }
+
+  if (details.scheduledEndAt) {
+    const end = new Date(details.scheduledEndAt).getTime();
+    if (!isNaN(end) && now > end) {
+      // Past scheduled end
+      return false;
     }
   }
 
-  return false;
+  return true;
 }
 
 export async function isMaintenanceModeActive(db?: any): Promise<boolean> {
@@ -133,9 +136,9 @@ export async function setMaintenanceMode(
 
   const scope: MaintenanceScope = options.scope === "full_site" ? "full_site" : "app_only";
   const message = options.message || "System is currently undergoing scheduled maintenance. Please try again later.";
-  const estimatedRestorationAt = options.estimatedRestorationAt ?? null;
-  const scheduledStartAt = options.scheduledStartAt ?? null;
-  const scheduledEndAt = options.scheduledEndAt ?? null;
+  const estimatedRestorationAt = options.isEnabled ? (options.estimatedRestorationAt ?? null) : null;
+  const scheduledStartAt = options.isEnabled ? (options.scheduledStartAt ?? null) : null;
+  const scheduledEndAt = options.isEnabled ? (options.scheduledEndAt ?? null) : null;
 
   const config = {
     scope,
