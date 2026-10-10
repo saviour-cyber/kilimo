@@ -42,7 +42,7 @@ export default function AdminAiManagement() {
           <BrainCircuit className="w-6 h-6 text-muted-foreground" />
           <h1 className="text-2xl font-bold tracking-tight text-foreground">AI Management</h1>
         </div>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
+        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
           <Settings className="w-4 h-4" /> Global Settings
         </Button>
       </div>
@@ -51,8 +51,8 @@ export default function AdminAiManagement() {
         <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-indigo-100 rounded-lg">
-                <Sparkles className="w-5 h-5 text-indigo-600" />
+              <div className="p-2 bg-info-bg rounded-lg">
+                <Sparkles className="w-5 h-5 text-info" />
               </div>
             </div>
             <p className="text-3xl font-bold text-foreground">1.2M</p>
@@ -63,8 +63,8 @@ export default function AdminAiManagement() {
         <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-emerald-100 rounded-lg">
-                <TrendingUp className="w-5 h-5 text-emerald-600" />
+              <div className="p-2 bg-success-bg rounded-lg">
+                <TrendingUp className="w-5 h-5 text-success" />
               </div>
             </div>
             <p className="text-3xl font-bold text-foreground">4,285</p>
@@ -75,8 +75,8 @@ export default function AdminAiManagement() {
         <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-amber-100 rounded-lg">
-                <AlertTriangle className="w-5 h-5 text-amber-600" />
+              <div className="p-2 bg-warning-bg rounded-lg">
+                <AlertTriangle className="w-5 h-5 text-warning" />
               </div>
             </div>
             <p className="text-3xl font-bold text-foreground">0.05s</p>
@@ -109,7 +109,7 @@ export default function AdminAiManagement() {
                   </TableCell>
                   <TableCell>
                     {model.status === "Active" ? (
-                      <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none">Active</Badge>
+                      <Badge className="bg-success-bg text-success hover:bg-success-bg border-none">Active</Badge>
                     ) : (
                       <Badge className="bg-muted text-muted-foreground hover:bg-muted border-none">Disabled</Badge>
                     )}
@@ -126,7 +126,7 @@ export default function AdminAiManagement() {
                   <TableCell className="text-right">
                     <Switch 
                       checked={model.status === "Active"}
-                      className="data-[state=checked]:bg-indigo-500"
+                      className="data-[state=checked]:bg-primary"
                     />
                   </TableCell>
                 </TableRow>

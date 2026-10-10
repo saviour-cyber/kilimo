@@ -16,7 +16,7 @@ export default function AdminIotManagement() {
           <Server className="w-6 h-6 text-muted-foreground" />
           <h1 className="text-2xl font-bold tracking-tight text-foreground">IoT Network Global</h1>
         </div>
-        <Button className="bg-sky-600 hover:bg-sky-700 text-white gap-2">
+        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
           <Settings className="w-4 h-4" /> Gateway Settings
         </Button>
       </div>
@@ -25,8 +25,8 @@ export default function AdminIotManagement() {
         <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-sky-100 rounded-lg">
-                <Server className="w-5 h-5 text-sky-600" />
+              <div className="p-2 bg-info-bg rounded-lg">
+                <Server className="w-5 h-5 text-info" />
               </div>
             </div>
             {isLoading ? <Skeleton className="h-9 w-20" /> : <p className="text-3xl font-bold text-foreground">{stats?.gateways.total}</p>}
@@ -37,8 +37,8 @@ export default function AdminIotManagement() {
         <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-emerald-100 rounded-lg">
-                <Wifi className="w-5 h-5 text-emerald-600" />
+              <div className="p-2 bg-success-bg rounded-lg">
+                <Wifi className="w-5 h-5 text-success" />
               </div>
             </div>
             {isLoading ? <Skeleton className="h-9 w-20" /> : <p className="text-3xl font-bold text-foreground">{stats?.devices.active}</p>}
@@ -49,8 +49,8 @@ export default function AdminIotManagement() {
         <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-rose-100 rounded-lg">
-                <WifiOff className="w-5 h-5 text-rose-600" />
+              <div className="p-2 bg-destructive-bg rounded-lg">
+                <WifiOff className="w-5 h-5 text-destructive" />
               </div>
             </div>
             {isLoading ? <Skeleton className="h-9 w-20" /> : <p className="text-3xl font-bold text-foreground">{Number(stats?.devices.total) - Number(stats?.devices.active)}</p>}
@@ -61,8 +61,8 @@ export default function AdminIotManagement() {
         <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-indigo-100 rounded-lg">
-                <Activity className="w-5 h-5 text-indigo-600" />
+              <div className="p-2 bg-secondary rounded-lg">
+                <Activity className="w-5 h-5 text-muted-foreground" />
               </div>
             </div>
             {isLoading ? <Skeleton className="h-9 w-20" /> : <p className="text-3xl font-bold text-foreground">12.4M</p>}
@@ -107,19 +107,19 @@ export default function AdminIotManagement() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="p-3 bg-rose-50 border border-rose-100 rounded-lg">
+              <div className="p-3 bg-destructive-bg border border-destructive/20 rounded-lg">
                 <div className="flex justify-between items-start">
-                  <span className="font-medium text-rose-900 text-sm">Gateway-NVR-14</span>
-                  <Badge variant="outline" className="text-rose-600 border-rose-200 text-[10px]">OFFLINE</Badge>
+                  <span className="font-medium text-destructive text-sm">Gateway-NVR-14</span>
+                  <Badge variant="outline" className="text-destructive border-destructive/30 text-[10px]">OFFLINE</Badge>
                 </div>
-                <p className="text-xs text-rose-600 mt-1">Lost connection 4 hours ago. Region: Rift Valley.</p>
+                <p className="text-xs text-muted-foreground mt-1">Lost connection 4 hours ago. Region: Rift Valley.</p>
               </div>
-              <div className="p-3 bg-amber-50 border border-amber-100 rounded-lg">
+              <div className="p-3 bg-warning-bg border border-warning/20 rounded-lg">
                 <div className="flex justify-between items-start">
-                  <span className="font-medium text-amber-900 text-sm">Gateway-MBA-02</span>
-                  <Badge variant="outline" className="text-amber-600 border-amber-200 text-[10px]">LATENCY</Badge>
+                  <span className="font-medium text-warning text-sm">Gateway-MBA-02</span>
+                  <Badge variant="outline" className="text-warning border-warning/30 text-[10px]">LATENCY</Badge>
                 </div>
-                <p className="text-xs text-amber-600 mt-1">High packet loss detected in the last hour.</p>
+                <p className="text-xs text-muted-foreground mt-1">High packet loss detected in the last hour.</p>
               </div>
               <Button variant="outline" className="w-full text-muted-foreground border-border mt-4">
                 View All Alerts

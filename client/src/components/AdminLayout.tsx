@@ -123,7 +123,7 @@ function NavList({
           {/* Thin divider shown when label is hidden */}
           <div
             className={cn(
-              "mb-2 mx-1 h-px bg-white/[0.06]",
+              "mb-2 mx-1 h-px bg-sidebar-border",
               // Only visible in icon-only modes
               "hidden md:block",
               !collapsed ? "lg:hidden" : "lg:block",
@@ -144,8 +144,8 @@ function NavList({
                       "group relative flex items-center gap-2.5 rounded-lg px-2 py-[7px] text-sm font-medium",
                       "transition-colors duration-150",
                       isActive
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                        ? "bg-sidebar-accent text-sidebar-primary font-semibold"
+                        : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-foreground",
                       // Icon-only: center icon
                       "md:justify-center md:px-0",
                       !collapsed ? "lg:justify-start lg:px-2" : "lg:justify-center lg:px-0",
@@ -153,7 +153,7 @@ function NavList({
                   >
                     {/* Active indicator bar */}
                     {isActive && (
-                      <span className="absolute inset-y-1 left-0 w-[3px] rounded-r-full bg-primary md:hidden lg:block" />
+                      <span className="absolute inset-y-1 left-0 w-[3px] rounded-r-full bg-sidebar-primary md:hidden lg:block" />
                     )}
 
                     {/* Icon */}
@@ -162,8 +162,8 @@ function NavList({
                         "shrink-0 transition-transform duration-150 group-hover:scale-105",
                         "w-[18px] h-[18px]",
                         isActive
-                          ? "text-primary"
-                          : (item.accent ?? "text-muted-foreground group-hover:text-accent-foreground"),
+                          ? "text-sidebar-primary"
+                          : (item.accent ?? "text-muted-foreground group-hover:text-foreground"),
                       )}
                     />
 
@@ -288,7 +288,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
       Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex shrink-0 flex-col border-r border-border bg-card",
+          "fixed inset-y-0 left-0 z-50 flex shrink-0 flex-col border-r border-sidebar-border bg-sidebar",
           "transition-transform duration-300 ease-in-out",
           // Mobile base
           "w-[78vw] max-w-[280px]",
@@ -300,7 +300,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         )}
       >
         {/* Ã¢â€â‚¬Ã¢â€â‚¬ Sidebar header Ã¢â€â‚¬Ã¢â€â‚¬ */}
-        <div className="flex h-[60px] shrink-0 items-center border-b border-border px-3 gap-2.5">
+        <div className="flex h-[60px] shrink-0 items-center border-b border-sidebar-border px-3 gap-2.5">
           {/* Logo mark */}
           <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-primary shadow-sm shadow-primary/20">
             <ShieldAlert className="h-3.5 w-3.5 text-primary-foreground" />
@@ -320,7 +320,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           {/* Mobile close */}
           <button
             onClick={() => setDrawerOpen(false)}
-            className="ml-auto flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors md:hidden"
+            className="ml-auto flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-sidebar-accent hover:text-foreground transition-colors md:hidden"
             aria-label="Close menu"
           >
             <X className="h-4 w-4" />
@@ -330,7 +330,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           <button
             onClick={() => setCollapsed((c) => !c)}
             className={cn(
-              "hidden ml-auto h-6 w-6 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors",
+              "hidden ml-auto h-6 w-6 items-center justify-center rounded-md text-muted-foreground hover:bg-sidebar-accent hover:text-foreground transition-colors",
               "lg:flex",
             )}
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -350,13 +350,13 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         {/* Ã¢â€â‚¬Ã¢â€â‚¬ User footer Ã¢â€â‚¬Ã¢â€â‚¬ */}
         <div
           className={cn(
-            "flex shrink-0 items-center gap-2.5 border-t border-border p-3",
+            "flex shrink-0 items-center gap-2.5 border-t border-sidebar-border p-3",
             (collapsed) && "lg:justify-center",
             "md:justify-center",
           )}
         >
           {/* Avatar */}
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-semibold text-foreground border border-border">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sidebar-accent text-xs font-semibold text-foreground border border-sidebar-border">
             {initials}
           </div>
 

@@ -41,60 +41,76 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-destructive-bg: var(--destructive-bg);
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+  --color-attention: var(--attention);
 }
 
 :root {
   --radius: 0.625rem;
 
-  /* KiliSense Human-Designed Theme */
-  --background: #FAFAF8;
-  --foreground: #18181B;
+  /* KiliSense Approved Agriculture Palette */
+  --background: #F1F5F2;
+  --foreground: #172B22;
 
   --card: #FFFFFF;
-  --card-foreground: #0F172A;
+  --card-foreground: #172B22;
 
   --popover: #FFFFFF;
-  --popover-foreground: #0F172A;
+  --popover-foreground: #172B22;
 
-  /* Primary Brand: Emerald */
-  --primary: #16A34A;
+  /* Primary Brand: Forest Green */
+  --primary: #246B4B;
+  --primary-hover: #1D583D;
   --primary-foreground: #FFFFFF;
 
-  --secondary: #F1F5F9;
-  --secondary-foreground: #64748B;
+  --secondary: #EAF0EC;
+  --secondary-foreground: #68766E;
 
-  --muted: #F1F5F9;
-  --muted-foreground: #64748B;
+  --muted: #EAF0EC;
+  --muted-foreground: #68766E;
 
-  --accent: #F1F5F9;
-  --accent-foreground: #0F172A;
+  --accent: #D6E7DA;
+  --accent-foreground: #172B22;
 
-  /* Status Colors */
-  --success: #22C55E;
-  --warning: #F59E0B;
-  --destructive: #EF4444;
-  --info: #3B82F6;
+  /* Semantic Status Colors */
+  --success: #247348;
+  --success-bg: #EAF5EE;
+  --warning: #98620C;
+  --warning-bg: #FDF5E8;
+  --destructive: #B42332;
+  --destructive-bg: #FDF0F1;
+  --info: #2864A5;
+  --info-bg: #EDF4FC;
 
-  --border: #E2E8F0;
-  --input: #E2E8F0;
-  --ring: #16A34A;
+  --border: #DCE5DF;
+  --input: #DCE5DF;
+  --ring: #438A63;
+
+  /* Attention Accent */
+  --attention: #E8A23A;
 
   /* Charts */
-  --chart-1: #16A34A;
-  --chart-2: #8B5CF6;
-  --chart-3: #0EA5E9;
-  --chart-4: #F97316;
-  --chart-5: #6366F1;
+  --chart-1: #246B4B;
+  --chart-2: #2864A5;
+  --chart-3: #98620C;
+  --chart-4: #E8A23A;
+  --chart-5: #B42332;
 
-  /* Sidebar (Dark Slate) */
-  --sidebar: #0F172A;
-  --sidebar-foreground: #F8FAFC;
-  --sidebar-primary: #16A34A;
+  /* Sidebar (Subtle Sage Tone) */
+  --sidebar: #E8F0EA;
+  --sidebar-foreground: #172B22;
+  --sidebar-primary: #246B4B;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #1E293B;
-  --sidebar-accent-foreground: #FFFFFF;
-  --sidebar-border: #1E293B;
-  --sidebar-ring: #16A34A;
+  --sidebar-accent: #D6E7DA;
+  --sidebar-accent-foreground: #172B22;
+  --sidebar-border: #DCE5DF;
+  --sidebar-ring: #438A63;
 }
 
 .dark {
@@ -108,8 +124,8 @@
   --popover: #111827;
   --popover-foreground: #F9FAFB;
 
-  --primary: #22C55E;
-  --primary-foreground: #18181B;
+  --primary: #2CA36B;
+  --primary-foreground: #FFFFFF;
 
   --secondary: #1F2937;
   --secondary-foreground: #94A3B8;
@@ -122,14 +138,21 @@
 
   /* Status Colors */
   --destructive: #EF4444;
+  --destructive-bg: rgba(239, 68, 68, 0.15);
   --warning: #F59E0B;
+  --warning-bg: rgba(245, 158, 11, 0.15);
+  --success: #2CA36B;
+  --success-bg: rgba(44, 163, 107, 0.15);
+  --info: #3B82F6;
+  --info-bg: rgba(59, 130, 246, 0.15);
+  --attention: #E8A23A;
 
   --border: #2D3748;
   --input: #2D3748;
-  --ring: #22C55E;
+  --ring: #2CA36B;
 
   /* Charts */
-  --chart-1: #22C55E;
+  --chart-1: #2CA36B;
   --chart-2: #3B82F6;
   --chart-3: #8B5CF6;
   --chart-4: #F59E0B;
@@ -138,12 +161,12 @@
   /* Sidebar */
   --sidebar: #0B1220;
   --sidebar-foreground: #94A3B8;
-  --sidebar-primary: #22C55E;
-  --sidebar-primary-foreground: #18181B;
+  --sidebar-primary: #2CA36B;
+  --sidebar-primary-foreground: #FFFFFF;
   --sidebar-accent: #1F2937;
   --sidebar-accent-foreground: #F9FAFB;
   --sidebar-border: #2D3748;
-  --sidebar-ring: #22C55E;
+  --sidebar-ring: #2CA36B;
 }
 
 @layer base {

@@ -34,7 +34,7 @@ export default function AdminMonitoring() {
         <Card className="border-border">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-2 bg-blue-100 rounded-lg">
+              <div className="p-2 bg-blue-50 rounded-lg">
                 <Cpu className="w-5 h-5 text-blue-600" />
               </div>
               <span className="text-sm font-medium text-emerald-600 flex items-center gap-1">
@@ -49,7 +49,7 @@ export default function AdminMonitoring() {
         <Card className="border-border">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-2 bg-purple-100 rounded-lg">
+              <div className="p-2 bg-purple-50 rounded-lg">
                 <HardDrive className="w-5 h-5 text-purple-600" />
               </div>
             </div>
@@ -61,7 +61,7 @@ export default function AdminMonitoring() {
         <Card className="border-border">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-2 bg-emerald-100 rounded-lg">
+              <div className="p-2 bg-emerald-50 rounded-lg">
                 <Network className="w-5 h-5 text-emerald-600" />
               </div>
             </div>
@@ -73,7 +73,7 @@ export default function AdminMonitoring() {
         <Card className="border-border bg-background">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-2 bg-accent rounded-lg">
+              <div className="p-2 bg-secondary rounded-lg">
                 <Activity className="w-5 h-5 text-muted-foreground" />
               </div>
               <div className="flex items-center gap-2">
@@ -84,7 +84,7 @@ export default function AdminMonitoring() {
                 <span className="text-xs font-medium text-primary uppercase tracking-wider">Live</span>
               </div>
             </div>
-            <p className="text-3xl font-bold text-white">{metrics.current.uptime}</p>
+            <p className="text-3xl font-bold text-foreground">{metrics.current.uptime}</p>
             <p className="text-sm text-muted-foreground mt-1">System Uptime</p>
           </CardContent>
         </Card>
@@ -99,14 +99,14 @@ export default function AdminMonitoring() {
             <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={metrics.history}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                  <XAxis dataKey="time" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} domain={[0, 100]} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#DCE5DF" />
+                  <XAxis dataKey="time" stroke="#68766E" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#68766E" fontSize={12} tickLine={false} axisLine={false} domain={[0, 100]} />
                   <Tooltip 
-                    contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                    contentStyle={{ borderRadius: '8px', border: '1px solid #DCE5DF', backgroundColor: '#FFFFFF', color: '#172B22', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.07)' }}
                   />
-                  <Line type="monotone" dataKey="cpu" stroke="#2563eb" strokeWidth={3} dot={false} name="CPU (%)" />
-                  <Line type="monotone" dataKey="memory" stroke="#9333ea" strokeWidth={3} dot={false} name="Memory (%)" />
+                  <Line type="monotone" dataKey="cpu" stroke="#2864A5" strokeWidth={3} dot={false} name="CPU (%)" />
+                  <Line type="monotone" dataKey="memory" stroke="#246B4B" strokeWidth={3} dot={false} name="Memory (%)" />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -123,17 +123,17 @@ export default function AdminMonitoring() {
                 <AreaChart data={metrics.history}>
                   <defs>
                     <linearGradient id="colorApi" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#059669" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#059669" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#246B4B" stopOpacity={0.25}/>
+                      <stop offset="95%" stopColor="#246B4B" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                  <XAxis dataKey="time" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#DCE5DF" />
+                  <XAxis dataKey="time" stroke="#68766E" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#68766E" fontSize={12} tickLine={false} axisLine={false} />
                   <Tooltip 
-                    contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                    contentStyle={{ borderRadius: '8px', border: '1px solid #DCE5DF', backgroundColor: '#FFFFFF', color: '#172B22', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.07)' }}
                   />
-                  <Area type="monotone" dataKey="apiRequests" stroke="#059669" strokeWidth={2} fillOpacity={1} fill="url(#colorApi)" name="API Requests/hr" />
+                  <Area type="monotone" dataKey="apiRequests" stroke="#246B4B" strokeWidth={2} fillOpacity={1} fill="url(#colorApi)" name="API Requests/hr" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>

@@ -16,7 +16,7 @@ export default function AdminReports() {
           <BarChart2 className="w-6 h-6 text-muted-foreground" />
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Analytics & Reports</h1>
         </div>
-        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2">
+        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
           <Download className="w-4 h-4" /> Export Raw Data
         </Button>
       </div>
@@ -25,8 +25,8 @@ export default function AdminReports() {
         <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-indigo-100 rounded-lg">
-                <FileText className="w-5 h-5 text-indigo-600" />
+              <div className="p-2 bg-info-bg rounded-lg">
+                <FileText className="w-5 h-5 text-info" />
               </div>
             </div>
             {isLoading ? <Skeleton className="h-9 w-20" /> : <p className="text-3xl font-bold text-foreground">{analytics?.totalReportsGenerated}</p>}
@@ -37,8 +37,8 @@ export default function AdminReports() {
         <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-emerald-100 rounded-lg">
-                <TrendingUp className="w-5 h-5 text-emerald-600" />
+              <div className="p-2 bg-success-bg rounded-lg">
+                <TrendingUp className="w-5 h-5 text-success" />
               </div>
             </div>
             <p className="text-3xl font-bold text-foreground">+24%</p>
@@ -49,8 +49,8 @@ export default function AdminReports() {
         <Card className="border-border shadow-sm">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-sky-100 rounded-lg">
-                <Users className="w-5 h-5 text-sky-600" />
+              <div className="p-2 bg-secondary rounded-lg">
+                <Users className="w-5 h-5 text-muted-foreground" />
               </div>
             </div>
             <p className="text-3xl font-bold text-foreground">8,204</p>

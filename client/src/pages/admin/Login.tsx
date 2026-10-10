@@ -41,7 +41,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] flex flex-col items-center justify-center relative px-4 font-sans text-foreground">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center relative px-4 font-sans text-foreground">
       
       {/* Subtle Background Pattern */}
       <div
@@ -71,7 +71,7 @@ export default function AdminLogin() {
         </div>
 
         {/* Login Card */}
-        <div className="w-full bg-white rounded-2xl border border-border/60 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] p-[28px] md:p-[44px]">
+        <div className="w-full bg-card rounded-2xl border border-border shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] p-[28px] md:p-[44px]">
           <form onSubmit={handleSubmit} className="space-y-6">
             
             <div className="space-y-2">
@@ -79,7 +79,7 @@ export default function AdminLogin() {
                 Username or Email
               </label>
               <div className="relative flex items-center group">
-                <div className="absolute left-4 text-muted-foreground group-focus-within:text-emerald-600 transition-colors">
+                <div className="absolute left-4 text-muted-foreground group-focus-within:text-primary transition-colors">
                   <UserIcon className="w-4 h-4" />
                 </div>
                 <input
@@ -89,7 +89,7 @@ export default function AdminLogin() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@kilisense.com"
                   required
-                  className="w-full h-[52px] pl-11 pr-4 rounded-xl border border-border bg-muted/50 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-foreground text-[14px] placeholder:text-muted-foreground"
+                  className="w-full h-[52px] pl-11 pr-4 rounded-xl border border-border bg-muted/40 focus:bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-foreground text-[14px] placeholder:text-muted-foreground"
                 />
               </div>
             </div>
@@ -99,7 +99,7 @@ export default function AdminLogin() {
                 Password
               </label>
               <div className="relative flex items-center group">
-                <div className="absolute left-4 text-muted-foreground group-focus-within:text-emerald-600 transition-colors">
+                <div className="absolute left-4 text-muted-foreground group-focus-within:text-primary transition-colors">
                   <Lock className="w-4 h-4" />
                 </div>
                 <input
@@ -107,14 +107,14 @@ export default function AdminLogin() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                  placeholder="••••••••"
                   required
-                  className="w-full h-[52px] pl-11 pr-12 rounded-xl border border-border bg-muted/50 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-foreground text-[14px] placeholder:text-muted-foreground"
+                  className="w-full h-[52px] pl-11 pr-12 rounded-xl border border-border bg-muted/40 focus:bg-card focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-foreground text-[14px] placeholder:text-muted-foreground"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-muted-foreground hover:text-muted-foreground transition-colors rounded-lg"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-muted-foreground hover:text-foreground transition-colors rounded-lg"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -127,7 +127,7 @@ export default function AdminLogin() {
                   id="remember" 
                   checked={rememberMe}
                   onCheckedChange={(c) => setRememberMe(!!c)}
-                  className="border-slate-300 rounded-[4px] data-[state=checked]:bg-[#10B981] data-[state=checked]:border-[#10B981] w-4 h-4"
+                  className="border-border rounded-[4px] data-[state=checked]:bg-primary data-[state=checked]:border-primary w-4 h-4"
                 />
                 <label
                   htmlFor="remember"
@@ -136,7 +136,7 @@ export default function AdminLogin() {
                   Remember Me
                 </label>
               </div>
-              <a href="#" className="text-[13px] font-medium text-muted-foreground hover:text-emerald-600 transition-colors">
+              <a href="#" className="text-[13px] font-medium text-muted-foreground hover:text-primary transition-colors">
                 Forgot Password?
               </a>
             </div>
@@ -144,7 +144,7 @@ export default function AdminLogin() {
             <Button
               type="submit"
               disabled={loginMutation.isPending || !email || !password}
-              className="w-full h-[52px] bg-[#10B981] hover:bg-[#059669] text-white font-medium text-[15px] rounded-xl transition-all shadow-none mt-2"
+              className="w-full h-[52px] bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-[15px] rounded-xl transition-all shadow-none mt-2"
             >
               {loginMutation.isPending ? (
                 <>

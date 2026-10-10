@@ -58,9 +58,9 @@ export default function AdminAnnouncements() {
 
   const getBadgeColor = (type: string) => {
     switch(type) {
-      case 'info': return 'bg-sky-100 text-sky-700 hover:bg-sky-100';
-      case 'warning': return 'bg-amber-100 text-amber-700 hover:bg-amber-100';
-      case 'critical': return 'bg-rose-100 text-rose-700 hover:bg-rose-100';
+      case 'info': return 'bg-info-bg text-info hover:bg-info-bg';
+      case 'warning': return 'bg-warning-bg text-warning hover:bg-warning-bg';
+      case 'critical': return 'bg-destructive-bg text-destructive hover:bg-destructive-bg';
       default: return 'bg-muted text-muted-foreground';
     }
   };
@@ -75,7 +75,7 @@ export default function AdminAnnouncements() {
         
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-background hover:bg-accent text-white gap-2">
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
               <Plus className="w-4 h-4" /> New Announcement
             </Button>
           </DialogTrigger>

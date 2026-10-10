@@ -104,7 +104,7 @@ function KpiCard({
       </div>
       <div>
         <p className="text-xs text-muted-foreground font-medium">{title}</p>
-        <p className="mt-0.5 text-xl font-bold text-white tracking-tight">{value}</p>
+        <p className="mt-0.5 text-xl font-bold text-foreground tracking-tight">{value}</p>
       </div>
     </AdminCard>
   );
@@ -113,15 +113,15 @@ function KpiCard({
 /** Status badge */
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, { cls: string; icon: React.ElementType; label: string }> = {
-    success: { cls: "text-primary bg-emerald-400/10", icon: CheckCircle2, label: "Success" },
-    pending: { cls: "text-amber-600 bg-amber-400/10",   icon: Clock,         label: "Pending" },
-    warning: { cls: "text-orange-400 bg-orange-400/10", icon: AlertTriangle, label: "Warning" },
-    error:   { cls: "text-rose-400 bg-rose-400/10",     icon: AlertTriangle, label: "Error"   },
+    success: { cls: "text-emerald-700 bg-emerald-50 border border-emerald-200/60", icon: CheckCircle2, label: "Success" },
+    pending: { cls: "text-amber-800 bg-amber-50 border border-amber-200/60",       icon: Clock,         label: "Pending" },
+    warning: { cls: "text-orange-800 bg-orange-50 border border-orange-200/60",   icon: AlertTriangle, label: "Warning" },
+    error:   { cls: "text-rose-800 bg-rose-50 border border-rose-200/60",         icon: AlertTriangle, label: "Error"   },
   };
   const s = map[status] ?? map.pending;
   const Icon = s.icon;
   return (
-    <span className={cn("inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-medium", s.cls)}>
+    <span className={cn("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium", s.cls)}>
       <Icon className="h-2.5 w-2.5" />
       {s.label}
     </span>
@@ -138,9 +138,9 @@ function HealthRow({
   value: string;
   status: "ok" | "warn" | "err";
 }) {
-  const dot = status === "ok" ? "bg-emerald-400" : status === "warn" ? "bg-amber-400" : "bg-rose-400";
+  const dot = status === "ok" ? "bg-emerald-500" : status === "warn" ? "bg-amber-500" : "bg-rose-500";
   return (
-    <div className="flex items-center justify-between py-2 text-sm border-b border-white/[0.04] last:border-0">
+    <div className="flex items-center justify-between py-2 text-sm border-b border-border/60 last:border-0">
       <div className="flex items-center gap-2 text-muted-foreground">
         <span className={cn("h-1.5 w-1.5 rounded-full shrink-0", dot)} />
         {label}
@@ -180,28 +180,28 @@ function ChartCard({
             </defs>
             <XAxis
               dataKey="name"
-              stroke="#475569"
+              stroke="#68766E"
               fontSize={11}
               tickLine={false}
               axisLine={false}
             />
             <YAxis
-              stroke="#475569"
+              stroke="#68766E"
               fontSize={11}
               tickLine={false}
               axisLine={false}
               tickFormatter={formatter ? (v: number) => formatter(v) : undefined}
               width={48}
             />
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ffffff0a" />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#DCE5DF" />
             <RechartsTooltip
               contentStyle={{
                 borderRadius: "8px",
-                border: "1px solid rgba(255,255,255,0.08)",
-                background: "#0A1628",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+                border: "1px solid #DCE5DF",
+                background: "#FFFFFF",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
                 fontSize: "12px",
-                color: "#cbd5e1",
+                color: "#172B22",
               }}
               formatter={formatter ? (v: number) => [formatter(v), dataKey] : undefined}
             />
@@ -327,7 +327,7 @@ export default function AdminDashboard() {
 
       {/* Ã¢â€â‚¬Ã¢â€â‚¬ Page title Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <div>
-        <h1 className="text-lg font-bold text-white md:text-xl">Overview</h1>
+        <h1 className="text-lg font-bold text-foreground md:text-xl">Overview</h1>
         <p className="mt-0.5 text-xs text-muted-foreground">
           Real-time system health and business metrics
         </p>
@@ -349,14 +349,14 @@ export default function AdminDashboard() {
         <ChartCard
           title="User Growth"
           dataKey="users"
-          color="#10B981"
+          color="#246B4B"
           gradientId="grad-users"
           data={growthDataData}
         />
         <ChartCard
           title="Monthly Revenue (KES)"
           dataKey="revenue"
-          color="#3B82F6"
+          color="#2864A5"
           gradientId="grad-revenue"
           data={growthDataData}
           formatter={(v: number) => `KES ${(v / 1_000).toFixed(1)}k`}
@@ -443,9 +443,9 @@ export default function AdminDashboard() {
               { label: "Active Now",    value: Math.floor((stats?.onlineDevices ?? 0) * 0.87).toLocaleString(), icon: Zap, color: "text-primary" },
               { label: "Alerts",        value: "3",                                              icon: AlertTriangle, color: "text-amber-600" },
             ].map(({ label, value, icon: Icon, color }) => (
-              <div key={label} className="rounded-lg bg-white/[0.03] p-3 text-center">
+              <div key={label} className="rounded-lg bg-secondary/60 p-3 text-center border border-border/50">
                 <Icon className={cn("mx-auto mb-1 h-4 w-4", color)} />
-                <p className="text-base font-bold text-white">{value}</p>
+                <p className="text-base font-bold text-foreground">{value}</p>
                 <p className="text-[10px] text-muted-foreground">{label}</p>
               </div>
             ))}
@@ -476,7 +476,7 @@ export default function AdminDashboard() {
               { label: "Avg revenue / org", value: `KES ${Math.round((stats?.monthlyRevenue ?? 0) / Math.max(stats?.totalOrganizations ?? 1, 1)).toLocaleString()}`, color: "text-amber-600" },
               { label: "Outstanding dues",  value: "KES 0",                                                color: "text-muted-foreground" },
             ].map(({ label, value, color }) => (
-              <div key={label} className="flex items-center justify-between py-1.5 border-b border-white/[0.04] last:border-0">
+              <div key={label} className="flex items-center justify-between py-1.5 border-b border-border/60 last:border-0">
                 <span className="text-xs text-muted-foreground">{label}</span>
                 <span className={cn("text-sm font-semibold", color)}>{value}</span>
               </div>
@@ -504,18 +504,18 @@ export default function AdminDashboard() {
         <div className="hidden md:block">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-white/[0.06] text-left">
-                <th className="px-5 pb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">User</th>
-                <th className="px-5 pb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Action</th>
-                <th className="px-5 pb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Status</th>
-                <th className="px-5 pb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground text-right">Time</th>
+              <tr className="border-b border-border text-left bg-secondary/30">
+                <th className="px-5 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">User</th>
+                <th className="px-5 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Action</th>
+                <th className="px-5 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Status</th>
+                <th className="px-5 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground text-right">Time</th>
               </tr>
             </thead>
             <tbody>
               {visibleActivity.map((row, i) => (
                 <tr
                   key={i}
-                  className="border-b border-white/[0.04] last:border-0 hover:bg-white/[0.02] transition-colors"
+                  className="border-b border-border/60 last:border-0 hover:bg-secondary/40 transition-colors"
                 >
                   <td className="px-5 py-3 font-medium text-foreground">{row.user}</td>
                   <td className="px-5 py-3 text-muted-foreground">{row.action}</td>
@@ -528,7 +528,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Mobile: card stack */}
-        <div className="md:hidden divide-y divide-white/[0.04]">
+        <div className="md:hidden divide-y divide-border/60">
           {visibleActivity.map((row, i) => (
             <div key={i} className="px-4 py-3">
               <div className="flex items-start justify-between gap-2">
@@ -546,7 +546,7 @@ export default function AdminDashboard() {
         </div>
 
         {recentActivityData.length > 4 && (
-          <div className="border-t border-white/[0.04] px-4 py-2.5 md:px-5">
+          <div className="border-t border-border px-4 py-2.5 md:px-5">
             <button
               onClick={() => setActivityExpanded((e) => !e)}
               className="flex w-full items-center justify-center gap-1.5 text-xs text-muted-foreground hover:text-muted-foreground transition-colors py-0.5"
@@ -562,7 +562,7 @@ export default function AdminDashboard() {
       <div className="fixed bottom-5 right-4 z-30 flex flex-col items-end gap-2 md:hidden">
         <a
           href="/admin/organizations"
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500 shadow-xl shadow-emerald-500/30 text-white hover:bg-emerald-400 transition-colors"
+          className="flex h-12 w-12 items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/25 text-primary-foreground hover:bg-primary/90 transition-colors"
           title="New Organization"
         >
           <Building2 className="h-5 w-5" />
