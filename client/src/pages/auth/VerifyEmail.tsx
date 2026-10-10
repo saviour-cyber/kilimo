@@ -2,27 +2,31 @@ import { useEffect, useState, useRef } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
-import { Loader2, CheckCircle2, XCircle, ArrowRight } from "lucide-react";
+import { Loader2, CheckCircle2, XCircle, ArrowRight, MailCheck } from "lucide-react";
 import { toast } from "sonner";
 import { AuthCard } from "@/components/shared/AuthCard";
 
 export default function VerifyEmail() {
   const [, setLocation] = useLocation();
-  const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
+  const [status, setStatus] = useState<"pending" | "loading" | "success" | "error">("loading");
   const [errorMessage, setErrorMessage] = useState("");
   const verifyMutation = trpc.auth.verifyEmail.useMutation();
   const hasAttempted = useRef(false);
 
   useEffect(() => {
-    const token = new URLSearchParams(window.location.search).get("token");
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    const pending = params.get("pending");
+
+    // No token yet — user was redirected here right after signup
     if (!token) {
-      setStatus("error");
-      setErrorMessage("No verification token found in the link.");
+      setStatus("pending");
       return;
     }
 
     if (!hasAttempted.current) {
       hasAttempted.current = true;
+      setStatus("loading");
       verifyMutation.mutate({ token }, {
         onSuccess: () => {
           setStatus("success");
@@ -39,17 +43,24 @@ export default function VerifyEmail() {
   return (
     <AuthCard
       title={
-        status === "loading" ? "Verifying email..." : 
-        status === "success" ? "Email Verified!" : 
+        status === "pending"  ? "Check your inbox" :
+        status === "loading"  ? "Verifying email..." :
+        status === "success"  ? "Email Verified!" :
         "Verification Failed"
       }
       description={
-        status === "loading" ? "Please wait while we confirm your email address." :
-        status === "success" ? "Your email has been verified and your account is active." :
+        status === "pending"  ? "We've sent a verification link to your email. Open it to activate your account." :
+        status === "loading"  ? "Please wait while we confirm your email address." :
+        status === "success"  ? "Your email has been verified and your account is active." :
         "We could not verify your email address."
       }
     >
       <div className="flex flex-col items-center justify-center space-y-6 pt-2 pb-2">
+        {status === "pending" && (
+          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+            <MailCheck className="w-8 h-8" />
+          </div>
+        )}
         {status === "loading" && (
           <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary">
             <Loader2 className="w-8 h-8 animate-spin" />
@@ -65,19 +76,28 @@ export default function VerifyEmail() {
             <XCircle className="w-8 h-8" />
           </div>
         )}
-        
+
+        {status === "pending" && (
+          <p className="text-sm text-muted-foreground text-center">
+            Didn't receive it? Check your spam folder, or{" "}
+            <a href="/register" className="text-primary hover:underline font-medium">
+              try again
+            </a>.
+          </p>
+        )}
+
         {status === "error" && errorMessage && (
           <p className="text-sm text-destructive font-medium text-center">{errorMessage}</p>
         )}
-        
+
         <div className="w-full pt-4">
           {status === "success" && (
-            <Button onClick={() => window.location.href = "/dashboard"} className="w-full h-11 text-base">
-              Go to Dashboard
+            <Button onClick={() => window.location.href = "/login"} className="w-full h-11 text-base">
+              Sign in to your account
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           )}
-          {status === "error" && (
+          {(status === "error" || status === "pending") && (
             <Button onClick={() => setLocation("/login")} variant="outline" className="w-full h-11">
               Return to Login
             </Button>

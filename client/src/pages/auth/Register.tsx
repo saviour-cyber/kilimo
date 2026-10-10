@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
-import { Loader2, Eye, EyeOff, Lock, User as UserIcon, Mail, Phone, Globe, ArrowRight, ShieldCheck } from "lucide-react";
+import {
+  Loader2, Eye, EyeOff, Lock, User as UserIcon, Mail,
+  Phone, Globe, ArrowRight, ShieldCheck, MailCheck,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AuthCard } from "@/components/shared/AuthCard";
-import { resolvePostLoginPath } from "@/components/AuthRouter";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -16,37 +18,65 @@ export default function Register() {
   const [country, setCountry] = useState("KE");
   const [showPassword, setShowPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
-  const utils = trpc.useUtils();
+  const [registeredEmail, setRegisteredEmail] = useState<string | null>(null);
 
   const registerMutation = trpc.auth.register.useMutation();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!agreeTerms) {
       toast.error("Please agree to the Terms of Service.");
       return;
     }
 
     try {
-      await registerMutation.mutateAsync({ 
-        email, 
-        password, 
+      const res = await registerMutation.mutateAsync({
+        email,
+        password,
         firstName,
         lastName,
         phone,
         country,
       });
-      await utils.auth.me.invalidate();
-      const me = await utils.auth.me.fetch();
-      toast.success("Registration successful!");
-      setTimeout(() => {
-        window.location.href = resolvePostLoginPath(me?.role);
-      }, 300);
+      // The server does NOT issue a session cookie at registration —
+      // the user must verify their email first. Show a confirmation screen.
+      setRegisteredEmail(res.email ?? email);
     } catch (error: any) {
       toast.error(error.message || "Registration failed");
     }
   };
+
+  // ── Email confirmation screen ────────────────────────────────────────────────
+  if (registeredEmail) {
+    return (
+      <AuthCard
+        title="Check your inbox"
+        description={`We've sent a verification link to ${registeredEmail}. Open it to activate your account.`}
+      >
+        <div className="flex flex-col items-center gap-6 py-4">
+          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+            <MailCheck className="w-8 h-8" />
+          </div>
+          <p className="text-sm text-muted-foreground text-center">
+            Didn't receive it? Check your spam folder, or{" "}
+            <a href="/register" className="text-primary hover:underline font-medium">
+              try again with a different email
+            </a>
+            .
+          </p>
+          <Button
+            variant="outline"
+            className="w-full h-11"
+            onClick={() => window.location.href = "/login"}
+          >
+            Back to sign in
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      </AuthCard>
+    );
+  }
 
   return (
     <AuthCard
