@@ -23,10 +23,17 @@ function generateToken(): { raw: string; hash: string } {
   return { raw, hash };
 }
 
+import { isMaintenanceModeActive } from "../services/maintenance";
+
 export const authRouter = router({
   // ── Who am I ────────────────────────────────────────────────────────────────
   me: publicProcedure.query(async ({ ctx }) => {
-    return ctx.user ?? null;
+    if (!ctx.user) return null;
+    if (ctx.user.role !== "admin") {
+      const isMaintenance = await isMaintenanceModeActive(ctx.db);
+      if (isMaintenance) return null;
+    }
+    return ctx.user;
   }),
 
   // ── Logout ──────────────────────────────────────────────────────────────────
@@ -62,6 +69,16 @@ export const authRouter = router({
       const isValid = await bcrypt.compare(password, user.password);
       if (!isValid) {
         throw new TRPCError({ code: "UNAUTHORIZED", message: "Invalid email or password" });
+      }
+
+      if (user.role !== "admin") {
+        const isMaintenance = await isMaintenanceModeActive(ctx.db);
+        if (isMaintenance) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "System is currently undergoing scheduled maintenance. Only administrators can sign in at this time.",
+          });
+        }
       }
 
       if (!user.isEmailVerified) {

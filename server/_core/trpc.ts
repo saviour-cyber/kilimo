@@ -7,6 +7,8 @@ const t = initTRPC.context<TrpcContext>().create({
   transformer: superjson,
 });
 
+import { isMaintenanceModeActive } from "../services/maintenance";
+
 export const router = t.router;
 export const publicProcedure = t.procedure;
 
@@ -15,6 +17,16 @@ const requireUser = t.middleware(async opts => {
 
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED", message: UNAUTHED_ERR_MSG });
+  }
+
+  if (ctx.user.role !== "admin") {
+    const isMaintenance = await isMaintenanceModeActive(ctx.db);
+    if (isMaintenance) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "System is currently undergoing scheduled maintenance. Please try again later.",
+      });
+    }
   }
 
   return next({

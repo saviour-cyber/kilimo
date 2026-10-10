@@ -6,6 +6,7 @@ import { provisionTrialSubscription } from "../services/subscriptions";
 import { sql, count, eq, desc, inArray, and, sum } from "drizzle-orm";
 import { z } from "zod";
 import { emailService } from "../services/email";
+import { getMaintenanceDetails, setMaintenanceMode } from "../services/maintenance";
 
 export const adminRouter = router({
   // ── Dashboard Stats ────────────────────────────────────────────────────────
@@ -638,4 +639,24 @@ export const adminRouter = router({
       .orderBy(desc(platformEmailLogs.sentAt))
       .limit(100);
   }),
+
+  // ── Maintenance Mode ───────────────────────────────────────────────────────
+  getMaintenanceMode: adminProcedure.query(async ({ ctx }) => {
+    return getMaintenanceDetails(ctx.db);
+  }),
+
+  setMaintenanceMode: adminProcedure
+    .input(z.object({ isEnabled: z.boolean(), message: z.string().optional() }))
+    .mutation(async ({ input, ctx }) => {
+      await setMaintenanceMode(input.isEnabled, input.message, ctx.db);
+      await ctx.db.insert(auditLogs).values({
+        farmId: 0,
+        userId: ctx.user.id,
+        action: "MAINTENANCE_MODE_TOGGLED",
+        entityType: "system",
+        description: `Maintenance mode ${input.isEnabled ? "enabled" : "disabled"}`,
+        metadata: { isEnabled: input.isEnabled },
+      });
+      return { success: true };
+    }),
 });

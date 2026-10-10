@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
-import { Loader2, Eye, EyeOff, Lock, User as UserIcon, ArrowRight, ShieldCheck } from "lucide-react";
+import { Loader2, Eye, EyeOff, Lock, User as UserIcon, ArrowRight, ShieldCheck, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AuthCard } from "@/components/shared/AuthCard";
@@ -14,6 +14,7 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const utils = trpc.useUtils();
 
+  const maintenanceQuery = trpc.system.getMaintenanceStatus.useQuery();
   const loginMutation = trpc.auth.login.useMutation();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -55,6 +56,16 @@ export default function Login() {
         </div>
       }
     >
+      {maintenanceQuery.data?.isMaintenance && (
+        <div className="mb-4 p-3 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-300 text-xs flex items-start gap-2.5">
+          <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <p className="font-semibold">System Maintenance in Progress</p>
+            <p className="opacity-90">{maintenanceQuery.data.message || "Only administrators can sign in at this time. Normal access will be restored shortly."}</p>
+          </div>
+        </div>
+      )}
+
       <form onSubmit={handleLogin} className="space-y-4">
         <div className="space-y-1.5">
           <label className="text-sm font-medium leading-none">Email Address</label>

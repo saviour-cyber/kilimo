@@ -70,15 +70,49 @@ export default function Settings() {
   const [sessionDurationDays, setSessionDurationDays] = useState("30");
   const [requireEmailVerification, setRequireEmailVerification] = useState(true);
   const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [maintenanceMessage, setMaintenanceMessage] = useState("");
+
+  const utils = trpc.useUtils();
+  const maintenanceQuery = trpc.admin.getMaintenanceMode.useQuery();
+
+  React.useEffect(() => {
+    if (maintenanceQuery.data) {
+      setMaintenanceMode(maintenanceQuery.data.isEnabled);
+      setMaintenanceMessage(maintenanceQuery.data.message || "");
+    }
+  }, [maintenanceQuery.data]);
+
+  const setMaintenanceMutation = trpc.admin.setMaintenanceMode.useMutation({
+    onSuccess: (_, variables) => {
+      utils.admin.getMaintenanceMode.invalidate();
+      if (variables.isEnabled) {
+        toast.warning("System maintenance mode is now ACTIVE. Non-admin users are blocked from logging in.");
+      } else {
+        toast.success("System maintenance mode DISABLED. Normal operations resumed.");
+      }
+    },
+    onError: (err) => {
+      toast.error(`Failed to update maintenance mode: ${err.message}`);
+    },
+  });
 
   const [isSaving, setIsSaving] = useState(false);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsSaving(true);
-    setTimeout(() => {
-      setIsSaving(false);
+    try {
+      if (maintenanceMode !== maintenanceQuery.data?.isEnabled) {
+        await setMaintenanceMutation.mutateAsync({
+          isEnabled: maintenanceMode,
+          message: maintenanceMessage || undefined,
+        });
+      }
       toast.success("System settings updated successfully.");
-    }, 600);
+    } catch (err: any) {
+      // handled by mutation onError
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleSendTestEmail = () => {
@@ -386,23 +420,55 @@ export default function Settings() {
                   />
                 </div>
 
-                <div className="flex items-center justify-between p-3 border border-red-500/20 bg-red-500/5 rounded-lg">
-                  <div>
-                    <p className="text-sm font-medium text-red-600 flex items-center gap-1.5">
-                      <AlertTriangle className="w-4 h-4" /> System Maintenance Mode
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      Temporarily freeze non-admin farm access during critical database migrations
-                    </p>
+                <div className="p-3 border border-red-500/20 bg-red-500/5 rounded-lg space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-red-600 flex items-center gap-1.5">
+                        <AlertTriangle className="w-4 h-4" /> System Maintenance Mode
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Temporarily freeze non-admin farm access during critical database migrations
+                      </p>
+                    </div>
+                    <Switch
+                      checked={maintenanceMode}
+                      disabled={setMaintenanceMutation.isPending}
+                      onCheckedChange={(val) => {
+                        setMaintenanceMode(val);
+                        setMaintenanceMutation.mutate({
+                          isEnabled: val,
+                          message: maintenanceMessage || undefined,
+                        });
+                      }}
+                    />
                   </div>
-                  <Switch
-                    checked={maintenanceMode}
-                    onCheckedChange={(val) => {
-                      setMaintenanceMode(val);
-                      if (val) toast.warning("System maintenance mode enabled.");
-                      else toast.info("System maintenance mode disabled.");
-                    }}
-                  />
+                  {maintenanceMode && (
+                    <div className="pt-2 border-t border-red-500/20 space-y-1.5">
+                      <Label className="text-xs text-red-600 font-medium">Maintenance Notice for Users</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="e.g. Scheduled database maintenance in progress. Back shortly."
+                          value={maintenanceMessage}
+                          onChange={(e) => setMaintenanceMessage(e.target.value)}
+                          className="text-xs h-8"
+                        />
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 text-xs border-red-500/30 text-red-600 hover:bg-red-500/10"
+                          disabled={setMaintenanceMutation.isPending}
+                          onClick={() => {
+                            setMaintenanceMutation.mutate({
+                              isEnabled: true,
+                              message: maintenanceMessage || undefined,
+                            });
+                          }}
+                        >
+                          Update Notice
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </CardContent>

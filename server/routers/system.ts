@@ -3,6 +3,7 @@ import { getDb } from "../db";
 import { platformAnnouncements } from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
 import { desc, eq } from "drizzle-orm";
+import { getMaintenanceDetails } from "../services/maintenance";
 
 export const systemRouter = router({
   getActiveAnnouncements: publicProcedure.query(async () => {
@@ -15,5 +16,13 @@ export const systemRouter = router({
       .where(eq(platformAnnouncements.isActive, true))
       .orderBy(desc(platformAnnouncements.createdAt))
       .limit(5); // Show latest 5 active announcements
+  }),
+
+  getMaintenanceStatus: publicProcedure.query(async ({ ctx }) => {
+    const details = await getMaintenanceDetails(ctx.db);
+    return {
+      isMaintenance: details.isEnabled,
+      message: details.message,
+    };
   }),
 });
