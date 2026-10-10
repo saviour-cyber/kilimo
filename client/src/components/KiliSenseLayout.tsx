@@ -289,6 +289,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
   );
 
   const { modules: grantedModules, isLoading: modulesLoading } = useGrantedModules();
+  const maintenanceQuery = trpc.system.getMaintenanceStatus.useQuery();
 
   if (loading || farmLoading) {
     return (
@@ -307,8 +308,6 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
       </div>
     );
   }
-
-  const maintenanceQuery = trpc.system.getMaintenanceStatus.useQuery();
 
   if (!isAuthenticated) {
     if (maintenanceQuery.data?.isMaintenance) {
