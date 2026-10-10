@@ -646,17 +646,44 @@ export const adminRouter = router({
   }),
 
   setMaintenanceMode: adminProcedure
-    .input(z.object({ isEnabled: z.boolean(), message: z.string().optional() }))
+    .input(
+      z.object({
+        isEnabled: z.boolean(),
+        scope: z.enum(["app_only", "full_site"]).optional(),
+        message: z.string().optional(),
+        estimatedRestorationAt: z.string().nullable().optional(),
+        scheduledStartAt: z.string().nullable().optional(),
+        scheduledEndAt: z.string().nullable().optional(),
+      })
+    )
     .mutation(async ({ input, ctx }) => {
-      await setMaintenanceMode(input.isEnabled, input.message, ctx.db);
+      const details = await setMaintenanceMode(
+        {
+          isEnabled: input.isEnabled,
+          scope: input.scope,
+          message: input.message,
+          estimatedRestorationAt: input.estimatedRestorationAt,
+          scheduledStartAt: input.scheduledStartAt,
+          scheduledEndAt: input.scheduledEndAt,
+        },
+        ctx.db
+      );
+
       await ctx.db.insert(auditLogs).values({
         farmId: 0,
         userId: ctx.user.id,
-        action: "MAINTENANCE_MODE_TOGGLED",
+        action: "MAINTENANCE_MODE_CONFIGURED",
         entityType: "system",
-        description: `Maintenance mode ${input.isEnabled ? "enabled" : "disabled"}`,
-        metadata: { isEnabled: input.isEnabled },
+        description: `Maintenance mode ${input.isEnabled ? "enabled" : "disabled"} (scope: ${details.scope})`,
+        metadata: {
+          isEnabled: input.isEnabled,
+          scope: details.scope,
+          estimatedRestorationAt: details.estimatedRestorationAt,
+          scheduledStartAt: details.scheduledStartAt,
+          scheduledEndAt: details.scheduledEndAt,
+        },
       });
-      return { success: true };
+
+      return { success: true, details };
     }),
 });

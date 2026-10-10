@@ -59,9 +59,19 @@ export default function Login() {
       {maintenanceQuery.data?.isMaintenance && (
         <div className="mb-4 p-3 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-300 text-xs flex items-start gap-2.5">
           <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-          <div className="space-y-0.5">
-            <p className="font-semibold">System Maintenance in Progress</p>
+          <div className="space-y-1">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="font-semibold">System Maintenance in Progress</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 uppercase tracking-wide font-medium">
+                {maintenanceQuery.data.scope === "full_site" ? "Full Platform" : "Application Only"}
+              </span>
+            </div>
             <p className="opacity-90">{maintenanceQuery.data.message || "Only administrators can sign in at this time. Normal access will be restored shortly."}</p>
+            {maintenanceQuery.data.estimatedRestorationAt && (
+              <p className="text-[11px] font-medium text-amber-900 dark:text-amber-200 pt-0.5">
+                Estimated restoration: {new Date(maintenanceQuery.data.estimatedRestorationAt).toLocaleString(undefined, { dateStyle: "short", timeStyle: "short" })}
+              </p>
+            )}
           </div>
         </div>
       )}

@@ -40,6 +40,7 @@ const FEATURES = [
 ];
 
 import { usePWAInstall } from "@/components/PWAInstallPrompt";
+import { MaintenancePage } from "@/pages/MaintenancePage";
 
 export default function Home() {
   const { loading, isAuthenticated, isPlatformAdmin } = useAuth();
@@ -52,6 +53,9 @@ export default function Home() {
 
   // Use the global PWA install state
   const { canInstall, isInstalled, triggerPrompt: triggerInstall } = usePWAInstall();
+
+  // Maintenance query
+  const maintenanceQuery = trpc.system.getMaintenanceStatus.useQuery();
 
   // Plans data
   const { data: plans } = trpc.subscriptions.listPlans.useQuery();
@@ -80,6 +84,25 @@ export default function Home() {
       }
     }
   }, [loading, isAuthenticated, isPlatformAdmin, navigate, splashFinished, isStandalone]);
+
+  // If full-site maintenance is active and user is not an authenticated platform admin
+  if (
+    !loading &&
+    maintenanceQuery.data?.isMaintenance &&
+    maintenanceQuery.data?.scope === "full_site" &&
+    !isPlatformAdmin
+  ) {
+    return (
+      <MaintenancePage
+        message={maintenanceQuery.data.message}
+        estimatedRestorationAt={maintenanceQuery.data.estimatedRestorationAt}
+        scheduledStartAt={maintenanceQuery.data.scheduledStartAt}
+        scheduledEndAt={maintenanceQuery.data.scheduledEndAt}
+        onRefresh={() => maintenanceQuery.refetch()}
+        isRefreshing={maintenanceQuery.isFetching}
+      />
+    );
+  }
 
   // Show splash screen for PWA
   if (isStandalone && !splashFinished) {

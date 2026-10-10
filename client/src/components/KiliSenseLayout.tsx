@@ -308,7 +308,43 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
     );
   }
 
+  const maintenanceQuery = trpc.system.getMaintenanceStatus.useQuery();
+
   if (!isAuthenticated) {
+    if (maintenanceQuery.data?.isMaintenance) {
+      return (
+        <div className="min-h-[100dvh] flex items-center justify-center bg-background p-4">
+          <div className="text-center space-y-6 max-w-md mx-auto p-8 rounded-2xl border border-amber-500/30 bg-amber-500/5 shadow-xl">
+            <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center mx-auto text-amber-500">
+              <Leaf className="w-8 h-8" />
+            </div>
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                Scheduled Maintenance Active
+              </div>
+              <h1 className="text-2xl font-bold text-foreground">KiliSense is under maintenance</h1>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                {maintenanceQuery.data.message || "Farm application features are temporarily offline for system maintenance. Please check back shortly."}
+              </p>
+              {maintenanceQuery.data.estimatedRestorationAt && (
+                <p className="text-xs font-medium text-amber-600 dark:text-amber-400 pt-1">
+                  Estimated restoration: {new Date(maintenanceQuery.data.estimatedRestorationAt).toLocaleString(undefined, { dateStyle: "short", timeStyle: "short" })}
+                </p>
+              )}
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2 pt-2">
+              <Button onClick={() => window.location.reload()} variant="outline" className="flex-1">
+                Refresh Status
+              </Button>
+              <Button onClick={() => window.location.href = "/login"} className="flex-1">
+                Go to Sign in
+              </Button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="min-h-[100dvh] flex items-center justify-center bg-background">
         <div className="text-center space-y-6 max-w-sm mx-auto p-8">

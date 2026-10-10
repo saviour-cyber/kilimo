@@ -24,6 +24,11 @@ async function startServer() {
   app.set("trust proxy", 1);
   const server = createServer(app);
 
+  // Health check endpoint for external monitoring / uptime robots / container checks
+  app.get(["/health", "/api/health"], (_req, res) => {
+    res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+  });
+
   // Webhooks must be mounted BEFORE express.json() so they can access the raw body
   app.use("/api/webhooks", webhooksRouter);
 

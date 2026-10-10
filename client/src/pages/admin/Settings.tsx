@@ -70,7 +70,11 @@ export default function Settings() {
   const [sessionDurationDays, setSessionDurationDays] = useState("30");
   const [requireEmailVerification, setRequireEmailVerification] = useState(true);
   const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [maintenanceScope, setMaintenanceScope] = useState<"app_only" | "full_site">("app_only");
   const [maintenanceMessage, setMaintenanceMessage] = useState("");
+  const [estimatedRestorationAt, setEstimatedRestorationAt] = useState("");
+  const [scheduledStartAt, setScheduledStartAt] = useState("");
+  const [scheduledEndAt, setScheduledEndAt] = useState("");
 
   const utils = trpc.useUtils();
   const maintenanceQuery = trpc.admin.getMaintenanceMode.useQuery();
@@ -78,7 +82,11 @@ export default function Settings() {
   React.useEffect(() => {
     if (maintenanceQuery.data) {
       setMaintenanceMode(maintenanceQuery.data.isEnabled);
+      setMaintenanceScope(maintenanceQuery.data.scope || "app_only");
       setMaintenanceMessage(maintenanceQuery.data.message || "");
+      setEstimatedRestorationAt(maintenanceQuery.data.estimatedRestorationAt || "");
+      setScheduledStartAt(maintenanceQuery.data.scheduledStartAt || "");
+      setScheduledEndAt(maintenanceQuery.data.scheduledEndAt || "");
     }
   }, [maintenanceQuery.data]);
 
@@ -86,9 +94,13 @@ export default function Settings() {
     onSuccess: (_, variables) => {
       utils.admin.getMaintenanceMode.invalidate();
       if (variables.isEnabled) {
-        toast.warning("System maintenance mode is now ACTIVE. Non-admin users are blocked from logging in.");
+        toast.warning(
+          variables.scope === "full_site"
+            ? "Full-Site Maintenance is ACTIVE. Landing page replaced & normal user login blocked."
+            : "Application Maintenance is ACTIVE. Landing page open, but normal user login & farm apps blocked."
+        );
       } else {
-        toast.success("System maintenance mode DISABLED. Normal operations resumed.");
+        toast.success("System maintenance mode DISABLED. Normal platform access restored.");
       }
     },
     onError: (err) => {
@@ -101,12 +113,14 @@ export default function Settings() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      if (maintenanceMode !== maintenanceQuery.data?.isEnabled) {
-        await setMaintenanceMutation.mutateAsync({
-          isEnabled: maintenanceMode,
-          message: maintenanceMessage || undefined,
-        });
-      }
+      await setMaintenanceMutation.mutateAsync({
+        isEnabled: maintenanceMode,
+        scope: maintenanceScope,
+        message: maintenanceMessage || undefined,
+        estimatedRestorationAt: estimatedRestorationAt || null,
+        scheduledStartAt: scheduledStartAt || null,
+        scheduledEndAt: scheduledEndAt || null,
+      });
       toast.success("System settings updated successfully.");
     } catch (err: any) {
       // handled by mutation onError
@@ -420,14 +434,14 @@ export default function Settings() {
                   />
                 </div>
 
-                <div className="p-3 border border-red-500/20 bg-red-500/5 rounded-lg space-y-3">
+                <div className="p-4 border border-red-500/20 bg-red-500/5 rounded-xl space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-red-600 flex items-center gap-1.5">
+                      <p className="text-sm font-semibold text-red-600 flex items-center gap-1.5">
                         <AlertTriangle className="w-4 h-4" /> System Maintenance Mode
                       </p>
-                      <p className="text-xs text-muted-foreground">
-                        Temporarily freeze non-admin farm access during critical database migrations
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        Temporarily restrict access during system updates, security patches, or database migrations
                       </p>
                     </div>
                     <Switch
@@ -437,34 +451,106 @@ export default function Settings() {
                         setMaintenanceMode(val);
                         setMaintenanceMutation.mutate({
                           isEnabled: val,
+                          scope: maintenanceScope,
                           message: maintenanceMessage || undefined,
+                          estimatedRestorationAt: estimatedRestorationAt || null,
+                          scheduledStartAt: scheduledStartAt || null,
+                          scheduledEndAt: scheduledEndAt || null,
                         });
                       }}
                     />
                   </div>
+
                   {maintenanceMode && (
-                    <div className="pt-2 border-t border-red-500/20 space-y-1.5">
-                      <Label className="text-xs text-red-600 font-medium">Maintenance Notice for Users</Label>
-                      <div className="flex gap-2">
+                    <div className="pt-3 border-t border-red-500/20 space-y-3.5">
+                      {/* Maintenance Scope */}
+                      <div className="space-y-1.5">
+                        <Label className="text-xs text-foreground font-semibold">Maintenance Scope</Label>
+                        <Select
+                          value={maintenanceScope}
+                          onValueChange={(val: "app_only" | "full_site") => setMaintenanceScope(val)}
+                        >
+                          <SelectTrigger className="h-9 text-xs">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="app_only">
+                              Application Only (Standard — landing page visible; user login & farm apps blocked)
+                            </SelectItem>
+                            <SelectItem value="full_site">
+                              Full Site (Dedicated branded maintenance screen; user login & farm apps blocked)
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <p className="text-[11px] text-muted-foreground">
+                          {maintenanceScope === "full_site"
+                            ? "Replaces the public landing page with a branded maintenance status screen."
+                            : "Public landing page remains accessible for new visitors, but farmer logins and farm management are halted."}
+                        </p>
+                      </div>
+
+                      {/* Public Maintenance Notice */}
+                      <div className="space-y-1.5">
+                        <Label className="text-xs text-foreground font-semibold">Public Notice for Users</Label>
                         <Input
-                          placeholder="e.g. Scheduled database maintenance in progress. Back shortly."
+                          placeholder="e.g. Scheduled database maintenance in progress. Normal operations will resume shortly."
                           value={maintenanceMessage}
                           onChange={(e) => setMaintenanceMessage(e.target.value)}
-                          className="text-xs h-8"
+                          className="text-xs h-9"
                         />
+                      </div>
+
+                      {/* Estimated Restoration & Scheduling Window */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div className="space-y-1">
+                          <Label className="text-[11px] text-muted-foreground font-medium">Estimated Restoration Time (Optional)</Label>
+                          <Input
+                            type="datetime-local"
+                            value={estimatedRestorationAt}
+                            onChange={(e) => setEstimatedRestorationAt(e.target.value)}
+                            className="text-xs h-8"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-[11px] text-muted-foreground font-medium">Scheduled Window Start (Optional)</Label>
+                          <Input
+                            type="datetime-local"
+                            value={scheduledStartAt}
+                            onChange={(e) => setScheduledStartAt(e.target.value)}
+                            className="text-xs h-8"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-[11px] text-muted-foreground font-medium">Scheduled Window End (Optional)</Label>
+                          <Input
+                            type="datetime-local"
+                            value={scheduledEndAt}
+                            onChange={(e) => setScheduledEndAt(e.target.value)}
+                            className="text-xs h-8"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-1">
+                        <p className="text-[11px] text-muted-foreground">
+                          Note: Platform administrators retain full access to <span className="font-mono text-xs">/admin</span> to manage or deactivate maintenance anytime.
+                        </p>
                         <Button
                           size="sm"
-                          variant="outline"
-                          className="h-8 text-xs border-red-500/30 text-red-600 hover:bg-red-500/10"
+                          className="h-8 text-xs bg-red-600 hover:bg-red-700 text-white"
                           disabled={setMaintenanceMutation.isPending}
                           onClick={() => {
                             setMaintenanceMutation.mutate({
                               isEnabled: true,
+                              scope: maintenanceScope,
                               message: maintenanceMessage || undefined,
+                              estimatedRestorationAt: estimatedRestorationAt || null,
+                              scheduledStartAt: scheduledStartAt || null,
+                              scheduledEndAt: scheduledEndAt || null,
                             });
                           }}
                         >
-                          Update Notice
+                          Apply Maintenance Settings
                         </Button>
                       </div>
                     </div>

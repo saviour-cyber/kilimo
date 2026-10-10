@@ -21,8 +21,13 @@ export const systemRouter = router({
   getMaintenanceStatus: publicProcedure.query(async ({ ctx }) => {
     const details = await getMaintenanceDetails(ctx.db);
     return {
-      isMaintenance: details.isEnabled,
+      isMaintenance: details.isActive,
+      isEnabled: details.isEnabled,
+      scope: details.scope,
       message: details.message,
+      estimatedRestorationAt: details.estimatedRestorationAt,
+      scheduledStartAt: details.scheduledStartAt,
+      scheduledEndAt: details.scheduledEndAt,
     };
   }),
 });
