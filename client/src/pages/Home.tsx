@@ -85,9 +85,18 @@ export default function Home() {
     }
   }, [loading, isAuthenticated, isPlatformAdmin, navigate, splashFinished, isStandalone]);
 
+  // Wait for auth and maintenance status before deciding what to render,
+  // preventing any 1-second flash of the landing page when maintenance is active.
+  if (loading || maintenanceQuery.isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-emerald-500/20 border-t-emerald-500 animate-spin" />
+      </div>
+    );
+  }
+
   // If full-site maintenance is active and user is not an authenticated platform admin
   if (
-    !loading &&
     maintenanceQuery.data?.isMaintenance &&
     maintenanceQuery.data?.scope === "full_site" &&
     !isPlatformAdmin
