@@ -21,6 +21,22 @@ export async function getDb() {
         ssl: process.env.DATABASE_URL.includes('tidb') || process.env.DATABASE_URL.includes('ssl=') ? { rejectUnauthorized: false } : undefined,
       });
       _db = drizzle(_pool);
+
+      // Self-healing: verify isSuspended column on users table exists
+      (async () => {
+        try {
+          const [cols]: any = await _pool.query(
+            `SELECT COLUMN_NAME FROM information_schema.columns WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'isSuspended'`
+          );
+          if (cols && cols.length === 0) {
+            console.log("[Database] Adding missing 'isSuspended' column to users table...");
+            await _pool.query("ALTER TABLE `users` ADD COLUMN `isSuspended` tinyint(1) NOT NULL DEFAULT 0");
+            console.log("[Database] Successfully added 'isSuspended' column to users table.");
+          }
+        } catch (e: any) {
+          console.warn("[Database] Schema check warning:", e.message);
+        }
+      })();
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
