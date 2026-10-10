@@ -23,7 +23,7 @@ export default function PlatformAbout() {
           <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
           <a href="#" className="hover:text-foreground transition-colors">Contact Support</a>
           <span className="text-slate-300">|</span>
-          <span>© {new Date().getFullYear()} KiliSense Next. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} KiliSense. All rights reserved.</span>
         </div>
       </section>
     </div>

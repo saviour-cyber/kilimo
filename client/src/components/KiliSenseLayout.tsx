@@ -16,7 +16,7 @@ import {
   User,
   X,
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { Badge } from "./ui/badge";
@@ -291,6 +291,13 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
   const { modules: grantedModules, isLoading: modulesLoading } = useGrantedModules();
   const maintenanceQuery = trpc.system.getMaintenanceStatus.useQuery();
 
+  // Automatic redirect guard: send unauthenticated users straight to /login unless maintenance is active
+  useEffect(() => {
+    if (!loading && !isAuthenticated && !maintenanceQuery.data?.isMaintenance) {
+      window.location.replace("/login");
+    }
+  }, [loading, isAuthenticated, maintenanceQuery.data?.isMaintenance]);
+
   if (loading || farmLoading) {
     return (
       <div className="flex h-[100dvh] bg-background">
@@ -346,18 +353,7 @@ export function KiliSenseLayout({ children }: KiliSenseLayoutProps) {
 
     return (
       <div className="min-h-[100dvh] flex items-center justify-center bg-background">
-        <div className="text-center space-y-6 max-w-sm mx-auto p-8">
-          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
-            <Leaf className="w-8 h-8 text-primary" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">KiliSense Next</h1>
-            <p className="text-muted-foreground mt-2 text-sm">Enterprise farm management platform</p>
-          </div>
-          <Button onClick={() => window.location.href = "/login"} size="lg" className="w-full">
-            Sign in to continue
-          </Button>
-        </div>
+        <div className="w-8 h-8 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
       </div>
     );
   }
