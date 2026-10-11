@@ -604,4 +604,134 @@ export function regionalAgriInsightTemplate(ctx: {
   return { subject, html, text };
 }
 
+export function getTemplatePreview(templateKey: string): { subject: string; html: string } {
+  const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
+  switch (templateKey) {
+    case "trial_started":
+      return trialStartedEmailTemplate({
+        userName: "John Kiprono",
+        organizationName: "Highland Greens Farm",
+        planName: "Pro Agriculture",
+        trialDays: 14,
+        expiresAt: new Date(Date.now() + 14 * 86400000).toLocaleDateString(),
+        billingUrl: `${base}/settings/organization/billing`,
+      });
+    case "trial_ending_7d":
+    case "trial_ending_3d":
+    case "trial_ending_1d": {
+      const days = templateKey === "trial_ending_7d" ? 7 : templateKey === "trial_ending_3d" ? 3 : 1;
+      return trialEndingTemplate({
+        userName: "John Kiprono",
+        organizationName: "Highland Greens Farm",
+        planName: "Pro Agriculture",
+        daysRemaining: days,
+        expiresAt: new Date(Date.now() + days * 86400000).toLocaleDateString(),
+        billingUrl: `${base}/settings/organization/billing`,
+      });
+    }
+    case "trial_expired":
+      return trialExpiredTemplate({
+        userName: "John Kiprono",
+        organizationName: "Highland Greens Farm",
+        planName: "Pro Agriculture",
+        billingUrl: `${base}/settings/organization/billing`,
+      });
+    case "subscription_past_due":
+      return subscriptionPastDueTemplate({
+        userName: "John Kiprono",
+        organizationName: "Highland Greens Farm",
+        planName: "Commercial Enterprise",
+        amount: "KES 12,000",
+        dueDate: new Date().toLocaleDateString(),
+        billingUrl: `${base}/settings/organization/billing`,
+      });
+    case "subscription_suspended":
+      return subscriptionSuspendedTemplate({
+        userName: "John Kiprono",
+        organizationName: "Highland Greens Farm",
+        planName: "Commercial Enterprise",
+        reactivateUrl: `${base}/settings/organization/billing`,
+      });
+    case "payment_success":
+      return paymentSuccessTemplate({
+        userName: "John Kiprono",
+        organizationName: "Highland Greens Farm",
+        planName: "Commercial Enterprise",
+        amount: "12,000.00",
+        currency: "KES",
+        invoiceUrl: `${base}/invoices/sample`,
+      });
+    case "payment_failed":
+      return paymentFailedTemplate({
+        userName: "John Kiprono",
+        organizationName: "Highland Greens Farm",
+        planName: "Commercial Enterprise",
+        amount: "12,000.00",
+        currency: "KES",
+        failureReason: "Insufficient M-Pesa balance",
+        retryUrl: `${base}/settings/organization/billing`,
+      });
+    case "plan_changed":
+      return planChangedTemplate({
+        userName: "John Kiprono",
+        organizationName: "Highland Greens Farm",
+        oldPlanName: "Starter Farm",
+        newPlanName: "Commercial Enterprise",
+        billingUrl: `${base}/settings/organization/billing`,
+      });
+    case "usage_limit_warning":
+      return usageLimitWarningTemplate({
+        userName: "John Kiprono",
+        organizationName: "Highland Greens Farm",
+        metricName: "Connected IoT Devices",
+        currentUsage: 9,
+        maxLimit: 10,
+        percentUsed: 90,
+        upgradeUrl: `${base}/settings/organization/billing`,
+      });
+    case "farm_digest":
+      return farmDigestTemplate({
+        userName: "John Kiprono",
+        farmName: "Highland Greens",
+        periodLabel: "Weekly Farm Digest",
+        highlights: [
+          { title: "Soil Moisture Levels", description: "Average moisture maintained at optimal 42%", metric: "42%" },
+          { title: "Milk Production", description: "Produced 1,280 liters across all milking cows", metric: "1,280 L" },
+          { title: "Crop Stage", description: "Maize Section 2 moved into grain filling stage" },
+        ],
+        dashboardUrl: `${base}/dashboard`,
+      });
+    case "regional_insight":
+      return regionalAgriInsightTemplate({
+        userName: "John Kiprono",
+        regionName: "Mount Kenya Central",
+        weatherSummary: "Expected light rain (15-20mm) over Wednesday through Friday, temperatures 16°C - 24°C.",
+        cropInsights: "Favorable conditions for foliar nutrient spraying before Thursday rains.",
+        pestAlerts: "Increased Fall Armyworm activity detected across neighboring maize corridors.",
+        marketInsights: "Local dry maize wholesale price up 6% this week to KES 3,800 per 90kg bag.",
+        portalUrl: `${base}/intelligence`,
+      });
+    case "platform_announcement":
+      return platformAnnouncementTemplate({
+        userName: "John Kiprono",
+        subject: "Scheduled Platform Maintenance Notice",
+        message: "We will be performing scheduled performance optimizations this Sunday between 02:00 and 04:00 UTC.",
+        callToActionLabel: "View Status",
+        callToActionUrl: `${base}/status`,
+      });
+    case "security_alert":
+      return securityAlertTemplate({
+        userName: "John Kiprono",
+        alertTitle: "New Sign-in Detected",
+        message: "A new session was initiated on your account from Chrome on Windows (Nairobi, Kenya).",
+      });
+    default:
+      return {
+        subject: "KiliSense Notification",
+        html: `<p>This is a preview of the ${templateKey} template.</p>`,
+      };
+  }
+}
+
+
 

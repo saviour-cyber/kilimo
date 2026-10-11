@@ -1643,4 +1643,43 @@ export const userEmailPreferences = mysqlTable("userEmailPreferences", {
 export type UserEmailPreference = typeof userEmailPreferences.$inferSelect;
 export type InsertUserEmailPreference = typeof userEmailPreferences.$inferInsert;
 
+export const emailAutomationRules = mysqlTable("emailAutomationRules", {
+  id: varchar("id", { length: 64 }).primaryKey(), // e.g. "trial_ending_warnings", "trial_expired_notice", etc.
+  name: varchar("name", { length: 128 }).notNull(),
+  description: text("description").notNull(),
+  category: mysqlEnum("category", ["billing", "agricultural", "system"]).default("billing").notNull(),
+  isEnabled: boolean("isEnabled").default(true).notNull(),
+  isSystemEnforced: boolean("isSystemEnforced").default(false).notNull(), // Cannot be paused if true
+  triggerType: varchar("triggerType", { length: 64 }).notNull(), // "scheduled_cron", "lifecycle_event", etc.
+  cronExpression: varchar("cronExpression", { length: 64 }),
+  timeZone: varchar("timeZone", { length: 64 }).default("UTC").notNull(),
+  templateKey: varchar("templateKey", { length: 64 }).notNull(),
+  recipientRule: text("recipientRule").notNull(),
+  lastExecutedAt: timestamp("lastExecutedAt"),
+  lastExecutionStatus: varchar("lastExecutionStatus", { length: 32 }),
+  lastExecutionMessage: text("lastExecutionMessage"),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type EmailAutomationRule = typeof emailAutomationRules.$inferSelect;
+export type InsertEmailAutomationRule = typeof emailAutomationRules.$inferInsert;
+
+export const regionalBriefingConfigs = mysqlTable("regionalBriefingConfigs", {
+  id: int("id").autoincrement().primaryKey(),
+  regionName: varchar("regionName", { length: 128 }).notNull(), // e.g. "Mount Kenya Central", "Rift Valley"
+  county: varchar("county", { length: 64 }).notNull(),
+  frequency: mysqlEnum("frequency", ["daily", "weekly", "biweekly"]).default("weekly").notNull(),
+  minScanThreshold: int("minScanThreshold").default(3).notNull(), // Minimum anonymous scans to generate pest warning
+  requireWeatherData: boolean("requireWeatherData").default(true).notNull(),
+  requireMarketData: boolean("requireMarketData").default(false).notNull(),
+  isEnabled: boolean("isEnabled").default(true).notNull(),
+  lastDispatchedAt: timestamp("lastDispatchedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type RegionalBriefingConfig = typeof regionalBriefingConfigs.$inferSelect;
+export type InsertRegionalBriefingConfig = typeof regionalBriefingConfigs.$inferInsert;
+
+
 

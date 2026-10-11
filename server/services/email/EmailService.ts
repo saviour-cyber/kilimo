@@ -44,6 +44,10 @@ export class EmailService {
     console.log(`[EmailService] Initialized with provider: ${provider.name}`);
   }
 
+  public getProviderName(): string {
+    return this.provider.name;
+  }
+
   // ── Low-level send ───────────────────────────────────────────────────────────
 
   async send(options: SendEmailOptions): Promise<SendEmailResult> {

@@ -71,6 +71,13 @@
       "when": 1788700000000,
       "tag": "0009_email_automation",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1788800000000,
+      "tag": "0010_email_rules_and_briefings",
+      "breakpoints": true
     }
   ]
 }
