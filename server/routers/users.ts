@@ -65,4 +65,76 @@ export const usersRouter = router({
 
       return { success: true };
     }),
+
+  getEmailPreferences: protectedProcedure.query(async ({ ctx }) => {
+    const { getDb } = await import("../db");
+    const { userEmailPreferences } = await import("../../drizzle/schema");
+    const db = await getDb();
+    if (!db) throw new Error("Database unavailable");
+
+    const [pref] = await db
+      .select()
+      .from(userEmailPreferences)
+      .where(eq(userEmailPreferences.userId, ctx.user.id))
+      .limit(1);
+
+    if (!pref) {
+      return {
+        billingEmails: true,
+        agriInsightEmails: true,
+        farmDigestEmails: true,
+        securityEmails: true,
+      };
+    }
+
+    return {
+      billingEmails: pref.billingEmails,
+      agriInsightEmails: pref.agriInsightEmails,
+      farmDigestEmails: pref.farmDigestEmails,
+      securityEmails: pref.securityEmails,
+    };
+  }),
+
+  updateEmailPreferences: protectedProcedure
+    .input(z.object({
+      billingEmails: z.boolean().optional(),
+      agriInsightEmails: z.boolean().optional(),
+      farmDigestEmails: z.boolean().optional(),
+      securityEmails: z.boolean().optional(),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const { getDb } = await import("../db");
+      const { userEmailPreferences } = await import("../../drizzle/schema");
+      const db = await getDb();
+      if (!db) throw new Error("Database unavailable");
+
+      const [existing] = await db
+        .select()
+        .from(userEmailPreferences)
+        .where(eq(userEmailPreferences.userId, ctx.user.id))
+        .limit(1);
+
+      if (existing) {
+        await db
+          .update(userEmailPreferences)
+          .set({
+            ...(input.billingEmails !== undefined ? { billingEmails: input.billingEmails } : {}),
+            ...(input.agriInsightEmails !== undefined ? { agriInsightEmails: input.agriInsightEmails } : {}),
+            ...(input.farmDigestEmails !== undefined ? { farmDigestEmails: input.farmDigestEmails } : {}),
+            ...(input.securityEmails !== undefined ? { securityEmails: input.securityEmails } : {}),
+          })
+          .where(eq(userEmailPreferences.userId, ctx.user.id));
+      } else {
+        await db.insert(userEmailPreferences).values({
+          userId: ctx.user.id,
+          billingEmails: input.billingEmails ?? true,
+          agriInsightEmails: input.agriInsightEmails ?? true,
+          farmDigestEmails: input.farmDigestEmails ?? true,
+          securityEmails: input.securityEmails ?? true,
+        });
+      }
+
+      return { success: true };
+    }),
 });
+

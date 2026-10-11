@@ -22,7 +22,7 @@ export async function getDb() {
       });
       _db = drizzle(_pool);
 
-      // Self-healing: verify isSuspended column on users table exists
+      // Self-healing: verify isSuspended column and email automation tables
       (async () => {
         try {
           const [cols]: any = await _pool.query(
@@ -33,6 +33,37 @@ export async function getDb() {
             await _pool.query("ALTER TABLE `users` ADD COLUMN `isSuspended` tinyint(1) NOT NULL DEFAULT 0");
             console.log("[Database] Successfully added 'isSuspended' column to users table.");
           }
+
+          // Ensure email automation tables exist
+          await _pool.query(`
+            CREATE TABLE IF NOT EXISTS \`emailAutomationLogs\` (
+              \`id\` int AUTO_INCREMENT NOT NULL,
+              \`organizationId\` int,
+              \`userId\` int,
+              \`recipientEmail\` varchar(320) NOT NULL,
+              \`automationType\` varchar(64) NOT NULL,
+              \`status\` enum('sent','failed','skipped') NOT NULL DEFAULT 'sent',
+              \`errorMessage\` text,
+              \`metadata\` json,
+              \`sentAt\` timestamp NOT NULL DEFAULT (now()),
+              PRIMARY KEY (\`id\`)
+            )
+          `);
+
+          await _pool.query(`
+            CREATE TABLE IF NOT EXISTS \`userEmailPreferences\` (
+              \`userId\` int NOT NULL,
+              \`billingEmails\` boolean NOT NULL DEFAULT true,
+              \`agriInsightEmails\` boolean NOT NULL DEFAULT true,
+              \`farmDigestEmails\` boolean NOT NULL DEFAULT true,
+              \`securityEmails\` boolean NOT NULL DEFAULT true,
+              \`unsubscribeToken\` varchar(64),
+              \`createdAt\` timestamp NOT NULL DEFAULT (now()),
+              \`updatedAt\` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+              PRIMARY KEY (\`userId\`),
+              UNIQUE KEY \`userEmailPreferences_unsubscribeToken_unique\` (\`unsubscribeToken\`)
+            )
+          `);
         } catch (e: any) {
           console.warn("[Database] Schema check warning:", e.message);
         }

@@ -64,6 +64,13 @@
       "when": 1788616292142,
       "tag": "0008_fresh_ultimo",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1788700000000,
+      "tag": "0009_email_automation",
+      "breakpoints": true
     }
   ]
 }

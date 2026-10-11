@@ -1612,3 +1612,35 @@ export const aquaMortality = mysqlTable("aquaMortality", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
+// ─── Automated Communications & Email Intelligence ───────────────────────────
+
+export const emailAutomationLogs = mysqlTable("emailAutomationLogs", {
+  id: int("id").autoincrement().primaryKey(),
+  organizationId: int("organizationId"),
+  userId: int("userId"),
+  recipientEmail: varchar("recipientEmail", { length: 320 }).notNull(),
+  automationType: varchar("automationType", { length: 64 }).notNull(), // 'trial_ending_7d', 'trial_ending_3d', 'trial_ending_1d', 'trial_expired', 'past_due', 'suspended', 'agri_digest', etc.
+  status: mysqlEnum("status", ["sent", "failed", "skipped"]).default("sent").notNull(),
+  errorMessage: text("errorMessage"),
+  metadata: json("metadata"),
+  sentAt: timestamp("sentAt").defaultNow().notNull(),
+});
+
+export type EmailAutomationLog = typeof emailAutomationLogs.$inferSelect;
+export type InsertEmailAutomationLog = typeof emailAutomationLogs.$inferInsert;
+
+export const userEmailPreferences = mysqlTable("userEmailPreferences", {
+  userId: int("userId").primaryKey(), // 1:1 with users.id
+  billingEmails: boolean("billingEmails").default(true).notNull(),
+  agriInsightEmails: boolean("agriInsightEmails").default(true).notNull(),
+  farmDigestEmails: boolean("farmDigestEmails").default(true).notNull(),
+  securityEmails: boolean("securityEmails").default(true).notNull(),
+  unsubscribeToken: varchar("unsubscribeToken", { length: 64 }).unique(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type UserEmailPreference = typeof userEmailPreferences.$inferSelect;
+export type InsertUserEmailPreference = typeof userEmailPreferences.$inferInsert;
+
+

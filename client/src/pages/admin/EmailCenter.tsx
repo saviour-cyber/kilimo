@@ -18,14 +18,18 @@ export default function EmailCenter() {
   
   // Queries
   const { data: logs, isLoading: isLogsLoading } = trpc.admin.getPlatformEmailLogs.useQuery();
+  const { data: automationLogs, isLoading: isAutoLogsLoading } = trpc.admin.getEmailAutomationLogs.useQuery();
   const { data: recipients, isLoading: isRecipientsLoading } = trpc.admin.getEmailRecipients.useQuery();
   
   // Mutations
   const sendEmailMutation = trpc.admin.sendPlatformEmail.useMutation();
+  const sendTestEmailMutation = trpc.admin.sendTestEmail.useMutation();
 
   // State
   const [activeTab, setActiveTab] = useState("compose");
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [testEmailAddress, setTestEmailAddress] = useState("");
+  const [testTemplate, setTestTemplate] = useState<any>("trial_ending_3d");
   const [formData, setFormData] = useState({
     recipientGroup: "", // 'all_users', 'all_farms', or specific IDs
     templateKey: "platform_announcement" as "platform_announcement" | "payment_reminder" | "security_alert" | "custom",
@@ -96,7 +100,8 @@ export default function EmailCenter() {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="mb-4">
           <TabsTrigger value="compose" className="gap-2"><Send className="w-4 h-4" /> Compose</TabsTrigger>
-          <TabsTrigger value="history" className="gap-2"><RefreshCw className="w-4 h-4" /> History</TabsTrigger>
+          <TabsTrigger value="automations" className="gap-2"><Mail className="w-4 h-4" /> Automated Triggers</TabsTrigger>
+          <TabsTrigger value="history" className="gap-2"><RefreshCw className="w-4 h-4" /> Delivery Logs</TabsTrigger>
         </TabsList>
 
         {/* Compose Tab */}
@@ -168,6 +173,174 @@ export default function EmailCenter() {
                   <Send className="w-4 h-4 mr-2" /> Prepare Email
                 </Button>
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Automations Tab */}
+        <TabsContent value="automations" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Active Triggers Card */}
+            <Card className="md:col-span-2 border-border shadow-sm">
+              <CardHeader>
+                <CardTitle>Automated Rules</CardTitle>
+                <CardDescription>Scheduled jobs and event-driven communications active across KiliSense.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="divide-y divide-border rounded-md border border-border">
+                  <div className="p-4 flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold text-sm">Trial Ending Warnings (7d, 3d, 1d)</p>
+                      <p className="text-xs text-muted-foreground">Dispatches warnings before trial expires, urging upgrade with direct billing link.</p>
+                    </div>
+                    <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none">Active (Daily 08:00 UTC)</Badge>
+                  </div>
+
+                  <div className="p-4 flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold text-sm">Trial Expiration Notice</p>
+                      <p className="text-xs text-muted-foreground">Sent immediately when trial concludes, reassuring data safety and offering renewal.</p>
+                    </div>
+                    <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none">Active (Enforcer)</Badge>
+                  </div>
+
+                  <div className="p-4 flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold text-sm">Subscription Past Due (7-Day Grace)</p>
+                      <p className="text-xs text-muted-foreground">Notifies organization owners of failed renewals before grace period lapses.</p>
+                    </div>
+                    <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none">Active (Enforcer)</Badge>
+                  </div>
+
+                  <div className="p-4 flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold text-sm">Subscription Suspended</p>
+                      <p className="text-xs text-muted-foreground">Sent when grace period expires, providing immediate reactivation link.</p>
+                    </div>
+                    <Badge className="bg-rose-100 text-rose-700 hover:bg-rose-100 border-none">Active (Enforcer)</Badge>
+                  </div>
+
+                  <div className="p-4 flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold text-sm">Regional Agronomy Briefings & Digests</p>
+                      <p className="text-xs text-muted-foreground">Anonymous regional weather, pest outbreaks, and market trends.</p>
+                    </div>
+                    <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none">Enabled</Badge>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Test Send Card */}
+            <Card className="border-border shadow-sm">
+              <CardHeader>
+                <CardTitle>Send Test Email</CardTitle>
+                <CardDescription>Deliver a live branded sample to verify email rendering.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-xs font-medium text-muted-foreground">Target Email</label>
+                  <Input 
+                    value={testEmailAddress} 
+                    onChange={e => setTestEmailAddress(e.target.value)} 
+                    placeholder="admin@kilisense.co.ke" 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-medium text-muted-foreground">Select Template</label>
+                  <Select value={testTemplate} onValueChange={setTestTemplate}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="trial_started">Trial Started</SelectItem>
+                      <SelectItem value="trial_ending_7d">Trial Ending (7 Days)</SelectItem>
+                      <SelectItem value="trial_ending_3d">Trial Ending (3 Days)</SelectItem>
+                      <SelectItem value="trial_ending_1d">Trial Ending (1 Day)</SelectItem>
+                      <SelectItem value="trial_expired">Trial Expired</SelectItem>
+                      <SelectItem value="subscription_past_due">Subscription Past Due</SelectItem>
+                      <SelectItem value="subscription_suspended">Subscription Suspended</SelectItem>
+                      <SelectItem value="payment_success">Payment Confirmed</SelectItem>
+                      <SelectItem value="payment_failed">Payment Failed</SelectItem>
+                      <SelectItem value="plan_changed">Plan Changed</SelectItem>
+                      <SelectItem value="usage_limit_warning">Usage Limit Warning</SelectItem>
+                      <SelectItem value="farm_digest">Farm Weekly Digest</SelectItem>
+                      <SelectItem value="regional_insight">Regional Agronomy Briefing</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button 
+                  className="w-full"
+                  disabled={!testEmailAddress || sendTestEmailMutation.isPending}
+                  onClick={async () => {
+                    try {
+                      const res = await sendTestEmailMutation.mutateAsync({
+                        targetEmail: testEmailAddress,
+                        templateKey: testTemplate,
+                      });
+                      if (res.success) {
+                        toast.success(`Test email sent successfully! Message ID: ${res.messageId || 'OK'}`);
+                        utils.admin.getPlatformEmailLogs.invalidate();
+                      } else {
+                        toast.error(`Send failed: ${res.error || 'Unknown error'}`);
+                      }
+                    } catch (err: any) {
+                      toast.error(err.message);
+                    }
+                  }}
+                >
+                  {sendTestEmailMutation.isPending && <RefreshCw className="w-4 h-4 mr-2 animate-spin" />}
+                  <Send className="w-4 h-4 mr-2" /> Dispatch Sample
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Automated Dispatch History */}
+          <Card className="border-border shadow-sm">
+            <CardHeader>
+              <CardTitle>Recent Automated Dispatches</CardTitle>
+              <CardDescription>Dedup-guarded automated emails triggered by cron and background workers.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Organization</TableHead>
+                    <TableHead>Recipient</TableHead>
+                    <TableHead>Automation Type</TableHead>
+                    <TableHead>Date Sent</TableHead>
+                    <TableHead className="text-right">Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {isAutoLogsLoading ? (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center py-6 text-muted-foreground">Loading automated log...</TableCell>
+                    </TableRow>
+                  ) : automationLogs?.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center py-6 text-muted-foreground">No automated emails dispatched yet.</TableCell>
+                    </TableRow>
+                  ) : (
+                    automationLogs?.map((log) => (
+                      <TableRow key={log.id}>
+                        <TableCell className="font-medium">{log.orgName || "System"}</TableCell>
+                        <TableCell className="text-muted-foreground">{log.recipientEmail}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="text-xs bg-muted text-muted-foreground font-normal capitalize">
+                            {log.automationType.replace(/_/g, " ")}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-muted-foreground text-sm">
+                          {format(new Date(log.sentAt), "MMM d, yyyy h:mm a")}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {getStatusBadge(log.status)}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
         </TabsContent>

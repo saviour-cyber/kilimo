@@ -343,3 +343,265 @@ export function trialStartedEmailTemplate(ctx: {
   return { subject, html, text };
 }
 
+export function trialEndingTemplate(ctx: {
+  userName: string;
+  organizationName: string;
+  planName: string;
+  daysRemaining: number;
+  expiresAt: string;
+  billingUrl: string;
+}): { subject: string; html: string; text: string } {
+  const urgencyWord = ctx.daysRemaining === 1 ? "tomorrow" : `in ${ctx.daysRemaining} days`;
+  const subject = `Reminder: Your ${ctx.planName} trial ends ${urgencyWord}`;
+  const html = shell(
+    `<h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:${BRAND.textPrimary};">Trial ending soon</h1>
+    <p style="margin:0 0 20px;font-size:16px;color:${BRAND.textSecondary};line-height:1.6;">
+      Hi ${ctx.userName}, your free trial of the <strong>${ctx.planName}</strong> plan for <strong>${ctx.organizationName}</strong> will expire ${urgencyWord} on <strong>${ctx.expiresAt}</strong>.
+    </p>
+    ${infoBox(`To ensure uninterrupted access to your farm records, AI crop insights, and IoT monitoring, please choose a subscription plan before your trial ends.`, BRAND.warning)}
+    ${button("Upgrade & Keep Access", ctx.billingUrl)}
+    ${divider}
+    <p style="margin:0;font-size:13px;color:${BRAND.textMuted};">
+      Need assistance or custom billing options? Reply directly to this email.
+    </p>`,
+    `Your KiliSense trial expires ${urgencyWord}. Keep your farm data running.`
+  );
+  const text = `Hi ${ctx.userName},\n\nYour trial for ${ctx.organizationName} (${ctx.planName}) ends ${urgencyWord} on ${ctx.expiresAt}.\n\nUpgrade here: ${ctx.billingUrl}`;
+  return { subject, html, text };
+}
+
+export function trialExpiredTemplate(ctx: {
+  userName: string;
+  organizationName: string;
+  planName: string;
+  billingUrl: string;
+}): { subject: string; html: string; text: string } {
+  const subject = `Your KiliSense trial has expired`;
+  const html = shell(
+    `<h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:${BRAND.textPrimary};">Your trial has ended</h1>
+    <p style="margin:0 0 20px;font-size:16px;color:${BRAND.textSecondary};line-height:1.6;">
+      Hi ${ctx.userName}, the trial period for <strong>${ctx.organizationName}</strong> (${ctx.planName}) has ended.
+    </p>
+    ${infoBox(`Your farm data and historical records are safely preserved, but premium features such as real-time IoT alerts and automated disease scans are paused until you activate a subscription.`, BRAND.warning)}
+    ${button("Reactivate Subscription", ctx.billingUrl)}
+    ${divider}
+    <p style="margin:0;font-size:13px;color:${BRAND.textMuted};">
+      You can select from affordable monthly or annual plans anytime to restore full functionality.
+    </p>`,
+    `Your trial has ended. Reactivate now to restore full access.`
+  );
+  const text = `Hi ${ctx.userName},\n\nThe trial for ${ctx.organizationName} has ended. Your records are safe. Reactivate anytime: ${ctx.billingUrl}`;
+  return { subject, html, text };
+}
+
+export function subscriptionPastDueTemplate(ctx: {
+  userName: string;
+  organizationName: string;
+  planName: string;
+  amount?: string;
+  dueDate?: string;
+  billingUrl: string;
+}): { subject: string; html: string; text: string } {
+  const subject = `Payment Due: KiliSense Subscription`;
+  const html = shell(
+    `<h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:${BRAND.danger};">Payment Needed</h1>
+    <p style="margin:0 0 20px;font-size:16px;color:${BRAND.textSecondary};line-height:1.6;">
+      Hi ${ctx.userName}, we were unable to process the renewal payment for <strong>${ctx.organizationName}</strong> (${ctx.planName}).
+    </p>
+    ${infoBox(`Your account has a <strong>7-day grace period</strong> before access is suspended. Please update your payment method or complete the payment to maintain active service.`, BRAND.danger)}
+    ${button("Complete Payment", ctx.billingUrl, BRAND.danger)}
+    ${divider}
+    <p style="margin:0;font-size:13px;color:${BRAND.textMuted};">
+      If you already submitted this payment via M-Pesa or wire transfer, please reply with your transaction reference.
+    </p>`,
+    `Action required: Payment due for ${ctx.organizationName}.`
+  );
+  const text = `Hi ${ctx.userName},\n\nPayment for ${ctx.organizationName} (${ctx.planName}) is past due. Update your payment within 7 days: ${ctx.billingUrl}`;
+  return { subject, html, text };
+}
+
+export function subscriptionSuspendedTemplate(ctx: {
+  userName: string;
+  organizationName: string;
+  planName: string;
+  reactivateUrl: string;
+}): { subject: string; html: string; text: string } {
+  const subject = `Important: Your KiliSense subscription is suspended`;
+  const html = shell(
+    `<h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:${BRAND.danger};">Subscription Suspended</h1>
+    <p style="margin:0 0 20px;font-size:16px;color:${BRAND.textSecondary};line-height:1.6;">
+      Hi ${ctx.userName}, the subscription for <strong>${ctx.organizationName}</strong> (${ctx.planName}) has been suspended due to overdue payment.
+    </p>
+    ${infoBox(`Your team members cannot access farm workflows or IoT device telemetry while suspended. You can immediately restore access by completing payment.`, BRAND.danger)}
+    ${button("Restore Access Now", ctx.reactivateUrl, BRAND.primary)}
+    ${divider}
+    <p style="margin:0;font-size:13px;color:${BRAND.textMuted};">
+      Need billing support? Contact billing@kilisense.co.ke.
+    </p>`,
+    `Your subscription is suspended. Reconnect now.`
+  );
+  const text = `Hi ${ctx.userName},\n\nSubscription for ${ctx.organizationName} is suspended due to overdue payment. Restore: ${ctx.reactivateUrl}`;
+  return { subject, html, text };
+}
+
+export function paymentSuccessTemplate(ctx: {
+  userName: string;
+  organizationName: string;
+  planName: string;
+  amount: string;
+  currency: string;
+  invoiceUrl?: string;
+}): { subject: string; html: string; text: string } {
+  const subject = `Payment Confirmed: ${ctx.planName} Subscription`;
+  const html = shell(
+    `<h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:${BRAND.textPrimary};">Thank you for your payment! ✅</h1>
+    <p style="margin:0 0 20px;font-size:16px;color:${BRAND.textSecondary};line-height:1.6;">
+      Hi ${ctx.userName}, we have received your payment of <strong>${ctx.currency} ${ctx.amount}</strong> for <strong>${ctx.organizationName}</strong>.
+    </p>
+    ${infoBox(`Your <strong>${ctx.planName}</strong> plan is fully active. All farm sensors, automated telemetry, and AI modules are enabled.`, BRAND.success)}
+    ${ctx.invoiceUrl ? button("View Receipt / Invoice", ctx.invoiceUrl) : ""}
+    ${divider}
+    <p style="margin:0;font-size:13px;color:${BRAND.textMuted};">
+      Thank you for empowering modern agriculture with KiliSense.
+    </p>`,
+    `Payment receipt: ${ctx.currency} ${ctx.amount} received for ${ctx.organizationName}.`
+  );
+  const text = `Hi ${ctx.userName},\n\nPayment of ${ctx.currency} ${ctx.amount} for ${ctx.organizationName} (${ctx.planName}) received successfully.`;
+  return { subject, html, text };
+}
+
+export function paymentFailedTemplate(ctx: {
+  userName: string;
+  organizationName: string;
+  planName: string;
+  amount: string;
+  currency: string;
+  retryUrl: string;
+  failureReason?: string;
+}): { subject: string; html: string; text: string } {
+  const subject = `Payment Unsuccessful: KiliSense ${ctx.planName}`;
+  const html = shell(
+    `<h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:${BRAND.danger};">Payment Attempt Failed</h1>
+    <p style="margin:0 0 20px;font-size:16px;color:${BRAND.textSecondary};line-height:1.6;">
+      Hi ${ctx.userName}, the payment of <strong>${ctx.currency} ${ctx.amount}</strong> for <strong>${ctx.organizationName}</strong> could not be processed.
+    </p>
+    ${ctx.failureReason ? infoBox(`Reason: <em>${ctx.failureReason}</em>`, BRAND.warning) : ""}
+    ${button("Retry Payment", ctx.retryUrl, BRAND.danger)}
+    ${divider}
+    <p style="margin:0;font-size:13px;color:${BRAND.textMuted};">
+      Please check your card or M-Pesa balance and attempt payment again.
+    </p>`,
+    `Payment unsuccessful for ${ctx.organizationName}. Please retry.`
+  );
+  const text = `Hi ${ctx.userName},\n\nPayment attempt failed for ${ctx.organizationName}. Retry here: ${ctx.retryUrl}`;
+  return { subject, html, text };
+}
+
+export function planChangedTemplate(ctx: {
+  userName: string;
+  organizationName: string;
+  oldPlanName: string;
+  newPlanName: string;
+  billingUrl: string;
+}): { subject: string; html: string; text: string } {
+  const subject = `Your KiliSense Plan has been updated to ${ctx.newPlanName}`;
+  const html = shell(
+    `<h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:${BRAND.textPrimary};">Plan Updated</h1>
+    <p style="margin:0 0 20px;font-size:16px;color:${BRAND.textSecondary};line-height:1.6;">
+      Hi ${ctx.userName}, the subscription plan for <strong>${ctx.organizationName}</strong> was successfully switched from <strong>${ctx.oldPlanName}</strong> to <strong>${ctx.newPlanName}</strong>.
+    </p>
+    ${infoBox(`Your new entitlements and usage caps are active immediately across all farms and team members.`)}
+    ${button("Review Subscription Details", ctx.billingUrl)}`,
+    `Plan updated to ${ctx.newPlanName} for ${ctx.organizationName}.`
+  );
+  const text = `Hi ${ctx.userName},\n\nYour plan for ${ctx.organizationName} was updated to ${ctx.newPlanName}.\n\nReview: ${ctx.billingUrl}`;
+  return { subject, html, text };
+}
+
+export function usageLimitWarningTemplate(ctx: {
+  userName: string;
+  organizationName: string;
+  metricName: string;
+  currentUsage: number;
+  maxLimit: number;
+  percentUsed: number;
+  upgradeUrl: string;
+}): { subject: string; html: string; text: string } {
+  const subject = `Usage Alert: You have used ${ctx.percentUsed}% of your ${ctx.metricName} limit`;
+  const html = shell(
+    `<h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:${BRAND.textPrimary};">Approaching Usage Limit</h1>
+    <p style="margin:0 0 20px;font-size:16px;color:${BRAND.textSecondary};line-height:1.6;">
+      Hi ${ctx.userName}, <strong>${ctx.organizationName}</strong> has reached <strong>${ctx.currentUsage} / ${ctx.maxLimit}</strong> (${ctx.percentUsed}%) of its monthly allowance for <strong>${ctx.metricName}</strong>.
+    </p>
+    ${infoBox(`To avoid disruptions when adding more devices, scanning crops, or exporting reports, consider upgrading your plan.`, BRAND.warning)}
+    ${button("Upgrade Plan Allowance", ctx.upgradeUrl)}`,
+    `You have used ${ctx.percentUsed}% of your ${ctx.metricName} quota.`
+  );
+  const text = `Hi ${ctx.userName},\n\n${ctx.organizationName} reached ${ctx.percentUsed}% of ${ctx.metricName} limit (${ctx.currentUsage}/${ctx.maxLimit}). Upgrade: ${ctx.upgradeUrl}`;
+  return { subject, html, text };
+}
+
+export function farmDigestTemplate(ctx: {
+  userName: string;
+  farmName: string;
+  periodLabel: string;
+  highlights: Array<{ title: string; description: string; metric?: string }>;
+  dashboardUrl: string;
+}): { subject: string; html: string; text: string } {
+  const subject = `${ctx.farmName} — ${ctx.periodLabel}`;
+  const rows = ctx.highlights
+    .map(
+      (h) => `<tr>
+        <td style="padding:12px;border-bottom:1px solid ${BRAND.border};">
+          <strong style="color:${BRAND.textPrimary};display:block;font-size:14px;">${h.title}</strong>
+          <span style="color:${BRAND.textSecondary};font-size:13px;">${h.description}</span>
+        </td>
+        ${h.metric ? `<td style="padding:12px;border-bottom:1px solid ${BRAND.border};text-align:right;font-weight:700;color:${BRAND.primaryDark};">${h.metric}</td>` : ""}
+      </tr>`
+    )
+    .join("");
+
+  const html = shell(
+    `<h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:${BRAND.textPrimary};">${ctx.farmName} Digest</h1>
+    <p style="margin:0 0 16px;font-size:14px;color:${BRAND.textSecondary};">${ctx.periodLabel}</p>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0;background-color:${BRAND.card};border:1px solid ${BRAND.border};border-radius:8px;">
+      <tbody>${rows}</tbody>
+    </table>
+    ${button("Open Farm Dashboard", ctx.dashboardUrl)}`,
+    `Your agricultural summary for ${ctx.farmName}.`
+  );
+  const text = `Hi ${ctx.userName},\n\nFarm Summary for ${ctx.farmName} (${ctx.periodLabel}):\n\n` +
+    ctx.highlights.map(h => `- ${h.title}: ${h.description} ${h.metric ? `(${h.metric})` : ''}`).join('\n') +
+    `\n\nDashboard: ${ctx.dashboardUrl}`;
+  return { subject, html, text };
+}
+
+export function regionalAgriInsightTemplate(ctx: {
+  userName: string;
+  regionName: string;
+  weatherSummary?: string;
+  cropInsights?: string;
+  pestAlerts?: string;
+  marketInsights?: string;
+  portalUrl: string;
+}): { subject: string; html: string; text: string } {
+  const subject = `Agricultural Insights for ${ctx.regionName}`;
+  const html = shell(
+    `<h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:${BRAND.textPrimary};">Regional Agronomy Briefing</h1>
+    <p style="margin:0 0 16px;font-size:14px;color:${BRAND.textSecondary};">Aggregated, anonymous regional patterns for <strong>${ctx.regionName}</strong></p>
+    ${ctx.weatherSummary ? infoBox(`<strong>🌦️ Weather Outlook:</strong> ${ctx.weatherSummary}`, BRAND.primary) : ""}
+    ${ctx.pestAlerts ? infoBox(`<strong>⚠️ Pest & Pathogen Warning:</strong> ${ctx.pestAlerts}`, BRAND.danger) : ""}
+    ${ctx.cropInsights ? `<p style="font-size:14px;color:${BRAND.textSecondary};line-height:1.6;margin:16px 0;"><strong>🌱 Crop Advisory:</strong> ${ctx.cropInsights}</p>` : ""}
+    ${ctx.marketInsights ? `<p style="font-size:14px;color:${BRAND.textSecondary};line-height:1.6;margin:16px 0;"><strong>📊 Market Trend:</strong> ${ctx.marketInsights}</p>` : ""}
+    ${button("Explore Intelligence Center", ctx.portalUrl)}
+    ${divider}
+    <p style="margin:0;font-size:12px;color:${BRAND.textMuted};">
+      Insights are generated from regional agronomic models. No farmer private information or individual scan history is ever disclosed.
+    </p>`,
+    `Regional insights for ${ctx.regionName}`
+  );
+  const text = `Regional Agronomy Briefing for ${ctx.regionName}\n\nWeather: ${ctx.weatherSummary || 'N/A'}\nPests: ${ctx.pestAlerts || 'N/A'}\nInsights: ${ctx.cropInsights || 'N/A'}\n\nView more: ${ctx.portalUrl}`;
+  return { subject, html, text };
+}
+
+

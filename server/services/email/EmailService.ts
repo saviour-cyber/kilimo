@@ -1,4 +1,4 @@
-﻿// ─── EmailService ─────────────────────────────────────────────────────────────
+// ─── EmailService ─────────────────────────────────────────────────────────────
 // Provider-agnostic email service for KiliSense.
 // Switching providers requires only an environment variable change.
 //
@@ -21,9 +21,20 @@ import {
   paymentReminderTemplate,
   securityAlertTemplate,
   trialStartedEmailTemplate,
+  trialEndingTemplate,
+  trialExpiredTemplate,
+  subscriptionPastDueTemplate,
+  subscriptionSuspendedTemplate,
+  paymentSuccessTemplate,
+  paymentFailedTemplate,
+  planChangedTemplate,
+  usageLimitWarningTemplate,
+  farmDigestTemplate,
+  regionalAgriInsightTemplate,
 } from "./templates";
 import { getDb } from "../../db";
-import { platformEmailLogs } from "../../../drizzle/schema";
+import { platformEmailLogs, userEmailPreferences } from "../../../drizzle/schema";
+import { eq } from "drizzle-orm";
 
 export class EmailService {
   private provider: IEmailProvider;
@@ -202,6 +213,183 @@ export class EmailService {
     });
     return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "security_alert", senderId });
   }
+
+  // ── Automated Billing Helpers ──────────────────────────────────────────────
+
+  /** Send trial ending reminder (7d, 3d, 1d) */
+  async sendTrialEndingEmail(
+    to: { name: string; email: string },
+    ctx: { organizationName: string; planName: string; daysRemaining: number; expiresAt: string }
+  ) {
+    const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
+    const billingUrl = `${base}/settings/organization/billing`;
+    const tpl = trialEndingTemplate({
+      ...ctx,
+      userName: to.name,
+      billingUrl,
+    });
+    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: `trial_ending_${ctx.daysRemaining}d` });
+  }
+
+  /** Send trial expired email */
+  async sendTrialExpiredEmail(
+    to: { name: string; email: string },
+    ctx: { organizationName: string; planName: string }
+  ) {
+    const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
+    const billingUrl = `${base}/settings/organization/billing`;
+    const tpl = trialExpiredTemplate({
+      ...ctx,
+      userName: to.name,
+      billingUrl,
+    });
+    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "trial_expired" });
+  }
+
+  /** Send subscription past due notice */
+  async sendSubscriptionPastDueEmail(
+    to: { name: string; email: string },
+    ctx: { organizationName: string; planName: string; amount?: string; dueDate?: string }
+  ) {
+    const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
+    const billingUrl = `${base}/settings/organization/billing`;
+    const tpl = subscriptionPastDueTemplate({
+      ...ctx,
+      userName: to.name,
+      billingUrl,
+    });
+    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "subscription_past_due" });
+  }
+
+  /** Send subscription suspended notice */
+  async sendSubscriptionSuspendedEmail(
+    to: { name: string; email: string },
+    ctx: { organizationName: string; planName: string }
+  ) {
+    const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
+    const reactivateUrl = `${base}/settings/organization/billing`;
+    const tpl = subscriptionSuspendedTemplate({
+      ...ctx,
+      userName: to.name,
+      reactivateUrl,
+    });
+    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "subscription_suspended" });
+  }
+
+  /** Send payment success receipt */
+  async sendPaymentSuccessEmail(
+    to: { name: string; email: string },
+    ctx: { organizationName: string; planName: string; amount: string; currency: string; invoiceUrl?: string }
+  ) {
+    const tpl = paymentSuccessTemplate({
+      ...ctx,
+      userName: to.name,
+    });
+    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "payment_success" });
+  }
+
+  /** Send payment failed alert */
+  async sendPaymentFailedEmail(
+    to: { name: string; email: string },
+    ctx: { organizationName: string; planName: string; amount: string; currency: string; failureReason?: string }
+  ) {
+    const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
+    const retryUrl = `${base}/settings/organization/billing`;
+    const tpl = paymentFailedTemplate({
+      ...ctx,
+      userName: to.name,
+      retryUrl,
+    });
+    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "payment_failed" });
+  }
+
+  /** Send plan changed confirmation */
+  async sendPlanChangedEmail(
+    to: { name: string; email: string },
+    ctx: { organizationName: string; oldPlanName: string; newPlanName: string }
+  ) {
+    const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
+    const billingUrl = `${base}/settings/organization/billing`;
+    const tpl = planChangedTemplate({
+      ...ctx,
+      userName: to.name,
+      billingUrl,
+    });
+    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "plan_changed" });
+  }
+
+  /** Send usage quota warning */
+  async sendUsageLimitWarningEmail(
+    to: { name: string; email: string },
+    ctx: { organizationName: string; metricName: string; currentUsage: number; maxLimit: number; percentUsed: number }
+  ) {
+    const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
+    const upgradeUrl = `${base}/settings/organization/billing`;
+    const tpl = usageLimitWarningTemplate({
+      ...ctx,
+      userName: to.name,
+      upgradeUrl,
+    });
+    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "usage_limit_warning" });
+  }
+
+  // ── Agricultural Intelligence & Digest Helpers ─────────────────────────────
+
+  /** Send farm digest (weekly/monthly) */
+  async sendFarmDigestEmail(
+    to: { name: string; email: string },
+    ctx: { farmName: string; periodLabel: string; highlights: Array<{ title: string; description: string; metric?: string }> }
+  ) {
+    const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
+    const dashboardUrl = `${base}/dashboard`;
+    const tpl = farmDigestTemplate({
+      ...ctx,
+      userName: to.name,
+      dashboardUrl,
+    });
+    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "farm_digest" });
+  }
+
+  /** Send regional agronomy briefing */
+  async sendRegionalAgriInsightEmail(
+    to: { name: string; email: string },
+    ctx: { regionName: string; weatherSummary?: string; cropInsights?: string; pestAlerts?: string; marketInsights?: string }
+  ) {
+    const base = process.env.APP_BASE_URL ?? "https://kilisense.onrender.com";
+    const portalUrl = `${base}/intelligence`;
+    const tpl = regionalAgriInsightTemplate({
+      ...ctx,
+      userName: to.name,
+      portalUrl,
+    });
+    return this.send({ to, subject: tpl.subject, html: tpl.html, text: tpl.text, templateKey: "regional_insight" });
+  }
+
+  // ── User Preference Check ──────────────────────────────────────────────────
+
+  /** Check if a recipient has opted out of this email category */
+  async isUserOptedIn(userId: number, category: "billing" | "agri" | "digest" | "security"): Promise<boolean> {
+    try {
+      const db = await getDb();
+      if (!db) return true;
+      const [pref] = await db
+        .select()
+        .from(userEmailPreferences)
+        .where(eq(userEmailPreferences.userId, userId))
+        .limit(1);
+
+      if (!pref) return true; // Default is opted-in
+      if (category === "billing") return pref.billingEmails;
+      if (category === "agri") return pref.agriInsightEmails;
+      if (category === "digest") return pref.farmDigestEmails;
+      if (category === "security") return pref.securityEmails;
+      return true;
+    } catch (e) {
+      console.warn("[EmailService] Failed to check user email preference:", e);
+      return true;
+    }
+  }
 }
+
 
 

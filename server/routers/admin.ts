@@ -1,6 +1,6 @@
 import { adminProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
-import { users, organizations, farms, iotDevices, platformModules, platformServices, auditLogs, iotGateways, generatedReports, platformAnnouncements, platformEmailLogs, subscriptions, subscriptionPlans, subscriptionPayments } from "../../drizzle/schema";
+import { users, organizations, farms, iotDevices, platformModules, platformServices, auditLogs, iotGateways, generatedReports, platformAnnouncements, platformEmailLogs, subscriptions, subscriptionPlans, subscriptionPayments, emailAutomationLogs, userEmailPreferences } from "../../drizzle/schema";
 import { TRPCError } from "@trpc/server";
 import { provisionTrialSubscription } from "../services/subscriptions";
 import { sql, count, eq, desc, inArray, and, sum } from "drizzle-orm";
@@ -760,6 +760,152 @@ export const adminRouter = router({
       .orderBy(desc(platformEmailLogs.sentAt))
       .limit(100);
   }),
+
+  getEmailAutomationLogs: adminProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
+    return db
+      .select({
+        id: emailAutomationLogs.id,
+        organizationId: emailAutomationLogs.organizationId,
+        recipientEmail: emailAutomationLogs.recipientEmail,
+        automationType: emailAutomationLogs.automationType,
+        status: emailAutomationLogs.status,
+        errorMessage: emailAutomationLogs.errorMessage,
+        sentAt: emailAutomationLogs.sentAt,
+        orgName: organizations.name,
+      })
+      .from(emailAutomationLogs)
+      .leftJoin(organizations, eq(emailAutomationLogs.organizationId, organizations.id))
+      .orderBy(desc(emailAutomationLogs.sentAt))
+      .limit(100);
+  }),
+
+  sendTestEmail: adminProcedure
+    .input(z.object({
+      targetEmail: z.string().email(),
+      templateKey: z.enum([
+        "trial_started",
+        "trial_ending_7d",
+        "trial_ending_3d",
+        "trial_ending_1d",
+        "trial_expired",
+        "subscription_past_due",
+        "subscription_suspended",
+        "payment_success",
+        "payment_failed",
+        "plan_changed",
+        "usage_limit_warning",
+        "farm_digest",
+        "regional_insight",
+      ]),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const to = { name: ctx.user.name || "Admin Tester", email: input.targetEmail };
+      let result;
+
+      switch (input.templateKey) {
+        case "trial_started":
+          result = await emailService.sendTrialStartedEmail(to, {
+            organizationName: "Sample Farm Org",
+            planName: "Pro Agriculture",
+            trialDays: 14,
+            expiresAt: new Date(Date.now() + 14 * 86400000).toLocaleDateString(),
+          });
+          break;
+        case "trial_ending_7d":
+        case "trial_ending_3d":
+        case "trial_ending_1d": {
+          const days = input.templateKey === "trial_ending_7d" ? 7 : input.templateKey === "trial_ending_3d" ? 3 : 1;
+          result = await emailService.sendTrialEndingEmail(to, {
+            organizationName: "Sample Farm Org",
+            planName: "Pro Agriculture",
+            daysRemaining: days,
+            expiresAt: new Date(Date.now() + days * 86400000).toLocaleDateString(),
+          });
+          break;
+        }
+        case "trial_expired":
+          result = await emailService.sendTrialExpiredEmail(to, {
+            organizationName: "Sample Farm Org",
+            planName: "Pro Agriculture",
+          });
+          break;
+        case "subscription_past_due":
+          result = await emailService.sendSubscriptionPastDueEmail(to, {
+            organizationName: "Sample Farm Org",
+            planName: "Commercial Enterprise",
+            amount: "KES 12,000",
+            dueDate: new Date().toLocaleDateString(),
+          });
+          break;
+        case "subscription_suspended":
+          result = await emailService.sendSubscriptionSuspendedEmail(to, {
+            organizationName: "Sample Farm Org",
+            planName: "Commercial Enterprise",
+          });
+          break;
+        case "payment_success":
+          result = await emailService.sendPaymentSuccessEmail(to, {
+            organizationName: "Sample Farm Org",
+            planName: "Commercial Enterprise",
+            amount: "12,000.00",
+            currency: "KES",
+          });
+          break;
+        case "payment_failed":
+          result = await emailService.sendPaymentFailedEmail(to, {
+            organizationName: "Sample Farm Org",
+            planName: "Commercial Enterprise",
+            amount: "12,000.00",
+            currency: "KES",
+            failureReason: "Insufficient M-Pesa balance",
+          });
+          break;
+        case "plan_changed":
+          result = await emailService.sendPlanChangedEmail(to, {
+            organizationName: "Sample Farm Org",
+            oldPlanName: "Starter Farm",
+            newPlanName: "Commercial Enterprise",
+          });
+          break;
+        case "usage_limit_warning":
+          result = await emailService.sendUsageLimitWarningEmail(to, {
+            organizationName: "Sample Farm Org",
+            metricName: "IoT Devices",
+            currentUsage: 9,
+            maxLimit: 10,
+            percentUsed: 90,
+          });
+          break;
+        case "farm_digest":
+          result = await emailService.sendFarmDigestEmail(to, {
+            farmName: "Green Valley Farm",
+            periodLabel: "Weekly Performance Digest",
+            highlights: [
+              { title: "Soil Moisture Levels", description: "Average moisture held at optimal 42%", metric: "42%" },
+              { title: "Milk Production", description: "Produced 1,280 liters across all milking cows", metric: "1,280 L" },
+              { title: "Planting Cycle", description: "Maize Section 2 moved into flowering stage" },
+            ],
+          });
+          break;
+        case "regional_insight":
+          result = await emailService.sendRegionalAgriInsightEmail(to, {
+            regionName: "Mount Kenya Central",
+            weatherSummary: "Expected light rain (15-20mm) over Wednesday through Friday, temperatures 16°C - 24°C.",
+            cropInsights: "Favorable conditions for foliar nutrient spraying before Thursday rains.",
+            pestAlerts: "Increased Fall Armyworm activity detected across neighboring maize corridors.",
+            marketInsights: "Local dry maize wholesale price up 6% this week to KES 3,800 per 90kg bag.",
+          });
+          break;
+        default:
+          result = { success: false, error: "Unknown template" };
+      }
+
+      return result;
+    }),
+
 
   // ── Maintenance Mode ───────────────────────────────────────────────────────
   getMaintenanceMode: adminProcedure.query(async ({ ctx }) => {

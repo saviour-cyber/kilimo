@@ -13,6 +13,7 @@ import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { generateRemindersHandler } from "../scheduled/generateReminders";
 import { enforceSubscriptionsHandler } from "../scheduled/enforceSubscriptions";
+import { billingEmailRemindersHandler } from "../scheduled/billingEmailReminders";
 import { iotCoreApi } from "../services/iot/IotCoreApi";
 import { deviceMonitor } from "../services/iot/DeviceMonitor";
 import { aiEventHandler } from "../services/ai/aiEventHandler";
@@ -43,6 +44,7 @@ async function startServer() {
   // Scheduled job handlers
   app.post("/api/scheduled/generateReminders", generateRemindersHandler);
   app.post("/api/scheduled/enforceSubscriptions", enforceSubscriptionsHandler);
+  app.post(["/api/scheduled/billingEmailReminders", "/api/scheduled/billing-email-reminders"], billingEmailRemindersHandler);
 
   // tRPC API
   app.use(

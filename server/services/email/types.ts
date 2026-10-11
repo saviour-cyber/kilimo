@@ -68,3 +68,97 @@ export interface OrganizationInviteContext {
   inviteUrl: string;
   expiresInDays: number;
 }
+
+export interface TrialEndingContext {
+  userName: string;
+  organizationName: string;
+  planName: string;
+  daysRemaining: number;
+  expiresAt: string;
+  billingUrl: string;
+}
+
+export interface TrialExpiredContext {
+  userName: string;
+  organizationName: string;
+  planName: string;
+  billingUrl: string;
+}
+
+export interface SubscriptionPastDueContext {
+  userName: string;
+  organizationName: string;
+  planName: string;
+  amount?: string;
+  dueDate?: string;
+  billingUrl: string;
+}
+
+export interface SubscriptionSuspendedContext {
+  userName: string;
+  organizationName: string;
+  planName: string;
+  reactivateUrl: string;
+}
+
+export interface PaymentSuccessContext {
+  userName: string;
+  organizationName: string;
+  planName: string;
+  amount: string;
+  currency: string;
+  invoiceUrl?: string;
+}
+
+export interface PaymentFailedContext {
+  userName: string;
+  organizationName: string;
+  planName: string;
+  amount: string;
+  currency: string;
+  retryUrl: string;
+  failureReason?: string;
+}
+
+export interface PlanChangedContext {
+  userName: string;
+  organizationName: string;
+  oldPlanName: string;
+  newPlanName: string;
+  billingUrl: string;
+}
+
+export interface UsageLimitWarningContext {
+  userName: string;
+  organizationName: string;
+  metricName: string;
+  currentUsage: number;
+  maxLimit: number;
+  percentUsed: number;
+  upgradeUrl: string;
+}
+
+export interface FarmDigestItem {
+  title: string;
+  description: string;
+  metric?: string;
+}
+
+export interface FarmDigestContext {
+  userName: string;
+  farmName: string;
+  periodLabel: string; // e.g. "Weekly Digest: Oct 5 - Oct 12"
+  highlights: FarmDigestItem[];
+  dashboardUrl: string;
+}
+
+export interface RegionalAgriInsightContext {
+  userName: string;
+  regionName: string;
+  weatherSummary?: string;
+  cropInsights?: string;
+  pestAlerts?: string;
+  marketInsights?: string;
+  portalUrl: string;
+}
+

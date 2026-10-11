@@ -1,6 +1,6 @@
-﻿import type { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { getDb } from "../db";
-import { subscriptions, organizations } from "../../drizzle/schema";
+import { subscriptions, organizations, subscriptionPlans, emailAutomationLogs } from "../../drizzle/schema";
 import { eq, lt, and, sql } from "drizzle-orm";
 import { emailService } from "../services/email";
 
@@ -13,20 +13,71 @@ export async function enforceSubscriptionsHandler(req: Request, res: Response) {
 
     const now = new Date();
 
-    // 1. Mark trialing -> expired
+    // 1. Mark trialing -> expired (Fetch first so we can notify them)
+    const expiringTrials = await db
+      .select({
+        subId: subscriptions.id,
+        orgId: subscriptions.organizationId,
+        email: organizations.contactEmail,
+        orgName: organizations.name,
+        planName: subscriptionPlans.name,
+      })
+      .from(subscriptions)
+      .innerJoin(organizations, eq(subscriptions.organizationId, organizations.id))
+      .innerJoin(subscriptionPlans, eq(subscriptions.planId, subscriptionPlans.id))
+      .where(and(eq(subscriptions.status, "trialing"), lt(subscriptions.trialEndsAt, now)));
+
     const expiredTrials = await db
       .update(subscriptions)
       .set({ status: "expired" })
       .where(and(eq(subscriptions.status, "trialing"), lt(subscriptions.trialEndsAt, now)));
-      
-    // If we wanted to, we could fetch these before updating to send emails, 
-    // but for simplicity we'll just execute the query. A robust system would SELECT then UPDATE.
+
+    // Send trial expired notifications with dedup
+    for (const item of expiringTrials) {
+      if (item.email) {
+        try {
+          const [alreadySent] = await db
+            .select()
+            .from(emailAutomationLogs)
+            .where(
+              and(
+                eq(emailAutomationLogs.organizationId, item.orgId),
+                eq(emailAutomationLogs.automationType, "trial_expired")
+              )
+            )
+            .limit(1);
+
+          if (!alreadySent) {
+            await emailService.sendTrialExpiredEmail(
+              { email: item.email, name: item.orgName || "Farmer" },
+              { organizationName: item.orgName, planName: item.planName || "Trial" }
+            );
+
+            await db.insert(emailAutomationLogs).values({
+              organizationId: item.orgId,
+              recipientEmail: item.email,
+              automationType: "trial_expired",
+              status: "sent",
+            });
+          }
+        } catch (e: any) {
+          console.error(`[Subscription Enforcer] Failed to send trial_expired email to ${item.email}:`, e);
+        }
+      }
+    }
 
     // 2. Mark active -> past_due
     const newlyPastDue = await db
-      .select({ subId: subscriptions.id, orgId: subscriptions.organizationId, email: organizations.contactEmail, name: organizations.name })
+      .select({
+        subId: subscriptions.id,
+        orgId: subscriptions.organizationId,
+        email: organizations.contactEmail,
+        name: organizations.name,
+        planName: subscriptionPlans.name,
+      })
       .from(subscriptions)
       .innerJoin(organizations, eq(subscriptions.organizationId, organizations.id))
+      .innerJoin(subscriptionPlans, eq(subscriptions.planId, subscriptionPlans.id))
       .where(and(eq(subscriptions.status, "active"), lt(subscriptions.currentPeriodEnd, now)));
 
     if (newlyPastDue.length > 0) {
@@ -38,10 +89,15 @@ export async function enforceSubscriptionsHandler(req: Request, res: Response) {
       for (const org of newlyPastDue) {
         if (org.email) {
           try {
-            await emailService.send({
-              to: { email: org.email, name: org.name || undefined },
-              subject: "KiliSense Subscription Past Due",
-              html: `<p>Hi ${org.name || 'there'},</p><p>Your KiliSense subscription is past due. Please update your payment method to avoid suspension in 7 days.</p>`,
+            await emailService.sendSubscriptionPastDueEmail(
+              { email: org.email, name: org.name || "Subscriber" },
+              { organizationName: org.name, planName: org.planName || "Subscription" }
+            );
+            await db.insert(emailAutomationLogs).values({
+              organizationId: org.orgId,
+              recipientEmail: org.email,
+              automationType: "subscription_past_due",
+              status: "sent",
             });
             console.log(`[Subscription Enforcer] Sent past_due email to ${org.email}`);
           } catch (e) {
@@ -54,13 +110,18 @@ export async function enforceSubscriptionsHandler(req: Request, res: Response) {
     // 3. Mark past_due -> suspended (after 7 days grace period)
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
     const newlySuspended = await db
-      .select({ subId: subscriptions.id, orgId: subscriptions.organizationId, email: organizations.contactEmail, name: organizations.name })
+      .select({
+        subId: subscriptions.id,
+        orgId: subscriptions.organizationId,
+        email: organizations.contactEmail,
+        name: organizations.name,
+        planName: subscriptionPlans.name,
+      })
       .from(subscriptions)
       .innerJoin(organizations, eq(subscriptions.organizationId, organizations.id))
+      .innerJoin(subscriptionPlans, eq(subscriptions.planId, subscriptionPlans.id))
       .where(and(
-        eq(subscriptions.status, "past_due"), 
-        // We assume they became past_due when currentPeriodEnd passed. 
-        // So if currentPeriodEnd is more than 7 days ago, the grace period is over.
+        eq(subscriptions.status, "past_due"),
         lt(subscriptions.currentPeriodEnd, sevenDaysAgo)
       ));
 
@@ -69,17 +130,22 @@ export async function enforceSubscriptionsHandler(req: Request, res: Response) {
         .update(subscriptions)
         .set({ status: "suspended" })
         .where(and(
-          eq(subscriptions.status, "past_due"), 
+          eq(subscriptions.status, "past_due"),
           lt(subscriptions.currentPeriodEnd, sevenDaysAgo)
         ));
 
       for (const org of newlySuspended) {
         if (org.email) {
           try {
-            await emailService.send({
-              to: { email: org.email, name: org.name || undefined },
-              subject: "KiliSense Subscription Suspended",
-              html: `<p>Hi ${org.name || 'there'},</p><p>Your KiliSense subscription has been suspended due to non-payment. Please log in and update your payment method to restore access.</p>`,
+            await emailService.sendSubscriptionSuspendedEmail(
+              { email: org.email, name: org.name || "Subscriber" },
+              { organizationName: org.name, planName: org.planName || "Subscription" }
+            );
+            await db.insert(emailAutomationLogs).values({
+              organizationId: org.orgId,
+              recipientEmail: org.email,
+              automationType: "subscription_suspended",
+              status: "sent",
             });
             console.log(`[Subscription Enforcer] Sent suspended email to ${org.email}`);
           } catch (e) {
