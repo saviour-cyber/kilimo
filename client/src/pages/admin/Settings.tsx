@@ -435,48 +435,53 @@ export default function Settings() {
                   />
                 </div>
 
-                <div className="p-4 border border-red-500/20 bg-red-500/5 rounded-xl space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-semibold text-red-600 flex items-center gap-1.5">
-                        <AlertTriangle className="w-4 h-4" /> System Maintenance Mode
+                <div className="p-4 sm:p-6 border border-destructive/30 bg-destructive/5 rounded-2xl space-y-5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <p className="text-base font-semibold text-destructive flex items-center gap-2">
+                        <AlertTriangle className="w-5 h-5" /> System Maintenance Mode
                       </p>
-                      <p className="text-xs text-muted-foreground mt-0.5">
+                      <p className="text-xs sm:text-sm text-muted-foreground">
                         Temporarily restrict access during system updates, security patches, or database migrations
                       </p>
                     </div>
-                    <Switch
-                      checked={maintenanceMode}
-                      disabled={setMaintenanceMutation.isPending}
-                      onCheckedChange={(val) => {
-                        setMaintenanceMode(val);
-                        if (!val) {
-                          setScheduledStartAt("");
-                          setScheduledEndAt("");
-                          setEstimatedRestorationAt("");
-                        }
-                        setMaintenanceMutation.mutate({
-                          isEnabled: val,
-                          scope: maintenanceScope,
-                          message: maintenanceMessage || undefined,
-                          estimatedRestorationAt: val ? (estimatedRestorationAt || null) : null,
-                          scheduledStartAt: val ? (scheduledStartAt || null) : null,
-                          scheduledEndAt: val ? (scheduledEndAt || null) : null,
-                        });
-                      }}
-                    />
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground sm:hidden">
+                        {maintenanceMode ? "Enabled" : "Disabled"}
+                      </span>
+                      <Switch
+                        checked={maintenanceMode}
+                        disabled={setMaintenanceMutation.isPending}
+                        onCheckedChange={(val) => {
+                          setMaintenanceMode(val);
+                          if (!val) {
+                            setScheduledStartAt("");
+                            setScheduledEndAt("");
+                            setEstimatedRestorationAt("");
+                          }
+                          setMaintenanceMutation.mutate({
+                            isEnabled: val,
+                            scope: maintenanceScope,
+                            message: maintenanceMessage || undefined,
+                            estimatedRestorationAt: val ? (estimatedRestorationAt || null) : null,
+                            scheduledStartAt: val ? (scheduledStartAt || null) : null,
+                            scheduledEndAt: val ? (scheduledEndAt || null) : null,
+                          });
+                        }}
+                      />
+                    </div>
                   </div>
 
                   {maintenanceMode && (
-                    <div className="pt-3 border-t border-red-500/20 space-y-3.5">
+                    <div className="pt-4 border-t border-destructive/20 space-y-4">
                       {/* Maintenance Scope */}
-                      <div className="space-y-1.5">
-                        <Label className="text-xs text-foreground font-semibold">Maintenance Scope</Label>
+                      <div className="space-y-2">
+                        <Label className="text-xs sm:text-sm text-foreground font-semibold">Maintenance Scope</Label>
                         <Select
                           value={maintenanceScope}
                           onValueChange={(val: "app_only" | "full_site") => setMaintenanceScope(val)}
                         >
-                          <SelectTrigger className="h-9 text-xs">
+                          <SelectTrigger className="h-10 text-xs sm:text-sm bg-card">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -488,62 +493,62 @@ export default function Settings() {
                             </SelectItem>
                           </SelectContent>
                         </Select>
-                        <p className="text-[11px] text-muted-foreground">
+                        <p className="text-xs text-muted-foreground">
                           {maintenanceScope === "full_site"
-                            ? "Replaces the public landing page with a branded maintenance status screen."
+                            ? "Replaces the public landing page with a branded full-screen maintenance status screen."
                             : "Public landing page remains accessible for new visitors, but farmer logins and farm management are halted."}
                         </p>
                       </div>
 
                       {/* Public Maintenance Notice */}
-                      <div className="space-y-1.5">
-                        <Label className="text-xs text-foreground font-semibold">Public Notice for Users</Label>
+                      <div className="space-y-2">
+                        <Label className="text-xs sm:text-sm text-foreground font-semibold">Public Notice for Users</Label>
                         <Input
                           placeholder="e.g. Scheduled database maintenance in progress. Normal operations will resume shortly."
                           value={maintenanceMessage}
                           onChange={(e) => setMaintenanceMessage(e.target.value)}
-                          className="text-xs h-9"
+                          className="text-xs sm:text-sm h-10 bg-card"
                         />
                       </div>
 
-                      {/* Estimated Restoration & Scheduling Window */}
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <div className="space-y-1">
-                          <Label className="text-[11px] text-muted-foreground font-medium">Estimated Restoration Time (Optional)</Label>
+                      {/* Estimated Restoration & Scheduling Window - Responsive Grid */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
+                        <div className="space-y-1.5">
+                          <Label className="text-xs text-muted-foreground font-medium">Estimated Restoration Time (Optional)</Label>
                           <Input
                             type="datetime-local"
                             value={estimatedRestorationAt}
                             onChange={(e) => setEstimatedRestorationAt(e.target.value)}
-                            className="text-xs h-8"
+                            className="text-xs sm:text-sm h-10 bg-card"
                           />
                         </div>
-                        <div className="space-y-1">
-                          <Label className="text-[11px] text-muted-foreground font-medium">Scheduled Window Start (Optional)</Label>
+                        <div className="space-y-1.5">
+                          <Label className="text-xs text-muted-foreground font-medium">Scheduled Window Start (Optional)</Label>
                           <Input
                             type="datetime-local"
                             value={scheduledStartAt}
                             onChange={(e) => setScheduledStartAt(e.target.value)}
-                            className="text-xs h-8"
+                            className="text-xs sm:text-sm h-10 bg-card"
                           />
                         </div>
-                        <div className="space-y-1">
-                          <Label className="text-[11px] text-muted-foreground font-medium">Scheduled Window End (Optional)</Label>
+                        <div className="space-y-1.5">
+                          <Label className="text-xs text-muted-foreground font-medium">Scheduled Window End (Optional)</Label>
                           <Input
                             type="datetime-local"
                             value={scheduledEndAt}
                             onChange={(e) => setScheduledEndAt(e.target.value)}
-                            className="text-xs h-8"
+                            className="text-xs sm:text-sm h-10 bg-card"
                           />
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between pt-1">
-                        <p className="text-[11px] text-muted-foreground">
-                          Note: Platform administrators retain full access to <span className="font-mono text-xs">/admin</span> to manage or deactivate maintenance anytime.
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2">
+                        <p className="text-xs text-muted-foreground">
+                          Note: Platform administrators retain full access to <span className="font-mono text-xs font-semibold text-primary">/admin</span> to manage or deactivate maintenance anytime.
                         </p>
                         <Button
                           size="sm"
-                          className="h-8 text-xs bg-red-600 hover:bg-red-700 text-white"
+                          className="w-full sm:w-auto h-9 text-xs sm:text-sm bg-destructive hover:bg-destructive/90 text-destructive-foreground font-medium px-4 shrink-0"
                           disabled={setMaintenanceMutation.isPending}
                           onClick={() => {
                             setMaintenanceMutation.mutate({
